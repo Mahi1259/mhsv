@@ -1,0 +1,47 @@
+---
+/**
+ * Layout for the short standalone pages (privacy, legal notice, form results).
+ * Narrow measure, same masthead and footer as the main document.
+ */
+import Base from '@/layouts/Base.astro';
+import type { Locale } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+  path: string;
+  title: string;
+  description?: string;
+  eyebrow?: string;
+  noindex?: boolean;
+}
+
+const { locale, path, title, description, eyebrow, noindex = false } = Astro.props;
+---
+
+<Base locale={locale} path={path} title={title} description={description} noindex={noindex}>
+  <article class="band band-ink page">
+    <div class="shell shell-narrow">
+      {eyebrow && <p class="eyebrow"><span>{eyebrow}</span></p>}
+      <h1 class="page__title">{title}</h1>
+      <div class="page__body">
+        <slot />
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .page {
+    padding-block: clamp(3rem, 2rem + 5vw, 6rem);
+  }
+
+  .page__title {
+    font-size: var(--text-h2);
+    margin-block-start: 1rem;
+    max-width: 24ch;
+  }
+
+  .page__body {
+    margin-block-start: 2.5rem;
+  }
+</style>

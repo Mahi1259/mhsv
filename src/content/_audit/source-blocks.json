@@ -1,0 +1,688 @@
+{
+  "source": "MHSV_Website_Content_Pack_Phase1_Developer_Ready_V3.docx",
+  "extractedAt": null,
+  "locales": {
+    "fr": {
+      "hero": [
+        "MHSV®",
+        "Centre International de Développement et de Transition",
+        "Association suisse à but non lucratif - Genève",
+        "Beyond Sport - Beyond Human Potential",
+        "Développer la performance. Construire la personne. Préparer l’avenir.",
+        "MHSV® conçoit et coordonne des parcours sportifs, humains, éducatifs, sociaux et professionnels destinés à accompagner chaque bénéficiaire dans le développement de son potentiel et dans les transitions importantes de son parcours.",
+        "CTA : Découvrir MHSV® | Nos programmes | Demander une évaluation | Devenir partenaire"
+      ],
+      "about": [
+        "MHSV® - Centre International de Développement et de Transition est l’identité institutionnelle de MHSV Association, association suisse à but non lucratif dont le siège est à Genève.",
+        "Sa mission est de promouvoir le développement global de la personne à travers le sport, l’éducation, la formation, l’accompagnement humain et la préparation des transitions personnelles, sportives, scolaires et professionnelles.",
+        "Le football constitue le principal programme de lancement, mais la mission s’étend à l’ensemble du sport et, surtout, à la personne derrière la performance. MHSV® ne promet pas un accès automatique au sport professionnel : l’organisation construit des parcours réalistes, individualisés et coordonnés."
+      ],
+      "vision": [
+        "À l’horizon 2035, MHSV® ambitionne de devenir une référence internationale dans le développement et la transition par le sport, reconnue pour la qualité de ses parcours, sa capacité de coopération et son impact durable.",
+        "Structurer et expérimenter -> Consolider et professionnaliser -> Déployer et transmettre.",
+        "La croissance doit renforcer la qualité de l’accompagnement, la protection des bénéficiaires et la pérennité de l’organisation."
+      ],
+      "mission": [
+        "Sport & performance - compétences techniques, tactiques, physiques et mentales.",
+        "Développement humain - confiance, autonomie, leadership, communication et résilience.",
+        "Éducation & formation - double projet, apprentissages, orientation et préparation de l’avenir.",
+        "Santé & bien-être - prévention, récupération, orientation et coordination avec des professionnels qualifiés.",
+        "Transition & employabilité - évolutions sportives, scolaires, professionnelles et personnelles.",
+        "Impact social & international - inclusion, ouverture, coopération et création d’opportunités."
+      ],
+      "audience": [
+        "Jeunes sportifs et talents en développement ; sportifs souhaitant franchir un nouveau niveau ; personnes confrontées à une blessure, un échec, une non-sélection ou une réorientation ; sportifs arrivant d’un autre pays ; personnes préparant leur reconversion ; enfants et jeunes concernés par des programmes éducatifs ou d’inclusion ; familles ; entraîneurs et professionnels ; clubs, écoles, institutions, entreprises et organisations."
+      ],
+      "method": [
+        "La personne au centre. Le sport comme levier. La transition comme continuité.",
+        "M - Mental | I - Intelligence de jeu | T - Technique | I - Intensité | P - Physique | S - Social & Leadership.",
+        "La méthodologie peut être adaptée aux différentes disciplines tout en conservant une évaluation globale, des objectifs individualisés, un accompagnement coordonné, des bilans et une préparation de la transition. Les protocoles internes détaillés ne sont pas publiés sur le site."
+      ],
+      "services": [
+        "Performance sportive ; développement mental et humain ; éducation & double projet ; transition professionnelle ; santé & bien-être ; analyse vidéo, média & innovation ; socialisation & inclusion par le sport ; formation des entraîneurs et intervenants ; international."
+      ],
+      "pathway": [
+        "Accueil & pré-orientation -> Évaluation globale -> Plan individualisé -> Accompagnement coordonné -> Bilans & ajustements -> Transition.",
+        "La réussite ne se résume pas à un contrat professionnel : elle peut aussi être une progression sportive, une meilleure santé, une orientation réussie, une reprise de confiance ou un projet professionnel sécurisé."
+      ],
+      "programmes": [
+        "Un parcours qui se construit sur le terrain.",
+        "Pour sa première phase de déploiement, MHSV® se fixe comme objectif d’accueillir jusqu’à 40 joueurs de football, sélectionnés et répartis dans des groupes d’âge et de niveau cohérents.",
+        "Le programme pourra comprendre des entraînements techniques, tactiques et physiques ; des oppositions et matchs internes ; des évaluations périodiques ; des matchs amicaux contre des équipes locales, nationales ou issues de structures élites lorsque les calendriers le permettent ; des rencontres pendant les périodes de préparation, pauses de compétition ou certaines vacances sportives ; des stages, camps et expériences de développement.",
+        "Ce modèle est conçu pour être adapté aux autres sports : organisation par groupes pour les sports collectifs et suivi individualisé autour de l’entraînement, de la compétition et des objectifs pour les sports individuels.",
+        "STATUT : EN COURS DE STRUCTURATION / DÉPLOIEMENT PROGRESSIF"
+      ],
+      "founding": [
+        {
+          "table": [
+            [
+              "PROGRAMME FONDATEUR FOOTBALL"
+            ],
+            [
+              "Capacité cible",
+              "Jusqu’à 40 joueurs lors de la première année de déploiement"
+            ],
+            [
+              "Organisation",
+              "Groupes structurés par âge et niveau"
+            ],
+            [
+              "Cycle",
+              "Programme recommandé : 3 ans"
+            ],
+            [
+              "Contenu",
+              "Entraînement + performance + santé + développement humain + éducation + transition + opportunités"
+            ],
+            [
+              "Tarif",
+              "CHF 15’000 / année - tarif de lancement"
+            ]
+          ]
+        },
+        {
+          "table": [
+            [
+              "AUTRES SPORTS"
+            ],
+            [
+              "Approche",
+              "Même philosophie d’accompagnement 360°"
+            ],
+            [
+              "Adaptation",
+              "Parcours adapté aux exigences de chaque discipline"
+            ],
+            [
+              "Disciplines",
+              "Sports collectifs et individuels"
+            ],
+            [
+              "Tarif",
+              "Programme Complet : CHF 15’000 / année - tarif de lancement"
+            ]
+          ]
+        }
+      ],
+      "international": [
+        "Créer des expériences de compétition, de rencontre et d’ouverture.",
+        "MHSV® ambitionne de développer progressivement un programme comprenant jusqu’à deux à trois tournois ou rencontres de référence par année, selon les disciplines et les capacités opérationnelles de l’Association.",
+        "Ces événements auront vocation à réunir progressivement des structures MHSV®, des clubs locaux et nationaux, des centres de formation, des structures élites, des académies et, lorsque des accords auront été formalisés, des organisations ou équipes professionnelles internationales.",
+        "Les stages, immersions et mises en relation dépendent du profil du bénéficiaire, des accords disponibles et des capacités opérationnelles ; aucune intégration professionnelle n’est garantie.",
+        "STATUT : EN COURS DE STRUCTURATION / DÉPLOIEMENT PROGRESSIF"
+      ],
+      "ecosystem": [
+        "Selon les besoins du bénéficiaire, MHSV® mobilise et coordonne différentes expertises spécialisées : entraînement, préparation physique, préparation mentale, physiothérapie, nutrition, analyse vidéo, santé, éducation et transition professionnelle.",
+        "Les interventions de partenaires externes s’intègrent dans un parcours MHSV® structuré et coordonné, chaque professionnel conservant les responsabilités propres à son domaine d’expertise."
+      ],
+      "fees": [
+        "Programme Complet MHSV® - Tous sports : CHF 15’000 / année / bénéficiaire - tarif de lancement.",
+        "Les prestations exactes incluses sont précisées dans le contrat de programme. Les modules ciblés sont proposés sur devis. Les stages, déplacements, tournois, prestations extraordinaires et certains services tiers peuvent faire l’objet de conditions ou tarifs spécifiques.",
+        "Cycle complet recommandé : 3 ans. L’engagement contractuel et les modules sont adaptés au profil et aux besoins du bénéficiaire."
+      ],
+      "inclusion": [
+        "MHSV® souhaite développer progressivement des programmes éducatifs, sociaux et d’inclusion par le sport avec des écoles, communes, institutions ou organismes spécialisés.",
+        "Ces actions sont conçues en complémentarité avec les familles et les professionnels compétents et ne remplacent ni l’école, ni les professionnels de santé, ni les services sociaux.",
+        "STATUT : EN COURS DE STRUCTURATION / DÉPLOIEMENT PROGRESSIF"
+      ],
+      "digital": [
+        "Feuille de route : espace bénéficiaire, suivi des objectifs, retours des entraîneurs, documents, vidéo, communications autorisées et indicateurs de progression.",
+        "L’intelligence artificielle pourra soutenir la synthèse, l’organisation, l’aide multilingue et certains contenus personnalisés. Elle ne devra pas prendre seule des décisions importantes relatives à l’admission, la santé, la sélection ou l’avenir d’une personne.",
+        "Architecture visée : sécurité, accès par rôle, minimisation des données et hébergement/stockage en Suisse à confirmer avec le prestataire retenu.",
+        "STATUT : EN COURS DE STRUCTURATION / DÉPLOIEMENT PROGRESSIF"
+      ],
+      "team": [
+        "Présentation sans photos pour la Phase 1. Afficher le nom, la fonction et l’adresse professionnelle MHSV® lorsqu’elle est créée.",
+        "Martial HAPPI - Fondateur et Président - m.happi@mhsv-international.org",
+        "Gwladys ESSAI - Secrétaire Générale - adresse MHSV® à insérer après création.",
+        "Xavier MARTI - Directeur du Développement Institutionnel et des Partenariats - adresse MHSV® à insérer après création.",
+        "Laetitia PILLER - Responsable de la communication - adresse MHSV® à insérer après création.",
+        "Diego FUIANO - Coordination du projet web / digital - adresse MHSV® à insérer après création. Toute mention de sa fonction de gouvernance doit attendre la confirmation formelle correspondante.",
+        "Ne pas publier les autres fonctions ou organigrammes historiques tant que les intitulés et engagements n’ont pas été validés.",
+        "Le prototype doit toutefois prévoir une structure extensible permettant d’ajouter ultérieurement d’autres membres, pôles et fonctions après validation institutionnelle."
+      ],
+      "founder": [
+        "Martial HAPPI - Fondateur et Président. Chef d’entreprise basé à Genève, ancien joueur de football de niveau pré-élite à l’international, entraîneur diplômé C-UEFA et ancien arbitre officiel du football amateur. Il a fondé MHSV® afin de relier développement sportif, éducation, santé, projet professionnel, inclusion et transition.",
+        "Parce que derrière chaque performance se trouve une personne. Derrière chaque personne existe un potentiel. Et ce potentiel mérite d’être accompagné."
+      ],
+      "book": [
+        "Présenter la couverture du Livre Fondateur Premium - Édition Fondatrice 2026, accompagnée d’un texte court expliquant qu’il constitue la référence institutionnelle de la vision, des programmes, de la gouvernance, de l’impact et de la feuille de route de MHSV®.",
+        "Phase 1 : ne pas proposer le téléchargement intégral public du livre afin de préserver les éléments stratégiques, méthodologiques et financiers. Un extrait public pourra être ajouté ultérieurement."
+      ],
+      "identity": [
+        "Prévoir un espace élégant pour l’identité de marque et la future collection MHSV® : équipement athlètes, coaching, représentation, accessoires et lifestyle.",
+        "Mention publique : « Collection MHSV® en développement - maquettes conceptuelles, non contractuelles ; commercialisation envisagée. »",
+        "Pour le prototype, utiliser uniquement le logo principal marqué APPROVED_FOR_PROTOTYPE dans le dossier développeur. Réserver les emplacements pour les variantes officielle / institutionnelle / équipement, mais ne pas publier les variantes historiques comportant l’ancien slogan ou des textes non finalisés.",
+        "STATUT : EN COURS DE STRUCTURATION / DÉPLOIEMENT PROGRESSIF"
+      ],
+      "roadmap": [
+        "À annoncer comme feuille de route et non comme services déjà opérationnels : espace bénéficiaires, plateforme de suivi, MHSV® Coaching Institute, Performance & Media Lab, programmes et événements internationaux, initiatives d’impact et nouvelles fonctionnalités numériques.",
+        "STATUT : EN COURS DE STRUCTURATION / DÉPLOIEMENT PROGRESSIF"
+      ],
+      "contact": [
+        "Développons le potentiel. Préparons l’avenir.",
+        "MHSV® - Centre International de Développement et de Transition | Genève - Suisse | +41 79 294 64 73 | m.happi@mhsv-international.org | www.mhsv.ch",
+        "Formulaire : Nom, Prénom, E-mail, Téléphone (optionnel), Profil / Organisation, Objet, Message, consentement à la politique de confidentialité.",
+        "Destinataire technique proposé : infos@mhsv-international.org - boîte à créer/confirmer avant la mise en production. Le destinataire doit être configurable et non codé en dur.",
+        "Footer légal : MHSV Association | Association suisse à but non lucratif | Siège : Genève, Suisse | Identité institutionnelle : MHSV® - Centre International de Développement et de Transition. La formulation légale finale sera publiée après validation définitive des statuts."
+      ]
+    },
+    "en": {
+      "hero": [
+        "MHSV®",
+        "International Centre for Development and Transition",
+        "Swiss non-profit association - Geneva",
+        "Beyond Sport - Beyond Human Potential",
+        "Develop performance. Build the person. Prepare the future.",
+        "MHSV® designs and coordinates sporting, human, educational, social and professional pathways to help each beneficiary develop their potential and navigate important transitions.",
+        "CTA: Discover MHSV® | Our Programmes | Request an Assessment | Become a Partner"
+      ],
+      "about": [
+        "MHSV® - International Centre for Development and Transition is the institutional identity of MHSV Association, a Swiss non-profit association with its registered office in Geneva.",
+        "Its mission is to promote holistic human development through sport, education, training, human support and preparation for personal, sporting, educational and professional transitions.",
+        "Football is the principal launch programme, while the mission extends to all sports and, above all, to the person behind performance. MHSV® does not promise automatic access to professional sport; it builds realistic, individualised and coordinated pathways."
+      ],
+      "vision": [
+        "By 2035, MHSV® aims to become an international reference in development and transition through sport, recognised for the quality of its pathways, cooperation and sustainable impact.",
+        "Structure & Experiment -> Consolidate & Professionalise -> Deploy & Transfer.",
+        "Growth must reinforce the quality of support, beneficiary protection and organisational sustainability."
+      ],
+      "mission": [
+        "Sport & Performance - technical, tactical, physical and mental development.",
+        "Human Development - confidence, autonomy, leadership, communication and resilience.",
+        "Education & Training - dual career, learning, guidance and future preparation.",
+        "Health & Well-being - prevention, recovery, referral and coordination with qualified professionals.",
+        "Transition & Employability - sporting, educational, professional and personal transitions.",
+        "Social & International Impact - inclusion, openness, cooperation and opportunity creation."
+      ],
+      "audience": [
+        "Young athletes and developing talents; athletes seeking progression; people facing injury, non-selection or a change of direction; international athletes adapting to a new environment; people preparing for life after sport; children and young people in educational or inclusion programmes; families; coaches and professionals; clubs, schools, institutions, companies and organisations."
+      ],
+      "method": [
+        "The person at the centre. Sport as a lever. Transition as continuity.",
+        "M - Mental | I - Game Intelligence | T - Technique | I - Intensity | P - Physical | S - Social & Leadership.",
+        "The methodology can be adapted to different sports while retaining holistic assessment, individual objectives, coordinated support, reviews and transition planning. Detailed internal protocols are not published on the website."
+      ],
+      "services": [
+        "Sports performance; mental & human development; education & dual career; professional transition; health & well-being; video, media & innovation; social inclusion through sport; coach and professional development; international programmes."
+      ],
+      "pathway": [
+        "Welcome & Pre-assessment -> Global Assessment -> Individual Plan -> Coordinated Support -> Review & Adjustment -> Transition.",
+        "Success is not limited to a professional contract: it may also mean sporting progress, improved health, successful guidance, renewed confidence or a secure professional project."
+      ],
+      "programmes": [
+        "A pathway built on the field.",
+        "For its first deployment phase, MHSV® has set the objective of welcoming up to 40 football players, selected and organised into coherent age and level groups.",
+        "The programme may include technical, tactical and physical training; internal MHSV® matches; periodic assessments; friendly matches against local, national or elite-structure teams when schedules allow; activities during preparation periods, competition breaks or selected sporting holidays; camps and development experiences.",
+        "The model is designed to extend to other sports: group structures for team sports and individual monitoring around training, competition and goals for individual sports.",
+        "STATUS: IN DEVELOPMENT / PROGRESSIVE DEPLOYMENT"
+      ],
+      "founding": [
+        {
+          "table": [
+            [
+              "FOUNDING FOOTBALL PROGRAMME"
+            ],
+            [
+              "Target capacity",
+              "Up to 40 players during the first deployment year"
+            ],
+            [
+              "Organisation",
+              "Groups structured by age and level"
+            ],
+            [
+              "Cycle",
+              "Recommended programme: 3 years"
+            ],
+            [
+              "Content",
+              "Training + performance + health + human development + education + transition + opportunities"
+            ],
+            [
+              "Fee",
+              "CHF 15,000 / year - launch rate"
+            ]
+          ]
+        },
+        {
+          "table": [
+            [
+              "OTHER SPORTS"
+            ],
+            [
+              "Approach",
+              "Same 360° support philosophy"
+            ],
+            [
+              "Adaptation",
+              "Pathway adapted to each sport"
+            ],
+            [
+              "Disciplines",
+              "Team and individual sports"
+            ],
+            [
+              "Fee",
+              "Complete Programme: CHF 15,000 / year - launch rate"
+            ]
+          ]
+        }
+      ],
+      "international": [
+        "Creating competitive, cultural and development experiences.",
+        "MHSV® aims to progressively develop a programme of up to two or three reference tournaments or events per year, depending on the sport and the Association’s operational capacity.",
+        "These events are intended to progressively bring together MHSV® structures, local and national clubs, training centres, elite structures, academies and, once agreements are formalised, international professional organisations or teams.",
+        "Camps, immersions and introductions depend on the beneficiary profile, available agreements and operational capacity; no professional placement is guaranteed.",
+        "STATUS: IN DEVELOPMENT / PROGRESSIVE DEPLOYMENT"
+      ],
+      "ecosystem": [
+        "Depending on the beneficiary’s needs, MHSV® mobilises and coordinates specialist expertise including coaching, physical preparation, mental preparation, physiotherapy, nutrition, video analysis, health, education and professional transition.",
+        "External partners operate as part of a structured MHSV® pathway, while each professional retains the responsibilities specific to their field."
+      ],
+      "fees": [
+        "MHSV® Complete Programme - All Sports: CHF 15,000 / year / beneficiary - launch rate.",
+        "Exact included services are defined in the participant’s programme agreement. Targeted modules are quoted separately. Camps, travel, tournaments, extraordinary services and certain third-party services may be subject to specific terms or pricing.",
+        "Recommended complete cycle: 3 years. Contractual commitment and modules are adapted to each beneficiary’s profile and needs."
+      ],
+      "inclusion": [
+        "MHSV® plans to progressively develop educational, social and sport-for-inclusion programmes with schools, municipalities, institutions and specialist organisations.",
+        "These initiatives complement families and qualified professionals and do not replace schools, healthcare professionals or social services.",
+        "STATUS: IN DEVELOPMENT / PROGRESSIVE DEPLOYMENT"
+      ],
+      "digital": [
+        "Roadmap: beneficiary area, objectives tracking, coach feedback, documents, video, authorised communications and progress indicators.",
+        "Artificial intelligence may support synthesis, organisation, multilingual assistance and selected personalised content. It must not independently make important decisions about admission, health, selection or a person’s future.",
+        "Target architecture: security, role-based access, data minimisation and Swiss-based hosting/storage to be confirmed with the selected provider.",
+        "STATUS: IN DEVELOPMENT / PROGRESSIVE DEPLOYMENT"
+      ],
+      "team": [
+        "Phase 1: no photos. Display name, role and MHSV® professional email once created.",
+        "Martial HAPPI - Founder and President - m.happi@mhsv-international.org",
+        "Gwladys ESSAI - Secretary General - MHSV® email to be inserted once created.",
+        "Xavier MARTI - Director of Institutional Development and Partnerships - MHSV® email to be inserted once created.",
+        "Laetitia PILLER - Head of Communications - MHSV® email to be inserted once created.",
+        "Diego FUIANO - Website / Digital Project Coordination - MHSV® email to be inserted once created. Any governance title should wait for the corresponding formal confirmation.",
+        "Do not publish other historical roles or organisation charts until titles and commitments have been finally validated.",
+        "The prototype should nevertheless use an extensible team structure so that additional members, departments and roles can be added later after institutional validation."
+      ],
+      "founder": [
+        "Martial HAPPI - Founder and President. Geneva-based entrepreneur, former international pre-elite football player, UEFA C qualified coach and former official amateur football referee. He founded MHSV® to connect sports development, education, health, professional development, inclusion and transition.",
+        "Behind every performance is a person. Behind every person is potential. And that potential deserves to be supported."
+      ],
+      "book": [
+        "Show the cover of the Premium Founding Book - Founding Edition 2026 with a short description explaining that it is the institutional reference for MHSV®’s vision, programmes, governance, impact and roadmap.",
+        "Phase 1: do not offer the full book as a public download, in order to protect strategic, methodological and financial content. A selected public extract may be added later."
+      ],
+      "identity": [
+        "Provide an elegant space for the brand identity and future MHSV® collection: athlete equipment, coaching, representation, accessories and lifestyle.",
+        "Public wording: “MHSV® Collection in development - conceptual, non-contractual mock-ups; future commercialisation envisaged.”",
+        "For the prototype, use only the primary logo marked APPROVED_FOR_PROTOTYPE in the developer folder. Reserve placements for official / institutional / equipment variants, but do not publish historical variants containing the former slogan or non-final text.",
+        "STATUS: IN DEVELOPMENT / PROGRESSIVE DEPLOYMENT"
+      ],
+      "roadmap": [
+        "Present as roadmap, not as currently operational services: beneficiary area, tracking platform, MHSV® Coaching Institute, Performance & Media Lab, international programmes and events, impact initiatives and new digital features.",
+        "STATUS: IN DEVELOPMENT / PROGRESSIVE DEPLOYMENT"
+      ],
+      "contact": [
+        "Develop potential. Prepare the future.",
+        "MHSV® - International Centre for Development and Transition | Geneva - Switzerland | +41 79 294 64 73 | m.happi@mhsv-international.org | www.mhsv.ch",
+        "Form: First name, Last name, Email, Phone (optional), Profile / Organisation, Subject, Message, privacy-policy consent.",
+        "Proposed technical recipient: infos@mhsv-international.org - mailbox to be created/confirmed before production. The recipient must be configurable rather than hard-coded.",
+        "Legal footer: MHSV Association | Swiss non-profit association | Registered office: Geneva, Switzerland | Institutional identity: MHSV® - International Centre for Development and Transition. Final legal wording to be published after definitive approval of the Articles of Association."
+      ]
+    },
+    "de": {
+      "hero": [
+        "MHSV®",
+        "Internationales Zentrum für Entwicklung und Transition",
+        "Schweizer Non-Profit-Verein - Genf",
+        "Beyond Sport - Beyond Human Potential",
+        "Leistung entwickeln. Menschen stärken. Zukunft vorbereiten.",
+        "MHSV® entwickelt und koordiniert sportliche, menschliche, schulische, soziale und berufliche Entwicklungswege, damit jede begleitete Person ihr Potenzial entfalten und wichtige Übergänge erfolgreich gestalten kann.",
+        "CTA: MHSV® entdecken | Unsere Programme | Beurteilung anfragen | Partner werden"
+      ],
+      "about": [
+        "MHSV® - Internationales Zentrum für Entwicklung und Transition ist die institutionelle Identität von MHSV Association, einem Schweizer Non-Profit-Verein mit Sitz in Genf.",
+        "Die Mission besteht darin, die ganzheitliche Entwicklung des Menschen durch Sport, Bildung, Ausbildung, persönliche Begleitung und die Vorbereitung persönlicher, sportlicher, schulischer und beruflicher Transitionen zu fördern.",
+        "Fussball ist das wichtigste Startprogramm. Die Mission umfasst jedoch alle Sportarten und vor allem den Menschen hinter der Leistung. MHSV® verspricht keinen automatischen Zugang zum Profisport, sondern entwickelt realistische, individuelle und koordinierte Wege."
+      ],
+      "vision": [
+        "Bis 2035 strebt MHSV® an, eine internationale Referenz für Entwicklung und Transition durch Sport zu werden.",
+        "Strukturieren & Erproben -> Konsolidieren & Professionalisieren -> Ausbauen & Weitergeben.",
+        "Wachstum soll die Qualität der Begleitung, den Schutz der Begünstigten und die Nachhaltigkeit der Organisation stärken."
+      ],
+      "mission": [
+        "Sport & Leistung - technische, taktische, körperliche und mentale Entwicklung.",
+        "Persönliche Entwicklung - Selbstvertrauen, Selbstständigkeit, Leadership, Kommunikation und Resilienz.",
+        "Bildung & Ausbildung - dualer Weg, Lernen, Orientierung und Zukunftsvorbereitung.",
+        "Gesundheit & Wohlbefinden - Prävention, Regeneration, Orientierung und Koordination mit qualifizierten Fachpersonen.",
+        "Transition & Arbeitsmarktfähigkeit - sportliche, schulische, berufliche und persönliche Übergänge.",
+        "Soziale & internationale Wirkung - Inklusion, Offenheit, Zusammenarbeit und neue Chancen."
+      ],
+      "audience": [
+        "Junge Sportlerinnen und Sportler sowie Talente; Athletinnen und Athleten mit Entwicklungszielen; Personen nach Verletzung, Nichtselektion oder Neuorientierung; internationale Sportlerinnen und Sportler in einem neuen Umfeld; Personen in der Nachsport-Karriere; Kinder und Jugendliche in Bildungs- oder Inklusionsprogrammen; Familien; Trainerinnen, Trainer und Fachpersonen; Vereine, Schulen, Institutionen, Unternehmen und Organisationen."
+      ],
+      "method": [
+        "Der Mensch im Zentrum. Sport als Hebel. Transition als Kontinuität.",
+        "M - Mental | I - Spielintelligenz | T - Technik | I - Intensität | P - Physis | S - Soziales & Leadership.",
+        "Die Methodologie kann an verschiedene Sportarten angepasst werden und behält ganzheitliche Beurteilung, individuelle Ziele, koordinierte Begleitung, Evaluation und Transitionsplanung bei. Detaillierte interne Protokolle werden nicht auf der Website veröffentlicht."
+      ],
+      "services": [
+        "Sport & Leistung; mentale & persönliche Entwicklung; Bildung & dualer Weg; berufliche Transition; Gesundheit & Wohlbefinden; Video, Medien & Innovation; Inklusion durch Sport; Ausbildung von Trainern und Fachpersonen; internationale Programme."
+      ],
+      "pathway": [
+        "Erstkontakt -> Ganzheitliche Beurteilung -> Individueller Plan -> Koordinierte Begleitung -> Evaluation & Anpassung -> Transition.",
+        "Erfolg bedeutet nicht ausschliesslich einen Profivertrag. Er kann auch sportliche Entwicklung, bessere Gesundheit, gelungene Orientierung, neues Selbstvertrauen oder ein gesichertes berufliches Projekt bedeuten."
+      ],
+      "programmes": [
+        "Ein Weg, der auf dem Feld aufgebaut wird.",
+        "Für die erste Umsetzungsphase setzt sich MHSV® das Ziel, bis zu 40 Fussballspieler aufzunehmen und in passende Alters- und Leistungsgruppen einzuteilen.",
+        "Das Programm kann technische, taktische und körperliche Trainings, interne MHSV®-Spiele, periodische Evaluationen, Freundschaftsspiele gegen lokale, nationale oder Elite-Strukturen je nach Kalender sowie Aktivitäten in Vorbereitungsphasen, Wettbewerbspausen oder ausgewählten Sportferien und Entwicklungs-Camps umfassen.",
+        "Das Modell ist auf andere Sportarten übertragbar: Gruppenstrukturen für Teamsportarten und individuelle Begleitung rund um Training, Wettkampf und Ziele für Einzelsportarten.",
+        "STATUS: IM AUFBAU / SCHRITTWEISE UMSETZUNG"
+      ],
+      "founding": [
+        {
+          "table": [
+            [
+              "GRÜNDUNGSPROGRAMM FUSSBALL"
+            ],
+            [
+              "Zielkapazität",
+              "Bis zu 40 Spieler im ersten Umsetzungsjahr"
+            ],
+            [
+              "Organisation",
+              "Gruppen nach Alter und Niveau"
+            ],
+            [
+              "Zyklus",
+              "Empfohlenes Programm: 3 Jahre"
+            ],
+            [
+              "Inhalt",
+              "Training + Leistung + Gesundheit + persönliche Entwicklung + Bildung + Transition + Chancen"
+            ],
+            [
+              "Tarif",
+              "CHF 15’000 / Jahr - Einführungstarif"
+            ]
+          ]
+        },
+        {
+          "table": [
+            [
+              "ANDERE SPORTARTEN"
+            ],
+            [
+              "Ansatz",
+              "Gleiche 360°-Begleitphilosophie"
+            ],
+            [
+              "Anpassung",
+              "Weg an die Anforderungen der Sportart angepasst"
+            ],
+            [
+              "Disziplinen",
+              "Team- und Einzelsportarten"
+            ],
+            [
+              "Tarif",
+              "Komplettprogramm: CHF 15’000 / Jahr - Einführungstarif"
+            ]
+          ]
+        }
+      ],
+      "international": [
+        "Wettkampf-, Begegnungs- und Entwicklungserfahrungen schaffen.",
+        "MHSV® beabsichtigt, schrittweise ein Programm mit bis zu zwei oder drei Referenzturnieren oder -veranstaltungen pro Jahr zu entwickeln, abhängig von Sportart und operativer Kapazität.",
+        "Diese Veranstaltungen sollen schrittweise MHSV®-Strukturen, lokale und nationale Vereine, Ausbildungszentren, Elite-Strukturen, Akademien und - nach formalisierter Vereinbarung - internationale professionelle Organisationen oder Teams zusammenbringen.",
+        "Camps, Hospitationen und Vermittlungen hängen vom Profil, von verfügbaren Vereinbarungen und der operativen Kapazität ab; eine professionelle Platzierung wird nicht garantiert.",
+        "STATUS: IM AUFBAU / SCHRITTWEISE UMSETZUNG"
+      ],
+      "ecosystem": [
+        "Je nach Bedarf mobilisiert und koordiniert MHSV® spezialisierte Kompetenzen: Training, Athletik, mentale Vorbereitung, Physiotherapie, Ernährung, Videoanalyse, Gesundheit, Bildung und berufliche Transition.",
+        "Externe Partner arbeiten innerhalb eines strukturierten MHSV®-Weges, wobei jede Fachperson die Verantwortung ihres eigenen Fachgebiets behält."
+      ],
+      "fees": [
+        "MHSV® Komplettprogramm - alle Sportarten: CHF 15’000 / Jahr / begünstigte Person - Einführungstarif.",
+        "Die genauen eingeschlossenen Leistungen werden im Programmvertrag festgelegt. Gezielte Module werden separat offeriert. Camps, Reisen, Turniere, ausserordentliche Leistungen und gewisse Drittleistungen können besonderen Bedingungen oder Preisen unterliegen.",
+        "Empfohlener kompletter Zyklus: 3 Jahre. Vertragsdauer und Module werden an Profil und Bedarf angepasst."
+      ],
+      "inclusion": [
+        "MHSV® möchte schrittweise Bildungs-, Sozial- und Inklusionsprogramme durch Sport mit Schulen, Gemeinden, Institutionen und spezialisierten Organisationen entwickeln.",
+        "Diese Angebote ergänzen Familien und qualifizierte Fachpersonen und ersetzen weder Schule noch Gesundheitsfachpersonen oder Sozialdienste.",
+        "STATUS: IM AUFBAU / SCHRITTWEISE UMSETZUNG"
+      ],
+      "digital": [
+        "Roadmap: Bereich für Begünstigte, Zielverfolgung, Trainer-Feedback, Dokumente, Video, autorisierte Kommunikation und Fortschrittsindikatoren.",
+        "Künstliche Intelligenz kann Zusammenfassungen, Organisation, Mehrsprachigkeit und ausgewählte personalisierte Inhalte unterstützen. Sie darf wichtige Entscheidungen zu Aufnahme, Gesundheit, Selektion oder Zukunft einer Person nicht selbstständig treffen.",
+        "Zielarchitektur: Sicherheit, rollenbasierter Zugriff, Datenminimierung sowie Hosting/Speicherung in der Schweiz - mit dem gewählten Anbieter zu bestätigen.",
+        "STATUS: IM AUFBAU / SCHRITTWEISE UMSETZUNG"
+      ],
+      "team": [
+        "Phase 1: keine Fotos. Name, Funktion und MHSV®-E-Mail anzeigen, sobald diese eingerichtet ist.",
+        "Martial HAPPI - Gründer und Präsident - m.happi@mhsv-international.org",
+        "Gwladys ESSAI - Generalsekretärin - MHSV®-E-Mail nach Einrichtung einsetzen.",
+        "Xavier MARTI - Direktor Institutionelle Entwicklung und Partnerschaften - MHSV®-E-Mail nach Einrichtung einsetzen.",
+        "Laetitia PILLER - Verantwortliche Kommunikation - MHSV®-E-Mail nach Einrichtung einsetzen.",
+        "Diego FUIANO - Koordination Web-/Digitalprojekt - MHSV®-E-Mail nach Einrichtung einsetzen. Eine Governance-Funktion erst nach entsprechender formeller Bestätigung veröffentlichen.",
+        "Andere historische Funktionen oder Organigramme erst nach endgültiger Validierung der Titel und Engagements veröffentlichen.",
+        "Der Prototyp soll dennoch eine erweiterbare Teamstruktur vorsehen, damit weitere Mitglieder, Bereiche und Funktionen nach institutioneller Validierung ergänzt werden können."
+      ],
+      "founder": [
+        "Martial HAPPI - Gründer und Präsident. In Genf ansässiger Unternehmer, ehemaliger internationaler Fussballspieler auf Pre-Elite-Niveau, UEFA-C-Trainer und ehemaliger offizieller Amateur-Schiedsrichter. Er gründete MHSV®, um Sportentwicklung, Bildung, Gesundheit, berufliche Entwicklung, Inklusion und Transition zu verbinden.",
+        "Hinter jeder Leistung steht ein Mensch. Hinter jedem Menschen steckt Potenzial. Und dieses Potenzial verdient Begleitung."
+      ],
+      "book": [
+        "Die Titelseite des Premium Founding Book - Founding Edition 2026 zeigen und kurz erklären, dass es die institutionelle Referenz für Vision, Programme, Governance, Wirkung und Roadmap von MHSV® ist.",
+        "Phase 1: kein vollständiger öffentlicher Download, um strategische, methodologische und finanzielle Inhalte zu schützen. Ein ausgewählter öffentlicher Auszug kann später folgen."
+      ],
+      "identity": [
+        "Einen eleganten Bereich für Markenidentität und die zukünftige MHSV®-Kollektion vorsehen: Athletenausrüstung, Coaching, Repräsentation, Accessoires und Lifestyle.",
+        "Öffentliche Formulierung: „MHSV® Kollektion in Entwicklung - konzeptionelle, unverbindliche Mock-ups; zukünftige Vermarktung vorgesehen.“",
+        "Für den Prototyp nur das im Entwicklerordner als APPROVED_FOR_PROTOTYPE markierte Hauptlogo verwenden. Plätze für offizielle / institutionelle / Ausrüstungsvarianten reservieren, historische Varianten mit altem Slogan oder nicht finalem Text jedoch nicht veröffentlichen.",
+        "STATUS: IM AUFBAU / SCHRITTWEISE UMSETZUNG"
+      ],
+      "roadmap": [
+        "Als Roadmap und nicht als bereits operative Leistungen darstellen: Begünstigtenbereich, Tracking-Plattform, MHSV® Coaching Institute, Performance & Media Lab, internationale Programme und Events, Impact-Initiativen und neue digitale Funktionen.",
+        "STATUS: IM AUFBAU / SCHRITTWEISE UMSETZUNG"
+      ],
+      "contact": [
+        "Potenzial entwickeln. Zukunft vorbereiten.",
+        "MHSV® - Internationales Zentrum für Entwicklung und Transition | Genf - Schweiz | +41 79 294 64 73 | m.happi@mhsv-international.org | www.mhsv.ch",
+        "Formular: Vorname, Nachname, E-Mail, Telefon (optional), Profil / Organisation, Betreff, Nachricht, Einwilligung zur Datenschutzerklärung.",
+        "Vorgeschlagener technischer Empfänger: infos@mhsv-international.org - Mailbox vor Produktionsstart erstellen/bestätigen. Empfänger konfigurierbar und nicht fest im Code hinterlegen.",
+        "Rechtlicher Footer: MHSV Association | Schweizer Non-Profit-Verein | Sitz: Genf, Schweiz | Institutionelle Identität: MHSV® - Internationales Zentrum für Entwicklung und Transition. Endgültige Rechtsformulierung nach definitiver Genehmigung der Statuten veröffentlichen."
+      ]
+    },
+    "it": {
+      "hero": [
+        "MHSV®",
+        "Centro Internazionale di Sviluppo e Transizione",
+        "Associazione svizzera senza scopo di lucro - Ginevra",
+        "Beyond Sport - Beyond Human Potential",
+        "Sviluppare la performance. Far crescere la persona. Preparare il futuro.",
+        "MHSV® progetta e coordina percorsi sportivi, umani, educativi, sociali e professionali per aiutare ogni beneficiario a sviluppare il proprio potenziale e ad affrontare le transizioni importanti del proprio percorso.",
+        "CTA: Scopri MHSV® | I nostri programmi | Richiedi una valutazione | Diventa partner"
+      ],
+      "about": [
+        "MHSV® - Centro Internazionale di Sviluppo e Transizione è l’identità istituzionale di MHSV Association, associazione svizzera senza scopo di lucro con sede a Ginevra.",
+        "La sua missione è promuovere lo sviluppo globale della persona attraverso lo sport, l’educazione, la formazione, l’accompagnamento umano e la preparazione delle transizioni personali, sportive, scolastiche e professionali.",
+        "Il calcio è il principale programma di lancio, ma la missione si estende a tutti gli sport e soprattutto alla persona dietro la performance. MHSV® non promette un accesso automatico allo sport professionistico; costruisce percorsi realistici, individualizzati e coordinati."
+      ],
+      "vision": [
+        "Entro il 2035 MHSV® ambisce a diventare un punto di riferimento internazionale nello sviluppo e nella transizione attraverso lo sport.",
+        "Strutturare & Sperimentare -> Consolidare & Professionalizzare -> Sviluppare & Trasmettere.",
+        "La crescita deve rafforzare la qualità dell’accompagnamento, la protezione dei beneficiari e la sostenibilità dell’organizzazione."
+      ],
+      "mission": [
+        "Sport & Performance - sviluppo tecnico, tattico, fisico e mentale.",
+        "Sviluppo umano - fiducia, autonomia, leadership, comunicazione e resilienza.",
+        "Educazione & Formazione - doppio progetto, apprendimento, orientamento e preparazione del futuro.",
+        "Salute & Benessere - prevenzione, recupero, orientamento e coordinamento con professionisti qualificati.",
+        "Transizione & Occupabilità - transizioni sportive, scolastiche, professionali e personali.",
+        "Impatto sociale & internazionale - inclusione, apertura, cooperazione e creazione di opportunità."
+      ],
+      "audience": [
+        "Giovani sportivi e talenti; atleti che vogliono progredire; persone confrontate con infortuni, mancata selezione o riorientamento; sportivi internazionali in un nuovo ambiente; persone che preparano la riconversione; bambini e giovani in programmi educativi o di inclusione; famiglie; allenatori e professionisti; club, scuole, istituzioni, imprese e organizzazioni."
+      ],
+      "method": [
+        "La persona al centro. Lo sport come leva. La transizione come continuità.",
+        "M - Mentale | I - Intelligenza di gioco | T - Tecnica | I - Intensità | P - Fisico | S - Sociale & Leadership.",
+        "La metodologia può essere adattata alle diverse discipline mantenendo valutazione globale, obiettivi individuali, accompagnamento coordinato, verifiche e pianificazione della transizione. I protocolli interni dettagliati non vengono pubblicati sul sito."
+      ],
+      "services": [
+        "Performance sportiva; sviluppo mentale e umano; educazione & doppio progetto; transizione professionale; salute & benessere; video, media & innovazione; inclusione attraverso lo sport; formazione degli allenatori e professionisti; programmi internazionali."
+      ],
+      "pathway": [
+        "Accoglienza & pre-orientamento -> Valutazione globale -> Piano individuale -> Accompagnamento coordinato -> Valutazione & adattamento -> Transizione.",
+        "Il successo non si limita a un contratto professionistico: può significare anche progresso sportivo, migliore salute, orientamento riuscito, fiducia ritrovata o un progetto professionale più sicuro."
+      ],
+      "programmes": [
+        "Un percorso che si costruisce sul campo.",
+        "Per la prima fase di sviluppo, MHSV® si pone l’obiettivo di accogliere fino a 40 giocatori di calcio, selezionati e suddivisi in gruppi coerenti per età e livello.",
+        "Il programma potrà comprendere allenamenti tecnici, tattici e fisici; partite e opposizioni interne MHSV®; valutazioni periodiche; amichevoli contro squadre locali, nazionali o strutture élite quando i calendari lo consentono; attività durante periodi di preparazione, pause di competizione o alcune vacanze sportive; stage, camp e esperienze di sviluppo.",
+        "Il modello è pensato per essere adattato agli altri sport: gruppi per gli sport di squadra e monitoraggio individuale di allenamento, competizione e obiettivi per gli sport individuali.",
+        "STATO: IN STRUTTURAZIONE / SVILUPPO PROGRESSIVO"
+      ],
+      "founding": [
+        {
+          "table": [
+            [
+              "PROGRAMMA FONDATORE CALCIO"
+            ],
+            [
+              "Capacità obiettivo",
+              "Fino a 40 giocatori nel primo anno di sviluppo"
+            ],
+            [
+              "Organizzazione",
+              "Gruppi strutturati per età e livello"
+            ],
+            [
+              "Ciclo",
+              "Programma raccomandato: 3 anni"
+            ],
+            [
+              "Contenuto",
+              "Allenamento + performance + salute + sviluppo umano + educazione + transizione + opportunità"
+            ],
+            [
+              "Tariffa",
+              "CHF 15’000 / anno - tariffa di lancio"
+            ]
+          ]
+        },
+        {
+          "table": [
+            [
+              "ALTRI SPORT"
+            ],
+            [
+              "Approccio",
+              "Stessa filosofia di accompagnamento a 360°"
+            ],
+            [
+              "Adattamento",
+              "Percorso adattato alle esigenze di ogni disciplina"
+            ],
+            [
+              "Discipline",
+              "Sport di squadra e individuali"
+            ],
+            [
+              "Tariffa",
+              "Programma Completo: CHF 15’000 / anno - tariffa di lancio"
+            ]
+          ]
+        }
+      ],
+      "international": [
+        "Creare esperienze di competizione, incontro e apertura.",
+        "MHSV® ambisce a sviluppare progressivamente un programma comprendente fino a due o tre tornei o incontri di riferimento all’anno, secondo la disciplina e la capacità operativa dell’Associazione.",
+        "Gli eventi avranno l’obiettivo di riunire progressivamente strutture MHSV®, club locali e nazionali, centri di formazione, strutture élite, accademie e, dopo la formalizzazione degli accordi, organizzazioni o squadre professionistiche internazionali.",
+        "Stage, immersioni e introduzioni dipendono dal profilo del beneficiario, dagli accordi disponibili e dalla capacità operativa; non è garantito alcun inserimento professionistico.",
+        "STATO: IN STRUTTURAZIONE / SVILUPPO PROGRESSIVO"
+      ],
+      "ecosystem": [
+        "In base ai bisogni del beneficiario, MHSV® mobilita e coordina competenze specialistiche: allenamento, preparazione fisica, preparazione mentale, fisioterapia, nutrizione, videoanalisi, salute, educazione e transizione professionale.",
+        "Gli interventi di partner esterni si integrano in un percorso MHSV® strutturato e coordinato, mentre ogni professionista mantiene le responsabilità proprie del proprio ambito."
+      ],
+      "fees": [
+        "Programma Completo MHSV® - Tutti gli sport: CHF 15’000 / anno / beneficiario - tariffa di lancio.",
+        "I servizi esatti inclusi vengono definiti nel contratto di programma. I moduli specifici sono quotati separatamente. Camp, viaggi, tornei, prestazioni straordinarie e alcuni servizi di terzi possono avere condizioni o prezzi specifici.",
+        "Ciclo completo raccomandato: 3 anni. Impegno contrattuale e moduli vengono adattati al profilo e ai bisogni del beneficiario."
+      ],
+      "inclusion": [
+        "MHSV® intende sviluppare progressivamente programmi educativi, sociali e di inclusione attraverso lo sport con scuole, comuni, istituzioni e organismi specializzati.",
+        "Queste azioni sono complementari alle famiglie e ai professionisti qualificati e non sostituiscono la scuola, i professionisti della salute o i servizi sociali.",
+        "STATO: IN STRUTTURAZIONE / SVILUPPO PROGRESSIVO"
+      ],
+      "digital": [
+        "Roadmap: area beneficiari, monitoraggio obiettivi, feedback degli allenatori, documenti, video, comunicazioni autorizzate e indicatori di progresso.",
+        "L’intelligenza artificiale potrà supportare sintesi, organizzazione, assistenza multilingue e alcuni contenuti personalizzati. Non dovrà prendere autonomamente decisioni importanti su ammissione, salute, selezione o futuro di una persona.",
+        "Architettura obiettivo: sicurezza, accesso per ruoli, minimizzazione dei dati e hosting/archiviazione in Svizzera da confermare con il fornitore selezionato.",
+        "STATO: IN STRUTTURAZIONE / SVILUPPO PROGRESSIVO"
+      ],
+      "team": [
+        "Fase 1: senza fotografie. Mostrare nome, funzione ed e-mail professionale MHSV® quando disponibile.",
+        "Martial HAPPI - Fondatore e Presidente - m.happi@mhsv-international.org",
+        "Gwladys ESSAI - Segretaria Generale - e-mail MHSV® da inserire dopo la creazione.",
+        "Xavier MARTI - Direttore dello Sviluppo Istituzionale e delle Partnership - e-mail MHSV® da inserire dopo la creazione.",
+        "Laetitia PILLER - Responsabile della comunicazione - e-mail MHSV® da inserire dopo la creazione.",
+        "Diego FUIANO - Coordinamento progetto web / digitale - e-mail MHSV® da inserire dopo la creazione. Qualsiasi titolo di governance dovrà attendere la relativa conferma formale.",
+        "Non pubblicare altri ruoli storici o organigrammi finché titoli e impegni non saranno definitivamente validati.",
+        "Il prototipo dovrà comunque prevedere una struttura del team estensibile, così da poter aggiungere successivamente altri membri, aree e funzioni dopo la validazione istituzionale."
+      ],
+      "founder": [
+        "Martial HAPPI - Fondatore e Presidente. Imprenditore con sede a Ginevra, ex calciatore di livello pre-élite internazionale, allenatore UEFA C ed ex arbitro ufficiale del calcio dilettantistico. Ha fondato MHSV® per collegare sviluppo sportivo, educazione, salute, progetto professionale, inclusione e transizione.",
+        "Dietro ogni performance c’è una persona. Dietro ogni persona c’è un potenziale. E quel potenziale merita di essere accompagnato."
+      ],
+      "book": [
+        "Mostrare la copertina del Premium Founding Book - Founding Edition 2026 con una breve descrizione che lo presenta come riferimento istituzionale per visione, programmi, governance, impatto e roadmap di MHSV®.",
+        "Fase 1: non offrire il download pubblico integrale, per proteggere i contenuti strategici, metodologici e finanziari. Un estratto pubblico selezionato potrà essere aggiunto in seguito."
+      ],
+      "identity": [
+        "Prevedere uno spazio elegante per l’identità del marchio e la futura collezione MHSV®: equipaggiamento atleti, coaching, rappresentanza, accessori e lifestyle.",
+        "Formula pubblica: “Collezione MHSV® in sviluppo - mock-up concettuali e non contrattuali; futura commercializzazione prevista.”",
+        "Per il prototipo usare soltanto il logo principale contrassegnato APPROVED_FOR_PROTOTYPE nella cartella sviluppatore. Riservare gli spazi per le varianti ufficiale / istituzionale / equipaggiamento, senza pubblicare varianti storiche con vecchio slogan o testi non definitivi.",
+        "STATO: IN STRUTTURAZIONE / SVILUPPO PROGRESSIVO"
+      ],
+      "roadmap": [
+        "Presentare come roadmap e non come servizi già operativi: area beneficiari, piattaforma di monitoraggio, MHSV® Coaching Institute, Performance & Media Lab, programmi ed eventi internazionali, iniziative d’impatto e nuove funzioni digitali.",
+        "STATO: IN STRUTTURAZIONE / SVILUPPO PROGRESSIVO"
+      ],
+      "contact": [
+        "Sviluppare il potenziale. Preparare il futuro.",
+        "MHSV® - Centro Internazionale di Sviluppo e Transizione | Ginevra - Svizzera | +41 79 294 64 73 | m.happi@mhsv-international.org | www.mhsv.ch",
+        "Modulo: Nome, Cognome, E-mail, Telefono (facoltativo), Profilo / Organizzazione, Oggetto, Messaggio, consenso alla politica sulla privacy.",
+        "Destinatario tecnico proposto: infos@mhsv-international.org - casella da creare/confermare prima della produzione. Il destinatario deve essere configurabile e non codificato in modo fisso.",
+        "Footer legale: MHSV Association | Associazione svizzera senza scopo di lucro | Sede: Ginevra, Svizzera | Identità istituzionale: MHSV® - Centro Internazionale di Sviluppo e Transizione. La formulazione legale definitiva sarà pubblicata dopo l’approvazione finale degli statuti."
+      ]
+    }
+  },
+  "statusLegendFR": [
+    {
+      "label": "ACTIF",
+      "description": "Élément déjà utilisable/public"
+    },
+    {
+      "label": "EN COURS DE STRUCTURATION",
+      "description": "Élément en préparation ou en formalisation"
+    },
+    {
+      "label": "PROJET PILOTE",
+      "description": "Expérimentation limitée avant déploiement"
+    },
+    {
+      "label": "PARTENARIAT EN DISCUSSION",
+      "description": "Contact ou discussion sans accord public définitif"
+    },
+    {
+      "label": "AMBITION FUTURE",
+      "description": "Feuille de route, non encore opérationnelle"
+    }
+  ]
+}

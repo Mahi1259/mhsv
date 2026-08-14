@@ -1,0 +1,42 @@
+{
+  "name": "mhsv-website",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "npm run content:extract && npm run content:check && astro build && npm run build:check",
+    "preview": "astro preview",
+    "astro": "astro",
+    "content:extract": "node scripts/extract-content.mjs",
+    "content:check": "node scripts/check-content.mjs",
+    "assets:prepare": "node scripts/prepare-assets.mjs",
+    "build:check": "node scripts/check-build.mjs",
+    "typecheck": "astro check",
+    "audit": "node scripts/audit.mjs",
+    "test:contact": "node scripts/test-contact.mjs"
+  },
+  "description": "MHSV® — International Centre for Development and Transition. Phase 1 showcase website (FR/EN/DE/IT).",
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "@fontsource/archivo": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/source-sans-3": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^5.18.2",
+    "fflate": "^0.8.3",
+    "nodemailer": "^9.0.5",
+    "sharp": "^0.35.3",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@types/node": "^26.2.0",
+    "@types/nodemailer": "^8.0.1",
+    "axe-core": "^4.13.0",
+    "lighthouse": "^12.8.2",
+    "puppeteer-core": "^24.43.1",
+    "typescript": "^6.0.3"
+  },
+  "private": true,
+  "type": "module"
+}

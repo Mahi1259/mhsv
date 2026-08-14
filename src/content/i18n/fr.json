@@ -1,0 +1,650 @@
+{
+  "locale": "fr",
+  "sections": {
+    "hero": {
+      "num": "01",
+      "anchor": "top",
+      "title": "HERO / ACCUEIL",
+      "brand": "MHSV®",
+      "institutional": "Centre International de Développement et de Transition",
+      "legalStatus": "Association suisse à but non lucratif - Genève",
+      "baseline": "Beyond Sport - Beyond Human Potential",
+      "tagline": "Développer la performance. Construire la personne. Préparer l’avenir.",
+      "intro": "MHSV® conçoit et coordonne des parcours sportifs, humains, éducatifs, sociaux et professionnels destinés à accompagner chaque bénéficiaire dans le développement de son potentiel et dans les transitions importantes de son parcours.",
+      "ctas": [
+        "Découvrir MHSV®",
+        "Nos programmes",
+        "Demander une évaluation",
+        "Devenir partenaire"
+      ]
+    },
+    "about": {
+      "num": "02",
+      "anchor": "about",
+      "title": "QUI SOMMES-NOUS ?",
+      "lead": "MHSV® - Centre International de Développement et de Transition est l’identité institutionnelle de MHSV Association, association suisse à but non lucratif dont le siège est à Genève.",
+      "paragraphs": [
+        "Sa mission est de promouvoir le développement global de la personne à travers le sport, l’éducation, la formation, l’accompagnement humain et la préparation des transitions personnelles, sportives, scolaires et professionnelles.",
+        "Le football constitue le principal programme de lancement, mais la mission s’étend à l’ensemble du sport et, surtout, à la personne derrière la performance. MHSV® ne promet pas un accès automatique au sport professionnel : l’organisation construit des parcours réalistes, individualisés et coordonnés."
+      ],
+      "leadNoLegalStatus": "MHSV® — Centre International de Développement et de Transition est une organisation basée à Genève, en Suisse."
+    },
+    "vision": {
+      "num": "03",
+      "anchor": "vision",
+      "title": "NOTRE VISION 2035",
+      "lead": "À l’horizon 2035, MHSV® ambitionne de devenir une référence internationale dans le développement et la transition par le sport, reconnue pour la qualité de ses parcours, sa capacité de coopération et son impact durable.",
+      "steps": [
+        "Structurer et expérimenter",
+        "Consolider et professionnaliser",
+        "Déployer et transmettre"
+      ],
+      "note": "La croissance doit renforcer la qualité de l’accompagnement, la protection des bénéficiaires et la pérennité de l’organisation."
+    },
+    "mission": {
+      "num": "04",
+      "anchor": "mission",
+      "title": "NOTRE MISSION",
+      "items": [
+        {
+          "title": "Sport & performance",
+          "body": "compétences techniques, tactiques, physiques et mentales."
+        },
+        {
+          "title": "Développement humain",
+          "body": "confiance, autonomie, leadership, communication et résilience."
+        },
+        {
+          "title": "Éducation & formation",
+          "body": "double projet, apprentissages, orientation et préparation de l’avenir."
+        },
+        {
+          "title": "Santé & bien-être",
+          "body": "prévention, récupération, orientation et coordination avec des professionnels qualifiés."
+        },
+        {
+          "title": "Transition & employabilité",
+          "body": "évolutions sportives, scolaires, professionnelles et personnelles."
+        },
+        {
+          "title": "Impact social & international",
+          "body": "inclusion, ouverture, coopération et création d’opportunités."
+        }
+      ]
+    },
+    "audience": {
+      "num": "05",
+      "anchor": "audience",
+      "title": "À QUI S’ADRESSE MHSV® ?",
+      "items": [
+        "Jeunes sportifs et talents en développement",
+        "sportifs souhaitant franchir un nouveau niveau",
+        "personnes confrontées à une blessure, un échec, une non-sélection ou une réorientation",
+        "sportifs arrivant d’un autre pays",
+        "personnes préparant leur reconversion",
+        "enfants et jeunes concernés par des programmes éducatifs ou d’inclusion",
+        "familles",
+        "entraîneurs et professionnels",
+        "clubs, écoles, institutions, entreprises et organisations"
+      ],
+      "lead": "MHSV® accompagne des personnes et des structures à différentes étapes de leur parcours."
+    },
+    "method": {
+      "num": "06",
+      "anchor": "method",
+      "title": "MÉTHODOLOGIE MHSV® & MITIPS®",
+      "lead": "La personne au centre. Le sport comme levier. La transition comme continuité.",
+      "pillars": [
+        {
+          "letter": "M",
+          "name": "Mental"
+        },
+        {
+          "letter": "I",
+          "name": "Intelligence de jeu"
+        },
+        {
+          "letter": "T",
+          "name": "Technique"
+        },
+        {
+          "letter": "I",
+          "name": "Intensité"
+        },
+        {
+          "letter": "P",
+          "name": "Physique"
+        },
+        {
+          "letter": "S",
+          "name": "Social & Leadership"
+        }
+      ],
+      "note": "La méthodologie peut être adaptée aux différentes disciplines tout en conservant une évaluation globale, des objectifs individualisés, un accompagnement coordonné, des bilans et une préparation de la transition. Les protocoles internes détaillés ne sont pas publiés sur le site.",
+      "pillarsTitle": "Les six piliers MITIPS®",
+      "pillarNotes": [
+        "Confiance, concentration, gestion de la pression et résilience.",
+        "Lecture du jeu, prise d’information et qualité des décisions.",
+        "Fondamentaux techniques et qualité d’exécution.",
+        "Engagement, rythme et qualité de l’effort.",
+        "Préparation physique, prévention et récupération.",
+        "Communication, responsabilité et rôle dans le collectif."
+      ],
+      "pillarNotesDisclaimer": "Descriptions provisoires — libellés définitifs à fournir par MHSV®."
+    },
+    "services": {
+      "num": "07",
+      "anchor": "services",
+      "title": "SERVICES ET PRESTATIONS",
+      "items": [
+        "Performance sportive",
+        "développement mental et humain",
+        "éducation & double projet",
+        "transition professionnelle",
+        "santé & bien-être",
+        "analyse vidéo, média & innovation",
+        "socialisation & inclusion par le sport",
+        "formation des entraîneurs et intervenants",
+        "international"
+      ],
+      "lead": "Neuf domaines d’intervention, mobilisés selon les besoins de chaque bénéficiaire."
+    },
+    "pathway": {
+      "num": "08",
+      "anchor": "pathway",
+      "title": "LE PARCOURS MHSV®",
+      "steps": [
+        "Accueil & pré-orientation",
+        "Évaluation globale",
+        "Plan individualisé",
+        "Accompagnement coordonné",
+        "Bilans & ajustements",
+        "Transition"
+      ],
+      "note": "La réussite ne se résume pas à un contrat professionnel : elle peut aussi être une progression sportive, une meilleure santé, une orientation réussie, une reprise de confiance ou un projet professionnel sécurisé.",
+      "stepLabel": "Étape"
+    },
+    "programmes": {
+      "num": "09",
+      "anchor": "programmes",
+      "title": "LE PROGRAMME SPORTIF EN ACTION",
+      "lead": "Un parcours qui se construit sur le terrain.",
+      "paragraphs": [
+        "Pour sa première phase de déploiement, MHSV® se fixe comme objectif d’accueillir jusqu’à 40 joueurs de football, sélectionnés et répartis dans des groupes d’âge et de niveau cohérents.",
+        "Le programme pourra comprendre des entraînements techniques, tactiques et physiques ; des oppositions et matchs internes ; des évaluations périodiques ; des matchs amicaux contre des équipes locales, nationales ou issues de structures élites lorsque les calendriers le permettent ; des rencontres pendant les périodes de préparation, pauses de compétition ou certaines vacances sportives ; des stages, camps et expériences de développement.",
+        "Ce modèle est conçu pour être adapté aux autres sports : organisation par groupes pour les sports collectifs et suivi individualisé autour de l’entraînement, de la compétition et des objectifs pour les sports individuels."
+      ],
+      "status": {
+        "key": "inDevelopment",
+        "detail": "EN COURS DE STRUCTURATION / DÉPLOIEMENT PROGRESSIF"
+      }
+    },
+    "founding": {
+      "num": "10",
+      "anchor": "founding",
+      "title": "PROGRAMMES FONDATEURS",
+      "tables": [
+        {
+          "title": "PROGRAMME FONDATEUR FOOTBALL",
+          "entries": [
+            {
+              "label": "Capacité cible",
+              "value": "Jusqu’à 40 joueurs lors de la première année de déploiement"
+            },
+            {
+              "label": "Organisation",
+              "value": "Groupes structurés par âge et niveau"
+            },
+            {
+              "label": "Cycle",
+              "value": "Programme recommandé : 3 ans"
+            },
+            {
+              "label": "Contenu",
+              "value": "Entraînement + performance + santé + développement humain + éducation + transition + opportunités"
+            },
+            {
+              "label": "Tarif",
+              "value": "CHF 15’000 / année - tarif de lancement"
+            }
+          ]
+        },
+        {
+          "title": "AUTRES SPORTS",
+          "entries": [
+            {
+              "label": "Approche",
+              "value": "Même philosophie d’accompagnement 360°"
+            },
+            {
+              "label": "Adaptation",
+              "value": "Parcours adapté aux exigences de chaque discipline"
+            },
+            {
+              "label": "Disciplines",
+              "value": "Sports collectifs et individuels"
+            },
+            {
+              "label": "Tarif",
+              "value": "Programme Complet : CHF 15’000 / année - tarif de lancement"
+            }
+          ]
+        }
+      ],
+      "lead": "Les deux programmes fondateurs de la première année de déploiement."
+    },
+    "international": {
+      "num": "11",
+      "anchor": "international",
+      "title": "INTERNATIONAL & ÉVÉNEMENTS",
+      "lead": "Créer des expériences de compétition, de rencontre et d’ouverture.",
+      "paragraphs": [
+        "MHSV® ambitionne de développer progressivement un programme comprenant jusqu’à deux à trois tournois ou rencontres de référence par année, selon les disciplines et les capacités opérationnelles de l’Association.",
+        "Ces événements auront vocation à réunir progressivement des structures MHSV®, des clubs locaux et nationaux, des centres de formation, des structures élites, des académies et, lorsque des accords auront été formalisés, des organisations ou équipes professionnelles internationales.",
+        "Les stages, immersions et mises en relation dépendent du profil du bénéficiaire, des accords disponibles et des capacités opérationnelles ; aucune intégration professionnelle n’est garantie."
+      ],
+      "status": {
+        "key": "inDevelopment",
+        "detail": "EN COURS DE STRUCTURATION / DÉPLOIEMENT PROGRESSIF"
+      }
+    },
+    "ecosystem": {
+      "num": "12",
+      "anchor": "ecosystem",
+      "title": "UN ÉCOSYSTÈME COORDONNÉ PAR MHSV®",
+      "lead": "Selon les besoins du bénéficiaire, MHSV® mobilise et coordonne différentes expertises spécialisées : entraînement, préparation physique, préparation mentale, physiothérapie, nutrition, analyse vidéo, santé, éducation et transition professionnelle.",
+      "disciplines": [
+        "entraînement",
+        "préparation physique",
+        "préparation mentale",
+        "physiothérapie",
+        "nutrition",
+        "analyse vidéo",
+        "santé",
+        "éducation",
+        "transition professionnelle"
+      ],
+      "note": "Les interventions de partenaires externes s’intègrent dans un parcours MHSV® structuré et coordonné, chaque professionnel conservant les responsabilités propres à son domaine d’expertise.",
+      "disciplinesTitle": "Expertises coordonnées"
+    },
+    "fees": {
+      "num": "13",
+      "anchor": "fees",
+      "title": "TARIFS & ACCÈS",
+      "headline": "Programme Complet MHSV® - Tous sports : CHF 15’000 / année / bénéficiaire - tarif de lancement.",
+      "planName": "Programme Complet MHSV® - Tous sports",
+      "priceLine": "CHF 15’000 / année / bénéficiaire - tarif de lancement",
+      "paragraphs": [
+        "Les prestations exactes incluses sont précisées dans le contrat de programme. Les modules ciblés sont proposés sur devis. Les stages, déplacements, tournois, prestations extraordinaires et certains services tiers peuvent faire l’objet de conditions ou tarifs spécifiques.",
+        "Cycle complet recommandé : 3 ans. L’engagement contractuel et les modules sont adaptés au profil et aux besoins du bénéficiaire."
+      ],
+      "lead": "Un tarif unique de lancement, un contenu adapté à chaque profil.",
+      "included": "Prestations définies dans le contrat de programme"
+    },
+    "inclusion": {
+      "num": "14",
+      "anchor": "inclusion",
+      "title": "PROJETS, INCLUSION & DÉPLOIEMENT",
+      "paragraphs": [
+        "MHSV® souhaite développer progressivement des programmes éducatifs, sociaux et d’inclusion par le sport avec des écoles, communes, institutions ou organismes spécialisés.",
+        "Ces actions sont conçues en complémentarité avec les familles et les professionnels compétents et ne remplacent ni l’école, ni les professionnels de santé, ni les services sociaux."
+      ],
+      "status": {
+        "key": "inDevelopment",
+        "detail": "EN COURS DE STRUCTURATION / DÉPLOIEMENT PROGRESSIF"
+      }
+    },
+    "digital": {
+      "num": "15",
+      "anchor": "digital",
+      "title": "NUMÉRIQUE & INNOVATION RESPONSABLE",
+      "roadmapLead": "Feuille de route : espace bénéficiaire, suivi des objectifs, retours des entraîneurs, documents, vidéo, communications autorisées et indicateurs de progression.",
+      "roadmapItems": [
+        "espace bénéficiaire",
+        "suivi des objectifs",
+        "retours des entraîneurs",
+        "documents",
+        "vidéo",
+        "communications autorisées",
+        "indicateurs de progression"
+      ],
+      "paragraphs": [
+        "L’intelligence artificielle pourra soutenir la synthèse, l’organisation, l’aide multilingue et certains contenus personnalisés. Elle ne devra pas prendre seule des décisions importantes relatives à l’admission, la santé, la sélection ou l’avenir d’une personne.",
+        "Architecture visée : sécurité, accès par rôle, minimisation des données et hébergement/stockage en Suisse à confirmer avec le prestataire retenu."
+      ],
+      "status": {
+        "key": "inDevelopment",
+        "detail": "EN COURS DE STRUCTURATION / DÉPLOIEMENT PROGRESSIF"
+      },
+      "roadmapTitle": "Feuille de route numérique"
+    },
+    "team": {
+      "num": "16",
+      "anchor": "team",
+      "title": "ORGANISATION & ÉQUIPE",
+      "members": [
+        {
+          "name": "Martial HAPPI",
+          "role": "Fondateur et Président",
+          "email": "m.happi@mhsv-international.org",
+          "emailPending": false
+        },
+        {
+          "name": "Gwladys ESSAI",
+          "role": "Secrétaire Générale",
+          "email": null,
+          "emailPending": true
+        },
+        {
+          "name": "Xavier MARTI",
+          "role": "Directeur du Développement Institutionnel et des Partenariats",
+          "email": null,
+          "emailPending": true
+        },
+        {
+          "name": "Laetitia PILLER",
+          "role": "Responsable de la communication",
+          "email": null,
+          "emailPending": true
+        },
+        {
+          "name": "Diego FUIANO",
+          "role": "Coordination du projet web / digital",
+          "email": null,
+          "emailPending": true
+        }
+      ],
+      "lead": "Phase 1 : présentation sans photographies. Les adresses professionnelles MHSV® sont publiées au fur et à mesure de leur création.",
+      "emailPending": "Adresse MHSV® à venir",
+      "emailPendingHint": "L’adresse professionnelle sera publiée après sa création."
+    },
+    "founder": {
+      "num": "17",
+      "anchor": "founder",
+      "title": "LE FONDATEUR",
+      "name": "Martial HAPPI",
+      "role": "Fondateur et Président",
+      "bio": "Chef d’entreprise basé à Genève, ancien joueur de football de niveau pré-élite à l’international, entraîneur diplômé C-UEFA et ancien arbitre officiel du football amateur. Il a fondé MHSV® afin de relier développement sportif, éducation, santé, projet professionnel, inclusion et transition.",
+      "quote": "Parce que derrière chaque performance se trouve une personne. Derrière chaque personne existe un potentiel. Et ce potentiel mérite d’être accompagné."
+    },
+    "book": {
+      "num": "18",
+      "anchor": "book",
+      "title": "NOTRE LIVRE FONDATEUR",
+      "lead": "Livre Fondateur Premium — Édition Fondatrice 2026",
+      "body": "Le Livre Fondateur constitue la référence institutionnelle de MHSV® : vision, programmes, gouvernance, impact et feuille de route y sont réunis.",
+      "notice": "Phase 1 : le livre n’est pas proposé en téléchargement public. Un extrait sélectionné pourra être publié ultérieurement.",
+      "coverAltFr": "Couverture du Livre Fondateur MHSV® — édition française",
+      "coverAltEn": "Couverture du Livre Fondateur MHSV® — édition anglaise",
+      "ctaLabel": "Demander une présentation"
+    },
+    "identity": {
+      "num": "19",
+      "anchor": "identity",
+      "title": "IDENTITÉ, LOGOS & COLLECTION MHSV®",
+      "collectionNotice": "Collection MHSV® en développement - maquettes conceptuelles, non contractuelles ; commercialisation envisagée.",
+      "status": {
+        "key": "inDevelopment",
+        "detail": "EN COURS DE STRUCTURATION / DÉPLOIEMENT PROGRESSIF"
+      },
+      "lead": "L’identité MHSV® et la future collection : équipement athlètes, coaching, représentation, accessoires et lifestyle.",
+      "logoTitle": "Logo principal",
+      "logoNote": "Seul le logo principal validé est publié à ce stade.",
+      "placeholdersTitle": "Variantes réservées",
+      "placeholderOfficial": "Logo officiel",
+      "placeholderInstitutional": "Logo institutionnel",
+      "placeholderEquipment": "Logo équipement",
+      "placeholderNote": "Emplacement réservé — en attente de validation."
+    },
+    "roadmap": {
+      "num": "20",
+      "anchor": "roadmap",
+      "title": "PROCHAINEMENT / FUTURES RUBRIQUES",
+      "items": [
+        "espace bénéficiaires",
+        "plateforme de suivi",
+        "MHSV® Coaching Institute",
+        "Performance & Media Lab",
+        "programmes et événements internationaux",
+        "initiatives d’impact",
+        "nouvelles fonctionnalités numériques"
+      ],
+      "status": {
+        "key": "inDevelopment",
+        "detail": "EN COURS DE STRUCTURATION / DÉPLOIEMENT PROGRESSIF"
+      },
+      "lead": "Ces rubriques sont annoncées comme feuille de route et ne constituent pas des services déjà opérationnels."
+    },
+    "contact": {
+      "num": "21",
+      "anchor": "contact",
+      "title": "CONTACT & MENTIONS LÉGALES",
+      "tagline": "Développons le potentiel. Préparons l’avenir.",
+      "institutional": "MHSV® - Centre International de Développement et de Transition",
+      "place": "Genève - Suisse",
+      "phone": "+41 79 294 64 73",
+      "email": "m.happi@mhsv-international.org",
+      "website": "www.mhsv.ch",
+      "legalFooter": [
+        "MHSV Association",
+        "Association suisse à but non lucratif",
+        "Siège : Genève, Suisse",
+        "Identité institutionnelle : MHSV® - Centre International de Développement et de Transition. La formulation légale finale sera publiée après validation définitive des statuts."
+      ],
+      "lead": "Une question, un projet, une demande d’évaluation ? Écrivez-nous.",
+      "detailsTitle": "Coordonnées",
+      "formTitle": "Formulaire de contact"
+    }
+  },
+  "brand": {
+    "name": "MHSV®",
+    "institutional": "Centre International de Développement et de Transition",
+    "legalStatus": "Association suisse à but non lucratif - Genève",
+    "baseline": "Beyond Sport - Beyond Human Potential"
+  },
+  "_statusFromPack": {
+    "active": {
+      "label": "ACTIF",
+      "description": "Élément déjà utilisable/public"
+    },
+    "inDevelopment": {
+      "label": "EN COURS DE STRUCTURATION",
+      "description": "Élément en préparation ou en formalisation"
+    },
+    "pilot": {
+      "label": "PROJET PILOTE",
+      "description": "Expérimentation limitée avant déploiement"
+    },
+    "partnership": {
+      "label": "PARTENARIAT EN DISCUSSION",
+      "description": "Contact ou discussion sans accord public définitif"
+    },
+    "future": {
+      "label": "AMBITION FUTURE",
+      "description": "Feuille de route, non encore opérationnelle"
+    }
+  },
+  "_note": "Chaînes rédigées par le développeur — absentes du pack de contenu V3. À VALIDER PAR MHSV® avant mise en production. Voir CONTENT.md.",
+  "meta": {
+    "htmlLang": "fr-CH",
+    "ogLocale": "fr_CH",
+    "name": "Français",
+    "nameShort": "FR",
+    "hreflang": "fr"
+  },
+  "seo": {
+    "title": "MHSV® — Centre International de Développement et de Transition",
+    "description": "MHSV® conçoit et coordonne des parcours sportifs, humains, éducatifs, sociaux et professionnels. Genève, Suisse.",
+    "ogImageAlt": "Logo MHSV® — Centre International de Développement et de Transition"
+  },
+  "ui": {
+    "skipToContent": "Aller au contenu principal",
+    "primaryNav": "Navigation principale",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "languageNav": "Choix de la langue",
+    "chooseLanguage": "Langue",
+    "currentLanguage": "Langue actuelle",
+    "backToTop": "Retour en haut",
+    "sectionIndex": "Sommaire",
+    "statusLegend": "Légende des statuts",
+    "required": "obligatoire",
+    "optional": "optionnel",
+    "logoAlt": "Logo MHSV®",
+    "sectionLabel": "Section"
+  },
+  "nav": {
+    "items": [
+      {
+        "id": "about",
+        "label": "Qui sommes-nous"
+      },
+      {
+        "id": "vision",
+        "label": "Vision 2035"
+      },
+      {
+        "id": "method",
+        "label": "Méthodologie"
+      },
+      {
+        "id": "services",
+        "label": "Services"
+      },
+      {
+        "id": "programmes",
+        "label": "Programmes"
+      },
+      {
+        "id": "fees",
+        "label": "Tarifs"
+      },
+      {
+        "id": "team",
+        "label": "Équipe"
+      },
+      {
+        "id": "contact",
+        "label": "Contact"
+      }
+    ]
+  },
+  "status": {
+    "legendTitle": "Statuts de publication",
+    "legendIntro": "Chaque rubrique indique son niveau d’avancement réel.",
+    "items": {
+      "active": {
+        "label": "Actif",
+        "description": "Élément déjà utilisable ou public."
+      },
+      "inDevelopment": {
+        "label": "En cours de structuration",
+        "description": "Élément en préparation ou en formalisation."
+      },
+      "pilot": {
+        "label": "Projet pilote",
+        "description": "Expérimentation limitée avant déploiement."
+      },
+      "partnership": {
+        "label": "Partenariat en discussion",
+        "description": "Prise de contact uniquement, aucun accord public."
+      },
+      "future": {
+        "label": "Ambition future",
+        "description": "Feuille de route, pas encore opérationnel."
+      }
+    }
+  },
+  "form": {
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "E-mail",
+    "phone": "Téléphone",
+    "profile": "Profil / Organisation",
+    "profilePlaceholder": "Athlète, famille, club, institution, entreprise…",
+    "subject": "Objet",
+    "message": "Message",
+    "consent": "J’accepte que mes données soient traitées conformément à la politique de confidentialité.",
+    "consentLinkLabel": "politique de confidentialité",
+    "submit": "Envoyer",
+    "submitting": "Envoi en cours…",
+    "honeypotLabel": "Ne pas remplir ce champ",
+    "successTitle": "Message envoyé",
+    "successBody": "Merci pour votre message. Nous vous répondrons dans les meilleurs délais.",
+    "errorTitle": "Envoi impossible",
+    "errorBody": "Une erreur est survenue. Merci de réessayer ou de nous écrire directement par e-mail.",
+    "errors": {
+      "firstName": "Merci d’indiquer votre prénom.",
+      "lastName": "Merci d’indiquer votre nom.",
+      "email": "Merci d’indiquer une adresse e-mail valide.",
+      "phone": "Merci d’indiquer un numéro de téléphone valide.",
+      "profile": "Merci d’indiquer votre profil ou votre organisation.",
+      "subject": "Merci d’indiquer un objet.",
+      "message": "Merci d’écrire votre message.",
+      "messageTooLong": "Le message est trop long (5000 caractères maximum).",
+      "consent": "Votre consentement est nécessaire pour envoyer le formulaire.",
+      "spam": "Votre message n’a pas pu être vérifié. Merci de réessayer.",
+      "tooFast": "Formulaire envoyé trop rapidement. Merci de réessayer.",
+      "server": "Le service d’envoi est momentanément indisponible."
+    }
+  },
+  "footer": {
+    "tagline": "Développons le potentiel. Préparons l’avenir.",
+    "navTitle": "Rubriques",
+    "contactTitle": "Contact",
+    "legalTitle": "Informations",
+    "privacyLink": "Politique de confidentialité",
+    "legalLink": "Mentions légales",
+    "copyright": "Tous droits réservés.",
+    "trademarkNote": "MHSV® est une marque déposée."
+  },
+  "privacy": {
+    "title": "Politique de confidentialité",
+    "draftBadge": "Projet — en attente de validation juridique",
+    "draftNotice": "Ce texte est un projet préparé par le développeur pour le prototype. La version définitive doit être rédigée et validée par le conseil juridique de MHSV® avant la mise en production.",
+    "updated": "Dernière mise à jour",
+    "sections": [
+      {
+        "title": "Responsable du traitement",
+        "body": "MHSV® — Centre International de Développement et de Transition, Genève, Suisse. Les coordonnées complètes figurent dans la rubrique Contact."
+      },
+      {
+        "title": "Données traitées",
+        "body": "Lorsque vous utilisez le formulaire de contact, nous traitons les données que vous nous transmettez : prénom, nom, adresse e-mail, numéro de téléphone (facultatif), profil ou organisation, objet et contenu du message."
+      },
+      {
+        "title": "Finalité et base légale",
+        "body": "Ces données sont utilisées uniquement pour répondre à votre demande. Le traitement repose sur votre consentement, donné au moment de l’envoi du formulaire."
+      },
+      {
+        "title": "Destinataires",
+        "body": "Les messages sont transmis à l’adresse de contact de MHSV® et traités par les personnes habilitées au sein de l’organisation. Aucune donnée n’est vendue ni transmise à des fins publicitaires."
+      },
+      {
+        "title": "Durée de conservation",
+        "body": "Les messages sont conservés le temps nécessaire au traitement de la demande, puis supprimés ou archivés conformément aux obligations applicables."
+      },
+      {
+        "title": "Cookies et mesure d’audience",
+        "body": "Ce site ne dépose aucun cookie de suivi et n’utilise aucun outil de mesure d’audience tiers. Les polices de caractères sont hébergées sur nos serveurs et aucune requête n’est adressée à des services externes lors de votre visite."
+      },
+      {
+        "title": "Vos droits",
+        "body": "Conformément à la loi fédérale suisse sur la protection des données (LPD), vous disposez d’un droit d’accès, de rectification, d’effacement et d’opposition. Vous pouvez retirer votre consentement à tout moment en nous écrivant."
+      },
+      {
+        "title": "Contact",
+        "body": "Pour toute question relative à la protection des données, écrivez-nous via le formulaire de contact ou à l’adresse indiquée dans la rubrique Contact."
+      }
+    ]
+  },
+  "legal": {
+    "title": "Mentions légales",
+    "pendingNotice": "Les mentions légales définitives seront publiées après validation des statuts de l’association.",
+    "editorTitle": "Éditeur du site",
+    "hostingTitle": "Hébergement",
+    "hostingBody": "Hébergeur à confirmer avant la mise en production.",
+    "propertyTitle": "Propriété intellectuelle",
+    "propertyBody": "L’ensemble des contenus, marques et éléments graphiques présents sur ce site sont la propriété de MHSV® ou de leurs titulaires respectifs et ne peuvent être reproduits sans autorisation écrite."
+  }
+}

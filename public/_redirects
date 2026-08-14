@@ -1,0 +1,11 @@
+# Netlify redirects. Cloudflare Pages reads this file too.
+#
+# A real 301 for the root, so `/` does not depend on the meta-refresh fallback
+# in src/pages/index.astro. Geneva is the primary market, so French is default.
+/                 /fr/    301
+
+# Legacy/likely-typed paths for the language roots.
+/fr               /fr/    301
+/en               /en/    301
+/de               /de/    301
+/it               /it/    301

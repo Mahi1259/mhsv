@@ -1,0 +1,39 @@
+---
+/**
+ * §09 — Sport programmes in action.
+ *
+ * Carries a status badge: this is a target for the first deployment phase, not
+ * an operating programme.
+ */
+import Band from '@/components/Band.astro';
+import { getContent, type Locale } from '@/lib/i18n';
+import type { BandTone } from '@/config/site';
+
+interface Props {
+  locale: Locale;
+  tone: BandTone;
+}
+
+const { locale, tone } = Astro.props;
+const s = getContent(locale).sections.programmes;
+---
+
+<Band
+  locale={locale}
+  anchor={s.anchor}
+  num={s.num}
+  title={s.title}
+  tone={tone}
+  lead={s.lead}
+  status={s.status}
+>
+  <div class="prose-body programmes__body">
+    {s.paragraphs.map((text) => <p>{text}</p>)}
+  </div>
+</Band>
+
+<style>
+  .programmes__body {
+    font-size: 1rem;
+  }
+</style>

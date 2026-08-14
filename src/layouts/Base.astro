@@ -1,0 +1,102 @@
+---
+/**
+ * Document shell: head metadata, skip link, header, footer.
+ *
+ * `path` is the route *within* a locale ("" for the home page, "privacy/" for
+ * the privacy page). Everything locale-aware — canonical, hreflang, the
+ * language switcher — is derived from it, so a new page only has to pass its
+ * own path once.
+ */
+import { getContent, localeAlternates, localePath, type Locale } from '@/lib/i18n';
+import { SITE_URL, DEFAULT_LOCALE } from '@/config/site';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import preloadFonts from '@/config/preload-fonts.json';
+import '@/styles/global.css';
+
+interface Props {
+  locale: Locale;
+  path?: string;
+  title?: string;
+  description?: string;
+  /** Set on pages that exist for a flow, not for search (form results). */
+  noindex?: boolean;
+}
+
+const { locale, path = '', title, description, noindex = false } = Astro.props;
+const c = getContent(locale);
+
+const pageTitle = title ? `${title} — ${c.brand.name}` : c.seo.title;
+const pageDescription = description ?? c.seo.description;
+
+const alternates = localeAlternates(path);
+const canonical = new URL(localePath(path, locale), SITE_URL).href;
+const ogImage = new URL('/og-image.png', SITE_URL).href;
+---
+
+<!doctype html>
+<html lang={c.meta.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <link rel="canonical" href={canonical} />
+
+    {/* Every language has a real URL, so search engines can index all four. */}
+    {
+      alternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.hreflang} href={new URL(alt.path, SITE_URL).href} />
+      ))
+    }
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={new URL(localePath(path, DEFAULT_LOCALE), SITE_URL).href}
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={c.brand.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={c.seo.ogImageAlt} />
+    <meta property="og:locale" content={c.meta.ogLocale} />
+    {
+      alternates
+        .filter((alt) => alt.locale !== locale)
+        .map((alt) => <meta property="og:locale:alternate" content={alt.ogLocale} />)
+    }
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={c.seo.ogImageAlt} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0B0B0C" />
+
+    {
+      preloadFonts.map((href) => (
+        <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
+      ))
+    }
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">{c.ui.skipToContent}</a>
+    <Header locale={locale} path={path} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+  </body>
+</html>

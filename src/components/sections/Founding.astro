@@ -1,0 +1,111 @@
+---
+/**
+ * §10 — Founding programmes.
+ *
+ * The two programmes describe different attributes, so they are two definition
+ * lists rather than one shared-axis table — which also means no horizontal
+ * scroll at 320px.
+ */
+import Band from '@/components/Band.astro';
+import { getContent, type Locale } from '@/lib/i18n';
+import type { BandTone } from '@/config/site';
+
+interface Props {
+  locale: Locale;
+  tone: BandTone;
+}
+
+const { locale, tone } = Astro.props;
+const s = getContent(locale).sections.founding;
+---
+
+<Band locale={locale} anchor={s.anchor} num={s.num} title={s.title} tone={tone} lead={s.lead}>
+  <div class="programmes">
+    {
+      s.tables.map((table) => (
+        <article class="programme">
+          <h3 class="programme__title">{table.title}</h3>
+          <dl class="programme__list">
+            {table.entries.map((entry) => (
+              <div class="programme__row">
+                <dt>{entry.label}</dt>
+                <dd>{entry.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </article>
+      ))
+    }
+  </div>
+</Band>
+
+<style>
+  .programmes {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .programme {
+    background: var(--band-raised);
+    border: 1px solid var(--band-rule);
+    border-block-start: 2px solid var(--band-accent);
+    border-radius: var(--radius-card);
+    padding: clamp(1.25rem, 1rem + 1vw, 2rem);
+  }
+
+  .programme__title {
+    margin: 0 0 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--band-accent);
+    line-height: 1.4;
+  }
+
+  .programme__list {
+    margin: 0;
+    display: grid;
+    gap: 0;
+  }
+
+  .programme__row {
+    display: grid;
+    gap: 0.25rem;
+    padding-block: 0.875rem;
+    border-block-start: 1px solid var(--band-rule);
+  }
+
+  .programme__row:first-child {
+    border-block-start: 0;
+    padding-block-start: 0;
+  }
+
+  .programme__row dt {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--band-muted);
+  }
+
+  .programme__row dd {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+
+  @media (min-width: 48rem) {
+    .programmes {
+      grid-template-columns: repeat(2, 1fr);
+      align-items: start;
+    }
+
+    .programme__row {
+      grid-template-columns: 9rem 1fr;
+      gap: 1rem;
+      align-items: baseline;
+    }
+  }
+</style>

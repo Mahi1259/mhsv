@@ -1,0 +1,98 @@
+---
+/**
+ * Root entry point.
+ *
+ * `/` redirects to the default locale (`/fr/` — Geneva is the primary market).
+ * The real redirect is a 301 issued by the host (see public/_redirects and
+ * DEPLOY.md); this document is the fallback for hosts that only serve static
+ * files, and it degrades to a plain language list when JavaScript and
+ * meta-refresh are both unavailable.
+ *
+ * Marked noindex with a canonical to /fr/, so it never competes with the
+ * localised pages in search results.
+ */
+import { LOCALES, DEFAULT_LOCALE, SITE_URL } from '@/config/site';
+import { getContent } from '@/lib/i18n';
+
+const target = `/${DEFAULT_LOCALE}/`;
+const languages = LOCALES.map((locale) => {
+  const c = getContent(locale);
+  return { locale, name: c.meta.name, htmlLang: c.meta.htmlLang, institutional: c.brand.institutional };
+});
+---
+
+<!doctype html>
+<html lang={DEFAULT_LOCALE}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MHSV® — International Centre for Development and Transition</title>
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href={new URL(target, SITE_URL).href} />
+    {
+      LOCALES.map((locale) => (
+        <link rel="alternate" hreflang={locale} href={new URL(`/${locale}/`, SITE_URL).href} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={new URL(target, SITE_URL).href} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-content: center;
+        gap: 1.5rem;
+        padding: 2rem;
+        background: #0b0b0c;
+        color: #f2efe9;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        text-align: center;
+      }
+      h1 {
+        margin: 0;
+        font-size: 1.5rem;
+        letter-spacing: -0.02em;
+      }
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      a {
+        display: block;
+        padding: 0.75rem 1.25rem;
+        border: 1px solid #c8a24a;
+        color: #e8c877;
+        text-decoration: none;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        font-size: 0.8125rem;
+      }
+      a:hover,
+      a:focus-visible {
+        background: #c8a24a;
+        color: #0b0b0c;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>MHSV&reg;</h1>
+    <ul>
+      {
+        languages.map((lang) => (
+          <li>
+            <a href={`/${lang.locale}/`} hreflang={lang.locale} lang={lang.htmlLang}>
+              {lang.name}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </body>
+</html>

@@ -1,0 +1,98 @@
+---
+/**
+ * Publication-status badge.
+ *
+ * The client requires every forward-looking section to state its real stage, so
+ * nothing reads as an operational service or a confirmed partnership when it is
+ * not one. Five states exist; content pack V3 only uses "in development", but
+ * the other four are wired up so new content needs no code change.
+ */
+import { getContent, type Locale } from '@/lib/i18n';
+import { statusQualifier } from '@/lib/text';
+import type { StatusKey } from '@/config/site';
+
+interface Props {
+  locale: Locale;
+  status: StatusKey;
+  /** Full wording from the content pack, e.g. "IN DEVELOPMENT / PROGRESSIVE DEPLOYMENT". */
+  detail?: string;
+  class?: string;
+}
+
+const { locale, status, detail, class: className } = Astro.props;
+const c = getContent(locale);
+const item = c.status.items[status];
+
+// The pack's wording repeats the badge label ("IN DEVELOPMENT / PROGRESSIVE
+// DEPLOYMENT"); keep only the part that adds something.
+const qualifier = statusQualifier(detail, item.label);
+---
+
+<p class:list={['status', `status--${status}`, className]}>
+  <span class="status__dot" aria-hidden="true"></span>
+  <span class="status__label">{item.label}</span>
+  {qualifier && <span class="status__detail">{qualifier}</span>}
+  <span class="visually-hidden">— {item.description}</span>
+</p>
+
+<style>
+  .status {
+    display: inline-flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.375rem 0.625rem;
+    margin: 0;
+    padding: 0.4375rem 0.75rem;
+    border: 1px solid var(--status-line, var(--band-rule));
+    border-inline-start: 3px solid var(--status-accent, var(--band-accent));
+    border-radius: var(--radius-card);
+    background: var(--band-raised);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  .status__dot {
+    align-self: center;
+    width: 0.4375rem;
+    height: 0.4375rem;
+    border-radius: 50%;
+    background: var(--status-accent, var(--band-accent));
+    flex: 0 0 auto;
+  }
+
+  .status__label {
+    font-weight: 500;
+    color: var(--band-fg);
+  }
+
+  .status__detail {
+    color: var(--band-muted);
+    letter-spacing: 0.06em;
+  }
+
+  /* Each state carries its own accent so the five are distinguishable by more
+     than position. Colour is never the only signal — the label is always
+     spelled out. */
+  .status--active {
+    --status-accent: #4f9d69;
+  }
+
+  .status--inDevelopment {
+    --status-accent: var(--band-accent);
+  }
+
+  .status--pilot {
+    --status-accent: #5b8db8;
+  }
+
+  .status--partnership {
+    --status-accent: #a1789e;
+  }
+
+  .status--future {
+    --status-accent: var(--band-muted);
+  }
+</style>

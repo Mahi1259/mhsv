@@ -1,0 +1,78 @@
+---
+/** §04 — Our mission: six mission areas. */
+import Band from '@/components/Band.astro';
+import { getContent, type Locale } from '@/lib/i18n';
+import type { BandTone } from '@/config/site';
+
+interface Props {
+  locale: Locale;
+  tone: BandTone;
+}
+
+const { locale, tone } = Astro.props;
+const s = getContent(locale).sections.mission;
+---
+
+<Band locale={locale} anchor={s.anchor} num={s.num} title={s.title} tone={tone}>
+  <ul class="mission">
+    {
+      s.items.map((item, i) => (
+        <li class="mission__item">
+          <span class="mission__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <h3 class="mission__title">{item.title}</h3>
+          <p class="mission__body">{item.body}</p>
+        </li>
+      ))
+    }
+  </ul>
+</Band>
+
+<style>
+  .mission {
+    display: grid;
+    gap: 1px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: var(--band-rule);
+    border: 1px solid var(--band-rule);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+
+  .mission__item {
+    background: var(--band-bg);
+    padding: clamp(1.25rem, 1rem + 1vw, 2rem);
+  }
+
+  .mission__num {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    color: var(--band-accent);
+  }
+
+  .mission__title {
+    font-size: var(--text-h3);
+    margin: 0.625rem 0 0.5rem;
+  }
+
+  .mission__body {
+    margin: 0;
+    color: var(--band-muted);
+    font-size: 0.9375rem;
+  }
+
+  @media (min-width: 40rem) {
+    .mission {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .mission {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

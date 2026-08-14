@@ -1,0 +1,130 @@
+---
+/**
+ * §18 — Founding book.
+ *
+ * Covers and a short description only. The full PDFs are INTERNAL_REFERENCE in
+ * ASSET_STATUS.csv and are never copied into the build — there is deliberately
+ * no download link here, and no path that could become one.
+ *
+ * The pack's own §18 text is an instruction to the developer, so the public
+ * copy is authored (CONTENT.md).
+ */
+import { Picture } from 'astro:assets';
+import Band from '@/components/Band.astro';
+import { getContent, type Locale } from '@/lib/i18n';
+import type { BandTone } from '@/config/site';
+import coverFr from '@/assets/book/founding-book-fr.png';
+import coverEn from '@/assets/book/founding-book-en.png';
+
+interface Props {
+  locale: Locale;
+  tone: BandTone;
+}
+
+const { locale, tone } = Astro.props;
+const s = getContent(locale).sections.book;
+
+// Only FR and EN covers exist. DE and IT readers are shown both.
+const covers = [
+  { src: coverFr, alt: s.coverAltFr, edition: 'FR' },
+  { src: coverEn, alt: s.coverAltEn, edition: 'EN' },
+];
+---
+
+<Band locale={locale} anchor={s.anchor} num={s.num} title={s.title} tone={tone}>
+  <div class="book">
+    <ul class="book__covers">
+      {
+        covers.map((cover) => (
+          <li class="book__cover">
+            <Picture
+              src={cover.src}
+              alt={cover.alt}
+              formats={['webp']}
+              fallbackFormat="png"
+              widths={[240, 400]}
+              sizes="(min-width: 52rem) 15rem, 40vw"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="book__edition mono-label" aria-hidden="true">{cover.edition}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="book__text">
+      <h3 class="book__lead">{s.lead}</h3>
+      <p class="prose-body">{s.body}</p>
+      <p class="book__notice">{s.notice}</p>
+      <a class="btn btn-secondary book__cta" href="#contact">{s.ctaLabel}</a>
+    </div>
+  </div>
+</Band>
+
+<style>
+  .book {
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .book__covers {
+    display: flex;
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .book__cover {
+    position: relative;
+    flex: 1 1 0;
+    max-width: 15rem;
+  }
+
+  .book__cover :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--band-rule);
+    box-shadow: 0 18px 40px rgb(0 0 0 / 0.4);
+  }
+
+  .book__edition {
+    position: absolute;
+    inset-block-start: 0.5rem;
+    inset-inline-start: 0.5rem;
+    padding: 0.1875rem 0.4375rem;
+    background: var(--color-ink);
+    color: var(--color-gold);
+    font-size: 0.625rem;
+  }
+
+  .book__lead {
+    margin: 0 0 0.875rem;
+    font-size: var(--text-h3);
+    color: var(--band-accent);
+  }
+
+  .book__notice {
+    margin-block-start: 1.5rem;
+    padding: 0.875rem 1rem;
+    border: 1px dashed var(--band-rule);
+    border-radius: var(--radius-card);
+    color: var(--band-muted);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  .book__cta {
+    margin-block-start: 1.5rem;
+  }
+
+  @media (min-width: 52rem) {
+    .book {
+      grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+      gap: 3.5rem;
+    }
+  }
+</style>

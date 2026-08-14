@@ -1,0 +1,255 @@
+{
+  "_note": "Testi redatti dallo sviluppatore — non presenti nel content pack V3. DA VALIDARE DA PARTE DI MHSV® prima della messa in produzione. Vedi CONTENT.md.",
+  "meta": {
+    "htmlLang": "it-CH",
+    "ogLocale": "it_CH",
+    "name": "Italiano",
+    "nameShort": "IT",
+    "hreflang": "it"
+  },
+  "seo": {
+    "title": "MHSV® — Centro Internazionale di Sviluppo e Transizione",
+    "description": "MHSV® progetta e coordina percorsi sportivi, umani, educativi, sociali e professionali. Ginevra, Svizzera.",
+    "ogImageAlt": "Logo MHSV® — Centro Internazionale di Sviluppo e Transizione"
+  },
+  "ui": {
+    "skipToContent": "Vai al contenuto principale",
+    "primaryNav": "Navigazione principale",
+    "openMenu": "Apri il menu",
+    "closeMenu": "Chiudi il menu",
+    "languageNav": "Selezione della lingua",
+    "chooseLanguage": "Lingua",
+    "currentLanguage": "Lingua attuale",
+    "backToTop": "Torna su",
+    "sectionIndex": "Sommario",
+    "statusLegend": "Legenda degli stati",
+    "required": "obbligatorio",
+    "optional": "facoltativo",
+    "logoAlt": "Logo MHSV®",
+    "sectionLabel": "Sezione"
+  },
+  "nav": {
+    "items": [
+      {
+        "id": "about",
+        "label": "Chi siamo"
+      },
+      {
+        "id": "vision",
+        "label": "Visione 2035"
+      },
+      {
+        "id": "method",
+        "label": "Metodologia"
+      },
+      {
+        "id": "services",
+        "label": "Servizi"
+      },
+      {
+        "id": "programmes",
+        "label": "Programmi"
+      },
+      {
+        "id": "fees",
+        "label": "Tariffe"
+      },
+      {
+        "id": "team",
+        "label": "Team"
+      },
+      {
+        "id": "contact",
+        "label": "Contatti"
+      }
+    ]
+  },
+  "status": {
+    "legendTitle": "Stato di pubblicazione",
+    "legendIntro": "Ogni sezione indica il proprio reale stato di avanzamento.",
+    "items": {
+      "active": {
+        "label": "Attivo",
+        "description": "Già pubblico o utilizzabile."
+      },
+      "inDevelopment": {
+        "label": "In strutturazione",
+        "description": "In preparazione o in fase di formalizzazione."
+      },
+      "pilot": {
+        "label": "Progetto pilota",
+        "description": "Sperimentazione limitata prima dello sviluppo."
+      },
+      "partnership": {
+        "label": "Partnership in discussione",
+        "description": "Solo contatto, nessun accordo pubblico."
+      },
+      "future": {
+        "label": "Ambizione futura",
+        "description": "Roadmap, non ancora operativa."
+      }
+    }
+  },
+  "sections": {
+    "about": {
+      "leadNoLegalStatus": "MHSV® — Centro Internazionale di Sviluppo e Transizione è un'organizzazione con sede a Ginevra, in Svizzera."
+    },
+    "audience": {
+      "lead": "MHSV® accompagna persone e organizzazioni in diverse tappe del loro percorso."
+    },
+    "services": {
+      "lead": "Nove ambiti di intervento, attivati in base ai bisogni di ogni beneficiario."
+    },
+    "method": {
+      "pillarsTitle": "I sei pilastri MITIPS®",
+      "pillarNotes": [
+        "Fiducia, concentrazione, gestione della pressione e resilienza.",
+        "Lettura del gioco, raccolta delle informazioni e qualità delle decisioni.",
+        "Fondamentali tecnici e qualità dell'esecuzione.",
+        "Impegno, ritmo e qualità dello sforzo.",
+        "Preparazione fisica, prevenzione e recupero.",
+        "Comunicazione, responsabilità e ruolo nel collettivo."
+      ],
+      "pillarNotesDisclaimer": "Descrizioni provvisorie — formulazioni definitive da fornire da parte di MHSV®."
+    },
+    "pathway": {
+      "stepLabel": "Tappa"
+    },
+    "founding": {
+      "lead": "I due programmi fondatori del primo anno di sviluppo."
+    },
+    "ecosystem": {
+      "disciplinesTitle": "Competenze coordinate"
+    },
+    "fees": {
+      "lead": "Una tariffa unica di lancio, con contenuti adattati a ogni profilo.",
+      "included": "Prestazioni definite nel contratto di programma"
+    },
+    "digital": {
+      "roadmapTitle": "Roadmap digitale"
+    },
+    "team": {
+      "lead": "Fase 1: presentazione senza fotografie. Gli indirizzi professionali MHSV® vengono pubblicati man mano che sono creati.",
+      "emailPending": "Indirizzo MHSV® in arrivo",
+      "emailPendingHint": "L'indirizzo professionale sarà pubblicato dopo la sua creazione."
+    },
+    "book": {
+      "lead": "Premium Founding Book — Founding Edition 2026",
+      "body": "Il Libro Fondatore è il riferimento istituzionale di MHSV®: visione, programmi, governance, impatto e roadmap sono riuniti in un unico volume.",
+      "notice": "Fase 1: il libro non è disponibile per il download pubblico. Un estratto selezionato potrà essere pubblicato in seguito.",
+      "coverAltFr": "Copertina del Libro Fondatore MHSV® — edizione francese",
+      "coverAltEn": "Copertina del Libro Fondatore MHSV® — edizione inglese",
+      "ctaLabel": "Richiedi una presentazione"
+    },
+    "identity": {
+      "lead": "L'identità MHSV® e la futura collezione: equipaggiamento atleti, coaching, rappresentanza, accessori e lifestyle.",
+      "logoTitle": "Logo principale",
+      "logoNote": "In questa fase viene pubblicato unicamente il logo principale approvato.",
+      "placeholdersTitle": "Varianti riservate",
+      "placeholderOfficial": "Logo ufficiale",
+      "placeholderInstitutional": "Logo istituzionale",
+      "placeholderEquipment": "Logo equipaggiamento",
+      "placeholderNote": "Spazio riservato — in attesa di validazione."
+    },
+    "roadmap": {
+      "lead": "Queste sezioni sono annunciate come roadmap e non costituiscono servizi già operativi."
+    },
+    "contact": {
+      "lead": "Una domanda, un progetto, una richiesta di valutazione? Scriveteci.",
+      "detailsTitle": "Recapiti",
+      "formTitle": "Modulo di contatto"
+    }
+  },
+  "form": {
+    "firstName": "Nome",
+    "lastName": "Cognome",
+    "email": "E-mail",
+    "phone": "Telefono",
+    "profile": "Profilo / Organizzazione",
+    "profilePlaceholder": "Atleta, famiglia, club, istituzione, impresa…",
+    "subject": "Oggetto",
+    "message": "Messaggio",
+    "consent": "Accetto che i miei dati siano trattati conformemente alla politica sulla privacy.",
+    "consentLinkLabel": "politica sulla privacy",
+    "submit": "Invia",
+    "submitting": "Invio in corso…",
+    "honeypotLabel": "Non compilare questo campo",
+    "successTitle": "Messaggio inviato",
+    "successBody": "Grazie per il vostro messaggio. Vi risponderemo il prima possibile.",
+    "errorTitle": "Invio non riuscito",
+    "errorBody": "Si è verificato un errore. Riprovate oppure scriveteci direttamente per e-mail.",
+    "errors": {
+      "firstName": "Indicate il vostro nome.",
+      "lastName": "Indicate il vostro cognome.",
+      "email": "Indicate un indirizzo e-mail valido.",
+      "phone": "Indicate un numero di telefono valido.",
+      "profile": "Indicate il vostro profilo o la vostra organizzazione.",
+      "subject": "Indicate un oggetto.",
+      "message": "Scrivete il vostro messaggio.",
+      "messageTooLong": "Il messaggio è troppo lungo (massimo 5000 caratteri).",
+      "consent": "Il vostro consenso è necessario per inviare il modulo.",
+      "spam": "Non è stato possibile verificare il vostro messaggio. Riprovate.",
+      "tooFast": "Il modulo è stato inviato troppo rapidamente. Riprovate.",
+      "server": "Il servizio di invio è temporaneamente non disponibile."
+    }
+  },
+  "footer": {
+    "tagline": "Sviluppare il potenziale. Preparare il futuro.",
+    "navTitle": "Sezioni",
+    "contactTitle": "Contatti",
+    "legalTitle": "Informazioni",
+    "privacyLink": "Politica sulla privacy",
+    "legalLink": "Note legali",
+    "copyright": "Tutti i diritti riservati.",
+    "trademarkNote": "MHSV® è un marchio registrato."
+  },
+  "privacy": {
+    "title": "Politica sulla privacy",
+    "draftBadge": "Bozza — in attesa di validazione legale",
+    "draftNotice": "Questo testo è una bozza preparata dallo sviluppatore per il prototipo. La versione definitiva deve essere redatta e approvata dal consulente legale di MHSV® prima della messa in produzione.",
+    "updated": "Ultimo aggiornamento",
+    "sections": [
+      {
+        "title": "Titolare del trattamento",
+        "body": "MHSV® — Centro Internazionale di Sviluppo e Transizione, Ginevra, Svizzera. I recapiti completi sono indicati nella sezione Contatti."
+      },
+      {
+        "title": "Dati trattati",
+        "body": "Quando utilizzate il modulo di contatto, trattiamo i dati che ci trasmettete: nome, cognome, indirizzo e-mail, numero di telefono (facoltativo), profilo o organizzazione, oggetto e contenuto del messaggio."
+      },
+      {
+        "title": "Finalità e base giuridica",
+        "body": "Questi dati sono utilizzati esclusivamente per rispondere alla vostra richiesta. Il trattamento si basa sul vostro consenso, espresso al momento dell'invio del modulo."
+      },
+      {
+        "title": "Destinatari",
+        "body": "I messaggi sono trasmessi all'indirizzo di contatto di MHSV® e trattati dalle persone autorizzate all'interno dell'organizzazione. Nessun dato viene venduto o trasmesso a fini pubblicitari."
+      },
+      {
+        "title": "Durata di conservazione",
+        "body": "I messaggi sono conservati per il tempo necessario al trattamento della richiesta, poi cancellati o archiviati conformemente agli obblighi applicabili."
+      },
+      {
+        "title": "Cookie e misurazione del pubblico",
+        "body": "Questo sito non deposita cookie di tracciamento e non utilizza strumenti di analisi di terze parti. I caratteri tipografici sono ospitati sui nostri server e durante la visita non viene inviata alcuna richiesta a servizi esterni."
+      },
+      {
+        "title": "I vostri diritti",
+        "body": "Conformemente alla legge federale svizzera sulla protezione dei dati (LPD), avete diritto di accesso, rettifica, cancellazione e opposizione. Potete revocare il vostro consenso in qualsiasi momento scrivendoci."
+      },
+      {
+        "title": "Contatto",
+        "body": "Per qualsiasi domanda relativa alla protezione dei dati, scriveteci tramite il modulo di contatto o all'indirizzo indicato nella sezione Contatti."
+      }
+    ]
+  },
+  "legal": {
+    "title": "Note legali",
+    "pendingNotice": "Le note legali definitive saranno pubblicate dopo la validazione degli statuti dell'associazione.",
+    "editorTitle": "Editore del sito",
+    "hostingTitle": "Hosting",
+    "hostingBody": "Provider di hosting da confermare prima della messa in produzione.",
+    "propertyTitle": "Proprietà intellettuale",
+    "propertyBody": "Tutti i contenuti, i marchi e gli elementi grafici presenti su questo sito sono di proprietà di MHSV® o dei rispettivi titolari e non possono essere riprodotti senza autorizzazione scritta."
+  }
+}

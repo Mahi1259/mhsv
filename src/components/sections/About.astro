@@ -1,0 +1,38 @@
+---
+/**
+ * §02 — Who we are.
+ *
+ * BLOCKER #1. The pack's opening sentence names "MHSV Association" and states
+ * the legal form ("a Swiss non-profit association with its registered office in
+ * Geneva"). That is exactly what the later client instruction withholds until
+ * the lawyer validates the statutes, so while SHOW_LEGAL_STATUS is off this
+ * band opens with a neutral authored sentence instead. Nothing else in the
+ * section touches legal status.
+ *
+ * Turning the flag on restores the pack's own wording verbatim.
+ */
+import Band from '@/components/Band.astro';
+import { getContent, type Locale } from '@/lib/i18n';
+import { SHOW_LEGAL_STATUS, type BandTone } from '@/config/site';
+
+interface Props {
+  locale: Locale;
+  tone: BandTone;
+}
+
+const { locale, tone } = Astro.props;
+const s = getContent(locale).sections.about;
+const lead = SHOW_LEGAL_STATUS ? s.lead : s.leadNoLegalStatus;
+---
+
+<Band locale={locale} anchor={s.anchor} num={s.num} title={s.title} tone={tone} lead={lead}>
+  <div class="prose-body about__body">
+    {s.paragraphs.map((text) => <p>{text}</p>)}
+  </div>
+</Band>
+
+<style>
+  .about__body {
+    font-size: 1.0625rem;
+  }
+</style>

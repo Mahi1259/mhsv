@@ -1,0 +1,255 @@
+{
+  "_note": "Strings written by the developer — not present in content pack V3. TO BE VALIDATED BY MHSV® before production. See CONTENT.md.",
+  "meta": {
+    "htmlLang": "en",
+    "ogLocale": "en_GB",
+    "name": "English",
+    "nameShort": "EN",
+    "hreflang": "en"
+  },
+  "seo": {
+    "title": "MHSV® — International Centre for Development and Transition",
+    "description": "MHSV® designs and coordinates sporting, human, educational, social and professional pathways. Geneva, Switzerland.",
+    "ogImageAlt": "MHSV® logo — International Centre for Development and Transition"
+  },
+  "ui": {
+    "skipToContent": "Skip to main content",
+    "primaryNav": "Main navigation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "languageNav": "Language selection",
+    "chooseLanguage": "Language",
+    "currentLanguage": "Current language",
+    "backToTop": "Back to top",
+    "sectionIndex": "Contents",
+    "statusLegend": "Status legend",
+    "required": "required",
+    "optional": "optional",
+    "logoAlt": "MHSV® logo",
+    "sectionLabel": "Section"
+  },
+  "nav": {
+    "items": [
+      {
+        "id": "about",
+        "label": "Who we are"
+      },
+      {
+        "id": "vision",
+        "label": "Vision 2035"
+      },
+      {
+        "id": "method",
+        "label": "Methodology"
+      },
+      {
+        "id": "services",
+        "label": "Services"
+      },
+      {
+        "id": "programmes",
+        "label": "Programmes"
+      },
+      {
+        "id": "fees",
+        "label": "Fees"
+      },
+      {
+        "id": "team",
+        "label": "Team"
+      },
+      {
+        "id": "contact",
+        "label": "Contact"
+      }
+    ]
+  },
+  "status": {
+    "legendTitle": "Publication status",
+    "legendIntro": "Every section states its real stage of development.",
+    "items": {
+      "active": {
+        "label": "Active",
+        "description": "Already public or usable."
+      },
+      "inDevelopment": {
+        "label": "In development",
+        "description": "Being prepared or formalised."
+      },
+      "pilot": {
+        "label": "Pilot project",
+        "description": "Limited experiment before rollout."
+      },
+      "partnership": {
+        "label": "Partnership in discussion",
+        "description": "Contact only, no public agreement."
+      },
+      "future": {
+        "label": "Future ambition",
+        "description": "Roadmap, not yet operational."
+      }
+    }
+  },
+  "sections": {
+    "about": {
+      "leadNoLegalStatus": "MHSV® — International Centre for Development and Transition is an organisation based in Geneva, Switzerland."
+    },
+    "audience": {
+      "lead": "MHSV® supports people and organisations at different stages of their journey."
+    },
+    "services": {
+      "lead": "Nine areas of intervention, mobilised according to each beneficiary's needs."
+    },
+    "method": {
+      "pillarsTitle": "The six MITIPS® pillars",
+      "pillarNotes": [
+        "Confidence, focus, handling pressure and resilience.",
+        "Reading the game, gathering information and decision quality.",
+        "Technical fundamentals and quality of execution.",
+        "Commitment, rhythm and quality of effort.",
+        "Physical preparation, prevention and recovery.",
+        "Communication, responsibility and role within the group."
+      ],
+      "pillarNotesDisclaimer": "Provisional descriptions — final wording to be supplied by MHSV®."
+    },
+    "pathway": {
+      "stepLabel": "Step"
+    },
+    "founding": {
+      "lead": "The two founding programmes for the first deployment year."
+    },
+    "ecosystem": {
+      "disciplinesTitle": "Coordinated expertise"
+    },
+    "fees": {
+      "lead": "A single launch rate, with content adapted to each profile.",
+      "included": "Services defined in the programme agreement"
+    },
+    "digital": {
+      "roadmapTitle": "Digital roadmap"
+    },
+    "team": {
+      "lead": "Phase 1: presented without photographs. MHSV® professional addresses are published as they are created.",
+      "emailPending": "MHSV® address to come",
+      "emailPendingHint": "The professional address will be published once created."
+    },
+    "book": {
+      "lead": "Premium Founding Book — Founding Edition 2026",
+      "body": "The Founding Book is the institutional reference for MHSV®: vision, programmes, governance, impact and roadmap are brought together in a single volume.",
+      "notice": "Phase 1: the book is not offered as a public download. A selected extract may be published at a later stage.",
+      "coverAltFr": "MHSV® Founding Book cover — French edition",
+      "coverAltEn": "MHSV® Founding Book cover — English edition",
+      "ctaLabel": "Request a presentation"
+    },
+    "identity": {
+      "lead": "The MHSV® identity and future collection: athlete equipment, coaching, representation, accessories and lifestyle.",
+      "logoTitle": "Primary logo",
+      "logoNote": "Only the approved primary logo is published at this stage.",
+      "placeholdersTitle": "Reserved variants",
+      "placeholderOfficial": "Official logo",
+      "placeholderInstitutional": "Institutional logo",
+      "placeholderEquipment": "Equipment logo",
+      "placeholderNote": "Placement reserved — pending validation."
+    },
+    "roadmap": {
+      "lead": "These sections are announced as a roadmap and are not services already in operation."
+    },
+    "contact": {
+      "lead": "A question, a project, a request for an assessment? Write to us.",
+      "detailsTitle": "Details",
+      "formTitle": "Contact form"
+    }
+  },
+  "form": {
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "phone": "Phone",
+    "profile": "Profile / Organisation",
+    "profilePlaceholder": "Athlete, family, club, institution, company…",
+    "subject": "Subject",
+    "message": "Message",
+    "consent": "I agree that my data may be processed in accordance with the privacy policy.",
+    "consentLinkLabel": "privacy policy",
+    "submit": "Send",
+    "submitting": "Sending…",
+    "honeypotLabel": "Do not fill in this field",
+    "successTitle": "Message sent",
+    "successBody": "Thank you for your message. We will get back to you as soon as possible.",
+    "errorTitle": "Could not send",
+    "errorBody": "Something went wrong. Please try again, or write to us directly by email.",
+    "errors": {
+      "firstName": "Please enter your first name.",
+      "lastName": "Please enter your last name.",
+      "email": "Please enter a valid email address.",
+      "phone": "Please enter a valid phone number.",
+      "profile": "Please enter your profile or organisation.",
+      "subject": "Please enter a subject.",
+      "message": "Please write your message.",
+      "messageTooLong": "The message is too long (5000 characters maximum).",
+      "consent": "Your consent is required to send the form.",
+      "spam": "Your message could not be verified. Please try again.",
+      "tooFast": "The form was submitted too quickly. Please try again.",
+      "server": "The sending service is temporarily unavailable."
+    }
+  },
+  "footer": {
+    "tagline": "Develop potential. Prepare the future.",
+    "navTitle": "Sections",
+    "contactTitle": "Contact",
+    "legalTitle": "Information",
+    "privacyLink": "Privacy policy",
+    "legalLink": "Legal notice",
+    "copyright": "All rights reserved.",
+    "trademarkNote": "MHSV® is a registered trademark."
+  },
+  "privacy": {
+    "title": "Privacy policy",
+    "draftBadge": "Draft — pending legal validation",
+    "draftNotice": "This text is a draft prepared by the developer for the prototype. The final version must be written and approved by MHSV®'s legal counsel before going into production.",
+    "updated": "Last updated",
+    "sections": [
+      {
+        "title": "Data controller",
+        "body": "MHSV® — International Centre for Development and Transition, Geneva, Switzerland. Full details are given in the Contact section."
+      },
+      {
+        "title": "Data processed",
+        "body": "When you use the contact form, we process the data you provide: first name, last name, email address, phone number (optional), profile or organisation, subject and message content."
+      },
+      {
+        "title": "Purpose and legal basis",
+        "body": "This data is used solely to respond to your enquiry. Processing is based on your consent, given when you submit the form."
+      },
+      {
+        "title": "Recipients",
+        "body": "Messages are sent to the MHSV® contact address and handled by authorised people within the organisation. No data is sold or passed on for advertising purposes."
+      },
+      {
+        "title": "Retention",
+        "body": "Messages are kept for as long as necessary to handle the enquiry, then deleted or archived in line with applicable obligations."
+      },
+      {
+        "title": "Cookies and analytics",
+        "body": "This site sets no tracking cookies and uses no third-party analytics. Fonts are hosted on our own servers, and no requests are made to external services when you visit."
+      },
+      {
+        "title": "Your rights",
+        "body": "Under the Swiss Federal Act on Data Protection (FADP), you have the right to access, correct, delete and object to the processing of your data. You may withdraw your consent at any time by writing to us."
+      },
+      {
+        "title": "Contact",
+        "body": "For any question about data protection, write to us using the contact form or at the address given in the Contact section."
+      }
+    ]
+  },
+  "legal": {
+    "title": "Legal notice",
+    "pendingNotice": "The final legal notice will be published once the association's articles have been approved.",
+    "editorTitle": "Site publisher",
+    "hostingTitle": "Hosting",
+    "hostingBody": "Host to be confirmed before going into production.",
+    "propertyTitle": "Intellectual property",
+    "propertyBody": "All content, trademarks and graphic elements on this site are the property of MHSV® or their respective owners and may not be reproduced without written permission."
+  }
+}

@@ -1,0 +1,179 @@
+---
+/**
+ * §19 — Identity, logos & collection.
+ *
+ * Hard constraints honoured here:
+ *   - Only MHSV_Primary_Logo_HD.png is published. The REFERENCE_ONLY variants
+ *     are neither imported nor referenced.
+ *   - The collection mock-ups are REVIEW_REQUIRED and may carry retired
+ *     baselines, so no collection imagery is shown — only the wording the
+ *     client requires verbatim.
+ *   - Empty, labelled placements are reserved for the official / institutional
+ *     / equipment variants so they can be dropped in after validation.
+ */
+import { Image } from 'astro:assets';
+import Band from '@/components/Band.astro';
+import { getContent, type Locale } from '@/lib/i18n';
+import type { BandTone } from '@/config/site';
+import logo from '@/assets/logo/mhsv-logo.png';
+
+interface Props {
+  locale: Locale;
+  tone: BandTone;
+}
+
+const { locale, tone } = Astro.props;
+const s = getContent(locale).sections.identity;
+
+const placeholders = [s.placeholderOfficial, s.placeholderInstitutional, s.placeholderEquipment];
+---
+
+<Band
+  locale={locale}
+  anchor={s.anchor}
+  num={s.num}
+  title={s.title}
+  tone={tone}
+  lead={s.lead}
+  status={s.status}
+>
+  <div class="identity">
+    <figure class="identity__primary">
+      <div class="identity__plate">
+        <Image
+          src={logo}
+          alt={s.logoTitle}
+          widths={[240, 400]}
+          sizes="(min-width: 52rem) 15rem, 55vw"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <figcaption>
+        <span class="mono-label identity__caption">{s.logoTitle}</span>
+        <span class="identity__note">{s.logoNote}</span>
+      </figcaption>
+    </figure>
+
+    <div class="identity__reserved">
+      <h3 class="mono-label identity__reservedTitle">{s.placeholdersTitle}</h3>
+      <ul class="identity__slots">
+        {
+          placeholders.map((label) => (
+            <li class="identity__slot">
+              <span class="identity__slotLabel">{label}</span>
+              <span class="identity__slotNote">{s.placeholderNote}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <p class="identity__collection">{s.collectionNotice}</p>
+</Band>
+
+<style>
+  .identity {
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .identity__primary {
+    margin: 0;
+  }
+
+  /* The approved logo is artwork on white. A light plate presents it as
+     intended on any band tone. */
+  .identity__plate {
+    display: grid;
+    place-items: center;
+    padding: 1.75rem;
+    background: #ffffff;
+    border: 1px solid var(--band-rule);
+    border-radius: var(--radius-card);
+  }
+
+  .identity__plate :global(img) {
+    width: 100%;
+    max-width: 15rem;
+    height: auto;
+  }
+
+  .identity__primary figcaption {
+    display: grid;
+    gap: 0.375rem;
+    margin-block-start: 0.875rem;
+  }
+
+  .identity__caption {
+    color: var(--band-accent);
+  }
+
+  .identity__note {
+    color: var(--band-muted);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  .identity__reservedTitle {
+    color: var(--band-muted);
+    margin: 0 0 1rem;
+  }
+
+  .identity__slots {
+    display: grid;
+    gap: 0.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .identity__slot {
+    display: grid;
+    gap: 0.25rem;
+    align-content: center;
+    min-height: 5.5rem;
+    padding: 1rem;
+    border: 1px dashed var(--band-rule);
+    border-radius: var(--radius-card);
+    background: var(--band-raised);
+    text-align: center;
+  }
+
+  .identity__slotLabel {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--band-fg);
+  }
+
+  .identity__slotNote {
+    font-size: 0.75rem;
+    color: var(--band-muted);
+  }
+
+  .identity__collection {
+    margin-block-start: 2.5rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--band-rule);
+    border-inline-start: 3px solid var(--band-accent);
+    border-radius: var(--radius-card);
+    background: var(--band-raised);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  @media (min-width: 52rem) {
+    .identity {
+      grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+      gap: 3rem;
+    }
+
+    .identity__slots {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

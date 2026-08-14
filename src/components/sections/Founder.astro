@@ -1,0 +1,70 @@
+---
+/** §17 — The founder. No photo in Phase 1. */
+import Band from '@/components/Band.astro';
+import { getContent, type Locale } from '@/lib/i18n';
+import type { BandTone } from '@/config/site';
+
+interface Props {
+  locale: Locale;
+  tone: BandTone;
+}
+
+const { locale, tone } = Astro.props;
+const s = getContent(locale).sections.founder;
+---
+
+<Band locale={locale} anchor={s.anchor} num={s.num} title={s.title} tone={tone}>
+  <div class="founder">
+    <div class="founder__identity">
+      <h3 class="founder__name">{s.name}</h3>
+      <p class="founder__role mono-label">{s.role}</p>
+    </div>
+    <div class="founder__body">
+      <p class="prose-body">{s.bio}</p>
+      <blockquote class="founder__quote">
+        <p>{s.quote}</p>
+      </blockquote>
+    </div>
+  </div>
+</Band>
+
+<style>
+  .founder {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .founder__name {
+    margin: 0;
+    font-size: var(--text-h3);
+  }
+
+  .founder__role {
+    margin: 0.5rem 0 0;
+    color: var(--band-accent);
+  }
+
+  .founder__quote {
+    margin: 2rem 0 0;
+    padding-inline-start: 1.5rem;
+    border-inline-start: 2px solid var(--band-accent);
+  }
+
+  .founder__quote p {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-h3);
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+
+  @media (min-width: 52rem) {
+    .founder {
+      grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
+      gap: 3rem;
+    }
+  }
+</style>

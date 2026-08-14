@@ -1,0 +1,83 @@
+---
+/**
+ * A numbered content band — the page's repeating unit.
+ *
+ * Renders <section aria-labelledby> with the two-digit section number from the
+ * content pack as an eyebrow, an <h2>, an optional status badge and lead, then
+ * the caller's content. Tone alternates dark / raised / light down the page.
+ */
+import StatusBadge from '@/components/StatusBadge.astro';
+import type { Locale } from '@/lib/i18n';
+import type { BandTone, StatusKey } from '@/config/site';
+
+interface Props {
+  locale: Locale;
+  anchor: string;
+  num: string;
+  title: string;
+  tone: BandTone;
+  lead?: string;
+  status?: { key: string; detail: string } | null;
+  /** Set when the band's content already provides its own inner container. */
+  bare?: boolean;
+  class?: string;
+}
+
+const {
+  locale,
+  anchor,
+  num,
+  title,
+  tone,
+  lead,
+  status = null,
+  bare = false,
+  class: className,
+} = Astro.props;
+
+const headingId = `${anchor}-title`;
+---
+
+<section
+  id={anchor}
+  class:list={['band', `band-${tone}`, className]}
+  aria-labelledby={headingId}
+>
+  <div class="shell">
+    <div class="band__head">
+      <p class="eyebrow"><span>{num}</span></p>
+      <h2 id={headingId} class="section-title">{title}</h2>
+      {
+        status && (
+          <StatusBadge
+            locale={locale}
+            status={status.key as StatusKey}
+            detail={status.detail}
+            class="band__status"
+          />
+        )
+      }
+      {lead && <p class="lead band__lead">{lead}</p>}
+    </div>
+    {bare ? <slot /> : <div class="band__body"><slot /></div>}
+  </div>
+</section>
+
+<style>
+  .band__head {
+    max-width: 62rem;
+  }
+
+  .band__status {
+    margin-block-start: 1.25rem;
+  }
+
+  .band__lead {
+    margin-block-start: 1.5rem;
+    color: var(--band-fg);
+  }
+
+  .band__body {
+    margin-block-start: clamp(2rem, 1.4rem + 2.4vw, 3.5rem);
+  }
+</style>

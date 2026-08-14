@@ -1,0 +1,83 @@
+---
+/**
+ * §20 — Coming soon / roadmap.
+ *
+ * Presented as a roadmap, never as operating services — client instruction.
+ */
+import Band from '@/components/Band.astro';
+import { getContent, type Locale } from '@/lib/i18n';
+import { capitalizeFirst } from '@/lib/text';
+import type { BandTone } from '@/config/site';
+
+interface Props {
+  locale: Locale;
+  tone: BandTone;
+}
+
+const { locale, tone } = Astro.props;
+const s = getContent(locale).sections.roadmap;
+const items = s.items.map((item) => capitalizeFirst(item, locale));
+---
+
+<Band
+  locale={locale}
+  anchor={s.anchor}
+  num={s.num}
+  title={s.title}
+  tone={tone}
+  lead={s.lead}
+  status={s.status}
+>
+  <ul class="roadmap">
+    {
+      items.map((item) => (
+        <li class="roadmap__item">
+          <span class="roadmap__marker" aria-hidden="true" />
+          {item}
+        </li>
+      ))
+    }
+  </ul>
+</Band>
+
+<style>
+  .roadmap {
+    display: grid;
+    gap: 0.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .roadmap__item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9375rem 1.125rem;
+    background: var(--band-raised);
+    border: 1px dashed var(--band-rule);
+    border-radius: var(--radius-card);
+    font-size: 0.9375rem;
+    line-height: 1.35;
+  }
+
+  .roadmap__marker {
+    width: 0.375rem;
+    height: 0.375rem;
+    flex: 0 0 auto;
+    border: 1px solid var(--band-accent);
+    border-radius: 50%;
+  }
+
+  @media (min-width: 40rem) {
+    .roadmap {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .roadmap {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

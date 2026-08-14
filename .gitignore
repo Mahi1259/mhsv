@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.astro/
+.netlify/
+.wrangler/
+.env
+.env.*
+!.env.example
+.DS_Store
+npm-debug.log*
+
+# Client source material that must never be published or redistributed.
+# The full Founding Book PDFs are INTERNAL_REFERENCE (ASSET_STATUS.csv).
+src/assets/**/*INTERNAL_REFERENCE*
+public/**/*INTERNAL_REFERENCE*
+*REFERENCE_ONLY*

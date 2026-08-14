@@ -1,0 +1,91 @@
+---
+/**
+ * §03 — Vision 2035.
+ *
+ * The three-step arc (structure -> consolidate -> deploy) is an ordered list:
+ * the sequence is the meaning, so it must survive with CSS off.
+ */
+import Band from '@/components/Band.astro';
+import { getContent, type Locale } from '@/lib/i18n';
+import type { BandTone } from '@/config/site';
+
+interface Props {
+  locale: Locale;
+  tone: BandTone;
+}
+
+const { locale, tone } = Astro.props;
+const s = getContent(locale).sections.vision;
+---
+
+<Band locale={locale} anchor={s.anchor} num={s.num} title={s.title} tone={tone} lead={s.lead}>
+  <ol class="arc">
+    {
+      s.steps.map((step, i) => (
+        <li class="arc__step">
+          <span class="arc__num" aria-hidden="true">
+            {String(i + 1).padStart(2, '0')}
+          </span>
+          <span class="arc__label">{step}</span>
+        </li>
+      ))
+    }
+  </ol>
+  <p class="prose-body vision__note">{s.note}</p>
+</Band>
+
+<style>
+  .arc {
+    display: grid;
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: none;
+  }
+
+  .arc__step {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1.25rem 1.25rem 1.25rem 1rem;
+    background: var(--band-raised);
+    border: 1px solid var(--band-rule);
+    border-block-start: 2px solid var(--band-accent);
+    border-radius: var(--radius-card);
+  }
+
+  .arc__num {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--band-accent);
+    flex: 0 0 auto;
+  }
+
+  .arc__label {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-h3);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .vision__note {
+    margin-block-start: 2rem;
+  }
+
+  @media (min-width: 48rem) {
+    .arc {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    .arc__step {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+  }
+</style>

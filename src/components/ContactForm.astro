@@ -1,0 +1,462 @@
+---
+/**
+ * Contact form.
+ *
+ * Works with JavaScript disabled: it is a plain POST to /api/contact, and the
+ * function redirects to a static confirmation or error page. With JavaScript
+ * the submit is intercepted and the result is shown inline, so the visitor
+ * keeps their place on the page and their input if something fails.
+ *
+ * Spam protection is a honeypot plus a timing check, with no third-party
+ * CAPTCHA — a CAPTCHA would send visitor data to a third party, which is
+ * exactly what this site avoids elsewhere.
+ *
+ * The timing field is stamped by JavaScript on load. It cannot be stamped at
+ * build time because the page is a cached static document. When it is absent
+ * (no JS) the server falls back to the honeypot alone rather than locking
+ * those visitors out.
+ */
+import { getContent, localePath, type Locale } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const c = getContent(locale);
+const f = c.form;
+const privacyHref = localePath('privacy/', locale);
+
+// The consent label embeds a link to the privacy policy. Split on the link
+// label so the surrounding wording stays translatable as one string.
+const consentParts = f.consent.split(f.consentLinkLabel);
+const consentBefore = consentParts[0];
+const consentAfter = consentParts.length > 1 ? consentParts.slice(1).join(f.consentLinkLabel) : '';
+---
+
+<form
+  class="form"
+  id="contact-form"
+  action="/api/contact"
+  method="post"
+  novalidate
+  data-locale={locale}
+>
+  <input type="hidden" name="locale" value={locale} />
+  {/* Stamped client-side; see the note above. */}
+  <input type="hidden" name="rendered_at" value="" />
+
+  {/* Honeypot: positioned off-screen rather than display:none, which some
+      bots detect. Never focusable, never announced. */}
+  <div class="form__trap" aria-hidden="true">
+    <label for="website-url">{f.honeypotLabel}</label>
+    <input id="website-url" name="website_url" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div class="form__grid">
+    <p class="form__field">
+      <label for="firstName">{f.firstName} <span class="form__req" aria-hidden="true">*</span></label>
+      <input
+        id="firstName"
+        name="firstName"
+        type="text"
+        required
+        autocomplete="given-name"
+        maxlength="80"
+        aria-describedby="firstName-error"
+      />
+      <span class="form__error" id="firstName-error" data-error-for="firstName"></span>
+    </p>
+
+    <p class="form__field">
+      <label for="lastName">{f.lastName} <span class="form__req" aria-hidden="true">*</span></label>
+      <input
+        id="lastName"
+        name="lastName"
+        type="text"
+        required
+        autocomplete="family-name"
+        maxlength="80"
+        aria-describedby="lastName-error"
+      />
+      <span class="form__error" id="lastName-error" data-error-for="lastName"></span>
+    </p>
+
+    <p class="form__field">
+      <label for="email">{f.email} <span class="form__req" aria-hidden="true">*</span></label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        maxlength="254"
+        aria-describedby="email-error"
+      />
+      <span class="form__error" id="email-error" data-error-for="email"></span>
+    </p>
+
+    <p class="form__field">
+      <label for="phone">
+        {f.phone} <span class="form__optional">({c.ui.optional})</span>
+      </label>
+      <input
+        id="phone"
+        name="phone"
+        type="tel"
+        autocomplete="tel"
+        maxlength="40"
+        aria-describedby="phone-error"
+      />
+      <span class="form__error" id="phone-error" data-error-for="phone"></span>
+    </p>
+
+    <p class="form__field form__field--wide">
+      <label for="profile">{f.profile} <span class="form__req" aria-hidden="true">*</span></label>
+      <input
+        id="profile"
+        name="profile"
+        type="text"
+        required
+        maxlength="120"
+        placeholder={f.profilePlaceholder}
+        aria-describedby="profile-error"
+      />
+      <span class="form__error" id="profile-error" data-error-for="profile"></span>
+    </p>
+
+    <p class="form__field form__field--wide">
+      <label for="subject">{f.subject} <span class="form__req" aria-hidden="true">*</span></label>
+      <input
+        id="subject"
+        name="subject"
+        type="text"
+        required
+        maxlength="160"
+        aria-describedby="subject-error"
+      />
+      <span class="form__error" id="subject-error" data-error-for="subject"></span>
+    </p>
+
+    <p class="form__field form__field--wide">
+      <label for="message">{f.message} <span class="form__req" aria-hidden="true">*</span></label>
+      <textarea
+        id="message"
+        name="message"
+        rows="6"
+        required
+        maxlength="5000"
+        aria-describedby="message-error"></textarea>
+      <span class="form__error" id="message-error" data-error-for="message"></span>
+    </p>
+  </div>
+
+  <p class="form__consent">
+    <input id="consent" name="consent" type="checkbox" required aria-describedby="consent-error" />
+    <label for="consent">
+      {consentBefore}<a class="link" href={privacyHref}>{f.consentLinkLabel}</a>{consentAfter}
+      <span class="form__req" aria-hidden="true"> *</span>
+    </label>
+  </p>
+  <span class="form__error form__error--block" id="consent-error" data-error-for="consent"></span>
+
+  <div class="form__actions">
+    <button class="btn btn-primary" type="submit" data-submit-label={f.submit} data-sending-label={f.submitting}>
+      {f.submit}
+    </button>
+    <p class="form__required-note">
+      <span aria-hidden="true">*</span> {c.ui.required}
+    </p>
+  </div>
+
+  {/* Result region. Empty and inert until JavaScript fills it. */}
+  <div class="form__result" id="form-result" role="status" aria-live="polite" hidden>
+    <p class="form__result-title" data-result-title></p>
+    <p class="form__result-body" data-result-body></p>
+  </div>
+</form>
+
+<script
+  is:inline
+  define:vars={{
+    strings: {
+      errors: c.form.errors,
+      successTitle: c.form.successTitle,
+      successBody: c.form.successBody,
+      errorTitle: c.form.errorTitle,
+      errorBody: c.form.errorBody,
+    },
+  }}
+>
+  (function () {
+    const form = document.getElementById('contact-form');
+    if (!form) return;
+
+    // Marks the form as JS-capable and gives the server a timing baseline.
+    const stamp = form.elements.rendered_at;
+    if (stamp) stamp.value = String(Date.now());
+
+    const result = document.getElementById('form-result');
+    const button = form.querySelector('button[type="submit"]');
+    const errorFor = (name) => form.querySelector(`[data-error-for="${name}"]`);
+
+    function clearErrors() {
+      form.querySelectorAll('[data-error-for]').forEach((el) => {
+        el.textContent = '';
+        const field = form.elements[el.dataset.errorFor];
+        if (field) field.removeAttribute('aria-invalid');
+      });
+    }
+
+    function showErrors(fields) {
+      let first = null;
+      for (const name of fields) {
+        const el = errorFor(name);
+        const field = form.elements[name];
+        if (el) el.textContent = strings.errors[name] || '';
+        if (field) {
+          field.setAttribute('aria-invalid', 'true');
+          if (!first) first = field;
+        }
+      }
+      if (first) first.focus();
+    }
+
+    function showResult(kind, title, body) {
+      result.hidden = false;
+      result.dataset.kind = kind;
+      result.querySelector('[data-result-title]').textContent = title;
+      result.querySelector('[data-result-body]').textContent = body;
+    }
+
+    /** Mirrors the server's rules so the visitor is told before a round trip. */
+    function validate(data) {
+      const invalid = [];
+      for (const name of ['firstName', 'lastName', 'profile', 'subject', 'message']) {
+        if (!String(data.get(name) || '').trim()) invalid.push(name);
+      }
+      const email = String(data.get('email') || '').trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) invalid.push('email');
+      if (String(data.get('message') || '').length > 5000) invalid.push('message');
+      if (!data.get('consent')) invalid.push('consent');
+      return invalid;
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearErrors();
+      result.hidden = true;
+
+      const data = new FormData(form);
+      const invalid = validate(data);
+      if (invalid.length) {
+        showErrors(invalid);
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = button.dataset.sendingLabel;
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' },
+        });
+        const payload = await response.json().catch(() => ({}));
+
+        if (response.ok && payload.ok) {
+          form.reset();
+          if (stamp) stamp.value = String(Date.now());
+          showResult('success', strings.successTitle, strings.successBody);
+        } else if (Array.isArray(payload.fields) && payload.fields.length) {
+          showErrors(payload.fields);
+        } else {
+          showResult('error', strings.errorTitle, strings.errors[payload.reason] || strings.errorBody);
+        }
+      } catch {
+        showResult('error', strings.errorTitle, strings.errorBody);
+      } finally {
+        button.disabled = false;
+        button.textContent = button.dataset.submitLabel;
+      }
+    });
+  })();
+</script>
+
+<style>
+  .form {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  /* Off-screen rather than display:none — harder for bots to skip. */
+  .form__trap {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .form__grid {
+    display: grid;
+    gap: 1.125rem;
+  }
+
+  .form__field {
+    display: grid;
+    gap: 0.375rem;
+    margin: 0;
+    min-width: 0;
+  }
+
+  .form__field label,
+  .form__consent label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--band-muted);
+  }
+
+  .form__req {
+    color: var(--band-accent);
+  }
+
+  .form__optional {
+    text-transform: none;
+    letter-spacing: 0.04em;
+  }
+
+  .form input[type='text'],
+  .form input[type='email'],
+  .form input[type='tel'],
+  .form textarea {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.625rem 0.875rem;
+    background: var(--band-bg);
+    border: 1px solid var(--band-rule);
+    border-radius: var(--radius-card);
+    color: var(--band-fg);
+    font-family: var(--font-body);
+    /* 16px prevents iOS Safari zooming on focus. */
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .form textarea {
+    resize: vertical;
+    min-height: 8rem;
+  }
+
+  .form input:hover,
+  .form textarea:hover {
+    border-color: var(--band-muted);
+  }
+
+  .form input[aria-invalid='true'],
+  .form textarea[aria-invalid='true'] {
+    border-color: #e2725b;
+  }
+
+  .form ::placeholder {
+    color: var(--band-muted);
+    opacity: 0.8;
+  }
+
+  .form__error:empty {
+    display: none;
+  }
+
+  .form__error {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: #f0907c;
+  }
+
+  .form__error--block {
+    display: block;
+  }
+
+  .form__consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  .form__consent input {
+    /* 24px minimum target. Clicking the label also toggles it. */
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-block-start: 0;
+    flex: 0 0 auto;
+    accent-color: var(--color-gold);
+  }
+
+  .form__consent label {
+    text-transform: none;
+    letter-spacing: 0;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--band-fg);
+  }
+
+  .form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .form__required-note {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--band-muted);
+  }
+
+  .form__required-note span {
+    color: var(--band-accent);
+  }
+
+  .form__result {
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--band-rule);
+    border-inline-start: 3px solid var(--band-accent);
+    border-radius: var(--radius-card);
+    background: var(--band-raised);
+  }
+
+  .form__result[data-kind='error'] {
+    border-inline-start-color: #e2725b;
+  }
+
+  .form__result-title {
+    margin: 0 0 0.25rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    letter-spacing: -0.01em;
+  }
+
+  .form__result-body {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--band-muted);
+  }
+
+  @media (min-width: 40rem) {
+    .form__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.125rem 1.25rem;
+    }
+
+    .form__field--wide {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

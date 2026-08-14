@@ -1,0 +1,67 @@
+---
+/**
+ * The Phase 1 single page — one static document per locale.
+ *
+ * Band tone alternates dark / raised / light down the page: dark for vision and
+ * ambition, light for concrete programmes and method. The tone for each section
+ * is declared once in SECTION_ORDER (config/site.ts) and read here, so the
+ * rhythm can be re-cut in one place.
+ */
+import Base from '@/layouts/Base.astro';
+import { LOCALES, SECTION_ORDER, type Locale, type SectionId, type BandTone } from '@/config/site';
+
+import Hero from '@/components/sections/Hero.astro';
+import About from '@/components/sections/About.astro';
+import Vision from '@/components/sections/Vision.astro';
+import Mission from '@/components/sections/Mission.astro';
+import Audience from '@/components/sections/Audience.astro';
+import Method from '@/components/sections/Method.astro';
+import Services from '@/components/sections/Services.astro';
+import Pathway from '@/components/sections/Pathway.astro';
+import Programmes from '@/components/sections/Programmes.astro';
+import Founding from '@/components/sections/Founding.astro';
+import International from '@/components/sections/International.astro';
+import Ecosystem from '@/components/sections/Ecosystem.astro';
+import Fees from '@/components/sections/Fees.astro';
+import Inclusion from '@/components/sections/Inclusion.astro';
+import Digital from '@/components/sections/Digital.astro';
+import Team from '@/components/sections/Team.astro';
+import Founder from '@/components/sections/Founder.astro';
+import Book from '@/components/sections/Book.astro';
+import Identity from '@/components/sections/Identity.astro';
+import Roadmap from '@/components/sections/Roadmap.astro';
+import Contact from '@/components/sections/Contact.astro';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const locale = Astro.params.lang as Locale;
+
+const tone = (id: SectionId): BandTone =>
+  SECTION_ORDER.find((s) => s.id === id)!.tone;
+---
+
+<Base locale={locale}>
+  <Hero locale={locale} />
+  <About locale={locale} tone={tone('about')} />
+  <Vision locale={locale} tone={tone('vision')} />
+  <Mission locale={locale} tone={tone('mission')} />
+  <Audience locale={locale} tone={tone('audience')} />
+  <Method locale={locale} tone={tone('method')} />
+  <Services locale={locale} tone={tone('services')} />
+  <Pathway locale={locale} tone={tone('pathway')} />
+  <Programmes locale={locale} tone={tone('programmes')} />
+  <Founding locale={locale} tone={tone('founding')} />
+  <International locale={locale} tone={tone('international')} />
+  <Ecosystem locale={locale} tone={tone('ecosystem')} />
+  <Fees locale={locale} tone={tone('fees')} />
+  <Inclusion locale={locale} tone={tone('inclusion')} />
+  <Digital locale={locale} tone={tone('digital')} />
+  <Team locale={locale} tone={tone('team')} />
+  <Founder locale={locale} tone={tone('founder')} />
+  <Book locale={locale} tone={tone('book')} />
+  <Identity locale={locale} tone={tone('identity')} />
+  <Roadmap locale={locale} tone={tone('roadmap')} />
+  <Contact locale={locale} tone={tone('contact')} />
+</Base>

@@ -1,0 +1,44 @@
+---
+/**
+ * Failure page for visitors without JavaScript.
+ *
+ * Offers the direct email address as a fallback so a failed send is never a
+ * dead end.
+ */
+import Page from '@/layouts/Page.astro';
+import { getContent, localePath } from '@/lib/i18n';
+import { LOCALES, type Locale } from '@/config/site';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const locale = Astro.params.lang as Locale;
+const c = getContent(locale);
+const email = c.sections.contact.email;
+---
+
+<Page locale={locale} path="message-error/" title={c.form.errorTitle} noindex>
+  <p class="result">{c.form.errorBody}</p>
+  <p class="result__email">
+    <a class="link" href={`mailto:${email}`}>{email}</a>
+  </p>
+  <a class="btn btn-secondary" href={`${localePath('', locale)}#contact`}>
+    {c.sections.contact.formTitle}
+  </a>
+</Page>
+
+<style>
+  .result {
+    margin: 0 0 1rem;
+    font-size: var(--text-lead);
+    font-weight: 400;
+    color: var(--band-muted);
+    max-width: 56ch;
+  }
+
+  .result__email {
+    margin: 0 0 2rem;
+    overflow-wrap: anywhere;
+  }
+</style>

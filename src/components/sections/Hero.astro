@@ -1,0 +1,189 @@
+---
+/**
+ * §01 — Hero.
+ *
+ * Carries the page's single <h1>. The association / legal-status line is
+ * withheld behind SHOW_LEGAL_STATUS (BLOCKERS.md #1).
+ */
+import { Image } from 'astro:assets';
+import { getContent, type Locale } from '@/lib/i18n';
+import { SHOW_LEGAL_STATUS } from '@/config/site';
+import logo from '@/assets/logo/mhsv-logo.png';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const c = getContent(locale);
+const hero = c.sections.hero;
+
+/**
+ * The pack gives four CTA labels in fixed order:
+ * discover / programmes / request an assessment / become a partner.
+ * The last two both open the contact section.
+ */
+const CTA_TARGETS = ['#about', '#programmes', '#contact', '#contact'];
+---
+
+<section id="top" class="band band-ink hero" aria-labelledby="hero-title">
+  <div class="shell hero__inner">
+    <div class="hero__content">
+      <p class="eyebrow"><span>{hero.num}</span></p>
+
+      <h1 id="hero-title" class="hero__title">
+        <span class="hero__brand">{hero.brand}</span>
+        <span class="hero__institutional">{hero.institutional}</span>
+      </h1>
+
+      {SHOW_LEGAL_STATUS && <p class="hero__legal mono-label">{hero.legalStatus}</p>}
+
+      <p class="hero__baseline">{hero.baseline}</p>
+      <p class="hero__tagline">{hero.tagline}</p>
+      <p class="lead hero__intro">{hero.intro}</p>
+
+      <ul class="hero__ctas">
+        {
+          hero.ctas.map((label, i) => (
+            <li>
+              <a class:list={['btn', i === 0 ? 'btn-primary' : 'btn-secondary']} href={CTA_TARGETS[i]}>
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="hero__mark">
+      <Image
+        src={logo}
+        alt={c.seo.ogImageAlt}
+        widths={[320, 480, 640]}
+        sizes="(min-width: 62rem) 26rem, (min-width: 40rem) 20rem, 60vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(3rem, 2rem + 6vw, 7rem);
+    overflow: hidden;
+  }
+
+  /* A single soft gold wash anchored behind the mark. */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      60rem 40rem at 82% 18%,
+      rgb(200 162 74 / 0.16),
+      transparent 68%
+    );
+    pointer-events: none;
+  }
+
+  .hero__inner {
+    position: relative;
+    display: grid;
+    gap: clamp(2.5rem, 1.5rem + 5vw, 4rem);
+    align-items: center;
+  }
+
+  .hero__title {
+    margin: 1rem 0 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .hero__brand {
+    display: block;
+    font-size: var(--text-display);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+  }
+
+  .hero__institutional {
+    display: block;
+    font-family: var(--font-body);
+    font-size: clamp(1.0625rem, 0.9rem + 0.8vw, 1.5rem);
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1.3;
+    color: var(--band-muted);
+    max-width: 24ch;
+  }
+
+  .hero__legal {
+    margin-block-start: 1.25rem;
+    color: var(--band-muted);
+  }
+
+  .hero__baseline {
+    margin-block-start: 1.75rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.125rem, 0.95rem + 0.9vw, 1.75rem);
+    letter-spacing: -0.02em;
+    color: var(--color-gold-bright);
+  }
+
+  .hero__tagline {
+    margin-block-start: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--band-fg);
+  }
+
+  .hero__intro {
+    margin-block-start: 1.75rem;
+    color: var(--band-muted);
+  }
+
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    list-style: none;
+    margin: 2.25rem 0 0;
+    padding: 0;
+  }
+
+  .hero__mark {
+    justify-self: center;
+    /* Single-column layouts stack the mark under the copy, where a full-size
+       lockup would push the CTAs well below the fold. */
+    max-width: 18rem;
+    width: 100%;
+  }
+
+  .hero__mark :global(img) {
+    width: 100%;
+    height: auto;
+  }
+
+  @media (min-width: 62rem) {
+    .hero__inner {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    }
+
+    .hero__mark {
+      justify-self: end;
+      max-width: 26rem;
+    }
+  }
+
+  /* At the smallest widths the mark costs more than it gives. */
+  @media (max-width: 24rem) {
+    .hero__mark {
+      max-width: 14rem;
+    }
+  }
+</style>
