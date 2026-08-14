@@ -18,7 +18,7 @@
  * introduced. The client's brief explicitly asks for icons derived from the
  * primary logo.
  */
-import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
@@ -32,7 +32,27 @@ const PUBLISHABLE = new Set(['APPROVED_FOR_PROTOTYPE', 'APPROVED_FOR_BOOK_BLOCK'
 // ASSET_STATUS.csv
 // ---------------------------------------------------------------------------
 function readAssetStatus() {
-  const csv = readFileSync(resolve(PACK, 'ASSET_STATUS.csv'), 'utf8').trim();
+  const csvPath = resolve(PACK, 'ASSET_STATUS.csv');
+  if (!existsSync(csvPath)) {
+    console.error(
+      [
+        '',
+        `✗ developer pack not found: ${csvPath}`,
+        '',
+        '  This script re-derives the logo, icons, covers and fonts from the',
+        '  client pack, which lives outside the repository and is not committed.',
+        '',
+        '  If you are deploying: you do not need this. The derived assets are',
+        '  committed — run "npm run build".',
+        '',
+        '  If you are updating assets: put the pack next to the repo, or set',
+        '    MHSV_ASSET_PACK=/path/to/pack npm run assets:prepare',
+        '',
+      ].join('\n'),
+    );
+    process.exit(1);
+  }
+  const csv = readFileSync(csvPath, 'utf8').trim();
   const [, ...rows] = csv.split(/\r?\n/);
   const map = new Map();
   for (const row of rows) {

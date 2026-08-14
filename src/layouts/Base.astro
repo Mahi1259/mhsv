@@ -8,7 +8,7 @@
  * own path once.
  */
 import { getContent, localeAlternates, localePath, type Locale } from '@/lib/i18n';
-import { SITE_URL, DEFAULT_LOCALE } from '@/config/site';
+import { SITE_URL, DEFAULT_LOCALE, IS_PRODUCTION } from '@/config/site';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import preloadFonts from '@/config/preload-fonts.json';
@@ -41,7 +41,10 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
+    {
+      /* Preview and local builds are never indexable, whatever the page says. */
+      (noindex || !IS_PRODUCTION) && <meta name="robots" content="noindex, follow" />
+    }
     <link rel="canonical" href={canonical} />
 
     {/* Every language has a real URL, so search engines can index all four. */}

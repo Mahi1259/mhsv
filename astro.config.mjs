@@ -2,13 +2,20 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import { resolveSite } from './site-url.mjs';
 
 /**
- * Canonical origin. Overridden per environment via PUBLIC_SITE_URL so the same
- * source tree can build for a staging domain without code changes.
- * See BLOCKERS.md #4 — mhsv.ch vs mhsv-international.org is not yet decided.
+ * Canonical origin — see site-url.mjs. Resolved once here and pushed back into
+ * process.env so the components (which read import.meta.env.PUBLIC_SITE_URL)
+ * and the sitemap cannot disagree about what domain this build is for.
  */
-const site = process.env.PUBLIC_SITE_URL || 'https://www.mhsv.ch';
+const { url: site, source, isProduction } = resolveSite();
+process.env.PUBLIC_SITE_URL = site;
+// Preview and local builds are marked noindex so a Vercel preview URL can
+// never be indexed or compete with production.
+process.env.PUBLIC_IS_PRODUCTION = String(isProduction);
+
+console.log(`  · building for ${site}  (from ${source}${isProduction ? '' : ', noindex'})`);
 
 export default defineConfig({
   site,

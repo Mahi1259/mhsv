@@ -18,7 +18,7 @@
  *
  * Run `npm run content:check` after this to enforce key parity across locales.
  */
-import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readDocxBlocks } from './lib/docx.mjs';
@@ -440,6 +440,26 @@ function merge(base, overlay) {
 }
 
 function build() {
+  if (!existsSync(DOCX)) {
+    console.error(
+      [
+        '',
+        `✗ content pack not found: ${DOCX}`,
+        '',
+        '  This script regenerates src/content/i18n/*.json from the client pack,',
+        '  which lives outside the repository and is not committed.',
+        '',
+        '  If you are deploying: you do not need this. The generated JSON is',
+        '  committed — run "npm run build", which validates it and builds.',
+        '',
+        '  If you are updating content: put the .docx next to the repo, or set',
+        '    MHSV_CONTENT_DOCX=/path/to/…V3.docx npm run content:extract',
+        '',
+      ].join('\n'),
+    );
+    process.exit(1);
+  }
+
   const blocks = readDocxBlocks(DOCX);
   const byLocale = segmentByLocale(blocks);
   const legend = readStatusLegend(blocks);

@@ -12,7 +12,18 @@ export const DEFAULT_LOCALE: Locale = 'fr';
 export const isLocale = (value: string): value is Locale =>
   (LOCALES as readonly string[]).includes(value);
 
-export const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://www.mhsv.ch';
+/**
+ * Canonical origin for this build. Resolved in astro.config.mjs (see
+ * site-url.mjs) and injected here, so there is exactly one place the domain is
+ * decided. Changing domain is one environment variable — no code edit.
+ */
+export const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321';
+
+/**
+ * False on Vercel preview deployments and local builds. Those are marked
+ * noindex so a preview URL never gets indexed or competes with production.
+ */
+export const IS_PRODUCTION = import.meta.env.PUBLIC_IS_PRODUCTION !== 'false';
 
 /**
  * BLOCKER #1 — legal / association status.
