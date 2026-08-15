@@ -20,8 +20,13 @@
      still clears AA on the slightly-tinted card surface, where small link text
      sits: 6.06:1 on --bone, 5.70:1 on a card. */
   --color-gold-ink: #6f5920;
-  /* Bone, never pure white: #FFF glares against navy and looks cheap. */
-  --color-bone: #f4f2ed;
+  /*
+   * The panel surface. Never pure white — #FFF glares against navy — and
+   * deliberately cool rather than a warm bone: a warm off-white sitting on a
+   * navy ground reads as an unrelated sheet of paper, while a blue-leaning
+   * light tone belongs to the same family as the ground it floats on.
+   */
+  --color-bone: #f0f3f8;
   --color-white: #ffffff;
 
   --font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
@@ -418,12 +423,11 @@
     --band-accent: var(--color-gold-ink);
     --band-rule: rgb(12 29 58 / 0.16);
     /*
-     * Cards are a cool blue-grey, not a lighter shade of the panel. A neutral
-     * tint on a warm bone panel just reads as "white box on white"; leaning the
-     * surface toward the brand navy ties the panel back to the ground around
-     * it. Verified 5.08:1 for muted text, 5.57:1 for links.
+     * Cards are a step deeper than the panel and share its blue cast, so they
+     * read as raised surfaces rather than as white boxes on white. Verified
+     * 5.03:1 for muted text, 5.51:1 for links, 15.2:1 for body copy.
      */
-    --band-raised: #e7eaf0;
+    --band-raised: #e4e9f2;
     --focus-ring: var(--color-navy);
   }
 
