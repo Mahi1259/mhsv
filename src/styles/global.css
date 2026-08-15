@@ -36,7 +36,16 @@
   --text-lead: clamp(1.0625rem, 0.99rem + 0.36vw, 1.25rem);
 
   --radius: 4px;
-  --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+
+  /* Motion.
+     --ease-out decelerates hard at the end, so movement arrives and settles
+     rather than drifting. ease-in-out is what makes reveals feel sluggish. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease: var(--ease-out);
+  --dur-fast: 180ms;
+  --dur-base: 520ms;
+  --dur-slow: 700ms;
+  --stagger: 70ms;
 }
 
 /* ==========================================================================
@@ -96,10 +105,48 @@
       scroll-behavior: auto !important;
     }
 
-    /* Scroll-reveal elements must be visible without their animation. */
-    [data-reveal] {
+    /* Nothing may be left hidden or displaced. */
+    [data-reveal],
+    [data-reveal-x],
+    [data-stagger] > * {
       opacity: 1 !important;
       transform: none !important;
+      transition-delay: 0ms !important;
+    }
+
+    /* No cross-document transition either. */
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none !important;
+    }
+  }
+
+  /*
+   * Cross-document view transitions — CSS only, no router and no JavaScript.
+   * Supporting browsers cross-fade between pages; the rest navigate normally.
+   * Kept short: switching language should feel instant, not cinematic.
+   */
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-old(root) {
+    animation: vt-out 180ms var(--ease-out) both;
+  }
+
+  ::view-transition-new(root) {
+    animation: vt-in 260ms var(--ease-out) both;
+  }
+
+  @keyframes vt-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes vt-in {
+    from {
+      opacity: 0;
     }
   }
 
@@ -112,6 +159,8 @@
     color: var(--white);
     font-family: var(--font-body);
     font-weight: 400;
+    /* ~1.05rem: a timid body size against a 5rem hero reads as dated. */
+    font-size: 1.0625rem;
     line-height: 1.65;
     /* German compounds are long; break rather than overflow. */
     overflow-wrap: break-word;
@@ -188,25 +237,28 @@
      Bands and grounds
 
      No horizontal rules between sections — separation is space, and the
-     occasional change of ground. Where the ground does change, .band--fade
-     gradients it in over ~160px instead of hard-cutting.
+     occasional change of ground.
      ---------------------------------------------------------------------- */
   .band {
     /* Vertical rhythm, per archetype below. Held in a variable because the
        anchor maths needs to know it. */
     --band-pad: 4rem;
+    /* Split so a section can shorten one end without the anchor maths below
+       losing track of its top padding. */
+    --band-pad-top: var(--band-pad);
+    --band-pad-bottom: var(--band-pad);
 
     background-color: var(--band-bg);
     color: var(--band-fg);
     position: relative;
-    padding-block: var(--band-pad);
+    padding-block: var(--band-pad-top) var(--band-pad-bottom);
 
     /*
      * Land an anchor jump on the heading, not on the section's top padding.
      *
      * Scrolling into view aligns the element's scroll-margin box with the
      * viewport, so:
-     *     headingTop = scrollMarginTop + bandPad
+     *     headingTop = scrollMarginTop + bandPadTop
      * and we want headingTop = headerHeight + gap. Solving for the margin
      * gives the expression below — negative for the roomier archetypes, which
      * is exactly right: it scrolls past their padding.
@@ -214,7 +266,7 @@
      * Without this, a section with 9rem of top padding left ~200px of empty
      * screen under the masthead and pushed its own content out of view.
      */
-    scroll-margin-top: calc(var(--header-h) + var(--anchor-gap) - var(--band-pad));
+    scroll-margin-top: calc(var(--header-h) + var(--anchor-gap) - var(--band-pad-top));
   }
 
   .band--navy-deep {
@@ -250,27 +302,83 @@
     --focus-ring: var(--color-navy);
   }
 
-  /* Gradient hand-off into a new ground. */
-  .band--fade::before {
-    content: '';
-    position: absolute;
-    inset-inline: 0;
-    top: -10rem;
-    height: 10rem;
-    background: linear-gradient(to bottom, transparent, var(--band-bg));
-    pointer-events: none;
-    z-index: 1;
+  /* ------------------------------------------------------------------------
+     The continuous ground
+
+     The page is ONE navy ground from top to bottom. It used to be a stack of
+     full-bleed colour slabs — navy, hard edge, white, hard edge — which is the
+     slide-deck pattern itself, whatever you do about numbers and dividers.
+
+     Sections that need light relief are grouped into a few inset panels that
+     float on the ground (see .panel). Nothing produces a full-width horizontal
+     seam any more.
+     ---------------------------------------------------------------------- */
+  .flow {
+    position: relative;
+    background: var(--navy-deep);
+    isolation: isolate;
   }
 
-  /* Grain: stops large flat navy areas looking dead. Pure CSS, no asset. */
-  .band--grain::after {
+  /*
+   * Depth. Three large, very soft washes placed by percentage of the whole
+   * page, so they deliberately do NOT line up with any section boundary —
+   * that is what stops a long dark page reading as flat.
+   */
+  .flow::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(70rem 48rem at 84% 6%, rgb(20 40 74 / 0.62), transparent 62%),
+      radial-gradient(60rem 44rem at 8% 34%, rgb(212 175 55 / 0.05), transparent 60%),
+      radial-gradient(76rem 54rem at 92% 63%, rgb(20 40 74 / 0.55), transparent 64%),
+      radial-gradient(56rem 40rem at 6% 88%, rgb(20 40 74 / 0.45), transparent 62%);
+  }
+
+  /* Inside the flow the bands are transparent — the ground and the panels
+     supply the colour. (Standalone pages such as /livre keep their own.) */
+  .flow .band {
+    background-color: transparent;
+  }
+
+  /* --- inset panels ------------------------------------------------------
+     A run of light sections becomes ONE panel with a margin on both sides and
+     rounded corners, so it reads as an object sitting on the page rather than
+     as the next slide. */
+  .panel {
+    position: relative;
+    margin-inline: clamp(0.75rem, 2.5vw, 3.5rem);
+    /* Modest: the adjoining ground section already carries generous bottom
+       padding, and doubling the two leaves a dead void above the panel. */
+    margin-block: clamp(1.25rem, 2.5vw, 3rem);
+    border-radius: clamp(12px, 1.6vw, 24px);
+    background: var(--color-bone);
+    box-shadow: 0 40px 90px -30px rgb(0 0 0 / 0.55);
+  }
+
+  /* The panel's own inset already separates it; its first and last sections
+     do not need their full archetype padding as well. */
+  .panel > .band:first-child {
+    --band-pad-top: clamp(3rem, 2rem + 3.5vw, 5rem);
+  }
+
+  .panel > .band:last-child {
+    --band-pad-bottom: clamp(3rem, 2rem + 3.5vw, 5rem);
+  }
+
+  /* Grain on the ground, not per section — 2.5% is enough to stop a large
+     flat navy area looking dead, and not enough to consciously see. */
+  .flow::after {
     content: '';
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.5;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.28'/%3E%3C/svg%3E");
+    /* 2.5% — enough to stop large flat navy looking dead, not enough to see. */
+    opacity: 0.025;
+    mix-blend-mode: normal;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
   }
 
   /* ------------------------------------------------------------------------
@@ -285,19 +393,19 @@
   }
 
   .band--statement {
-    --band-pad: clamp(4rem, 2.5rem + 7vw, 8.5rem);
+    --band-pad: clamp(6rem, 3rem + 9vw, 11rem);
   }
 
   .band--grid {
-    --band-pad: clamp(3.5rem, 2.2rem + 5.5vw, 6.5rem);
+    --band-pad: clamp(4.5rem, 2.6rem + 7vw, 8.5rem);
   }
 
   .band--feature {
-    --band-pad: clamp(3.75rem, 2.4rem + 6vw, 7.5rem);
+    --band-pad: clamp(5rem, 2.8rem + 8vw, 9.5rem);
   }
 
   .band--quiet {
-    --band-pad: clamp(2.75rem, 2rem + 3.5vw, 4.75rem);
+    --band-pad: clamp(3.5rem, 2.4rem + 4.5vw, 6rem);
   }
 
   /* ------------------------------------------------------------------------
@@ -373,7 +481,9 @@
     border: 1px solid var(--band-rule);
     border-radius: var(--radius);
     padding: clamp(1.25rem, 1rem + 1vw, 1.875rem);
-    transition: border-color 200ms var(--ease), transform 200ms var(--ease);
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
   }
 
   .card:hover {
@@ -402,18 +512,20 @@
     text-decoration: none;
     cursor: pointer;
     transition:
-      background-color 180ms var(--ease),
-      color 180ms var(--ease),
-      border-color 180ms var(--ease),
-      transform 180ms var(--ease);
+      background-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
   }
 
   .btn:hover {
     transform: translateY(-1px);
   }
 
+  /* A press must feel immediate — faster than the hover it interrupts. */
   .btn:active {
     transform: translateY(0);
+    transition-duration: 80ms;
   }
 
   .btn--primary {
@@ -443,7 +555,7 @@
     text-decoration: underline;
     text-underline-offset: 0.2em;
     text-decoration-thickness: 1px;
-    transition: text-decoration-thickness 150ms var(--ease);
+    transition: text-decoration-thickness var(--dur-fast) var(--ease-out);
   }
 
   .link:hover {
@@ -464,7 +576,7 @@
     letter-spacing: 0.08em;
     text-decoration: none;
     transform: translateY(-150%);
-    transition: transform 150ms var(--ease);
+    transition: transform var(--dur-fast) var(--ease-out);
   }
 
   .skip-link:focus {
@@ -488,18 +600,117 @@
     border: 0;
   }
 
-  /* Scroll reveal. The element is only hidden once JS has confirmed it will
-     observe it (html.js), so with scripting off nothing is ever invisible. */
-  html.js [data-reveal] {
+  /* ------------------------------------------------------------------------
+     Scroll reveal
+
+     Elements are only hidden once the script has confirmed it will observe
+     them (html.js), so with scripting off — or with reduced motion, where the
+     class is never added — nothing is ever invisible.
+
+     16px, not 40: a large distance reads as sliding, a small one as settling.
+     translate3d rather than translateY to keep it on the compositor.
+     ---------------------------------------------------------------------- */
+  html.js [data-reveal],
+  html.js [data-stagger] > * {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translate3d(0, 16px, 0);
     transition:
-      opacity 700ms var(--ease),
-      transform 700ms var(--ease);
+      opacity var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-out);
+    will-change: opacity, transform;
   }
 
-  html.js [data-reveal].is-revealed {
+  html.js [data-reveal].is-in,
+  html.js [data-stagger].is-in > * {
     opacity: 1;
+    transform: translate3d(0, 0, 0);
+    /* Release the compositing hint once it has settled. */
+    will-change: auto;
+  }
+
+  /* --- stagger -----------------------------------------------------------
+     70ms between items. Capped at six steps (~420ms) so a long list never
+     leaves its last item feeling forgotten. */
+  html.js [data-stagger].is-in > *:nth-child(1) { transition-delay: 0ms; }
+  html.js [data-stagger].is-in > *:nth-child(2) { transition-delay: calc(1 * var(--stagger)); }
+  html.js [data-stagger].is-in > *:nth-child(3) { transition-delay: calc(2 * var(--stagger)); }
+  html.js [data-stagger].is-in > *:nth-child(4) { transition-delay: calc(3 * var(--stagger)); }
+  html.js [data-stagger].is-in > *:nth-child(5) { transition-delay: calc(4 * var(--stagger)); }
+  html.js [data-stagger].is-in > *:nth-child(n + 6) { transition-delay: calc(5 * var(--stagger)); }
+
+  /*
+   * Multi-column grids stagger by ROW, not by item — a 9-item grid staggered
+   * per item cascades for far too long and reads as items arriving one by one
+   * across a row, which looks mechanical.
+   */
+  @media (min-width: 40rem) {
+    html.js [data-stagger][data-rows].is-in > *:nth-child(-n + 2) {
+      transition-delay: 0ms;
+    }
+    html.js [data-stagger][data-rows].is-in > *:nth-child(n + 3):nth-child(-n + 4) {
+      transition-delay: calc(1 * var(--stagger));
+    }
+    html.js [data-stagger][data-rows].is-in > *:nth-child(n + 5):nth-child(-n + 6) {
+      transition-delay: calc(2 * var(--stagger));
+    }
+    html.js [data-stagger][data-rows].is-in > *:nth-child(n + 7) {
+      transition-delay: calc(3 * var(--stagger));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    html.js [data-stagger][data-rows].is-in > *:nth-child(-n + 3) {
+      transition-delay: 0ms;
+    }
+    html.js [data-stagger][data-rows].is-in > *:nth-child(n + 4):nth-child(-n + 6) {
+      transition-delay: calc(1 * var(--stagger));
+    }
+    html.js [data-stagger][data-rows].is-in > *:nth-child(n + 7) {
+      transition-delay: calc(2 * var(--stagger));
+    }
+  }
+
+  /* --- variation by section archetype ------------------------------------
+     Identical motion on every section is what makes a long page feel
+     mechanical. */
+
+  /* Statement: the heading rises alone, the body follows. Nothing else moves. */
+  html.js .band--statement .band__body[data-reveal] {
+    transition-delay: 120ms;
+  }
+
+  /* Grid: cards settle from very slightly small as well as from below. */
+  html.js .band--grid [data-stagger] > * {
+    transform: translate3d(0, 14px, 0) scale(0.98);
+  }
+
+  html.js .band--grid [data-stagger].is-in > * {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  /* Feature: the visual arrives from the opposite side to the text. */
+  html.js [data-reveal-x] {
+    opacity: 0;
+    transform: translate3d(-20px, 0, 0);
+    transition:
+      opacity var(--dur-slow) var(--ease-out),
+      transform var(--dur-slow) var(--ease-out);
+    will-change: opacity, transform;
+  }
+
+  html.js [data-reveal-x].is-in {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    will-change: auto;
+  }
+
+  /*
+   * Quiet: opacity only, no movement at all. Sections where nothing shifts
+   * give the eye somewhere to rest and make the sections that do move feel
+   * deliberate rather than automatic.
+   */
+  html.js .band--quiet [data-reveal],
+  html.js .band--quiet [data-stagger] > * {
     transform: none;
   }
 }

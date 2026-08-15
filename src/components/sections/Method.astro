@@ -18,10 +18,9 @@ interface Props {
   locale: Locale;
   type: SectionType;
   tone: BandTone;
-  fade?: boolean;
 }
 
-const { locale, type, tone, fade } = Astro.props;
+const { locale, type, tone } = Astro.props;
 const s = getContent(locale).sections.method;
 const pillars = s.pillars.map((p, i) => ({ ...p, note: s.pillarNotes[i], index: i }));
 const acronym = s.pillars.map((p) => p.letter).join('');
@@ -33,11 +32,10 @@ const acronym = s.pillars.map((p) => p.letter).join('');
   title={s.title}
   type={type}
   tone={tone}
-  fade={fade}
   lead={s.lead}
 >
   <div class="method">
-    <div class="method__intro">
+    <div class="method__intro" data-reveal-x>
       <p class="method__acronym" aria-hidden="true">{acronym}<span>®</span></p>
       <h3 class="method__subtitle">{s.pillarsTitle}</h3>
       <p class="method__disclaimer mono-label">{s.pillarNotesDisclaimer}</p>

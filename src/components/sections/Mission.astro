@@ -14,15 +14,14 @@ interface Props {
   locale: Locale;
   type: SectionType;
   tone: BandTone;
-  fade?: boolean;
 }
 
-const { locale, type, tone, fade } = Astro.props;
+const { locale, type, tone } = Astro.props;
 const s = getContent(locale).sections.mission;
 ---
 
-<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} fade={fade}>
-  <ul class="mission" data-stagger>
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone}>
+  <ul class="mission" data-stagger data-rows>
     {
       s.items.map((item) => (
         <li class="mission__item card">

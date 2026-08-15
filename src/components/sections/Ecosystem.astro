@@ -5,15 +5,15 @@ import { getContent, type Locale } from '@/lib/i18n';
 import { capitalizeFirst } from '@/lib/text';
 import type { BandTone, SectionType } from '@/config/site';
 
-interface Props { locale: Locale; type: SectionType; tone: BandTone; fade?: boolean }
-const { locale, type, tone, fade } = Astro.props;
+interface Props { locale: Locale; type: SectionType; tone: BandTone }
+const { locale, type, tone } = Astro.props;
 const s = getContent(locale).sections.ecosystem;
 const disciplines = s.disciplines.map((item) => capitalizeFirst(item, locale));
 ---
 
-<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} fade={fade} lead={s.lead}>
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} lead={s.lead}>
   <h3 class="mono-label ecosystem__title">{s.disciplinesTitle}</h3>
-  <ul class="chips" data-stagger>
+  <ul class="chips" data-stagger data-rows>
     {disciplines.map((item) => <li class="chip">{item}</li>)}
   </ul>
   <p class="prose-body ecosystem__note">{s.note}</p>

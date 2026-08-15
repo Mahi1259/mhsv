@@ -20,7 +20,8 @@
     "qr": "node scripts/generate-qr.mjs",
     "test:forms": "node scripts/test-forms.mjs",
     "check:qr": "node scripts/check-qr-target.mjs",
-    "check:contrast": "node scripts/check-contrast.mjs"
+    "check:contrast": "node scripts/check-contrast.mjs",
+    "check:motion": "node scripts/check-motion.mjs"
   },
   "description": "MHSV® — International Centre for Development and Transition. Phase 1 showcase website (FR/EN/DE/IT).",
   "dependencies": {

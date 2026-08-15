@@ -136,13 +136,15 @@ try {
            * disabling any other styling.
            */
           await page.evaluate(() => {
-            document.querySelectorAll('[data-reveal]').forEach((el) => {
-              el.classList.add('is-revealed');
-              // Staggered children carry a transition-delay of up to 560ms.
-              // Clearing it lets everything settle at once.
-              el.style.transitionDelay = '0ms';
-              for (const child of el.children) child.style.transitionDelay = '0ms';
-            });
+            document
+              .querySelectorAll('[data-reveal], [data-reveal-x], [data-stagger]')
+              .forEach((el) => {
+                el.classList.add('is-in');
+                // Stagger delays come from CSS; override them so everything
+                // settles at once rather than over ~400ms.
+                el.style.transitionDelay = '0ms';
+                for (const child of el.children) child.style.transitionDelay = '0ms';
+              });
           });
           // Longer than the 700ms reveal transition, so nothing is measured
           // part-way through its fade and reported as a contrast failure.

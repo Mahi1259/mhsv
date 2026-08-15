@@ -17,10 +17,9 @@ interface Props {
   locale: Locale;
   type: SectionType;
   tone: BandTone;
-  fade?: boolean;
 }
 
-const { locale, type, tone, fade } = Astro.props;
+const { locale, type, tone } = Astro.props;
 const c = getContent(locale);
 const s = c.sections.roadmap;
 const items = s.items.map((item) => capitalizeFirst(item, locale));
@@ -32,11 +31,10 @@ const items = s.items.map((item) => capitalizeFirst(item, locale));
   title={s.title}
   type={type}
   tone={tone}
-  fade={fade}
   lead={s.lead}
   status={s.status}
 >
-  <ul class="roadmap" data-stagger>
+  <ul class="roadmap" data-stagger data-rows>
     {
       items.map((item) => (
         <li class="roadmap__item">

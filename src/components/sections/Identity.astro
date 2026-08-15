@@ -13,15 +13,15 @@ import { getContent, type Locale } from '@/lib/i18n';
 import type { BandTone, SectionType } from '@/config/site';
 import logo from '@/assets/logo/mhsv-logo.png';
 
-interface Props { locale: Locale; type: SectionType; tone: BandTone; fade?: boolean }
-const { locale, type, tone, fade } = Astro.props;
+interface Props { locale: Locale; type: SectionType; tone: BandTone }
+const { locale, type, tone } = Astro.props;
 const s = getContent(locale).sections.identity;
 const placeholders = [s.placeholderOfficial, s.placeholderInstitutional, s.placeholderEquipment];
 ---
 
-<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} fade={fade} lead={s.lead} status={s.status}>
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} lead={s.lead} status={s.status}>
   <div class="identity">
-    <figure class="identity__primary">
+    <figure class="identity__primary" data-reveal-x>
       <div class="identity__plate">
         <Image src={logo} alt={s.logoTitle} widths={[200, 340]} sizes="(min-width: 52rem) 11rem, 45vw" loading="lazy" decoding="async" />
       </div>

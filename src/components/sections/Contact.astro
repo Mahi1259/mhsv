@@ -18,10 +18,9 @@ interface Props {
   locale: Locale;
   type: SectionType;
   tone: BandTone;
-  fade?: boolean;
 }
 
-const { locale, type, tone, fade } = Astro.props;
+const { locale, type, tone } = Astro.props;
 const c = getContent(locale);
 const s = c.sections.contact;
 
@@ -33,7 +32,7 @@ const rows = [
 ];
 ---
 
-<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} fade={fade}>
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone}>
   <p class="contact__tagline">{s.tagline}</p>
 
   <div class="contact">

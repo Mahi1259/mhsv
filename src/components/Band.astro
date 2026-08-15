@@ -22,8 +22,6 @@ interface Props {
   title: string;
   type: SectionType;
   tone: BandTone;
-  /** True when this band opens a new ground — fades the transition in. */
-  fade?: boolean;
   lead?: string;
   status?: { key: string; detail: string } | null;
   /** Skips the built-in header so a section can lay out its own. */
@@ -37,7 +35,6 @@ const {
   title,
   type,
   tone,
-  fade = false,
   lead,
   status = null,
   bare = false,
@@ -45,7 +42,6 @@ const {
 } = Astro.props;
 
 const headingId = `${anchor}-title`;
-const isDark = tone !== 'bone';
 const titleClass = type === 'statement' ? 'statement-title' : 'section-title';
 
 /**
@@ -63,8 +59,6 @@ const label = navLabel ?? title;
     'band',
     `band--${tone}`,
     `band--${type}`,
-    fade && 'band--fade',
-    isDark && 'band--grain',
     className,
   ]}
   aria-labelledby={headingId}

@@ -14,15 +14,14 @@ interface Props {
   locale: Locale;
   type: SectionType;
   tone: BandTone;
-  fade?: boolean;
 }
 
-const { locale, type, tone, fade } = Astro.props;
+const { locale, type, tone } = Astro.props;
 const s = getContent(locale).sections.about;
 const lead = SHOW_LEGAL_STATUS ? s.lead : s.leadNoLegalStatus;
 ---
 
-<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} fade={fade}>
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone}>
   <p class="statement-lead">{lead}</p>
   <div class="prose-body about__body">
     {s.paragraphs.map((text) => <p>{text}</p>)}

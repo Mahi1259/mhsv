@@ -19,10 +19,9 @@ interface Props {
   locale: Locale;
   type: SectionType;
   tone: BandTone;
-  fade?: boolean;
 }
 
-const { locale, type, tone, fade } = Astro.props;
+const { locale, type, tone } = Astro.props;
 const s = getContent(locale).sections.team;
 ---
 
@@ -32,10 +31,9 @@ const s = getContent(locale).sections.team;
   title={s.title}
   type={type}
   tone={tone}
-  fade={fade}
   lead={s.lead}
 >
-  <ul class="team" data-stagger>
+  <ul class="team" data-stagger data-rows>
     {
       s.members.map((member) => (
         <li class="team__card card">

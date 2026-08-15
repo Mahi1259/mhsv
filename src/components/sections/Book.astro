@@ -20,10 +20,9 @@ interface Props {
   locale: Locale;
   type: SectionType;
   tone: BandTone;
-  fade?: boolean;
 }
 
-const { locale, type, tone, fade } = Astro.props;
+const { locale, type, tone } = Astro.props;
 const s = getContent(locale).sections.book;
 
 const covers = [
@@ -32,9 +31,9 @@ const covers = [
 ];
 ---
 
-<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} fade={fade}>
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone}>
   <div class="book">
-    <ul class="book__covers">
+    <ul class="book__covers" data-reveal-x>
       {
         covers.map((cover) => (
           <li class="book__cover">

@@ -5,12 +5,12 @@ import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import type { BandTone, SectionType } from '@/config/site';
 
-interface Props { locale: Locale; type: SectionType; tone: BandTone; fade?: boolean }
-const { locale, type, tone, fade } = Astro.props;
+interface Props { locale: Locale; type: SectionType; tone: BandTone }
+const { locale, type, tone } = Astro.props;
 const s = getContent(locale).sections.programmes;
 ---
 
-<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} fade={fade} lead={s.lead} status={s.status}>
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} lead={s.lead} status={s.status}>
   <div class="prose-body">
     {s.paragraphs.map((text) => <p>{text}</p>)}
   </div>

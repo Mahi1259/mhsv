@@ -2,9 +2,14 @@
 /**
  * The Phase 1 single page — one static document per locale.
  *
- * Archetype and ground for each section come from SECTION_ORDER, so the
- * rhythm of the page is declared in one place. `fade` is computed here: a
- * section gets the gradient hand-off when it is the first of a new ground.
+ * The page is a single continuous navy ground (`.flow`). Sections that call
+ * for light relief are grouped into a few inset panels that float on it,
+ * rather than being full-bleed light slabs: a stack of edge-to-edge colour
+ * blocks is the slide-deck pattern, and no amount of tuning the numbering or
+ * the dividers fixes that.
+ *
+ * Consecutive light sections collapse into ONE panel — nine separate panels
+ * would just be nine rounded slides.
  */
 import Base from '@/layouts/Base.astro';
 import { LOCALES, SECTION_ORDER, type Locale, type SectionId } from '@/config/site';
@@ -37,18 +42,6 @@ export function getStaticPaths() {
 
 const locale = Astro.params.lang as Locale;
 
-/** Archetype, ground, and whether this section opens a new ground. */
-function band(id: SectionId) {
-  const index = SECTION_ORDER.findIndex((s) => s.id === id);
-  const section = SECTION_ORDER[index];
-  const previous = index > 0 ? SECTION_ORDER[index - 1] : null;
-  return {
-    type: section.type,
-    tone: section.tone,
-    fade: Boolean(previous && previous.tone !== section.tone),
-  };
-}
-
 const COMPONENTS = {
   about: About,
   vision: Vision,
@@ -71,14 +64,44 @@ const COMPONENTS = {
   newsletter: Newsletter,
   contact: Contact,
 } as const;
+
+/** Collapse consecutive same-surface sections into runs. */
+type Run = { surface: 'ground' | 'panel'; ids: SectionId[] };
+
+const runs: Run[] = [];
+for (const section of SECTION_ORDER) {
+  if (section.id === 'hero') continue;
+  const surface: Run['surface'] = section.tone === 'bone' ? 'panel' : 'ground';
+  const last = runs.at(-1);
+  if (last?.surface === surface) last.ids.push(section.id);
+  else runs.push({ surface, ids: [section.id] });
+}
+
+const propsFor = (id: SectionId) => {
+  const section = SECTION_ORDER.find((s) => s.id === id)!;
+  return { type: section.type, tone: section.tone };
+};
 ---
 
 <Base locale={locale}>
-  <Hero locale={locale} />
-  {
-    SECTION_ORDER.filter((s) => s.id !== 'hero').map((section) => {
-      const Section = COMPONENTS[section.id as keyof typeof COMPONENTS];
-      return <Section locale={locale} {...band(section.id)} />;
-    })
-  }
+  <div class="flow">
+    <Hero locale={locale} />
+    {
+      runs.map((run) =>
+        run.surface === 'panel' ? (
+          <div class="panel">
+            {run.ids.map((id) => {
+              const Section = COMPONENTS[id as keyof typeof COMPONENTS];
+              return <Section locale={locale} {...propsFor(id)} />;
+            })}
+          </div>
+        ) : (
+          run.ids.map((id) => {
+            const Section = COMPONENTS[id as keyof typeof COMPONENTS];
+            return <Section locale={locale} {...propsFor(id)} />;
+          })
+        ),
+      )
+    }
+  </div>
 </Base>

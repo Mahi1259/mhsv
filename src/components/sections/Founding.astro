@@ -20,10 +20,9 @@ interface Props {
   locale: Locale;
   type: SectionType;
   tone: BandTone;
-  fade?: boolean;
 }
 
-const { locale, type, tone, fade } = Astro.props;
+const { locale, type, tone } = Astro.props;
 const c = getContent(locale);
 const s = c.sections.founding;
 const fees = c.sections.fees;
@@ -45,7 +44,6 @@ const qualifier = match ? match[2] : null;
   title={s.title}
   type={type}
   tone={tone}
-  fade={fade}
   lead={s.lead}
 >
   <div class="offer">
@@ -67,7 +65,7 @@ const qualifier = match ? match[2] : null;
       }
     </div>
 
-    <aside class="fee">
+    <aside class="fee" data-reveal-x>
       <h3 class="fee__plan mono-label">{fees.planName}</h3>
       <p class="fee__amount" data-count>{amount}</p>
       {qualifier && <p class="fee__qualifier mono-label">{qualifier}</p>}

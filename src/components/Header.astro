@@ -218,7 +218,7 @@ const navHref = (item: { id: string; href?: string }) =>
       position: relative;
     }
 
-    /* Underline grows from the centre — a small, purposeful hover. */
+    /* Small, purposeful hover cue. */
     #main-nav a::after {
       content: '';
       position: absolute;
@@ -227,7 +227,9 @@ const navHref = (item: { id: string; href?: string }) =>
       height: 1px;
       background: var(--gold);
       transform: scaleX(0);
-      transition: transform 200ms var(--ease);
+      /* Wipes in from the left rather than growing out of the centre. */
+      transform-origin: left;
+      transition: transform var(--dur-fast) var(--ease-out);
     }
 
     #main-nav a:hover::after {

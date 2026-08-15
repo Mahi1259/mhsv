@@ -75,8 +75,8 @@ export type SectionType = (typeof SECTION_TYPES)[number];
  *
  * `tone` changes roughly every third or fourth section rather than alternating
  * — a switch on every section marks nothing, and the constant flipping was the
- * second reason the page felt paginated. Transitions between grounds are
- * gradients, not hard cuts (see .band--fade in global.css).
+ * second reason the page felt paginated. Grounds meet on a clean edge; see the
+ * note in global.css for why a gradient bridge was tried and removed.
  *
  * Note: the content pack's §10 (Founding programmes) and §13 (Fees) are merged
  * into one "Programmes & fees" section, because the CHF 15,000 launch rate was

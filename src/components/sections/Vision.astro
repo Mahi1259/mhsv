@@ -14,10 +14,9 @@ interface Props {
   locale: Locale;
   type: SectionType;
   tone: BandTone;
-  fade?: boolean;
 }
 
-const { locale, type, tone, fade } = Astro.props;
+const { locale, type, tone } = Astro.props;
 const s = getContent(locale).sections.vision;
 ---
 
@@ -27,7 +26,6 @@ const s = getContent(locale).sections.vision;
   title={s.title}
   type={type}
   tone={tone}
-  fade={fade}
   lead={s.lead}
 >
   <ol class="arc">
