@@ -28,6 +28,18 @@ const BANNED = [
   { pattern: /REVIEW_REQUIRED/i, why: 'asset not cleared for publication' },
 ];
 
+/**
+ * Keys whose ARRAY LENGTH is allowed to differ between locales.
+ *
+ * `titleLines` is a heading pre-split into display lines for the masked
+ * reveal. The split is deliberately per language — "WHO / WE ARE" is two lines
+ * in English while "ÜBER UNS" is one in German — so demanding equal lengths
+ * here would force a wrong line break into one of the languages. The key must
+ * still exist everywhere, and every locale's lines must still join back to its
+ * own heading (checked below); only the count is free to vary.
+ */
+const LENGTH_MAY_VARY = [/\.titleLines$/];
+
 const errors = [];
 const warnings = [];
 
@@ -66,15 +78,21 @@ const flat = Object.fromEntries(LOCALES.map((l) => [l, flatten(data[l])]));
 
 for (const loc of LOCALES) {
   if (loc === REF) continue;
+  const variable = (key) => LENGTH_MAY_VARY.some((re) => re.test(key.replace(/\[\d+\]$/, '')));
   for (const key of flat[REF].keys()) {
+    if (variable(key)) continue;
     if (!flat[loc].has(key)) errors.push(`[${loc}] missing key present in ${REF}: ${key}`);
   }
   for (const key of flat[loc].keys()) {
+    if (variable(key)) continue;
     if (!flat[REF].has(key)) errors.push(`[${loc}] extra key not present in ${REF}: ${key}`);
   }
   for (const [key, v] of flat[REF]) {
-    if (key.endsWith('[]') && flat[loc].get(key) !== v) {
-      errors.push(`[${loc}] array length differs at ${key.slice(0, -2)}: ${flat[loc].get(key)} vs ${REF} ${v}`);
+    if (!key.endsWith('[]')) continue;
+    const path = key.slice(0, -2);
+    if (LENGTH_MAY_VARY.some((re) => re.test(path))) continue;
+    if (flat[loc].get(key) !== v) {
+      errors.push(`[${loc}] array length differs at ${path}: ${flat[loc].get(key)} vs ${REF} ${v}`);
     }
   }
 }
@@ -95,6 +113,20 @@ for (const loc of LOCALES) {
     }
   };
   walk(data[loc], '');
+}
+
+// --- 3b: a split heading must join back to its own heading exactly ---------
+for (const loc of LOCALES) {
+  const sections = data[loc].sections ?? {};
+  for (const [id, section] of Object.entries(sections)) {
+    if (!Array.isArray(section?.titleLines)) continue;
+    const joined = section.titleLines.join(' ');
+    if (joined !== section.title) {
+      errors.push(
+        `[${loc}] sections.${id}.titleLines join to "${joined}" but the heading is "${section.title}"`,
+      );
+    }
+  }
 }
 
 // --- 4 & 5: banned wording / uncleared assets

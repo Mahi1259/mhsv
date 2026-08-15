@@ -92,7 +92,11 @@
   },
   "sections": {
     "about": {
-      "leadNoLegalStatus": "MHSV® — Centre International de Développement et de Transition est une organisation basée à Genève, en Suisse."
+      "leadNoLegalStatus": "MHSV® — Centre International de Développement et de Transition est une organisation basée à Genève, en Suisse.",
+      "titleLines": [
+        "QUI",
+        "SOMMES-NOUS ?"
+      ]
     },
     "audience": {
       "lead": "MHSV® accompagne des personnes et des structures à différentes étapes de leur parcours."
@@ -211,6 +215,29 @@
       "title": "RESTEZ INFORMÉ(E) DE L’ACTUALITÉ MHSV®",
       "lead": "Recevez nos actualités institutionnelles, l’évolution de nos programmes, nos projets, nos événements et nos initiatives internationales.",
       "anchor": "newsletter"
+    },
+    "vision": {
+      "titleLines": [
+        "NOTRE",
+        "VISION 2035"
+      ]
+    },
+    "programmes": {
+      "titleLines": [
+        "LE PROGRAMME",
+        "SPORTIF EN ACTION"
+      ]
+    },
+    "international": {
+      "titleLines": [
+        "INTERNATIONAL",
+        "& ÉVÉNEMENTS"
+      ]
+    },
+    "founder": {
+      "titleLines": [
+        "LE FONDATEUR"
+      ]
     }
   },
   "form": {

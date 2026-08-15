@@ -7,15 +7,15 @@
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import { capitalizeFirst } from '@/lib/text';
-import type { BandTone, SectionType } from '@/config/site';
+import type { Surface, SectionType } from '@/config/site';
 
 interface Props {
   locale: Locale;
   type: SectionType;
-  tone: BandTone;
+  surface: Surface;
 }
 
-const { locale, type, tone } = Astro.props;
+const { locale, type, surface } = Astro.props;
 const s = getContent(locale).sections.services;
 // The pack writes this as one running sentence, so only the first item is
 // capitalised in the source.
@@ -27,15 +27,15 @@ const items = s.items.map((item) => capitalizeFirst(item, locale));
   anchor={s.anchor}
   title={s.title}
   type={type}
-  tone={tone}
+  surface={surface}
   lead={s.lead}
 >
   <ul class="services" data-stagger data-rows>
     {
       items.map((item) => (
-        <li class="service">
+        <li class="service row">
           <span class="service__mark" aria-hidden="true" />
-          <h3 class="service__name">{item}</h3>
+          <h3 class="service__name row__label">{item}</h3>
         </li>
       ))
     }

@@ -20,7 +20,8 @@
      still clears AA on the slightly-tinted card surface, where small link text
      sits: 6.06:1 on --bone, 5.70:1 on a card. */
   --color-gold-ink: #6f5920;
-  --color-bone: #f5f3ef;
+  /* Bone, never pure white: #FFF glares against navy and looks cheap. */
+  --color-bone: #f4f2ed;
   --color-white: #ffffff;
 
   --font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
@@ -105,16 +106,38 @@
       scroll-behavior: auto !important;
     }
 
-    /* Nothing may be left hidden or displaced. */
+    /*
+     * Nothing may be left hidden or displaced.
+     *
+     * Masked line reveals are the most common way a site accidentally hides
+     * all of its own text — the mask stays and the text never slides in. Every
+     * reveal mechanism is listed here explicitly for that reason.
+     */
     [data-reveal],
     [data-reveal-x],
-    [data-stagger] > * {
+    [data-stagger] > *,
+    .reveal-lines .line > span {
       opacity: 1 !important;
       transform: none !important;
       transition-delay: 0ms !important;
     }
 
-    /* No cross-document transition either. */
+    /* Decorative, and pure motion: remove entirely. */
+    .floodlight,
+    .scroll-progress {
+      display: none !important;
+    }
+
+    [data-magnetic] {
+      transform: none !important;
+    }
+
+    /* Sticky panes become normal flow — a pinned column with no motion to
+       justify it just eats the viewport. */
+    .method__sticky {
+      position: static !important;
+    }
+
     ::view-transition-old(root),
     ::view-transition-new(root) {
       animation: none !important;
@@ -130,24 +153,58 @@
     navigation: auto;
   }
 
+  /*
+   * A curtain wipe rather than a crossfade. cubic-bezier(0.76, 0, 0.24, 1) is
+   * sharp in and sharp out — mechanical and precise, which suits the register.
+   */
   ::view-transition-old(root) {
-    animation: vt-out 180ms var(--ease-out) both;
+    animation: wipe-out 420ms cubic-bezier(0.76, 0, 0.24, 1) both;
   }
 
   ::view-transition-new(root) {
-    animation: vt-in 260ms var(--ease-out) both;
+    animation: wipe-in 480ms cubic-bezier(0.76, 0, 0.24, 1) both;
   }
 
-  @keyframes vt-out {
-    to {
-      opacity: 0;
-    }
+  @keyframes wipe-out {
+    from { transform: translateY(0); }
+    to { transform: translateY(-100%); }
   }
 
-  @keyframes vt-in {
-    from {
-      opacity: 0;
-    }
+  @keyframes wipe-in {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  /*
+   * The masthead is given its own transition name so it is animated
+   * independently of the page body — it stays put instead of wiping with the
+   * content, which is what stops the nav flickering on a language switch.
+   * Done with cross-document view transitions rather than an SPA router: no
+   * client-side routing to re-initialise every script against.
+   */
+  .site-header {
+    view-transition-name: masthead;
+  }
+
+  ::view-transition-old(masthead),
+  ::view-transition-new(masthead) {
+    animation: none;
+  }
+
+  /*
+   * Static grain over the whole viewport. Flat navy across a long page looks
+   * dead; 2.5% noise gives it a surface. Fixed, so it never slides against the
+   * content, and NEVER animated — animated noise is both distracting and a
+   * guaranteed repaint every frame.
+   */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
   html {
@@ -269,49 +326,16 @@
     scroll-margin-top: calc(var(--header-h) + var(--anchor-gap) - var(--band-pad-top));
   }
 
-  .band--navy-deep {
-    --band-bg: var(--color-navy-deep);
-    --band-fg: var(--color-white);
-    --band-muted: var(--muted-on-dark);
-    --band-accent: var(--color-gold);
-    --band-rule: var(--hairline);
-    --band-raised: rgb(255 255 255 / 0.045);
-    --focus-ring: var(--color-gold-soft);
-  }
-
-  .band--navy {
-    --band-bg: var(--color-navy);
-    --band-fg: var(--color-white);
-    --band-muted: var(--muted-on-dark);
-    --band-accent: var(--color-gold);
-    --band-rule: var(--hairline);
-    --band-raised: rgb(255 255 255 / 0.05);
-    --focus-ring: var(--color-gold-soft);
-  }
-
-  .band--bone {
-    /* Without this the root's `color-scheme: dark` makes the browser render
-       checkboxes, selects and scrollbars in their dark form on a light band. */
-    color-scheme: light;
-    --band-bg: var(--color-bone);
-    --band-fg: var(--color-navy-deep);
-    --band-muted: #5a6273;
-    --band-accent: var(--color-gold-ink);
-    --band-rule: rgb(12 29 58 / 0.14);
-    --band-raised: rgb(12 29 58 / 0.032);
-    --focus-ring: var(--color-navy);
-  }
-
   /* ------------------------------------------------------------------------
      The continuous ground
 
      The page is ONE navy ground from top to bottom. It used to be a stack of
-     full-bleed colour slabs — navy, hard edge, white, hard edge — which is the
-     slide-deck pattern itself, whatever you do about numbers and dividers.
+     full-bleed colour slabs — navy, hard edge, light, hard edge — which is the
+     slide-deck pattern itself, whatever you do about numbering and dividers.
 
-     Sections that need light relief are grouped into a few inset panels that
-     float on the ground (see .panel). Nothing produces a full-width horizontal
-     seam any more.
+     Four sections carry commercial weight — the offer, the people, the book and
+     the contact form — and those become inset panels floating on the ground.
+     Nothing produces a full-width horizontal seam.
      ---------------------------------------------------------------------- */
   .flow {
     position: relative;
@@ -320,9 +344,9 @@
   }
 
   /*
-   * Depth. Three large, very soft washes placed by percentage of the whole
-   * page, so they deliberately do NOT line up with any section boundary —
-   * that is what stops a long dark page reading as flat.
+   * Depth: four large, very soft washes placed by percentage of the WHOLE page,
+   * so they deliberately never line up with a section boundary. That is what
+   * stops a long dark page reading as flat.
    */
   .flow::before {
     content: '';
@@ -337,29 +361,22 @@
       radial-gradient(56rem 40rem at 6% 88%, rgb(20 40 74 / 0.45), transparent 62%);
   }
 
-  /* Inside the flow the bands are transparent — the ground and the panels
-     supply the colour. (Standalone pages such as /livre keep their own.) */
-  .flow .band {
-    background-color: transparent;
-  }
-
   /* --- inset panels ------------------------------------------------------
-     A run of light sections becomes ONE panel with a margin on both sides and
-     rounded corners, so it reads as an object sitting on the page rather than
-     as the next slide. */
+     A panel with a margin reads as content resting on the page; the identical
+     panel run full-bleed reads as the next slide. Same colour, opposite
+     perception — which is the whole reason for the margin. */
   .panel {
     position: relative;
-    margin-inline: clamp(0.75rem, 2.5vw, 3.5rem);
-    /* Modest: the adjoining ground section already carries generous bottom
-       padding, and doubling the two leaves a dead void above the panel. */
+    margin-inline: clamp(0.75rem, 3.5vw, 5rem);
     margin-block: clamp(1.25rem, 2.5vw, 3rem);
-    border-radius: clamp(12px, 1.6vw, 24px);
+    border-radius: clamp(8px, 0.9vw, 12px);
     background: var(--color-bone);
     box-shadow: 0 40px 90px -30px rgb(0 0 0 / 0.55);
   }
 
-  /* The panel's own inset already separates it; its first and last sections
-     do not need their full archetype padding as well. */
+  /* The panel's inset already separates it; its edge sections do not need
+     their full archetype padding as well. Set through the variable so the
+     anchor maths on .band stays correct. */
   .panel > .band:first-child {
     --band-pad-top: clamp(3rem, 2rem + 3.5vw, 5rem);
   }
@@ -368,17 +385,27 @@
     --band-pad-bottom: clamp(3rem, 2rem + 3.5vw, 5rem);
   }
 
-  /* Grain on the ground, not per section — 2.5% is enough to stop a large
-     flat navy area looking dead, and not enough to consciously see. */
-  .flow::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    /* 2.5% — enough to stop large flat navy looking dead, not enough to see. */
-    opacity: 0.025;
-    mix-blend-mode: normal;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  /* Two surfaces only: the continuous navy ground, and the inset light panel. */
+  .band--ground {
+    --band-bg: transparent;
+    --band-fg: var(--color-white);
+    --band-muted: var(--muted-on-dark);
+    --band-accent: var(--color-gold);
+    --band-rule: var(--hairline);
+    --band-raised: rgb(255 255 255 / 0.045);
+    --focus-ring: var(--color-gold-soft);
+  }
+
+  .band--panel {
+    /* The .panel wrapper paints the bone; the section itself stays clear. */
+    color-scheme: light;
+    --band-bg: transparent;
+    --band-fg: var(--color-navy-deep);
+    --band-muted: #5a6273;
+    --band-accent: var(--color-gold-ink);
+    --band-rule: rgb(12 29 58 / 0.14);
+    --band-raised: rgb(12 29 58 / 0.032);
+    --focus-ring: var(--color-navy);
   }
 
   /* ------------------------------------------------------------------------
@@ -712,5 +739,141 @@
   html.js .band--quiet [data-reveal],
   html.js .band--quiet [data-stagger] > * {
     transform: none;
+  }
+}
+
+/* ==========================================================================
+   Ambient effects
+   ========================================================================== */
+@layer components {
+  /* ------------------------------------------------------------------------
+     Floodlight
+
+     A soft gold light that drifts after the cursor. Sits behind the content
+     (z-index 0, with header/main/footer lifted to 1) so it never washes over
+     text — contrast is measured against the ground, not against the light.
+
+     13% peak. If you can point at it, it is too strong.
+     ---------------------------------------------------------------------- */
+  .floodlight {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 62vmax;
+    height: 62vmax;
+    margin: -31vmax 0 0 -31vmax;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 900ms ease-out;
+    background: radial-gradient(
+      circle closest-side,
+      rgb(212 175 55 / 0.13) 0%,
+      rgb(212 175 55 / 0.07) 34%,
+      rgb(212 175 55 / 0.025) 58%,
+      transparent 76%
+    );
+    will-change: transform;
+  }
+
+  .floodlight.is-lit {
+    opacity: 1;
+  }
+
+  /* The light lives behind everything the visitor reads. */
+  .site-header,
+  main,
+  footer {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ------------------------------------------------------------------------
+     Scroll progress — a hairline of gold under the masthead.
+     ---------------------------------------------------------------------- */
+  .scroll-progress {
+    position: fixed;
+    inset-inline: 0;
+    top: 0;
+    height: 2px;
+    z-index: 60;
+    pointer-events: none;
+    background: transparent;
+  }
+
+  .scroll-progress__bar {
+    height: 100%;
+    background: linear-gradient(to right, var(--gold), var(--gold-soft));
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  /* ------------------------------------------------------------------------
+     Masked line reveal
+
+     Each line sits in its own crop and slides up from behind it. Headings
+     only — masking body copy while someone is trying to read it is irritating.
+     ---------------------------------------------------------------------- */
+  .reveal-lines .line {
+    display: block;
+    overflow: hidden;
+  }
+
+  html.js .reveal-lines .line > span {
+    display: block;
+    /* 110%, not 100%: at exactly 100% descenders (g, y, p) peek under the
+       mask before the animation starts. */
+    transform: translateY(110%);
+    transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
+
+  html.js .reveal-lines.is-in .line > span {
+    transform: translateY(0);
+    will-change: auto;
+  }
+
+  html.js .reveal-lines.is-in .line:nth-child(1) > span { transition-delay: 0ms; }
+  html.js .reveal-lines.is-in .line:nth-child(2) > span { transition-delay: 90ms; }
+  html.js .reveal-lines.is-in .line:nth-child(3) > span { transition-delay: 180ms; }
+  html.js .reveal-lines.is-in .line:nth-child(4) > span { transition-delay: 270ms; }
+  html.js .reveal-lines.is-in .line:nth-child(n + 5) > span { transition-delay: 360ms; }
+
+  /* ------------------------------------------------------------------------
+     Hover rows — for the service and roadmap lists.
+
+     The fill and the label move at different speeds (460ms / 320ms). Matching
+     them makes the whole thing read as one flat state change; the offset is
+     what sells it.
+     ---------------------------------------------------------------------- */
+  .row {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .row::before {
+    content: '';
+    position: absolute;
+    inset: 0 -1rem;
+    z-index: -1;
+    border-radius: var(--radius);
+    background: rgb(212 175 55 / 0.06);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 460ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .row:hover::before,
+  .row:focus-within::before {
+    transform: scaleX(1);
+  }
+
+  .row__label {
+    transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .row:hover .row__label,
+  .row:focus-within .row__label {
+    transform: translateX(14px);
   }
 }

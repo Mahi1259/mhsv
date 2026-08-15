@@ -71,7 +71,7 @@ type Run = { surface: 'ground' | 'panel'; ids: SectionId[] };
 const runs: Run[] = [];
 for (const section of SECTION_ORDER) {
   if (section.id === 'hero') continue;
-  const surface: Run['surface'] = section.tone === 'bone' ? 'panel' : 'ground';
+  const surface: Run['surface'] = section.surface;
   const last = runs.at(-1);
   if (last?.surface === surface) last.ids.push(section.id);
   else runs.push({ surface, ids: [section.id] });
@@ -79,7 +79,7 @@ for (const section of SECTION_ORDER) {
 
 const propsFor = (id: SectionId) => {
   const section = SECTION_ORDER.find((s) => s.id === id)!;
-  return { type: section.type, tone: section.tone };
+  return { type: section.type, surface: section.surface };
 };
 ---
 

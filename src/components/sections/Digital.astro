@@ -4,15 +4,15 @@
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import { capitalizeFirst } from '@/lib/text';
-import type { BandTone, SectionType } from '@/config/site';
+import type { Surface, SectionType } from '@/config/site';
 
-interface Props { locale: Locale; type: SectionType; tone: BandTone }
-const { locale, type, tone } = Astro.props;
+interface Props { locale: Locale; type: SectionType; surface: Surface }
+const { locale, type, surface } = Astro.props;
 const s = getContent(locale).sections.digital;
 const roadmapItems = s.roadmapItems.map((item) => capitalizeFirst(item, locale));
 ---
 
-<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} status={s.status}>
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} surface={surface} status={s.status}>
   <div class="digital">
     <div>
       <h3 class="mono-label digital__title">{s.roadmapTitle}</h3>

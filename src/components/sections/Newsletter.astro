@@ -3,19 +3,19 @@
 import Band from '@/components/Band.astro';
 import NewsletterForm from '@/components/NewsletterForm.astro';
 import { getContent, type Locale } from '@/lib/i18n';
-import type { BandTone, SectionType } from '@/config/site';
+import type { Surface, SectionType } from '@/config/site';
 
 interface Props {
   locale: Locale;
   type: SectionType;
-  tone: BandTone;
+  surface: Surface;
 }
 
-const { locale, type, tone } = Astro.props;
+const { locale, type, surface } = Astro.props;
 const s = getContent(locale).sections.newsletter;
 ---
 
-<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone}>
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} surface={surface}>
   <div class="newsletter">
     <p class="newsletter__lead lead">{s.lead}</p>
     <div class="newsletter__form">

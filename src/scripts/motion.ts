@@ -15,7 +15,7 @@
  */
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-const REVEAL_SELECTOR = '[data-reveal], [data-reveal-x], [data-stagger]';
+const REVEAL_SELECTOR = '[data-reveal], [data-reveal-x], [data-stagger], [data-reveal-lines]';
 
 function revealAll() {
   document.querySelectorAll(REVEAL_SELECTOR).forEach((el) => el.classList.add('is-in'));

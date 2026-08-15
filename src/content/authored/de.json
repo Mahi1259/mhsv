@@ -92,7 +92,10 @@
   },
   "sections": {
     "about": {
-      "leadNoLegalStatus": "MHSV® — Internationales Zentrum für Entwicklung und Transition ist eine in Genf (Schweiz) ansässige Organisation."
+      "leadNoLegalStatus": "MHSV® — Internationales Zentrum für Entwicklung und Transition ist eine in Genf (Schweiz) ansässige Organisation.",
+      "titleLines": [
+        "ÜBER UNS"
+      ]
     },
     "audience": {
       "lead": "MHSV® begleitet Personen und Organisationen in unterschiedlichen Etappen ihres Weges."
@@ -211,6 +214,29 @@
       "title": "BLEIBEN SIE ÜBER MHSV® INFORMIERT",
       "lead": "Erhalten Sie institutionelle Neuigkeiten, Programmentwicklungen, Projekte, Veranstaltungen und internationale Initiativen.",
       "anchor": "newsletter"
+    },
+    "vision": {
+      "titleLines": [
+        "UNSERE",
+        "VISION 2035"
+      ]
+    },
+    "programmes": {
+      "titleLines": [
+        "SPORTPROGRAMME",
+        "IN DER PRAXIS"
+      ]
+    },
+    "international": {
+      "titleLines": [
+        "INTERNATIONAL",
+        "& EVENTS"
+      ]
+    },
+    "founder": {
+      "titleLines": [
+        "GRÜNDER"
+      ]
     }
   },
   "form": {

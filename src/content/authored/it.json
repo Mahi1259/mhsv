@@ -92,7 +92,10 @@
   },
   "sections": {
     "about": {
-      "leadNoLegalStatus": "MHSV® — Centro Internazionale di Sviluppo e Transizione è un'organizzazione con sede a Ginevra, in Svizzera."
+      "leadNoLegalStatus": "MHSV® — Centro Internazionale di Sviluppo e Transizione è un'organizzazione con sede a Ginevra, in Svizzera.",
+      "titleLines": [
+        "CHI SIAMO"
+      ]
     },
     "audience": {
       "lead": "MHSV® accompagna persone e organizzazioni in diverse tappe del loro percorso."
@@ -211,6 +214,29 @@
       "title": "RESTATE INFORMATI SU MHSV®",
       "lead": "Ricevete le nostre notizie istituzionali, gli aggiornamenti dei programmi, i progetti, gli eventi e le iniziative internazionali.",
       "anchor": "newsletter"
+    },
+    "vision": {
+      "titleLines": [
+        "LA NOSTRA",
+        "VISIONE 2035"
+      ]
+    },
+    "programmes": {
+      "titleLines": [
+        "IL PROGRAMMA",
+        "SPORTIVO IN AZIONE"
+      ]
+    },
+    "international": {
+      "titleLines": [
+        "INTERNAZIONALE",
+        "& EVENTI"
+      ]
+    },
+    "founder": {
+      "titleLines": [
+        "FONDATORE"
+      ]
     }
   },
   "form": {

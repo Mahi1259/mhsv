@@ -8,20 +8,20 @@
  */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
-import { SHOW_LEGAL_STATUS, type BandTone, type SectionType } from '@/config/site';
+import { SHOW_LEGAL_STATUS, type Surface, type SectionType } from '@/config/site';
 
 interface Props {
   locale: Locale;
   type: SectionType;
-  tone: BandTone;
+  surface: Surface;
 }
 
-const { locale, type, tone } = Astro.props;
+const { locale, type, surface } = Astro.props;
 const s = getContent(locale).sections.about;
 const lead = SHOW_LEGAL_STATUS ? s.lead : s.leadNoLegalStatus;
 ---
 
-<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone}>
+<Band locale={locale} anchor={s.anchor} title={s.title} titleLines={s.titleLines} type={type} surface={surface}>
   <p class="statement-lead">{lead}</p>
   <div class="prose-body about__body">
     {s.paragraphs.map((text) => <p>{text}</p>)}

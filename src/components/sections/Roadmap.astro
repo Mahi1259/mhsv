@@ -11,15 +11,15 @@
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import { capitalizeFirst } from '@/lib/text';
-import { STATUS_KEYS, type BandTone, type SectionType } from '@/config/site';
+import { STATUS_KEYS, type Surface, type SectionType } from '@/config/site';
 
 interface Props {
   locale: Locale;
   type: SectionType;
-  tone: BandTone;
+  surface: Surface;
 }
 
-const { locale, type, tone } = Astro.props;
+const { locale, type, surface } = Astro.props;
 const c = getContent(locale);
 const s = c.sections.roadmap;
 const items = s.items.map((item) => capitalizeFirst(item, locale));
@@ -30,16 +30,16 @@ const items = s.items.map((item) => capitalizeFirst(item, locale));
   anchor={s.anchor}
   title={s.title}
   type={type}
-  tone={tone}
+  surface={surface}
   lead={s.lead}
   status={s.status}
 >
   <ul class="roadmap" data-stagger data-rows>
     {
       items.map((item) => (
-        <li class="roadmap__item">
+        <li class="roadmap__item row">
           <span class="roadmap__marker" aria-hidden="true" />
-          {item}
+          <span class="row__label">{item}</span>
         </li>
       ))
     }

@@ -46,10 +46,10 @@ const C = {
   bone: token('color-bone'),
   white: token('color-white'),
   mutedOnDark: token('muted-on-dark'),
-  mutedOnLight: /\.band--bone[^}]*--band-muted:\s*(#[0-9a-fA-F]{6})/s.exec(css)?.[1],
+  mutedOnLight: /\.band--panel[^}]*--band-muted:\s*(#[0-9a-fA-F]{6})/s.exec(css)?.[1],
 };
 
-if (!C.mutedOnLight) throw new Error('light-band --band-muted not found');
+if (!C.mutedOnLight) throw new Error('panel --band-muted not found in global.css');
 
 /**
  * Composite a translucent overlay onto a ground.

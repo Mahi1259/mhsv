@@ -73,46 +73,53 @@ export type SectionType = (typeof SECTION_TYPES)[number];
 /**
  * Section order, archetype and ground for the single page.
  *
- * `tone` changes roughly every third or fourth section rather than alternating
- * — a switch on every section marks nothing, and the constant flipping was the
- * second reason the page felt paginated. Grounds meet on a clean edge; see the
- * note in global.css for why a gradient bridge was tried and removed.
+ * `surface` is either the continuous navy ground or one of FOUR inset light
+ * panels. Panels are reserved for the moments that carry commercial weight —
+ * the offer, the people, the book and the contact form — so light is a signal
+ * rather than a rhythm. Everything else sits on navy and is differentiated by
+ * layout.
  *
  * Note: the content pack's §10 (Founding programmes) and §13 (Fees) are merged
  * into one "Programmes & fees" section, because the CHF 15,000 launch rate was
  * otherwise stated three times on one page.
  */
 export const SECTION_ORDER = [
-  { id: 'hero', anchor: 'top', type: 'hero', tone: 'navy-deep' },
-  { id: 'about', anchor: 'about', type: 'statement', tone: 'navy' },
-  { id: 'vision', anchor: 'vision', type: 'statement', tone: 'navy' },
+  { id: 'hero', anchor: 'top', type: 'hero', surface: 'ground' },
+  { id: 'about', anchor: 'about', type: 'statement', surface: 'ground' },
+  { id: 'vision', anchor: 'vision', type: 'statement', surface: 'ground' },
+  { id: 'mission', anchor: 'mission', type: 'grid', surface: 'ground' },
+  { id: 'audience', anchor: 'audience', type: 'quiet', surface: 'ground' },
+  { id: 'method', anchor: 'method', type: 'feature', surface: 'ground' },
+  { id: 'services', anchor: 'services', type: 'grid', surface: 'ground' },
+  { id: 'pathway', anchor: 'pathway', type: 'feature', surface: 'ground' },
+  { id: 'programmes', anchor: 'programmes', type: 'statement', surface: 'ground' },
 
-  { id: 'mission', anchor: 'mission', type: 'grid', tone: 'bone' },
-  { id: 'audience', anchor: 'audience', type: 'quiet', tone: 'bone' },
-  { id: 'method', anchor: 'method', type: 'feature', tone: 'bone' },
-  { id: 'services', anchor: 'services', type: 'grid', tone: 'bone' },
+  // Panel — the commercial offer.
+  { id: 'founding', anchor: 'founding', type: 'feature', surface: 'panel' },
 
-  { id: 'pathway', anchor: 'pathway', type: 'feature', tone: 'navy' },
-  { id: 'programmes', anchor: 'programmes', type: 'statement', tone: 'navy' },
-  { id: 'founding', anchor: 'founding', type: 'feature', tone: 'navy' },
-  { id: 'international', anchor: 'international', type: 'statement', tone: 'navy' },
+  { id: 'international', anchor: 'international', type: 'statement', surface: 'ground' },
+  { id: 'ecosystem', anchor: 'ecosystem', type: 'grid', surface: 'ground' },
+  { id: 'inclusion', anchor: 'inclusion', type: 'quiet', surface: 'ground' },
+  { id: 'digital', anchor: 'digital', type: 'grid', surface: 'ground' },
 
-  { id: 'ecosystem', anchor: 'ecosystem', type: 'grid', tone: 'bone' },
-  { id: 'inclusion', anchor: 'inclusion', type: 'quiet', tone: 'bone' },
-  { id: 'digital', anchor: 'digital', type: 'grid', tone: 'bone' },
-  { id: 'team', anchor: 'team', type: 'grid', tone: 'bone' },
+  // Panel — the people.
+  { id: 'team', anchor: 'team', type: 'grid', surface: 'panel' },
 
-  { id: 'founder', anchor: 'founder', type: 'statement', tone: 'navy' },
-  { id: 'book', anchor: 'book', type: 'feature', tone: 'navy' },
-  { id: 'identity', anchor: 'identity', type: 'quiet', tone: 'navy' },
-  { id: 'roadmap', anchor: 'roadmap', type: 'grid', tone: 'navy' },
+  { id: 'founder', anchor: 'founder', type: 'statement', surface: 'ground' },
 
-  { id: 'newsletter', anchor: 'newsletter', type: 'feature', tone: 'bone' },
-  { id: 'contact', anchor: 'contact', type: 'feature', tone: 'navy' },
+  // Panel — the book.
+  { id: 'book', anchor: 'book', type: 'feature', surface: 'panel' },
+
+  { id: 'identity', anchor: 'identity', type: 'quiet', surface: 'ground' },
+  { id: 'roadmap', anchor: 'roadmap', type: 'grid', surface: 'ground' },
+  { id: 'newsletter', anchor: 'newsletter', type: 'feature', surface: 'ground' },
+
+  // Panel — the contact form.
+  { id: 'contact', anchor: 'contact', type: 'feature', surface: 'panel' },
 ] as const;
 
 export type SectionId = (typeof SECTION_ORDER)[number]['id'];
-export type BandTone = (typeof SECTION_ORDER)[number]['tone'];
+export type Surface = (typeof SECTION_ORDER)[number]['surface'];
 
 /** Sections listed in the footer. Deliberately short — it was 20 links. */
 export const FOOTER_LINKS = ['about', 'programmes', 'book', 'newsletter', 'contact'] as const;

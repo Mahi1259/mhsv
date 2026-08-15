@@ -92,7 +92,11 @@
   },
   "sections": {
     "about": {
-      "leadNoLegalStatus": "MHSV® — International Centre for Development and Transition is an organisation based in Geneva, Switzerland."
+      "leadNoLegalStatus": "MHSV® — International Centre for Development and Transition is an organisation based in Geneva, Switzerland.",
+      "titleLines": [
+        "WHO",
+        "WE ARE"
+      ]
     },
     "audience": {
       "lead": "MHSV® supports people and organisations at different stages of their journey."
@@ -211,6 +215,29 @@
       "title": "STAY INFORMED ABOUT MHSV®",
       "lead": "Receive institutional news, programme updates, projects, events and international initiatives.",
       "anchor": "newsletter"
+    },
+    "vision": {
+      "titleLines": [
+        "OUR",
+        "VISION 2035"
+      ]
+    },
+    "programmes": {
+      "titleLines": [
+        "SPORT PROGRAMMES",
+        "IN ACTION"
+      ]
+    },
+    "international": {
+      "titleLines": [
+        "INTERNATIONAL",
+        "& EVENTS"
+      ]
+    },
+    "founder": {
+      "titleLines": [
+        "FOUNDER"
+      ]
     }
   },
   "form": {

@@ -41,6 +41,30 @@ const QUIET_ZONE_MODULES = 4;
 const DPI = 300;
 const mmToPx = (mm) => Math.round((mm / 25.4) * DPI);
 
+/*
+ * GATE — the client brief holds final QR generation until two things are true:
+ *   1. https://www.mhsv.ch/livre is live over HTTPS, and
+ *   2. MHSV® has approved the destination page in writing.
+ *
+ * A QR on a printed book cannot be corrected, so generating "just to see" and
+ * having the file escape into a layout is a real risk. Confirm both, then:
+ *
+ *   MHSV_QR_APPROVED=yes npm run qr
+ */
+if (process.env.MHSV_QR_APPROVED !== 'yes') {
+  console.error('');
+  console.error('  QR generation is gated.');
+  console.error('');
+  console.error('  Before generating the file that goes to print:');
+  console.error(`    1. ${TARGET} must be live over HTTPS on the real domain`);
+  console.error('       (verify with: AUDIT_BASE_URL=https://www.mhsv.ch npm run check:qr)');
+  console.error('    2. MHSV® must have approved the destination page in writing');
+  console.error('');
+  console.error('  Then run:  MHSV_QR_APPROVED=yes npm run qr');
+  console.error('');
+  process.exit(1);
+}
+
 mkdirSync(OUT, { recursive: true });
 
 const options = {

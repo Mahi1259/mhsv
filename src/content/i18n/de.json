@@ -27,7 +27,11 @@
         "Die Mission besteht darin, die ganzheitliche Entwicklung des Menschen durch Sport, Bildung, Ausbildung, persönliche Begleitung und die Vorbereitung persönlicher, sportlicher, schulischer und beruflicher Transitionen zu fördern.",
         "Fussball ist das wichtigste Startprogramm. Die Mission umfasst jedoch alle Sportarten und vor allem den Menschen hinter der Leistung. MHSV® verspricht keinen automatischen Zugang zum Profisport, sondern entwickelt realistische, individuelle und koordinierte Wege."
       ],
-      "leadNoLegalStatus": "MHSV® — Internationales Zentrum für Entwicklung und Transition ist eine in Genf (Schweiz) ansässige Organisation."
+      "leadNoLegalStatus": "MHSV® — Internationales Zentrum für Entwicklung und Transition ist eine in Genf (Schweiz) ansässige Organisation.",
+      "titleLines": [
+        "ÜBER UNS"
+      ],
+      "_titleLinesCheck": "ÜBER UNS"
     },
     "vision": {
       "num": "03",
@@ -39,7 +43,12 @@
         "Konsolidieren & Professionalisieren",
         "Ausbauen & Weitergeben"
       ],
-      "note": "Wachstum soll die Qualität der Begleitung, den Schutz der Begünstigten und die Nachhaltigkeit der Organisation stärken."
+      "note": "Wachstum soll die Qualität der Begleitung, den Schutz der Begünstigten und die Nachhaltigkeit der Organisation stärken.",
+      "titleLines": [
+        "UNSERE",
+        "VISION 2035"
+      ],
+      "_titleLinesCheck": "UNSERE VISION 2035"
     },
     "mission": {
       "num": "04",
@@ -177,7 +186,12 @@
       "status": {
         "key": "inDevelopment",
         "detail": "IM AUFBAU / SCHRITTWEISE UMSETZUNG"
-      }
+      },
+      "titleLines": [
+        "SPORTPROGRAMME",
+        "IN DER PRAXIS"
+      ],
+      "_titleLinesCheck": "SPORTPROGRAMME IN DER PRAXIS"
     },
     "founding": {
       "num": "10",
@@ -246,7 +260,12 @@
       "status": {
         "key": "inDevelopment",
         "detail": "IM AUFBAU / SCHRITTWEISE UMSETZUNG"
-      }
+      },
+      "titleLines": [
+        "INTERNATIONAL",
+        "& EVENTS"
+      ],
+      "_titleLinesCheck": "INTERNATIONAL & EVENTS"
     },
     "ecosystem": {
       "num": "12",
@@ -371,7 +390,11 @@
       "name": "Martial HAPPI",
       "role": "Gründer und Präsident",
       "bio": "In Genf ansässiger Unternehmer, ehemaliger internationaler Fussballspieler auf Pre-Elite-Niveau, UEFA-C-Trainer und ehemaliger offizieller Amateur-Schiedsrichter. Er gründete MHSV®, um Sportentwicklung, Bildung, Gesundheit, berufliche Entwicklung, Inklusion und Transition zu verbinden.",
-      "quote": "Hinter jeder Leistung steht ein Mensch. Hinter jedem Menschen steckt Potenzial. Und dieses Potenzial verdient Begleitung."
+      "quote": "Hinter jeder Leistung steht ein Mensch. Hinter jedem Menschen steckt Potenzial. Und dieses Potenzial verdient Begleitung.",
+      "titleLines": [
+        "GRÜNDER"
+      ],
+      "_titleLinesCheck": "GRÜNDER"
     },
     "book": {
       "num": "18",

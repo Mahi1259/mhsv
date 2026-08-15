@@ -17,7 +17,7 @@
  * A trailingSlash setting of 'always' silently broke (3) once already: the
  * slash-less form, which is the printed one, returned 404.
  */
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import jsQR from 'jsqr';
@@ -39,7 +39,17 @@ const fail = (msg) => {
 // --- 1. the generated files decode to the expected URL ----------------------
 const QR_FILES = ['qr/mhsv-livre-qr-30mm.png', 'qr/mhsv-livre-qr-25mm.png', 'qr/mhsv-livre-qr.svg'];
 
-for (const file of QR_FILES) {
+// The print files are gated until the domain is live and the client has
+// approved the page (see scripts/generate-qr.mjs). Their absence is the
+// expected state before then — the destination checks below still run, because
+// the URL has to be right long before anything is generated.
+const generated = existsSync(resolve(ROOT, 'qr'));
+if (!generated) {
+  console.log('  · QR print files not generated yet (gated until the domain is live');
+  console.log('    and MHSV® has approved the page) — checking the destination only.');
+}
+
+for (const file of generated ? QR_FILES : []) {
   try {
     const source = readFileSync(resolve(ROOT, file));
     const input = file.endsWith('.svg') ? await sharp(source).resize(600).png().toBuffer() : source;
@@ -107,4 +117,8 @@ if (failures.length) {
   console.error(`✗ QR target check failed (${failures.length}). THIS URL GOES TO PRINT.\n`);
   process.exit(1);
 }
-console.log(`  ✓ QR target OK — ${EXPECTED_URL} resolves and is safe to print`);
+console.log(
+  generated
+    ? `  ✓ QR target OK — ${EXPECTED_URL} resolves and the print files match`
+    : `  ✓ QR target OK — ${EXPECTED_URL} resolves (print files correctly not yet generated)`,
+);
