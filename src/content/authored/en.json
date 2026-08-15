@@ -43,20 +43,20 @@
         "label": "Methodology"
       },
       {
-        "id": "services",
-        "label": "Services"
-      },
-      {
         "id": "programmes",
         "label": "Programmes"
       },
       {
-        "id": "fees",
-        "label": "Fees"
+        "id": "team",
+        "label": "Governance"
       },
       {
-        "id": "team",
-        "label": "Team"
+        "id": "book",
+        "label": "The Book"
+      },
+      {
+        "id": "newsletter",
+        "label": "Newsletter"
       },
       {
         "id": "contact",
@@ -116,7 +116,8 @@
       "stepLabel": "Step"
     },
     "founding": {
-      "lead": "The two founding programmes for the first deployment year."
+      "lead": "The two founding programmes for the first deployment year, and the launch rate.",
+      "title": "FOUNDING PROGRAMMES & FEES"
     },
     "ecosystem": {
       "disciplinesTitle": "Coordinated expertise"
@@ -129,17 +130,59 @@
       "roadmapTitle": "Digital roadmap"
     },
     "team": {
-      "lead": "Phase 1: presented without photographs. MHSV® professional addresses are published as they are created.",
+      "lead": "Presented without photographs at this stage. Cards remain modular so photos, biographies and members can be added later after approval.",
       "emailPending": "MHSV® address to come",
-      "emailPendingHint": "The professional address will be published once created."
+      "emailPendingHint": "The professional address will be published after written approval.",
+      "title": "ORGANISATION & GOVERNANCE",
+      "members": [
+        {
+          "name": "Martial HAPPI",
+          "role": "Founder and President",
+          "email": "m.happi@mhsv.ch",
+          "emailPending": false
+        },
+        {
+          "name": "Marc DJEA",
+          "role": "Vice-President",
+          "email": "infos@mhsv.ch",
+          "emailPending": false
+        },
+        {
+          "name": "Laetitia PILLER",
+          "role": "Committee Member — Communications Officer",
+          "email": "infos@mhsv.ch",
+          "emailPending": false
+        },
+        {
+          "name": "Paule ESSAI",
+          "role": "Secretary General",
+          "email": "infos@mhsv.ch",
+          "emailPending": false
+        },
+        {
+          "name": "Diego FUIANO",
+          "role": "Web & Digital Coordinator and Institutional Development & Partnerships — Italy",
+          "email": "infos@mhsv.ch",
+          "emailPending": false
+        },
+        {
+          "name": "Xavier MARTI",
+          "role": "Director of Institutional Development and Partnerships",
+          "email": "infos@mhsv.ch",
+          "emailPending": false
+        }
+      ]
     },
     "book": {
-      "lead": "Premium Founding Book — Founding Edition 2026",
-      "body": "The Founding Book is the institutional reference for MHSV®: vision, programmes, governance, impact and roadmap are brought together in a single volume.",
-      "notice": "Phase 1: the book is not offered as a public download. A selected extract may be published at a later stage.",
+      "lead": "THE MHSV® PREMIUM FOUNDING BOOK — FOUNDING EDITION 2026",
+      "body": "An exclusive institutional publication, the Premium Founding Book presents MHSV®’s vision, programmes, governance, impact and roadmap. Its strategic and methodological content is not available as a public download. French and English editions may be ordered through the website, subject to availability and confirmation by MHSV®.",
+      "notice": "No download of the complete book is offered. Only the approved covers are published.",
       "coverAltFr": "MHSV® Founding Book cover — French edition",
       "coverAltEn": "MHSV® Founding Book cover — English edition",
-      "ctaLabel": "Request a presentation"
+      "ctaLabel": "Order the book",
+      "title": "THE PREMIUM FOUNDING BOOK",
+      "qrCaption": "Discover the MHSV® Premium Founding Book and submit your order request.",
+      "qrAlt": "QR code linking to the MHSV® Founding Book page"
     },
     "identity": {
       "lead": "The MHSV® identity and future collection: athlete equipment, coaching, representation, accessories and lifestyle.",
@@ -157,7 +200,17 @@
     "contact": {
       "lead": "A question, a project, a request for an assessment? Write to us.",
       "detailsTitle": "Details",
-      "formTitle": "Contact form"
+      "formTitle": "Contact form",
+      "websiteLabel": "Website",
+      "emailLabel": "Institutional contact",
+      "founderLabel": "Founder and President",
+      "email": "infos@mhsv.ch",
+      "founderEmail": "m.happi@mhsv.ch"
+    },
+    "newsletter": {
+      "title": "STAY INFORMED ABOUT MHSV®",
+      "lead": "Receive institutional news, programme updates, projects, events and international initiatives.",
+      "anchor": "newsletter"
     }
   },
   "form": {
@@ -201,7 +254,8 @@
     "privacyLink": "Privacy policy",
     "legalLink": "Legal notice",
     "copyright": "All rights reserved.",
-    "trademarkNote": "MHSV® is a registered trademark."
+    "trademarkNote": "MHSV® is a registered trademark.",
+    "summary": "MHSV® — International Centre for Development and Transition | Geneva — Switzerland | www.mhsv.ch | infos@mhsv.ch"
   },
   "privacy": {
     "title": "Privacy policy",
@@ -251,5 +305,41 @@
     "hostingBody": "Host to be confirmed before going into production.",
     "propertyTitle": "Intellectual property",
     "propertyBody": "All content, trademarks and graphic elements on this site are the property of MHSV® or their respective owners and may not be reproduced without written permission."
+  },
+  "bookOrder": {
+    "title": "Order request",
+    "intro": "This is an order request, not a payment. MHSV® will contact you to confirm the arrangements.",
+    "edition": "Edition",
+    "editionFr": "French",
+    "editionEn": "English",
+    "quantity": "Quantity",
+    "organisation": "Organisation",
+    "country": "Country",
+    "consent": "I agree that MHSV® may use my data to process my order request.",
+    "submit": "Send my request",
+    "successTitle": "Request received",
+    "successBody": "Your request has been received. MHSV® will contact you to confirm availability, price, delivery and payment arrangements.",
+    "errors": {
+      "edition": "Please choose an edition.",
+      "quantity": "Please enter a valid quantity.",
+      "organisation": "Please enter your organisation.",
+      "country": "Please enter your country.",
+      "consent": "Your consent is required to send the request."
+    }
+  },
+  "newsletterForm": {
+    "firstName": "First name",
+    "email": "Email",
+    "language": "Preferred language",
+    "consent": "I agree to receive the MHSV® newsletter and may unsubscribe at any time.",
+    "submit": "Subscribe",
+    "successTitle": "Almost there",
+    "successBody": "Thank you. A confirmation email is on its way — click the link inside it to complete your subscription.",
+    "errors": {
+      "email": "Please enter a valid email address.",
+      "language": "Please choose a language.",
+      "consent": "Your consent is required to subscribe."
+    },
+    "privacyNote": "Your data is used only to send the newsletter. Every message contains an unsubscribe link."
   }
 }

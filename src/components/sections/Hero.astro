@@ -1,9 +1,12 @@
 ---
 /**
- * §01 — Hero.
+ * Hero — the only section with this weight.
  *
- * Carries the page's single <h1>. The association / legal-status line is
- * withheld behind SHOW_LEGAL_STATUS (BLOCKERS.md #1).
+ * Carries the page's single <h1>. The tagline is three sentences in the
+ * content pack ("Develop performance. Build the person. Prepare the future."),
+ * so it is split and sequenced in ~300ms apart on load.
+ *
+ * The association / legal-status line is withheld behind SHOW_LEGAL_STATUS.
  */
 import { Image } from 'astro:assets';
 import { getContent, type Locale } from '@/lib/i18n';
@@ -18,19 +21,22 @@ const { locale } = Astro.props;
 const c = getContent(locale);
 const hero = c.sections.hero;
 
+/** Split "A. B. C." into its sentences, keeping the full stops. */
+const taglineLines = hero.tagline
+  .split(/(?<=\.)\s+/)
+  .map((line) => line.trim())
+  .filter(Boolean);
+
 /**
- * The pack gives four CTA labels in fixed order:
- * discover / programmes / request an assessment / become a partner.
- * The last two both open the contact section.
+ * The pack gives four CTA labels in fixed order: discover / programmes /
+ * request an assessment / become a partner.
  */
 const CTA_TARGETS = ['#about', '#programmes', '#contact', '#contact'];
 ---
 
-<section id="top" class="band band-ink hero" aria-labelledby="hero-title">
+<section id="top" class="band band--navy-deep band--hero band--grain hero" aria-labelledby="hero-title">
   <div class="shell hero__inner">
     <div class="hero__content">
-      <p class="eyebrow"><span>{hero.num}</span></p>
-
       <h1 id="hero-title" class="hero__title">
         <span class="hero__brand">{hero.brand}</span>
         <span class="hero__institutional">{hero.institutional}</span>
@@ -39,14 +45,24 @@ const CTA_TARGETS = ['#about', '#programmes', '#contact', '#contact'];
       {SHOW_LEGAL_STATUS && <p class="hero__legal mono-label">{hero.legalStatus}</p>}
 
       <p class="hero__baseline">{hero.baseline}</p>
-      <p class="hero__tagline">{hero.tagline}</p>
+
+      <p class="hero__tagline">
+        {
+          taglineLines.map((line, i) => (
+            <span class="hero__taglineLine" style={`--i:${i}`}>
+              {line}
+            </span>
+          ))
+        }
+      </p>
+
       <p class="lead hero__intro">{hero.intro}</p>
 
       <ul class="hero__ctas">
         {
           hero.ctas.map((label, i) => (
             <li>
-              <a class:list={['btn', i === 0 ? 'btn-primary' : 'btn-secondary']} href={CTA_TARGETS[i]}>
+              <a class:list={['btn', i === 0 ? 'btn--primary' : 'btn--ghost']} href={CTA_TARGETS[i]}>
                 {label}
               </a>
             </li>
@@ -59,8 +75,8 @@ const CTA_TARGETS = ['#about', '#programmes', '#contact', '#contact'];
       <Image
         src={logo}
         alt={c.seo.ogImageAlt}
-        widths={[320, 480, 640]}
-        sizes="(min-width: 62rem) 26rem, (min-width: 40rem) 20rem, 60vw"
+        widths={[300, 440, 600]}
+        sizes="(min-width: 62rem) 24rem, (min-width: 40rem) 18rem, 58vw"
         loading="eager"
         fetchpriority="high"
       />
@@ -70,81 +86,107 @@ const CTA_TARGETS = ['#about', '#programmes', '#contact', '#contact'];
 
 <style>
   .hero {
-    padding-block: clamp(3rem, 2rem + 6vw, 7rem);
     overflow: hidden;
+    /*
+     * Fill the screen BELOW the sticky masthead, not the whole screen.
+     * `100svh` alone made the hero taller than the space it actually had, so
+     * the calls to action fell past the fold on a laptop.
+     *
+     * Capped so a very tall window does not stretch it absurdly, and it is a
+     * min-height, so short windows let the content grow rather than clip it.
+     */
+    min-height: min(calc(100svh - var(--header-h)), 46rem);
+    display: grid;
+    align-items: center;
   }
 
-  /* A single soft gold wash anchored behind the mark. */
+  /* A single soft gold wash behind the mark, and a navy lift at the top. */
   .hero::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(
-      60rem 40rem at 82% 18%,
-      rgb(200 162 74 / 0.16),
-      transparent 68%
-    );
+    background:
+      radial-gradient(52rem 34rem at 78% 22%, rgb(212 175 55 / 0.14), transparent 66%),
+      radial-gradient(40rem 30rem at 10% 0%, rgb(20 40 74 / 0.85), transparent 70%);
     pointer-events: none;
   }
 
   .hero__inner {
     position: relative;
+    z-index: 1;
     display: grid;
-    gap: clamp(2.5rem, 1.5rem + 5vw, 4rem);
+    gap: clamp(2.5rem, 1.5rem + 5vw, 4.5rem);
     align-items: center;
   }
 
   .hero__title {
-    margin: 1rem 0 0;
+    margin: 0;
     display: grid;
-    gap: 0.5rem;
+    gap: 0.75rem;
   }
 
   .hero__brand {
     display: block;
-    font-size: var(--text-display);
+    font-size: var(--text-hero);
     font-weight: 900;
-    letter-spacing: -0.04em;
-    line-height: 0.92;
+    letter-spacing: -0.045em;
+    line-height: 0.9;
   }
 
   .hero__institutional {
     display: block;
     font-family: var(--font-body);
-    font-size: clamp(1.0625rem, 0.9rem + 0.8vw, 1.5rem);
+    font-size: clamp(1.0625rem, 0.88rem + 0.85vw, 1.5rem);
     font-weight: 400;
     letter-spacing: 0;
     line-height: 1.3;
-    color: var(--band-muted);
-    max-width: 24ch;
+    color: var(--muted-on-dark);
+    max-width: 22ch;
   }
 
   .hero__legal {
     margin-block-start: 1.25rem;
-    color: var(--band-muted);
+    color: var(--muted-on-dark);
   }
 
   .hero__baseline {
     margin-block-start: 1.75rem;
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: clamp(1.125rem, 0.95rem + 0.9vw, 1.75rem);
+    font-size: clamp(1.125rem, 0.92rem + 0.95vw, 1.75rem);
     letter-spacing: -0.02em;
-    color: var(--color-gold-bright);
+    color: var(--gold-soft);
   }
 
   .hero__tagline {
-    margin-block-start: 0.5rem;
+    display: grid;
+    gap: 0.125rem;
+    margin-block-start: 0.875rem;
     font-family: var(--font-mono);
     font-size: 0.8125rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--band-fg);
+    color: var(--white);
+  }
+
+  /* Sequenced in on load, ~300ms apart. */
+  .hero__taglineLine {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: hero-line 620ms var(--ease) forwards;
+    animation-delay: calc(240ms + var(--i) * 300ms);
+  }
+
+  @keyframes hero-line {
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   .hero__intro {
     margin-block-start: 1.75rem;
-    color: var(--band-muted);
+    color: var(--muted-on-dark);
   }
 
   .hero__ctas {
@@ -158,32 +200,39 @@ const CTA_TARGETS = ['#about', '#programmes', '#contact', '#contact'];
 
   .hero__mark {
     justify-self: center;
-    /* Single-column layouts stack the mark under the copy, where a full-size
-       lockup would push the CTAs well below the fold. */
-    max-width: 18rem;
+    max-width: 17rem;
     width: 100%;
   }
 
   .hero__mark :global(img) {
     width: 100%;
     height: auto;
+    filter: drop-shadow(0 24px 48px rgb(0 0 0 / 0.5));
   }
 
   @media (min-width: 62rem) {
     .hero__inner {
-      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
     }
 
     .hero__mark {
       justify-self: end;
-      max-width: 26rem;
+      max-width: 24rem;
     }
   }
 
-  /* At the smallest widths the mark costs more than it gives. */
   @media (max-width: 24rem) {
     .hero__mark {
-      max-width: 14rem;
+      max-width: 13rem;
+    }
+  }
+
+  /* No entrance animation when motion is reduced — the lines are simply there. */
+  @media (prefers-reduced-motion: reduce) {
+    .hero__taglineLine {
+      opacity: 1;
+      transform: none;
+      animation: none;
     }
   }
 </style>

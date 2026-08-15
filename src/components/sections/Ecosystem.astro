@@ -1,53 +1,36 @@
 ---
-/** §12 — Coordinated ecosystem. */
+/** Coordinated ecosystem — grid type. */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import { capitalizeFirst } from '@/lib/text';
-import type { BandTone } from '@/config/site';
+import type { BandTone, SectionType } from '@/config/site';
 
-interface Props {
-  locale: Locale;
-  tone: BandTone;
-}
-
-const { locale, tone } = Astro.props;
+interface Props { locale: Locale; type: SectionType; tone: BandTone; fade?: boolean }
+const { locale, type, tone, fade } = Astro.props;
 const s = getContent(locale).sections.ecosystem;
 const disciplines = s.disciplines.map((item) => capitalizeFirst(item, locale));
 ---
 
-<Band locale={locale} anchor={s.anchor} num={s.num} title={s.title} tone={tone} lead={s.lead}>
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} fade={fade} lead={s.lead}>
   <h3 class="mono-label ecosystem__title">{s.disciplinesTitle}</h3>
-  <ul class="chips">
+  <ul class="chips" data-stagger>
     {disciplines.map((item) => <li class="chip">{item}</li>)}
   </ul>
   <p class="prose-body ecosystem__note">{s.note}</p>
 </Band>
 
 <style>
-  .ecosystem__title {
-    color: var(--band-muted);
-    margin: 0 0 1rem;
-  }
-
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
+  .ecosystem__title { color: var(--band-muted); margin: 0 0 1rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; margin: 0; padding: 0; }
   .chip {
-    padding: 0.5rem 0.875rem;
+    padding: 0.5rem 0.9375rem;
     background: var(--band-raised);
     border: 1px solid var(--band-rule);
     border-radius: 999px;
     font-size: 0.875rem;
     line-height: 1.3;
+    transition: border-color 180ms var(--ease), transform 180ms var(--ease);
   }
-
-  .ecosystem__note {
-    margin-block-start: 2rem;
-  }
+  .chip:hover { border-color: var(--band-accent); transform: translateY(-2px); }
+  .ecosystem__note { margin-block-start: 2rem; }
 </style>

@@ -34,6 +34,16 @@ const VIEWPORTS = [
   { name: '1280', width: 1280, height: 900 },
 ];
 const PATHS = ['', 'privacy/'];
+/** Not locale-prefixed: /livre is the bilingual QR destination. */
+const EXTRA_URLS = ['/livre/'];
+
+/** Every page to audit, as { url, label }. */
+const TARGETS = [
+  ...LOCALES.flatMap((locale) =>
+    PATHS.map((path) => ({ url: `${BASE}/${locale}/${path}`, label: `${locale}/${path || 'home'}` })),
+  ),
+  ...EXTRA_URLS.map((path) => ({ url: `${BASE}${path}`, label: path })),
+];
 
 const failures = [];
 const warnings = [];
@@ -45,16 +55,15 @@ const browser = await puppeteer.launch({
 });
 
 try {
-  for (const locale of LOCALES) {
-    for (const path of PATHS) {
-      const url = `${BASE}/${locale}/${path}`;
+  {
+    for (const target of TARGETS) {
       const page = await browser.newPage();
 
       for (const viewport of VIEWPORTS) {
         await page.setViewport({ width: viewport.width, height: viewport.height });
-        await page.goto(url, { waitUntil: 'networkidle0' });
+        await page.goto(target.url, { waitUntil: 'networkidle0' });
 
-        const label = `${locale}/${path || 'home'} @${viewport.name}`;
+        const label = `${target.label} @${viewport.name}`;
 
         // --- horizontal overflow -------------------------------------------
         const overflow = await page.evaluate((vw) => {
@@ -102,7 +111,9 @@ try {
               // does not require 44px for links in a sentence.
               const inline = el.tagName === 'A' && getComputedStyle(el).display === 'inline';
               if (inline) continue;
-              if (r.height < 24 || r.width < 24) {
+              // 23.5 rather than 24: sub-pixel layout makes an element that is
+              // exactly 24px measure as 23.99 and report a false warning.
+              if (r.height < 23.5 || r.width < 23.5) {
                 out.push(`${el.tagName.toLowerCase()}.${String(el.className).slice(0, 40)} ${Math.round(r.width)}x${Math.round(r.height)}`);
               }
             }
@@ -115,6 +126,28 @@ try {
         // Run once per page at the widest and narrowest viewport; the DOM is
         // identical, only layout differs.
         if (viewport.name === '320' || viewport.name === '1280') {
+          /*
+           * Settle the scroll reveals first.
+           *
+           * WCAG contrast applies to the resting state. Elements part-way
+           * through their fade-in are, briefly, semi-transparent, and axe
+           * reports that blended colour as a contrast failure. Forcing the
+           * reveal class measures what a reader actually reads, without
+           * disabling any other styling.
+           */
+          await page.evaluate(() => {
+            document.querySelectorAll('[data-reveal]').forEach((el) => {
+              el.classList.add('is-revealed');
+              // Staggered children carry a transition-delay of up to 560ms.
+              // Clearing it lets everything settle at once.
+              el.style.transitionDelay = '0ms';
+              for (const child of el.children) child.style.transitionDelay = '0ms';
+            });
+          });
+          // Longer than the 700ms reveal transition, so nothing is measured
+          // part-way through its fade and reported as a contrast failure.
+          await new Promise((r) => setTimeout(r, 900));
+
           await page.evaluate(AXE);
           const results = await page.evaluate(async () => {
             return await window.axe.run(document, {
@@ -150,5 +183,5 @@ if (unique.length) {
 }
 
 console.log(
-  `  ✓ audit OK — ${LOCALES.length} locales × ${PATHS.length} pages × ${VIEWPORTS.length} viewports, no overflow, no WCAG 2.1 AA violations`,
+  `  ✓ audit OK — ${TARGETS.length} pages × ${VIEWPORTS.length} viewports, no overflow, no WCAG 2.1 AA violations`,
 );

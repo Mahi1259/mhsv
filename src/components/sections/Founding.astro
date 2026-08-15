@@ -1,64 +1,107 @@
 ---
 /**
- * §10 — Founding programmes.
+ * Founding programmes & fees — feature type.
  *
- * The two programmes describe different attributes, so they are two definition
- * lists rather than one shared-axis table — which also means no horizontal
- * scroll at 320px.
+ * MERGE: the content pack keeps these as two sections (§10 Founding
+ * programmes, §13 Fees & access). Rendered separately, the CHF 15,000 launch
+ * rate was stated three times on one page — once in each programme table and
+ * again in the fees section. They are one section now, and the rate is stated
+ * exactly once.
+ *
+ * The fee rows are filtered out of the two programme tables by detecting the
+ * currency in the value, which works across all four locales without a
+ * per-language label list.
  */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
-import type { BandTone } from '@/config/site';
+import type { BandTone, SectionType } from '@/config/site';
 
 interface Props {
   locale: Locale;
+  type: SectionType;
   tone: BandTone;
+  fade?: boolean;
 }
 
-const { locale, tone } = Astro.props;
-const s = getContent(locale).sections.founding;
+const { locale, type, tone, fade } = Astro.props;
+const c = getContent(locale);
+const s = c.sections.founding;
+const fees = c.sections.fees;
+
+const tables = s.tables.map((table) => ({
+  ...table,
+  entries: table.entries.filter((entry) => !/CHF/i.test(entry.value)),
+}));
+
+/** "CHF 15'000 / year / beneficiary - launch rate" -> amount + qualifier. */
+const match = /^(.*?)\s[-–—]\s(.*)$/.exec(fees.priceLine);
+const amount = match ? match[1] : fees.priceLine;
+const qualifier = match ? match[2] : null;
 ---
 
-<Band locale={locale} anchor={s.anchor} num={s.num} title={s.title} tone={tone} lead={s.lead}>
-  <div class="programmes">
-    {
-      s.tables.map((table) => (
-        <article class="programme">
-          <h3 class="programme__title">{table.title}</h3>
-          <dl class="programme__list">
-            {table.entries.map((entry) => (
-              <div class="programme__row">
-                <dt>{entry.label}</dt>
-                <dd>{entry.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </article>
-      ))
-    }
+<Band
+  locale={locale}
+  anchor={s.anchor}
+  title={s.title}
+  type={type}
+  tone={tone}
+  fade={fade}
+  lead={s.lead}
+>
+  <div class="offer">
+    <div class="offer__programmes" data-stagger>
+      {
+        tables.map((table) => (
+          <article class="programme card">
+            <h3 class="programme__title">{table.title}</h3>
+            <dl class="programme__list">
+              {table.entries.map((entry) => (
+                <div class="programme__row">
+                  <dt>{entry.label}</dt>
+                  <dd>{entry.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </article>
+        ))
+      }
+    </div>
+
+    <aside class="fee">
+      <h3 class="fee__plan mono-label">{fees.planName}</h3>
+      <p class="fee__amount" data-count>{amount}</p>
+      {qualifier && <p class="fee__qualifier mono-label">{qualifier}</p>}
+      <p class="fee__included">{fees.included}</p>
+    </aside>
+  </div>
+
+  <div class="prose-body offer__notes">
+    {fees.paragraphs.map((text) => <p>{text}</p>)}
   </div>
 </Band>
 
 <style>
-  .programmes {
+  .offer {
     display: grid;
     gap: 1.5rem;
+    align-items: start;
+  }
+
+  .offer__programmes {
+    display: grid;
+    gap: 1.25rem;
   }
 
   .programme {
-    background: var(--band-raised);
-    border: 1px solid var(--band-rule);
-    border-block-start: 2px solid var(--band-accent);
-    border-radius: var(--radius-card);
-    padding: clamp(1.25rem, 1rem + 1vw, 2rem);
+    align-content: start;
   }
 
   .programme__title {
-    margin: 0 0 1.25rem;
+    margin: 0 0 1.125rem;
     font-family: var(--font-mono);
     font-size: 0.75rem;
     font-weight: 500;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--band-accent);
     line-height: 1.4;
@@ -67,13 +110,12 @@ const s = getContent(locale).sections.founding;
   .programme__list {
     margin: 0;
     display: grid;
-    gap: 0;
   }
 
   .programme__row {
     display: grid;
     gap: 0.25rem;
-    padding-block: 0.875rem;
+    padding-block: 0.8125rem;
     border-block-start: 1px solid var(--band-rule);
   }
 
@@ -84,7 +126,7 @@ const s = getContent(locale).sections.founding;
 
   .programme__row dt {
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
+    font-size: 0.625rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--band-muted);
@@ -96,16 +138,64 @@ const s = getContent(locale).sections.founding;
     line-height: 1.45;
   }
 
-  @media (min-width: 48rem) {
-    .programmes {
+  /* The launch rate — stated once on the page. */
+  .fee {
+    padding: clamp(1.375rem, 1.1rem + 1.1vw, 2rem);
+    border: 1px solid var(--band-rule);
+    border-block-start: 2px solid var(--band-accent);
+    border-radius: var(--radius);
+    background: var(--band-raised);
+  }
+
+  .fee__plan {
+    margin: 0;
+    color: var(--band-muted);
+    line-height: 1.5;
+    font-size: 0.6875rem;
+  }
+
+  .fee__amount {
+    margin: 0.875rem 0 0;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(1.5rem, 1.15rem + 1.6vw, 2.125rem);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--band-accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .fee__qualifier {
+    margin: 0.625rem 0 0;
+    color: var(--band-fg);
+  }
+
+  .fee__included {
+    margin: 1.25rem 0 0;
+    padding-block-start: 1rem;
+    border-block-start: 1px solid var(--band-rule);
+    color: var(--band-muted);
+    font-size: 0.8125rem;
+  }
+
+  .offer__notes {
+    margin-block-start: 2.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .offer__programmes {
       grid-template-columns: repeat(2, 1fr);
-      align-items: start;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .offer {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 19rem);
+      gap: 2rem;
     }
 
-    .programme__row {
-      grid-template-columns: 9rem 1fr;
-      gap: 1rem;
-      align-items: baseline;
+    .offer__programmes {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 </style>

@@ -1,0 +1,129 @@
+---
+/**
+ * Founding Book order REQUEST.
+ *
+ * Deliberately not a checkout: no price, no payment, no cart. Price and
+ * shipping are not approved, so the flow ends with MHSV® contacting the
+ * requester to confirm availability, price, delivery and payment.
+ */
+import FormShell from '@/components/FormShell.astro';
+import { getContent, localePath, type Locale } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const c = getContent(locale);
+const o = c.bookOrder;
+const f = c.form;
+const privacyHref = localePath('privacy/', locale);
+
+const strings = {
+  errors: { ...f.errors, ...o.errors },
+  successTitle: o.successTitle,
+  successBody: o.successBody,
+  errorTitle: f.errorTitle,
+  errorBody: f.errorBody,
+};
+---
+
+<FormShell
+  locale={locale}
+  kind="book-order"
+  id="book-order-form"
+  submitLabel={o.submit}
+  strings={strings}
+>
+  <p class="order__intro">{o.intro}</p>
+
+  <div class="form__grid">
+    <p class="form__field">
+      <label for="edition">{o.edition} <span class="form__req" aria-hidden="true">*</span></label>
+      <select id="edition" name="edition" required aria-describedby="edition-error">
+        <option value="fr">{o.editionFr}</option>
+        <option value="en">{o.editionEn}</option>
+      </select>
+      <span class="form__error" id="edition-error" data-error-for="edition"></span>
+    </p>
+
+    <p class="form__field">
+      <label for="quantity">{o.quantity} <span class="form__req" aria-hidden="true">*</span></label>
+      <input id="quantity" name="quantity" type="number" required min="1" max="500" value="1" inputmode="numeric" aria-describedby="quantity-error" />
+      <span class="form__error" id="quantity-error" data-error-for="quantity"></span>
+    </p>
+
+    <p class="form__field">
+      <label for="o-firstName">{f.firstName} <span class="form__req" aria-hidden="true">*</span></label>
+      <input id="o-firstName" name="firstName" type="text" required autocomplete="given-name" maxlength="80" aria-describedby="o-firstName-error" />
+      <span class="form__error" id="o-firstName-error" data-error-for="firstName"></span>
+    </p>
+
+    <p class="form__field">
+      <label for="o-lastName">{f.lastName} <span class="form__req" aria-hidden="true">*</span></label>
+      <input id="o-lastName" name="lastName" type="text" required autocomplete="family-name" maxlength="80" aria-describedby="o-lastName-error" />
+      <span class="form__error" id="o-lastName-error" data-error-for="lastName"></span>
+    </p>
+
+    <p class="form__field">
+      <label for="organisation">{o.organisation} <span class="form__req" aria-hidden="true">*</span></label>
+      <input id="organisation" name="organisation" type="text" required autocomplete="organization" maxlength="160" aria-describedby="organisation-error" />
+      <span class="form__error" id="organisation-error" data-error-for="organisation"></span>
+    </p>
+
+    <p class="form__field">
+      <label for="country">{o.country} <span class="form__req" aria-hidden="true">*</span></label>
+      <input id="country" name="country" type="text" required autocomplete="country-name" maxlength="80" aria-describedby="country-error" />
+      <span class="form__error" id="country-error" data-error-for="country"></span>
+    </p>
+
+    <p class="form__field">
+      <label for="o-email">{f.email} <span class="form__req" aria-hidden="true">*</span></label>
+      <input id="o-email" name="email" type="email" required autocomplete="email" maxlength="254" aria-describedby="o-email-error" />
+      <span class="form__error" id="o-email-error" data-error-for="email"></span>
+    </p>
+
+    <p class="form__field">
+      <label for="o-phone">{f.phone} <span class="form__optional">({c.ui.optional})</span></label>
+      <input id="o-phone" name="phone" type="tel" autocomplete="tel" maxlength="40" aria-describedby="o-phone-error" />
+      <span class="form__error" id="o-phone-error" data-error-for="phone"></span>
+    </p>
+
+    <p class="form__field form__field--wide">
+      <label for="o-message">{f.message} <span class="form__optional">({c.ui.optional})</span></label>
+      <textarea id="o-message" name="message" rows="4" maxlength="5000" aria-describedby="o-message-error"></textarea>
+      <span class="form__error" id="o-message-error" data-error-for="message"></span>
+    </p>
+  </div>
+
+  <div>
+    <p class="form__consent">
+      <input id="o-consent" name="consent" type="checkbox" required aria-describedby="o-consent-error" />
+      <label for="o-consent">
+        {o.consent}
+        <span class="form__req" aria-hidden="true"> *</span>
+      </label>
+    </p>
+    <span class="form__error" id="o-consent-error" data-error-for="consent"></span>
+    <p class="order__privacy">
+      <a class="link" href={privacyHref}>{c.footer.privacyLink}</a>
+    </p>
+  </div>
+</FormShell>
+
+<style>
+  .order__intro {
+    margin: 0;
+    padding: 0.875rem 1.125rem;
+    border: 1px dashed var(--band-rule);
+    border-radius: var(--radius);
+    color: var(--band-muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .order__privacy {
+    margin: 0.75rem 0 0;
+    font-size: 0.8125rem;
+  }
+</style>

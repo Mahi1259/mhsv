@@ -1,37 +1,38 @@
 ---
 /**
- * §18 — Founding book.
+ * The Premium Founding Book — feature type.
  *
- * Covers and a short description only. The full PDFs are INTERNAL_REFERENCE in
- * ASSET_STATUS.csv and are never copied into the build — there is deliberately
- * no download link here, and no path that could become one.
+ * Covers only. The full PDFs are INTERNAL_REFERENCE and are never copied into
+ * the build — there is deliberately no download link here and no path that
+ * could become one.
  *
- * The pack's own §18 text is an instruction to the developer, so the public
- * copy is authored (CONTENT.md).
+ * The primary action is the order request, which lives on the permanent
+ * /livre page (the address encoded in the printed QR code).
  */
 import { Picture } from 'astro:assets';
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
-import type { BandTone } from '@/config/site';
+import { BOOK_PAGE_PATH, type BandTone, type SectionType } from '@/config/site';
 import coverFr from '@/assets/book/founding-book-fr.png';
 import coverEn from '@/assets/book/founding-book-en.png';
 
 interface Props {
   locale: Locale;
+  type: SectionType;
   tone: BandTone;
+  fade?: boolean;
 }
 
-const { locale, tone } = Astro.props;
+const { locale, type, tone, fade } = Astro.props;
 const s = getContent(locale).sections.book;
 
-// Only FR and EN covers exist. DE and IT readers are shown both.
 const covers = [
   { src: coverFr, alt: s.coverAltFr, edition: 'FR' },
   { src: coverEn, alt: s.coverAltEn, edition: 'EN' },
 ];
 ---
 
-<Band locale={locale} anchor={s.anchor} num={s.num} title={s.title} tone={tone}>
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} fade={fade}>
   <div class="book">
     <ul class="book__covers">
       {
@@ -43,7 +44,7 @@ const covers = [
               formats={['webp']}
               fallbackFormat="png"
               widths={[240, 400]}
-              sizes="(min-width: 52rem) 15rem, 40vw"
+              sizes="(min-width: 52rem) 14rem, 40vw"
               loading="lazy"
               decoding="async"
             />
@@ -54,10 +55,10 @@ const covers = [
     </ul>
 
     <div class="book__text">
-      <h3 class="book__lead">{s.lead}</h3>
-      <p class="prose-body">{s.body}</p>
+      <p class="book__kicker mono-label">{s.lead}</p>
+      <p class="prose-body book__body">{s.body}</p>
       <p class="book__notice">{s.notice}</p>
-      <a class="btn btn-secondary book__cta" href="#contact">{s.ctaLabel}</a>
+      <a class="btn btn--primary book__cta" href={BOOK_PAGE_PATH}>{s.ctaLabel}</a>
     </div>
   </div>
 </Band>
@@ -66,7 +67,7 @@ const covers = [
   .book {
     display: grid;
     gap: 2.5rem;
-    align-items: start;
+    align-items: center;
   }
 
   .book__covers {
@@ -80,7 +81,12 @@ const covers = [
   .book__cover {
     position: relative;
     flex: 1 1 0;
-    max-width: 15rem;
+    max-width: 14rem;
+    transition: transform 250ms var(--ease);
+  }
+
+  .book__cover:hover {
+    transform: translateY(-4px);
   }
 
   .book__cover :global(img) {
@@ -88,7 +94,7 @@ const covers = [
     width: 100%;
     height: auto;
     border: 1px solid var(--band-rule);
-    box-shadow: 0 18px 40px rgb(0 0 0 / 0.4);
+    box-shadow: 0 20px 44px rgb(0 0 0 / 0.45);
   }
 
   .book__edition {
@@ -96,34 +102,35 @@ const covers = [
     inset-block-start: 0.5rem;
     inset-inline-start: 0.5rem;
     padding: 0.1875rem 0.4375rem;
-    background: var(--color-ink);
-    color: var(--color-gold);
+    background: var(--navy-deep);
+    color: var(--gold);
     font-size: 0.625rem;
   }
 
-  .book__lead {
-    margin: 0 0 0.875rem;
-    font-size: var(--text-h3);
+  .book__kicker {
+    margin: 0 0 1rem;
     color: var(--band-accent);
+    line-height: 1.5;
+    font-size: 0.6875rem;
   }
 
   .book__notice {
     margin-block-start: 1.5rem;
     padding: 0.875rem 1rem;
     border: 1px dashed var(--band-rule);
-    border-radius: var(--radius-card);
+    border-radius: var(--radius);
     color: var(--band-muted);
     font-size: 0.8125rem;
     line-height: 1.5;
   }
 
   .book__cta {
-    margin-block-start: 1.5rem;
+    margin-block-start: 1.75rem;
   }
 
   @media (min-width: 52rem) {
     .book {
-      grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
       gap: 3.5rem;
     }
   }

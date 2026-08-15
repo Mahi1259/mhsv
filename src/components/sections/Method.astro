@@ -1,156 +1,297 @@
 ---
 /**
- * §06 — Methodology & MITIPS®: the six pillars.
+ * Methodology & MITIPS® — feature type. The signature element.
  *
- * Descriptions are always rendered rather than revealed on hover, so the
- * content is available to keyboard and screen-reader users and to anyone on a
- * touch device. Hover/focus only changes emphasis.
+ * Six hexagons; selecting one expands its description. Built as a real
+ * tablist: arrow keys move between pillars, Home/End jump to the ends, and the
+ * panel is associated with its tab. With JavaScript off every description is
+ * rendered in sequence instead, so nothing is lost.
  *
- * Pillar descriptions are authored placeholders — BLOCKERS.md #7. The pack
- * supplies only the six labels, and the detailed internal protocols are
- * explicitly not for publication.
+ * Pillar descriptions are provisional — the pack supplies only the six labels,
+ * and the detailed internal protocols are explicitly not for publication.
  */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
-import type { BandTone } from '@/config/site';
+import type { BandTone, SectionType } from '@/config/site';
 
 interface Props {
   locale: Locale;
+  type: SectionType;
   tone: BandTone;
+  fade?: boolean;
 }
 
-const { locale, tone } = Astro.props;
+const { locale, type, tone, fade } = Astro.props;
 const s = getContent(locale).sections.method;
-const pillars = s.pillars.map((p, i) => ({ ...p, note: s.pillarNotes[i] }));
+const pillars = s.pillars.map((p, i) => ({ ...p, note: s.pillarNotes[i], index: i }));
 const acronym = s.pillars.map((p) => p.letter).join('');
 ---
 
-<Band locale={locale} anchor={s.anchor} num={s.num} title={s.title} tone={tone} lead={s.lead}>
-  <h3 class="method__subtitle">
-    <span class="method__acronym" aria-hidden="true">{acronym}®</span>
-    {s.pillarsTitle}
-  </h3>
+<Band
+  locale={locale}
+  anchor={s.anchor}
+  title={s.title}
+  type={type}
+  tone={tone}
+  fade={fade}
+  lead={s.lead}
+>
+  <div class="method">
+    <div class="method__intro">
+      <p class="method__acronym" aria-hidden="true">{acronym}<span>®</span></p>
+      <h3 class="method__subtitle">{s.pillarsTitle}</h3>
+      <p class="method__disclaimer mono-label">{s.pillarNotesDisclaimer}</p>
+    </div>
 
-  <ul class="pillars">
-    {
-      pillars.map((pillar) => (
-        <li class="pillar">
-          <span class="pillar__hex" aria-hidden="true">
-            <span class="pillar__letter">{pillar.letter}</span>
-          </span>
-          <h4 class="pillar__name">
-            <span class="visually-hidden">{pillar.letter} — </span>
-            {pillar.name}
-          </h4>
-          <p class="pillar__note">{pillar.note}</p>
-        </li>
-      ))
-    }
-  </ul>
+    <div class="pillars" data-pillars>
+      <div class="pillars__row" role="tablist" aria-label={s.pillarsTitle}>
+        {
+          pillars.map((pillar) => (
+            <button
+              type="button"
+              class="pillar"
+              role="tab"
+              id={`pillar-tab-${pillar.index}`}
+              aria-controls={`pillar-panel-${pillar.index}`}
+              aria-selected={pillar.index === 0 ? 'true' : 'false'}
+              tabindex={pillar.index === 0 ? 0 : -1}
+              data-pillar={pillar.index}
+            >
+              <span class="pillar__hex" aria-hidden="true">
+                <span class="pillar__letter">{pillar.letter}</span>
+              </span>
+              <span class="pillar__name">{pillar.name}</span>
+            </button>
+          ))
+        }
+      </div>
 
-  <p class="method__disclaimer">{s.pillarNotesDisclaimer}</p>
+      {
+        pillars.map((pillar) => (
+          <div
+            class="pillars__panel"
+            role="tabpanel"
+            id={`pillar-panel-${pillar.index}`}
+            aria-labelledby={`pillar-tab-${pillar.index}`}
+            data-panel={pillar.index}
+            hidden={pillar.index !== 0}
+          >
+            <p class="pillars__panelName">
+              <span class="pillars__panelLetter" aria-hidden="true">
+                {pillar.letter}
+              </span>
+              {pillar.name}
+            </p>
+            <p class="pillars__panelNote">{pillar.note}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
   <p class="prose-body method__note">{s.note}</p>
 </Band>
 
+<script>
+  /**
+   * Progressive enhancement: without this, every panel is visible and the page
+   * simply lists the six pillars. The `hidden` attributes above are applied at
+   * build time, so this script's first job is to make the non-selected panels
+   * hidden only once it is running.
+   */
+  class Pillars {
+    constructor(root: HTMLElement) {
+      this.root = root;
+      this.tabs = Array.from(root.querySelectorAll<HTMLElement>('[data-pillar]'));
+      this.panels = Array.from(root.querySelectorAll<HTMLElement>('[data-panel]'));
+      this.select(0);
+
+      this.tabs.forEach((tab, i) => {
+        tab.addEventListener('click', () => this.select(i));
+        tab.addEventListener('keydown', (event) => this.onKey(event as KeyboardEvent, i));
+      });
+    }
+
+    root: HTMLElement;
+    tabs: HTMLElement[];
+    panels: HTMLElement[];
+
+    select(index: number) {
+      this.tabs.forEach((tab, i) => {
+        const active = i === index;
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+      });
+      this.panels.forEach((panel, i) => {
+        panel.hidden = i !== index;
+      });
+    }
+
+    onKey(event: KeyboardEvent, index: number) {
+      const last = this.tabs.length - 1;
+      let next: number | null = null;
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = index === last ? 0 : index + 1;
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = index === 0 ? last : index - 1;
+      if (event.key === 'Home') next = 0;
+      if (event.key === 'End') next = last;
+      if (next === null) return;
+      event.preventDefault();
+      this.select(next);
+      this.tabs[next].focus();
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-pillars]').forEach((el) => new Pillars(el));
+</script>
+
 <style>
-  .method__subtitle {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    font-size: var(--text-h3);
-    margin: 0 0 1.75rem;
+  .method {
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
   }
 
   .method__acronym {
+    margin: 0 0 0.75rem;
     font-family: var(--font-mono);
-    font-size: 0.8125rem;
+    font-size: clamp(1.5rem, 1.1rem + 1.7vw, 2.25rem);
     font-weight: 500;
-    letter-spacing: 0.35em;
+    letter-spacing: 0.24em;
     color: var(--band-accent);
+    line-height: 1;
   }
 
-  .pillars {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    list-style: none;
+  .method__acronym span {
+    font-size: 0.5em;
+    vertical-align: super;
+    letter-spacing: 0;
+  }
+
+  .method__subtitle {
+    margin: 0 0 0.875rem;
+    font-size: var(--text-h3);
+  }
+
+  .method__disclaimer {
     margin: 0;
-    padding: 0;
+    font-size: 0.625rem;
+    letter-spacing: 0.08em;
+    color: var(--band-muted);
+    max-width: 30ch;
+  }
+
+  /* --- pillars ---------------------------------------------------------- */
+  .pillars__row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.625rem;
   }
 
   .pillar {
-    padding: 1.25rem 1rem;
-    text-align: center;
-    background: var(--band-raised);
-    border: 1px solid var(--band-rule);
-    border-radius: var(--radius-card);
-    transition: border-color 200ms ease, transform 200ms ease;
+    display: grid;
+    justify-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 0.375rem;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    transition: border-color 180ms var(--ease), transform 180ms var(--ease);
   }
 
-  .pillar:hover,
-  .pillar:focus-within {
-    border-color: var(--band-accent);
+  .pillar:hover {
     transform: translateY(-2px);
+  }
+
+  .pillar[aria-selected='true'] {
+    border-color: var(--band-rule);
+    background: var(--band-raised);
   }
 
   .pillar__hex {
     display: grid;
     place-items: center;
-    width: 3.25rem;
-    height: 3.625rem;
-    margin-inline: auto;
-    background: var(--band-accent);
-    /* Hexagon suits the crest; a rounded square is a fine fallback where
-       clip-path is unsupported. */
+    width: 3rem;
+    height: 3.375rem;
+    background: color-mix(in srgb, var(--band-accent) 22%, transparent);
+    color: var(--band-accent);
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    transition: background-color 200ms var(--ease), color 200ms var(--ease);
+  }
+
+  .pillar[aria-selected='true'] .pillar__hex,
+  .pillar:hover .pillar__hex {
+    background: var(--band-accent);
+    color: var(--band-bg);
   }
 
   .pillar__letter {
     font-family: var(--font-display);
-    font-size: 1.5rem;
+    font-size: 1.375rem;
     font-weight: 900;
     line-height: 1;
-    color: var(--band-bg);
   }
 
   .pillar__name {
-    margin: 0.875rem 0 0.375rem;
-    font-size: 0.9375rem;
+    font-size: 0.75rem;
     line-height: 1.25;
-    /* German pillar names are the longest; hyphenate rather than overflow. */
+    text-align: center;
+    color: var(--band-muted);
     hyphens: auto;
   }
 
-  .pillar__note {
-    margin: 0;
-    font-size: 0.8125rem;
-    line-height: 1.45;
-    color: var(--band-muted);
+  .pillar[aria-selected='true'] .pillar__name {
+    color: var(--band-fg);
   }
 
-  .method__disclaimer {
-    margin-block-start: 1.25rem;
+  .pillars__panel {
+    margin-block-start: 1.5rem;
+    padding: 1.25rem 1.375rem;
+    border: 1px solid var(--band-rule);
+    border-inline-start: 3px solid var(--band-accent);
+    border-radius: var(--radius);
+    background: var(--band-raised);
+  }
+
+  .pillars__panelName {
+    display: flex;
+    align-items: baseline;
+    gap: 0.625rem;
+    margin: 0 0 0.375rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    letter-spacing: -0.01em;
+  }
+
+  .pillars__panelLetter {
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-size: 0.75rem;
+    color: var(--band-accent);
+  }
+
+  .pillars__panelNote {
+    margin: 0;
     color: var(--band-muted);
+    font-size: 0.9375rem;
   }
 
   .method__note {
-    margin-block-start: 2rem;
+    margin-block-start: 2.5rem;
   }
 
   @media (min-width: 40rem) {
-    .pillars {
-      grid-template-columns: repeat(3, 1fr);
+    .pillars__row {
+      grid-template-columns: repeat(6, 1fr);
     }
   }
 
   @media (min-width: 64rem) {
-    .pillars {
-      grid-template-columns: repeat(6, 1fr);
+    .method {
+      grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+      gap: 3.5rem;
     }
   }
 </style>

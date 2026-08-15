@@ -431,6 +431,33 @@ const SECTIONS = [
 // merge + emit
 // ---------------------------------------------------------------------------
 
+/**
+ * Corrections applied to every extracted string.
+ *
+ * The client's 14 August update brief supersedes the 10 August content pack:
+ * mhsv.ch was acquired and mhsv-international.org is retired everywhere —
+ * visible copy, links, mailto attributes, metadata. Rewriting here rather than
+ * per-field means a stale address cannot survive anywhere in the pack, and
+ * `npm run content:check` fails the build if one ever reappears.
+ */
+const SUPERSEDED = [
+  { from: /@mhsv-international\.org/g, to: '@mhsv.ch' },
+  { from: /mhsv-international\.org/g, to: 'mhsv.ch' },
+];
+
+function applySupersessions(value) {
+  if (typeof value === 'string') {
+    let out = value;
+    for (const { from, to } of SUPERSEDED) out = out.replace(from, to);
+    return out;
+  }
+  if (Array.isArray(value)) return value.map(applySupersessions);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, applySupersessions(v)]));
+  }
+  return value;
+}
+
 /** Deep merge where the authored overlay wins over anything extracted. */
 function merge(base, overlay) {
   if (Array.isArray(overlay) || overlay === null || typeof overlay !== 'object') return overlay;
@@ -527,7 +554,7 @@ function build() {
     } catch {
       console.warn(`  ! no authored overlay for "${loc}" — UI strings will be missing`);
     }
-    const merged = merge(results[loc], authored);
+    const merged = merge(applySupersessions(results[loc]), authored);
     writeFileSync(resolve(outDir, `${loc}.json`), JSON.stringify(merged, null, 2) + '\n');
     const n = Object.keys(merged.sections).length;
     console.log(`  ✓ src/content/i18n/${loc}.json  (${n} sections)`);

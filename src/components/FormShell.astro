@@ -1,0 +1,243 @@
+---
+/**
+ * Common scaffolding for the three forms: the POST target, the hidden locale
+ * and form-kind fields, the honeypot, the timing stamp, the submit row and the
+ * live result region.
+ *
+ * Spam protection is a honeypot plus a timing check, with no third-party
+ * CAPTCHA — a CAPTCHA would send visitor data to a third party, which is
+ * exactly what this site avoids everywhere else.
+ */
+import { getContent, type Locale } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+  /** Matches FORM_KINDS in functions/lib/contact-core.mjs. */
+  kind: 'contact' | 'book-order' | 'newsletter';
+  id: string;
+  submitLabel: string;
+  strings: {
+    errors: Record<string, string>;
+    successTitle: string;
+    successBody: string;
+    errorTitle: string;
+    errorBody: string;
+  };
+  class?: string;
+}
+
+const { locale, kind, id, submitLabel, strings, class: className } = Astro.props;
+const c = getContent(locale);
+---
+
+<form
+  class:list={['form', className]}
+  id={id}
+  data-form={kind}
+  action="/api/contact"
+  method="post"
+  novalidate
+>
+  <input type="hidden" name="form" value={kind} />
+  <input type="hidden" name="locale" value={locale} />
+  {/* Stamped client-side; absent without JS, where the honeypot alone applies. */}
+  <input type="hidden" name="rendered_at" value="" />
+
+  {/* Honeypot: off-screen rather than display:none, which some bots detect. */}
+  <div class="form__trap" aria-hidden="true">
+    <label for={`${id}-website`}>{c.form.honeypotLabel}</label>
+    <input id={`${id}-website`} name="website_url" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <slot />
+
+  <div class="form__actions">
+    <button class="btn btn--primary" type="submit" data-sending-label={c.form.submitting}>
+      {submitLabel}
+    </button>
+    <p class="form__note">
+      <span aria-hidden="true">*</span>
+      {c.ui.required}
+    </p>
+  </div>
+
+  <div class="form__result" data-result role="status" aria-live="polite" hidden>
+    <p class="form__resultTitle" data-result-title></p>
+    <p class="form__resultBody" data-result-body></p>
+  </div>
+</form>
+
+<script type="application/json" data-form-strings={id} set:html={JSON.stringify(strings)} />
+
+<style is:global>
+  .form {
+    display: grid;
+    gap: 1.375rem;
+  }
+
+  .form__trap {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .form__grid {
+    display: grid;
+    gap: 1.125rem;
+  }
+
+  .form__field {
+    display: grid;
+    gap: 0.375rem;
+    margin: 0;
+    min-width: 0;
+  }
+
+  .form__field label,
+  .form__consent label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--band-muted);
+  }
+
+  .form__req {
+    color: var(--band-accent);
+  }
+
+  .form__optional {
+    text-transform: none;
+    letter-spacing: 0.04em;
+  }
+
+  .form input[type='text'],
+  .form input[type='email'],
+  .form input[type='tel'],
+  .form input[type='number'],
+  .form select,
+  .form textarea {
+    width: 100%;
+    min-height: 2.875rem;
+    padding: 0.625rem 0.875rem;
+    background: var(--band-bg);
+    border: 1px solid var(--band-rule);
+    border-radius: var(--radius);
+    color: var(--band-fg);
+    font-family: var(--font-body);
+    /* 16px prevents iOS Safari zooming on focus. */
+    font-size: 1rem;
+    line-height: 1.5;
+    transition: border-color 160ms var(--ease);
+  }
+
+  .form textarea {
+    resize: vertical;
+    min-height: 8rem;
+  }
+
+  .form input:hover,
+  .form select:hover,
+  .form textarea:hover {
+    border-color: var(--band-muted);
+  }
+
+  .form [aria-invalid='true'] {
+    border-color: #e2725b;
+  }
+
+  .form ::placeholder {
+    color: var(--band-muted);
+    opacity: 0.75;
+  }
+
+  .form__error:empty {
+    display: none;
+  }
+
+  .form__error {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: #f0907c;
+  }
+
+  .form__consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  .form__consent input {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex: 0 0 auto;
+    accent-color: var(--gold);
+  }
+
+  .form__consent label {
+    text-transform: none;
+    letter-spacing: 0;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--band-fg);
+  }
+
+  .form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .form__note {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--band-muted);
+  }
+
+  .form__note span {
+    color: var(--band-accent);
+  }
+
+  .form__result {
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--band-rule);
+    border-inline-start: 3px solid var(--band-accent);
+    border-radius: var(--radius);
+    background: var(--band-raised);
+  }
+
+  .form__result[data-kind='error'] {
+    border-inline-start-color: #e2725b;
+  }
+
+  .form__resultTitle {
+    margin: 0 0 0.25rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    letter-spacing: -0.01em;
+  }
+
+  .form__resultBody {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--band-muted);
+  }
+
+  @media (min-width: 40rem) {
+    .form__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.125rem 1.25rem;
+    }
+
+    .form__field--wide {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

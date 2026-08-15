@@ -1,0 +1,28 @@
+---
+/** Book order-request confirmation, for visitors without JavaScript.
+    With JS the same wording is shown inline and this is never reached. */
+import Page from '@/layouts/Page.astro';
+import { getContent } from '@/lib/i18n';
+import { LOCALES, BOOK_PAGE_PATH, type Locale } from '@/config/site';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const locale = Astro.params.lang as Locale;
+const c = getContent(locale);
+---
+
+<Page locale={locale} path="order-sent/" title={c.bookOrder.successTitle} noindex>
+  <p class="result">{c.bookOrder.successBody}</p>
+  <a class="btn btn--ghost" href={BOOK_PAGE_PATH}>{c.sections.book.title}</a>
+</Page>
+
+<style>
+  .result {
+    margin: 0 0 2rem;
+    font-size: var(--text-lead);
+    color: var(--band-muted);
+    max-width: 56ch;
+  }
+</style>

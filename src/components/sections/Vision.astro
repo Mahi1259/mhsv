@@ -1,29 +1,40 @@
 ---
 /**
- * §03 — Vision 2035.
+ * Vision 2035 — statement type.
  *
- * The three-step arc (structure -> consolidate -> deploy) is an ordered list:
- * the sequence is the meaning, so it must survive with CSS off.
+ * Numbering is kept here: the three phases are a genuine sequence
+ * (structure -> consolidate -> deploy), so the order carries meaning. An
+ * ordered list keeps that true with CSS off.
  */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
-import type { BandTone } from '@/config/site';
+import type { BandTone, SectionType } from '@/config/site';
 
 interface Props {
   locale: Locale;
+  type: SectionType;
   tone: BandTone;
+  fade?: boolean;
 }
 
-const { locale, tone } = Astro.props;
+const { locale, type, tone, fade } = Astro.props;
 const s = getContent(locale).sections.vision;
 ---
 
-<Band locale={locale} anchor={s.anchor} num={s.num} title={s.title} tone={tone} lead={s.lead}>
+<Band
+  locale={locale}
+  anchor={s.anchor}
+  title={s.title}
+  type={type}
+  tone={tone}
+  fade={fade}
+  lead={s.lead}
+>
   <ol class="arc">
     {
       s.steps.map((step, i) => (
-        <li class="arc__step">
-          <span class="arc__num" aria-hidden="true">
+        <li class="arc__step" style={`--i:${i}`}>
+          <span class="arc__phase mono-label" aria-hidden="true">
             {String(i + 1).padStart(2, '0')}
           </span>
           <span class="arc__label">{step}</span>
@@ -37,32 +48,22 @@ const s = getContent(locale).sections.vision;
 <style>
   .arc {
     display: grid;
-    gap: 1rem;
+    gap: 1.25rem;
     list-style: none;
     margin: 0;
     padding: 0;
-    counter-reset: none;
   }
 
   .arc__step {
-    position: relative;
-    display: flex;
-    align-items: baseline;
-    gap: 1rem;
-    padding: 1.25rem 1.25rem 1.25rem 1rem;
-    background: var(--band-raised);
-    border: 1px solid var(--band-rule);
+    display: grid;
+    gap: 0.625rem;
+    padding-block-start: 1.125rem;
     border-block-start: 2px solid var(--band-accent);
-    border-radius: var(--radius-card);
   }
 
-  .arc__num {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
+  .arc__phase {
     color: var(--band-accent);
-    flex: 0 0 auto;
+    font-size: 0.6875rem;
   }
 
   .arc__label {
@@ -70,22 +71,17 @@ const s = getContent(locale).sections.vision;
     font-weight: 700;
     font-size: var(--text-h3);
     letter-spacing: -0.02em;
-    line-height: 1.15;
+    line-height: 1.2;
   }
 
   .vision__note {
-    margin-block-start: 2rem;
+    margin-block-start: 2.5rem;
   }
 
   @media (min-width: 48rem) {
     .arc {
       grid-template-columns: repeat(3, 1fr);
-      gap: 1.25rem;
-    }
-
-    .arc__step {
-      flex-direction: column;
-      gap: 0.75rem;
+      gap: 2rem;
     }
   }
 </style>

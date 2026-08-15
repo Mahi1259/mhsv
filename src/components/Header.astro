@@ -2,8 +2,14 @@
 /**
  * Sticky masthead: brand, primary navigation, language switcher.
  *
- * The mobile menu is a native <details> disclosure, so it needs no JavaScript
- * and stays keyboard- and screen-reader-operable if scripts fail to load.
+ * The navigation list is rendered EXACTLY ONCE (#main-nav). It was previously
+ * emitted twice — a desktop bar plus a mobile panel with one hidden by CSS —
+ * which duplicated every link in the DOM and made screen readers announce the
+ * menu twice.
+ *
+ * The mobile disclosure is a <details> whose panel is its *sibling*, toggled
+ * with `[open] ~ #main-nav`. That keeps one nav in the document, needs no
+ * JavaScript, and still works if scripts fail.
  */
 import { Image } from 'astro:assets';
 import { getContent, localeAlternates, localePath, type Locale } from '@/lib/i18n';
@@ -22,71 +28,66 @@ const alternates = localeAlternates(path);
 
 const anchorFor = (id: string) => SECTION_ORDER.find((s) => s.id === id)?.anchor ?? id;
 // On sub-pages the in-page anchors have to point back at the home document.
-const navHref = (id: string) => `${path === '' ? '' : home}#${anchorFor(id)}`;
+const navHref = (item: { id: string; href?: string }) =>
+  item.href ? localePath(item.href, locale) : `${path === '' ? '' : home}#${anchorFor(item.id)}`;
 ---
 
 <header class="site-header">
   <div class="shell site-header__inner">
     <a class="brand" href={home}>
       <Image src={crest} alt="" width={36} height={40} loading="eager" densities={[1, 2]} />
-      <span class="brand__name">{c.brand.name}</span>
+      <span class="brand__name notranslate" translate="no">{c.brand.name}</span>
       <span class="visually-hidden">— {c.brand.institutional}</span>
     </a>
 
-    <nav class="nav-desktop" aria-label={c.ui.primaryNav}>
+    <details class="menu">
+      <summary aria-label={c.ui.openMenu}>
+        <span class="menu__bars" aria-hidden="true"></span>
+      </summary>
+    </details>
+
+    <nav id="main-nav" aria-label={c.ui.primaryNav}>
       <ul>
         {
           c.nav.items.map((item) => (
             <li>
-              <a href={navHref(item.id)}>{item.label}</a>
+              <a href={navHref(item)}>{item.label}</a>
             </li>
           ))
         }
       </ul>
     </nav>
 
-    <div class="site-header__actions">
-      <nav class="lang" aria-label={c.ui.languageNav}>
-        <ul>
-          {
-            alternates.map((alt) => (
-              <li>
-                <a
-                  href={alt.path}
-                  hreflang={alt.hreflang}
-                  lang={alt.hreflang}
-                  aria-current={alt.locale === locale ? 'true' : undefined}
-                >
-                  <span class="visually-hidden">{alt.name}</span>
-                  <span aria-hidden="true">{alt.nameShort}</span>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-
-      <details class="nav-mobile">
-        <summary aria-label={c.ui.openMenu}>
-          <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-            <path d="M2 5h16M2 10h16M2 15h16" stroke="currentColor" stroke-width="1.75" fill="none" />
-          </svg>
-        </summary>
-        <div class="nav-mobile__panel">
-          <nav aria-label={c.ui.sectionIndex}>
-            <ul>
-              {
-                c.nav.items.map((item) => (
-                  <li>
-                    <a href={navHref(item.id)}>{item.label}</a>
-                  </li>
-                ))
-              }
-            </ul>
-          </nav>
-        </div>
-      </details>
-    </div>
+    {/*
+      translate="no" matters here. Browser auto-translation reads the two-letter
+      codes as words and rewrites them — Chrome turns EN into "IN" and DE into
+      "OF" on the French page, which leaves the switcher unusable for exactly
+      the visitor who needs it. The brand name is protected for the same reason.
+    */}
+    <nav class="lang notranslate" aria-label={c.ui.languageNav} translate="no">
+      <ul>
+        {
+          alternates.map((alt) => (
+            <li>
+              {/* data-base is the locale root; scripts/lang-anchor.ts appends
+                  the section currently on screen so switching language keeps
+                  your place instead of returning to the top. */}
+              <a
+                href={alt.path}
+                data-lang-link
+                data-base={alt.path}
+                hreflang={alt.hreflang}
+                lang={alt.hreflang}
+                aria-current={alt.locale === locale ? 'true' : undefined}
+              >
+                <span class="visually-hidden">{alt.name}</span>
+                <span aria-hidden="true">{alt.nameShort}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
   </div>
 </header>
 
@@ -95,16 +96,16 @@ const navHref = (id: string) => `${path === '' ? '' : home}#${anchorFor(id)}`;
     position: sticky;
     top: 0;
     z-index: 50;
-    background: color-mix(in srgb, var(--color-ink) 88%, transparent);
-    backdrop-filter: blur(12px);
-    border-block-end: 1px solid rgb(255 255 255 / 0.1);
+    background: color-mix(in srgb, var(--navy-deep) 82%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    border-block-end: 1px solid var(--hairline);
   }
 
   .site-header__inner {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    min-height: 4rem;
+    min-height: 4.25rem;
   }
 
   @media (min-width: 24rem) {
@@ -119,8 +120,13 @@ const navHref = (id: string) => `${path === '' ? '' : home}#${anchorFor(id)}`;
     align-items: center;
     gap: 0.5rem;
     text-decoration: none;
-    color: var(--color-bone);
+    color: var(--white);
     flex: 0 0 auto;
+    transition: opacity 180ms var(--ease);
+  }
+
+  .brand:hover {
+    opacity: 0.82;
   }
 
   .brand :global(img) {
@@ -130,59 +136,191 @@ const navHref = (id: string) => `${path === '' ? '' : home}#${anchorFor(id)}`;
 
   .brand__name {
     font-family: var(--font-display);
-    font-weight: 900;
+    font-weight: 800;
     font-size: 1.0625rem;
     letter-spacing: -0.02em;
   }
 
   /* At 320px the crest, four language codes and the menu button cannot all fit
-     alongside the wordmark. The crest alone still identifies the site, and the
-     full name remains in the <h1> immediately below. */
+     alongside the wordmark. The crest alone still identifies the site. */
   @media (max-width: 22.5rem) {
     .brand__name {
       display: none;
     }
   }
 
-  /* --- desktop nav ------------------------------------------------------ */
-  .nav-desktop {
-    display: none;
-    flex: 1 1 auto;
-    min-width: 0;
-  }
-
-  .nav-desktop ul {
+  /* --- the single navigation -------------------------------------------- */
+  #main-nav ul {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.25rem 1.125rem;
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  .nav-desktop a {
+  #main-nav a {
     display: block;
-    padding: 0.25rem 0;
-    font-size: 0.875rem;
-    color: var(--color-bone);
+    color: var(--white);
     text-decoration: none;
-    border-block-end: 1px solid transparent;
-    transition: color 160ms ease, border-color 160ms ease;
+    transition: color 180ms var(--ease);
   }
 
-  .nav-desktop a:hover {
-    color: var(--color-gold-bright);
-    border-block-end-color: var(--color-gold);
+  #main-nav a:hover {
+    color: var(--gold-soft);
   }
 
-  /* --- actions ---------------------------------------------------------- */
-  .site-header__actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  /* Mobile: the nav is a panel under the masthead, revealed by the disclosure
+     immediately before it. */
+  @media (max-width: 61.999rem) {
+    #main-nav {
+      display: none;
+      position: absolute;
+      inset-inline: 0;
+      top: 100%;
+      background: var(--navy-raise);
+      border-block-end: 1px solid var(--hairline);
+      box-shadow: 0 20px 44px rgb(0 0 0 / 0.45);
+      max-height: calc(100dvh - 4.25rem);
+      overflow-y: auto;
+    }
+
+    .menu[open] ~ #main-nav {
+      display: block;
+    }
+
+    #main-nav ul {
+      flex-direction: column;
+      padding-block: 0.5rem;
+    }
+
+    #main-nav a {
+      padding: 0.875rem clamp(1rem, 0.4rem + 3vw, 3.5rem);
+      font-size: 1rem;
+      border-block-end: 1px solid var(--hairline-soft);
+    }
+  }
+
+  /* Desktop: inline bar, disclosure hidden. */
+  @media (min-width: 62rem) {
+    #main-nav {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    #main-nav ul {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.25rem 1.25rem;
+    }
+
+    #main-nav a {
+      padding-block: 0.25rem;
+      font-size: 0.875rem;
+      position: relative;
+    }
+
+    /* Underline grows from the centre — a small, purposeful hover. */
+    #main-nav a::after {
+      content: '';
+      position: absolute;
+      inset-inline: 0;
+      bottom: -2px;
+      height: 1px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 200ms var(--ease);
+    }
+
+    #main-nav a:hover::after {
+      transform: scaleX(1);
+    }
+
+    .menu {
+      display: none;
+    }
+  }
+
+  /* --- disclosure ------------------------------------------------------- */
+  .menu {
+    order: 3;
     margin-inline-start: auto;
     flex: 0 0 auto;
+  }
+
+  .menu summary {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    cursor: pointer;
+    list-style: none;
+    border: 1px solid var(--hairline-strong);
+    border-radius: 3px;
+    color: var(--white);
+    transition: border-color 180ms var(--ease), color 180ms var(--ease);
+  }
+
+  .menu summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .menu[open] summary {
+    border-color: var(--gold);
+    color: var(--gold-soft);
+  }
+
+  /* Three bars drawn from one element, becoming a cross when open. */
+  .menu__bars,
+  .menu__bars::before,
+  .menu__bars::after {
+    display: block;
+    width: 1.125rem;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 220ms var(--ease), opacity 160ms var(--ease);
+  }
+
+  .menu__bars {
+    position: relative;
+  }
+
+  .menu__bars::before,
+  .menu__bars::after {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+  }
+
+  .menu__bars::before {
+    top: -6px;
+  }
+
+  .menu__bars::after {
+    top: 6px;
+  }
+
+  .menu[open] .menu__bars {
+    background: transparent;
+  }
+
+  .menu[open] .menu__bars::before {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .menu[open] .menu__bars::after {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  /* --- language --------------------------------------------------------- */
+  .lang {
+    order: 2;
+    flex: 0 0 auto;
+    margin-inline-start: auto;
+  }
+
+  @media (min-width: 62rem) {
+    .lang {
+      margin-inline-start: 0;
+    }
   }
 
   .lang ul {
@@ -198,96 +336,30 @@ const navHref = (id: string) => `${path === '' ? '' : home}#${anchorFor(id)}`;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Kept narrow so four codes fit at 320px; the 36px height keeps the target
-       comfortable despite the width. */
     min-width: 1.75rem;
     min-height: 2.25rem;
     font-family: var(--font-mono);
     font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.04em;
-    color: #a5a5ac;
+    color: var(--muted-on-dark);
     text-decoration: none;
-    border-radius: 2px;
-    transition: color 160ms ease, background-color 160ms ease;
+    border-radius: 3px;
+    transition: color 180ms var(--ease), background-color 180ms var(--ease);
   }
 
   .lang a:hover {
-    color: var(--color-gold-bright);
+    color: var(--gold-soft);
   }
 
   .lang a[aria-current='true'] {
-    color: var(--color-ink);
-    background: var(--color-gold);
-  }
-
-  /* --- mobile menu ------------------------------------------------------ */
-  .nav-mobile summary {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    color: var(--color-bone);
-    cursor: pointer;
-    list-style: none;
-    border: 1px solid rgb(255 255 255 / 0.16);
-    border-radius: 2px;
-  }
-
-  .nav-mobile summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .nav-mobile[open] summary {
-    border-color: var(--color-gold);
-    color: var(--color-gold-bright);
-  }
-
-  .nav-mobile__panel {
-    position: absolute;
-    inset-inline: 0;
-    top: 100%;
-    background: var(--color-ink-raised);
-    border-block-end: 1px solid rgb(255 255 255 / 0.12);
-    box-shadow: 0 18px 40px rgb(0 0 0 / 0.45);
-    max-height: calc(100vh - 4rem);
-    overflow-y: auto;
-  }
-
-  .nav-mobile__panel ul {
-    list-style: none;
-    margin: 0;
-    padding: 0.5rem 0;
-  }
-
-  .nav-mobile__panel a {
-    display: block;
-    padding: 0.875rem clamp(1rem, 0.4rem + 3vw, 3.5rem);
-    font-size: 1rem;
-    color: var(--color-bone);
-    text-decoration: none;
-    border-block-end: 1px solid rgb(255 255 255 / 0.06);
-  }
-
-  .nav-mobile__panel a:hover {
-    color: var(--color-gold-bright);
-    background: rgb(255 255 255 / 0.04);
+    color: var(--navy-deep);
+    background: var(--gold);
   }
 
   @media (min-width: 26rem) {
     .lang a {
       min-width: 2rem;
-    }
-  }
-
-  @media (min-width: 62rem) {
-    .nav-desktop {
-      display: block;
-    }
-
-    .nav-mobile {
-      display: none;
     }
   }
 </style>

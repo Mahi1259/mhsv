@@ -1,70 +1,54 @@
 ---
-/** §17 — The founder. No photo in Phase 1. */
+/** The founder — statement type. No photo in this phase. */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
-import type { BandTone } from '@/config/site';
+import type { BandTone, SectionType } from '@/config/site';
 
-interface Props {
-  locale: Locale;
-  tone: BandTone;
-}
-
-const { locale, tone } = Astro.props;
+interface Props { locale: Locale; type: SectionType; tone: BandTone; fade?: boolean }
+const { locale, type, tone, fade } = Astro.props;
 const s = getContent(locale).sections.founder;
 ---
 
-<Band locale={locale} anchor={s.anchor} num={s.num} title={s.title} tone={tone}>
-  <div class="founder">
-    <div class="founder__identity">
-      <h3 class="founder__name">{s.name}</h3>
-      <p class="founder__role mono-label">{s.role}</p>
-    </div>
-    <div class="founder__body">
-      <p class="prose-body">{s.bio}</p>
-      <blockquote class="founder__quote">
-        <p>{s.quote}</p>
-      </blockquote>
-    </div>
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} fade={fade}>
+  <blockquote class="founder__quote">
+    <p>{s.quote}</p>
+  </blockquote>
+  <div class="founder__body">
+    <p class="founder__name">{s.name}<span class="founder__role">{s.role}</span></p>
+    <p class="prose-body">{s.bio}</p>
   </div>
 </Band>
 
 <style>
-  .founder {
-    display: grid;
-    gap: 2rem;
-    align-items: start;
-  }
-
-  .founder__name {
-    margin: 0;
-    font-size: var(--text-h3);
-  }
-
-  .founder__role {
-    margin: 0.5rem 0 0;
-    color: var(--band-accent);
-  }
-
   .founder__quote {
-    margin: 2rem 0 0;
+    margin: 0 0 2.5rem;
     padding-inline-start: 1.5rem;
     border-inline-start: 2px solid var(--band-accent);
   }
-
   .founder__quote p {
     margin: 0;
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: var(--text-h3);
-    letter-spacing: -0.02em;
-    line-height: 1.3;
+    font-size: clamp(1.25rem, 1rem + 1.2vw, 1.875rem);
+    letter-spacing: -0.025em;
+    line-height: 1.28;
     text-wrap: balance;
+    max-width: 26ch;
   }
-
-  @media (min-width: 52rem) {
-    .founder {
-      grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
-      gap: 3rem;
-    }
+  .founder__name {
+    display: grid;
+    gap: 0.25rem;
+    margin: 0 0 1rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-h3);
+  }
+  .founder__role {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--band-accent);
   }
 </style>

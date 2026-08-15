@@ -20,7 +20,19 @@ console.log(`  · building for ${site}  (from ${source}${isProduction ? '' : ', 
 export default defineConfig({
   site,
   output: 'static',
-  trailingSlash: 'always',
+  /**
+   * 'ignore', not 'always'.
+   *
+   * The printed QR code on the Founding Book encodes `https://www.mhsv.ch/livre`
+   * — no trailing slash, as the client brief specifies. Under 'always' that
+   * exact URL 404s, including in `astro preview`, so the address on a printed
+   * book would not resolve and could not be tested before going to print.
+   *
+   * 'ignore' serves both forms everywhere. The hosts additionally redirect the
+   * slash-less form to the canonical one (vercel.json / public/_redirects), so
+   * only one URL is indexable.
+   */
+  trailingSlash: 'ignore',
   i18n: {
     locales: ['fr', 'en', 'de', 'it'],
     defaultLocale: 'fr',
@@ -45,7 +57,7 @@ export default defineConfig({
       filter: (page) => {
         const path = new URL(page).pathname;
         if (path === '/') return false;
-        return !/\/message-(sent|error)\/$/.test(path);
+        return !/\/(message-sent|message-error|order-sent|newsletter-sent)\/?$/.test(path);
       },
     }),
   ],

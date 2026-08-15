@@ -1,0 +1,350 @@
+---
+/**
+ * /livre — the permanent destination of the printed QR code.
+ *
+ * THIS URL MUST NOT CHANGE. It is encoded in the QR on the back cover of both
+ * editions; once printed, it cannot be corrected. If the page ever moves,
+ * keep /livre and redirect server-side from here.
+ *
+ * Deliberately NOT locale-prefixed: the QR is the same in the French and
+ * English editions because this page is bilingual. It shows FR and EN side by
+ * side rather than picking one.
+ *
+ * Contains only what the client approved: the two covers, the institutional
+ * copy, and the order-request form. There is no download of the complete book
+ * and no path that could become one.
+ */
+import { Picture } from 'astro:assets';
+import BookOrderForm from '@/components/BookOrderForm.astro';
+import { getContent, localePath } from '@/lib/i18n';
+import { SITE_URL, IS_PRODUCTION, BOOK_PAGE_PATH } from '@/config/site';
+import preloadFonts from '@/config/preload-fonts.json';
+import coverFr from '@/assets/book/founding-book-fr.png';
+import coverEn from '@/assets/book/founding-book-en.png';
+import crest from '@/assets/logo/mhsv-crest.png';
+import { Image } from 'astro:assets';
+import '@/styles/global.css';
+
+const fr = getContent('fr');
+const en = getContent('en');
+
+const canonical = new URL(BOOK_PAGE_PATH + '/', SITE_URL).href;
+const ogImage = new URL('/og-image.png', SITE_URL).href;
+
+const covers = [
+  { src: coverFr, alt: fr.sections.book.coverAltFr, edition: 'FR' },
+  { src: coverEn, alt: en.sections.book.coverAltEn, edition: 'EN' },
+];
+
+const columns = [
+  { htmlLang: 'fr-CH', c: fr },
+  { htmlLang: 'en', c: en },
+];
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fr.sections.book.title} — MHSV®</title>
+    <meta
+      name="description"
+      content={`${fr.sections.book.body.slice(0, 150)}…`}
+    />
+    {!IS_PRODUCTION && <meta name="robots" content="noindex, follow" />}
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MHSV®" />
+    <meta property="og:title" content={`${fr.sections.book.title} — MHSV®`} />
+    <meta property="og:description" content={fr.sections.book.lead} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#0C1D3A" />
+    {
+      preloadFonts.map((href) => (
+        <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
+      ))
+    }
+  </head>
+
+  <body>
+    <a class="skip-link" href="#book">Aller au contenu / Skip to content</a>
+
+    <header class="livre-header">
+      <div class="shell livre-header__inner">
+        <a class="livre-brand" href={localePath('', 'fr')}>
+          <Image src={crest} alt="" width={32} height={36} loading="eager" densities={[1, 2]} />
+          <span>MHSV®</span>
+        </a>
+        <nav class="livre-header__nav" aria-label="Langues du site / Site languages">
+          <a href={localePath('', 'fr')} hreflang="fr">Site FR</a>
+          <a href={localePath('', 'en')} hreflang="en">Site EN</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="book">
+      <section class="band band--navy-deep band--grain livre">
+        <div class="shell livre__inner">
+          <div class="livre__covers">
+            <ul>
+              {
+                covers.map((cover) => (
+                  <li>
+                    <Picture
+                      src={cover.src}
+                      alt={cover.alt}
+                      formats={['webp']}
+                      fallbackFormat="png"
+                      widths={[260, 440]}
+                      sizes="(min-width: 60rem) 15rem, 42vw"
+                      loading="eager"
+                    />
+                    <span class="livre__edition mono-label" aria-hidden="true">
+                      {cover.edition}
+                    </span>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+
+          <div class="livre__text">
+            {
+              columns.map(({ htmlLang, c }) => (
+                <article class="livre__lang" lang={htmlLang}>
+                  <h1 class="livre__title">{c.sections.book.lead}</h1>
+                  <p class="livre__body">{c.sections.book.body}</p>
+                </article>
+              ))
+            }
+            <p class="livre__notice">
+              <span lang="fr-CH">{fr.sections.book.notice}</span>
+              <span lang="en">{en.sections.book.notice}</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="band band--navy band--fade livre-order" aria-labelledby="order-title">
+        <div class="shell shell--mid">
+          <h2 id="order-title" class="section-title livre-order__title">
+            {fr.bookOrder.title} <span class="livre-order__sep">/</span> {en.bookOrder.title}
+          </h2>
+          <p class="livre-order__note">
+            <span lang="fr-CH">{fr.bookOrder.intro}</span>
+            <span lang="en">{en.bookOrder.intro}</span>
+          </p>
+          {/* Defaults to French; the visitor picks the edition in the form. */}
+          <BookOrderForm locale="fr" />
+        </div>
+      </section>
+    </main>
+
+    <footer class="band band--navy-deep livre-footer">
+      <div class="shell">
+        <p>{fr.footer.summary}</p>
+        <p class="livre-footer__links">
+          <a class="link" href={localePath('privacy/', 'fr')}>{fr.footer.privacyLink}</a>
+          <a class="link" href={localePath('privacy/', 'en')}>{en.footer.privacyLink}</a>
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      import '@/scripts/motion.ts';
+      import '@/scripts/forms.ts';
+    </script>
+  </body>
+</html>
+
+<style>
+  .livre-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--navy-deep) 85%, transparent);
+    backdrop-filter: blur(14px);
+    border-block-end: 1px solid var(--hairline);
+  }
+
+  .livre-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 4rem;
+  }
+
+  .livre-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--white);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1rem;
+  }
+
+  .livre-brand :global(img) {
+    width: 1.75rem;
+    height: auto;
+  }
+
+  .livre-header__nav {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .livre-header__nav a {
+    display: flex;
+    align-items: center;
+    /* 24px minimum target. */
+    min-height: 2.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted-on-dark);
+    text-decoration: none;
+    transition: color 180ms var(--ease);
+  }
+
+  .livre-header__nav a:hover {
+    color: var(--gold-soft);
+  }
+
+  .livre {
+    padding-block: clamp(3rem, 2rem + 6vw, 6rem);
+  }
+
+  .livre__inner {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .livre__covers ul {
+    display: flex;
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .livre__covers li {
+    position: relative;
+    flex: 1 1 0;
+    max-width: 15rem;
+  }
+
+  .livre__covers :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--hairline);
+    box-shadow: 0 24px 50px rgb(0 0 0 / 0.5);
+  }
+
+  .livre__edition {
+    position: absolute;
+    inset-block-start: 0.5rem;
+    inset-inline-start: 0.5rem;
+    padding: 0.1875rem 0.4375rem;
+    background: var(--navy-deep);
+    color: var(--gold);
+    font-size: 0.625rem;
+  }
+
+  .livre__lang + .livre__lang {
+    margin-block-start: 2rem;
+    padding-block-start: 2rem;
+    border-block-start: 1px solid var(--hairline);
+  }
+
+  .livre__title {
+    margin: 0 0 0.875rem;
+    font-size: clamp(1.125rem, 0.95rem + 0.85vw, 1.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--gold-soft);
+  }
+
+  .livre__body {
+    margin: 0;
+    color: var(--muted-on-dark);
+    max-width: 62ch;
+  }
+
+  .livre__notice {
+    display: grid;
+    gap: 0.375rem;
+    margin-block-start: 2rem;
+    padding: 0.875rem 1.125rem;
+    border: 1px dashed var(--hairline);
+    border-radius: var(--radius);
+    color: var(--muted-on-dark);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  .livre-order {
+    padding-block: clamp(3rem, 2rem + 5vw, 5.5rem);
+  }
+
+  .livre-order__title {
+    max-width: none;
+  }
+
+  .livre-order__sep {
+    color: var(--gold);
+    font-weight: 400;
+  }
+
+  .livre-order__note {
+    display: grid;
+    gap: 0.375rem;
+    margin: 1rem 0 2rem;
+    color: var(--muted-on-dark);
+    font-size: 0.9375rem;
+  }
+
+  .livre-footer {
+    padding-block: 2.5rem;
+    border-block-start: 1px solid var(--hairline);
+    color: var(--muted-on-dark);
+    font-size: 0.8125rem;
+  }
+
+  .livre-footer p {
+    margin: 0 0 0.5rem;
+    overflow-wrap: anywhere;
+  }
+
+  .livre-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+  }
+
+  .livre-footer__links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.75rem;
+  }
+
+  @media (min-width: 60rem) {
+    .livre__inner {
+      grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+      gap: 4rem;
+    }
+  }
+</style>

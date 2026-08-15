@@ -1,67 +1,95 @@
 ---
 /**
- * §08 — The MHSV® pathway: a six-step process flow.
+ * The MHSV® pathway — feature type.
  *
- * Ordered list, so the sequence survives without CSS. The connector arrows are
- * decorative and hidden from assistive technology.
+ * Numbering is kept: these are six genuine steps and the order is the meaning.
+ * The connecting line draws itself as the section scrolls into view (a CSS
+ * scale transform driven by one class, so reduced-motion collapses it to
+ * "already drawn").
  */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
-import type { BandTone } from '@/config/site';
+import type { BandTone, SectionType } from '@/config/site';
 
 interface Props {
   locale: Locale;
+  type: SectionType;
   tone: BandTone;
+  fade?: boolean;
 }
 
-const { locale, tone } = Astro.props;
+const { locale, type, tone, fade } = Astro.props;
 const s = getContent(locale).sections.pathway;
 ---
 
-<Band locale={locale} anchor={s.anchor} num={s.num} title={s.title} tone={tone}>
-  <ol class="flow">
-    {
-      s.steps.map((step, i) => (
-        <li class="flow__step">
-          <span class="flow__marker" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-          <span class="flow__label">
-            <span class="visually-hidden">{s.stepLabel} {i + 1} — </span>
-            {step}
-          </span>
-        </li>
-      ))
-    }
-  </ol>
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} fade={fade}>
+  <div class="flow" data-flow>
+    <span class="flow__line" aria-hidden="true"></span>
+    <ol class="flow__list">
+      {
+        s.steps.map((step, i) => (
+          <li class="flow__step" style={`--i:${i}`}>
+            <span class="flow__marker" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <span class="flow__label">
+              <span class="visually-hidden">{s.stepLabel} {i + 1} — </span>
+              {step}
+            </span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
   <p class="prose-body pathway__note">{s.note}</p>
 </Band>
 
+<script>
+  // Draw the line once, when the flow reaches the viewport.
+  const flows = document.querySelectorAll<HTMLElement>('[data-flow]');
+  if (flows.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add('is-drawn');
+          io.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.25 },
+    );
+    flows.forEach((el) => io.observe(el));
+  }
+</script>
+
 <style>
   .flow {
+    position: relative;
+  }
+
+  .flow__list {
     display: grid;
-    gap: 0.75rem;
+    gap: 1.25rem;
     list-style: none;
     margin: 0;
     padding: 0;
-    counter-reset: none;
+    position: relative;
+    z-index: 1;
   }
 
   .flow__step {
-    position: relative;
     display: flex;
     align-items: center;
-    gap: 0.875rem;
-    padding: 1rem 1.125rem;
-    background: var(--band-raised);
-    border: 1px solid var(--band-rule);
-    border-radius: var(--radius-card);
+    gap: 1rem;
   }
 
   .flow__marker {
     display: grid;
     place-items: center;
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
     flex: 0 0 auto;
+    background: var(--band-bg);
     border: 1px solid var(--band-accent);
     border-radius: 50%;
     font-family: var(--font-mono);
@@ -72,59 +100,64 @@ const s = getContent(locale).sections.pathway;
 
   .flow__label {
     font-weight: 600;
-    font-size: 0.9375rem;
+    font-size: 1rem;
     line-height: 1.3;
     hyphens: auto;
   }
 
-  .pathway__note {
-    margin-block-start: 2rem;
+  /* Vertical rule on narrow screens. */
+  .flow__line {
+    position: absolute;
+    left: 1.25rem;
+    top: 1.25rem;
+    bottom: 1.25rem;
+    width: 1px;
+    background: var(--band-rule);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 1100ms var(--ease);
   }
 
-  @media (min-width: 48rem) {
-    .flow {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem 1.75rem;
+  .flow.is-drawn .flow__line {
+    transform: scaleY(1);
+  }
+
+  .pathway__note {
+    margin-block-start: 2.5rem;
+  }
+
+  @media (min-width: 64rem) {
+    .flow__list {
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1.25rem;
     }
 
     .flow__step {
       flex-direction: column;
       align-items: flex-start;
-      gap: 0.75rem;
-      padding: 1.25rem;
+      gap: 0.875rem;
     }
 
-    /* Connector between steps within a row. */
-    .flow__step:not(:nth-child(3n))::after {
-      content: '';
-      position: absolute;
-      inset-inline-end: -1.375rem;
-      inset-block-start: 50%;
-      width: 1rem;
+    /* Horizontal rule threading the markers. */
+    .flow__line {
+      left: 0;
+      right: 0;
+      top: 1.25rem;
+      bottom: auto;
+      width: auto;
       height: 1px;
-      background: var(--band-rule);
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+
+    .flow.is-drawn .flow__line {
+      transform: scaleX(1);
     }
   }
 
-  @media (min-width: 64rem) {
-    .flow {
-      grid-template-columns: repeat(6, 1fr);
-      gap: 1.5rem 1.25rem;
-    }
-
-    .flow__step:not(:nth-child(3n))::after {
-      display: none;
-    }
-
-    .flow__step:not(:last-child)::after {
-      content: '';
-      display: block;
-      position: absolute;
-      inset-inline-end: -0.9375rem;
-      inset-block-start: 2.25rem;
-      width: 0.625rem;
-      height: 1px;
-      background: var(--band-rule);
+  @media (prefers-reduced-motion: reduce) {
+    .flow__line {
+      transform: none !important;
     }
   }
 </style>

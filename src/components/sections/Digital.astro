@@ -1,37 +1,22 @@
 ---
-/**
- * §15 — Digital & responsible innovation.
- *
- * Phase 1 is a showcase site: this section announces the roadmap only. The
- * beneficiary platform is not built here.
- */
+/** Digital & responsible innovation — grid type.
+    Phase 1 is a showcase site: this announces the roadmap only. */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import { capitalizeFirst } from '@/lib/text';
-import type { BandTone } from '@/config/site';
+import type { BandTone, SectionType } from '@/config/site';
 
-interface Props {
-  locale: Locale;
-  tone: BandTone;
-}
-
-const { locale, tone } = Astro.props;
+interface Props { locale: Locale; type: SectionType; tone: BandTone; fade?: boolean }
+const { locale, type, tone, fade } = Astro.props;
 const s = getContent(locale).sections.digital;
 const roadmapItems = s.roadmapItems.map((item) => capitalizeFirst(item, locale));
 ---
 
-<Band
-  locale={locale}
-  anchor={s.anchor}
-  num={s.num}
-  title={s.title}
-  tone={tone}
-  status={s.status}
->
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} fade={fade} status={s.status}>
   <div class="digital">
     <div>
       <h3 class="mono-label digital__title">{s.roadmapTitle}</h3>
-      <ul class="digital__items">
+      <ul class="digital__items" data-stagger>
         {roadmapItems.map((item) => <li>{item}</li>)}
       </ul>
     </div>
@@ -42,45 +27,15 @@ const roadmapItems = s.roadmapItems.map((item) => capitalizeFirst(item, locale))
 </Band>
 
 <style>
-  .digital {
-    display: grid;
-    gap: 2.5rem;
-    align-items: start;
-  }
-
-  .digital__title {
-    color: var(--band-accent);
-    margin: 0 0 1rem;
-  }
-
-  .digital__items {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 0.5rem;
-  }
-
-  .digital__items li {
-    position: relative;
-    padding-inline-start: 1.5rem;
-    font-size: 0.9375rem;
-  }
-
+  .digital { display: grid; gap: 2.5rem; align-items: start; }
+  .digital__title { color: var(--band-accent); margin: 0 0 1rem; }
+  .digital__items { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+  .digital__items li { position: relative; padding-inline-start: 1.5rem; font-size: 0.9375rem; }
   .digital__items li::before {
-    content: '';
-    position: absolute;
-    inset-inline-start: 0;
-    inset-block-start: 0.7em;
-    width: 0.625rem;
-    height: 1px;
-    background: var(--band-accent);
+    content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 0.7em;
+    width: 0.625rem; height: 1px; background: var(--band-accent);
   }
-
   @media (min-width: 52rem) {
-    .digital {
-      grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
-      gap: 3rem;
-    }
+    .digital { grid-template-columns: minmax(0, 20rem) minmax(0, 1fr); gap: 3rem; }
   }
 </style>

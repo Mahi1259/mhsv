@@ -1,0 +1,90 @@
+---
+/**
+ * Newsletter subscription.
+ *
+ * Separate from the contact form, as the brief requires. Consent is required
+ * and never pre-ticked. Subscription is handed to a mailing provider with
+ * double opt-in — nobody is on the list until they click the confirmation.
+ */
+import FormShell from '@/components/FormShell.astro';
+import { getContent, localePath, type Locale } from '@/lib/i18n';
+import { LOCALES } from '@/config/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const c = getContent(locale);
+const n = c.newsletterForm;
+const privacyHref = localePath('privacy/', locale);
+
+const strings = {
+  errors: { ...c.form.errors, ...n.errors },
+  successTitle: n.successTitle,
+  successBody: n.successBody,
+  errorTitle: c.form.errorTitle,
+  errorBody: c.form.errorBody,
+};
+---
+
+<FormShell
+  locale={locale}
+  kind="newsletter"
+  id="newsletter-form"
+  submitLabel={n.submit}
+  strings={strings}
+  class="newsletter-form"
+>
+  <div class="form__grid">
+    <p class="form__field">
+      <label for="nl-firstName">{n.firstName} <span class="form__optional">({c.ui.optional})</span></label>
+      <input id="nl-firstName" name="firstName" type="text" autocomplete="given-name" maxlength="80" aria-describedby="nl-firstName-error" />
+      <span class="form__error" id="nl-firstName-error" data-error-for="firstName"></span>
+    </p>
+
+    <p class="form__field">
+      <label for="nl-email">{n.email} <span class="form__req" aria-hidden="true">*</span></label>
+      <input id="nl-email" name="email" type="email" required autocomplete="email" maxlength="254" aria-describedby="nl-email-error" />
+      <span class="form__error" id="nl-email-error" data-error-for="email"></span>
+    </p>
+
+    <p class="form__field form__field--wide">
+      <label for="nl-language">{n.language} <span class="form__req" aria-hidden="true">*</span></label>
+      <select id="nl-language" name="language" required aria-describedby="nl-language-error">
+        {
+          LOCALES.map((code) => (
+            <option value={code} selected={code === locale}>
+              {getContent(code).meta.name}
+            </option>
+          ))
+        }
+      </select>
+      <span class="form__error" id="nl-language-error" data-error-for="language"></span>
+    </p>
+  </div>
+
+  <div>
+    <p class="form__consent">
+      {/* Never pre-ticked. */}
+      <input id="nl-consent" name="consent" type="checkbox" required aria-describedby="nl-consent-error" />
+      <label for="nl-consent">
+        {n.consent}
+        <span class="form__req" aria-hidden="true"> *</span>
+      </label>
+    </p>
+    <span class="form__error" id="nl-consent-error" data-error-for="consent"></span>
+    <p class="newsletter-form__privacy">
+      {n.privacyNote} <a class="link" href={privacyHref}>{c.footer.privacyLink}</a>
+    </p>
+  </div>
+</FormShell>
+
+<style>
+  .newsletter-form__privacy {
+    margin: 0.75rem 0 0;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--band-muted);
+  }
+</style>

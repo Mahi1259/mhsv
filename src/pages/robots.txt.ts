@@ -23,6 +23,8 @@ export const GET: APIRoute = () => {
     '# Form result pages exist for a flow, not for search.',
     'Disallow: /*/message-sent/',
     'Disallow: /*/message-error/',
+    'Disallow: /*/order-sent/',
+    'Disallow: /*/newsletter-sent/',
     '',
     `Sitemap: ${new URL('/sitemap-index.xml', SITE_URL).href}`,
     '',

@@ -20,7 +20,7 @@ const c = getContent(locale);
 
 <Page locale={locale} path="message-sent/" title={c.form.successTitle} noindex>
   <p class="result">{c.form.successBody}</p>
-  <a class="btn btn-secondary" href={localePath('', locale)}>{c.nav.items[0].label}</a>
+  <a class="btn btn--ghost" href={localePath('', locale)}>{c.nav.items[0].label}</a>
 </Page>
 
 <style>

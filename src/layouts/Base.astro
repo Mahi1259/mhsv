@@ -85,7 +85,7 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#0B0B0C" />
+    <meta name="theme-color" content="#0C1D3A" />
 
     {
       preloadFonts.map((href) => (
@@ -101,5 +101,11 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
       <slot />
     </main>
     <Footer locale={locale} />
+
+    <script>
+      import '@/scripts/motion.ts';
+      import '@/scripts/forms.ts';
+      import '@/scripts/lang-anchor.ts';
+    </script>
   </body>
 </html>

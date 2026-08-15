@@ -1,83 +1,93 @@
 ---
-/** §07 — Services: nine areas. */
+/**
+ * Services — grid type.
+ *
+ * Unnumbered: nine areas of intervention, mobilised as needed. Not a sequence.
+ */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import { capitalizeFirst } from '@/lib/text';
-import type { BandTone } from '@/config/site';
+import type { BandTone, SectionType } from '@/config/site';
 
 interface Props {
   locale: Locale;
+  type: SectionType;
   tone: BandTone;
+  fade?: boolean;
 }
 
-const { locale, tone } = Astro.props;
+const { locale, type, tone, fade } = Astro.props;
 const s = getContent(locale).sections.services;
-
 // The pack writes this as one running sentence, so only the first item is
 // capitalised in the source.
 const items = s.items.map((item) => capitalizeFirst(item, locale));
 ---
 
-<Band locale={locale} anchor={s.anchor} num={s.num} title={s.title} tone={tone} lead={s.lead}>
-  <ol class="services">
+<Band
+  locale={locale}
+  anchor={s.anchor}
+  title={s.title}
+  type={type}
+  tone={tone}
+  fade={fade}
+  lead={s.lead}
+>
+  <ul class="services" data-stagger>
     {
-      items.map((item, i) => (
+      items.map((item) => (
         <li class="service">
-          <span class="service__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <span class="service__mark" aria-hidden="true" />
           <h3 class="service__name">{item}</h3>
         </li>
       ))
     }
-  </ol>
+  </ul>
 </Band>
 
 <style>
   .services {
     display: grid;
-    gap: 1px;
+    gap: 0;
     list-style: none;
     margin: 0;
     padding: 0;
-    background: var(--band-rule);
-    border: 1px solid var(--band-rule);
-    border-radius: var(--radius-card);
-    overflow: hidden;
   }
 
   .service {
     display: flex;
     align-items: baseline;
     gap: 0.875rem;
-    padding: 1.125rem clamp(1rem, 0.85rem + 0.6vw, 1.5rem);
-    background: var(--band-bg);
+    padding-block: 1rem;
+    border-block-end: 1px solid var(--band-rule);
   }
 
-  .service__num {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    color: var(--band-accent);
+  .service__mark {
+    width: 0.5rem;
+    height: 1px;
     flex: 0 0 auto;
+    background: var(--band-accent);
+    transform: translateY(-0.35em);
   }
 
   .service__name {
     margin: 0;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: -0.01em;
-    line-height: 1.3;
+    line-height: 1.35;
   }
 
   @media (min-width: 40rem) {
     .services {
       grid-template-columns: repeat(2, 1fr);
+      column-gap: 2.5rem;
     }
   }
 
   @media (min-width: 64rem) {
     .services {
       grid-template-columns: repeat(3, 1fr);
+      column-gap: 3rem;
     }
   }
 </style>

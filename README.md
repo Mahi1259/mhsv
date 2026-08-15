@@ -11,14 +11,17 @@ almost anywhere.
 | --- | --- |
 | Languages | French (default), English, Swiss Standard German, Italian |
 | URLs | `/fr/`, `/en/`, `/de/`, `/it/` — `/` redirects to `/fr/` |
-| Sections | 21, on one page per language |
-| Content source | `../MHSV_Website_Content_Pack_Phase1_Developer_Ready_V3.docx` |
+| Sections | 21, on one page per language, in five archetypes |
+| Content source | `…Content_Pack_Phase1_Developer_Ready_V3.docx`, superseded where the 14 Aug 2026 brief differs |
+| Pages | one per locale, plus `/livre` (permanent QR destination), privacy, form results |
+| Forms | contact · book order request · newsletter (double opt-in) |
 | Lighthouse | 100 desktop · 97–99 mobile (perf), 100 a11y / best practices / SEO |
 | Page weight | ~227 kB total, no third-party requests |
 
-> **Before production, read [`BLOCKERS.md`](./BLOCKERS.md).** Eight items need a
-> client decision — including the legal-footer contradiction and the missing
-> privacy policy, which is a legal requirement under the Swiss FADP.
+> **Before production, read [`BLOCKERS.md`](./BLOCKERS.md).** The 14 August 2026
+> brief resolved the domain, mailboxes and governance. What remains includes the
+> legal-footer contradiction, the missing privacy policy (a legal requirement
+> under the Swiss FADP), and the newsletter provider account.
 
 ---
 
@@ -47,7 +50,8 @@ MHSV_CONTENT_DOCX=/path/to/pack/…V3.docx npm run content:extract
 | `npm run preview` | Serve the production build locally | no |
 | `npm run content:check` | Fail if the four locales are not key-for-key identical | no |
 | `npm run build:check` | Verify the built output honours the client's hard constraints | no |
-| `npm run test` | Contact handler + Vercel adapter tests | no |
+| `npm run test` | All form tests: contact, book order, newsletter, Vercel adapter | no |
+| `npm run qr` | Regenerate the printed QR code assets in `qr/` | no |
 | `npm run audit` | Overflow + WCAG 2.1 AA audit, 4 locales × 4 viewports (needs `npm run preview` running) | no |
 | `npm run typecheck` | `astro check` | no |
 | `node scripts/shot.mjs de 320` | Screenshot a locale at a given width | no |
@@ -79,32 +83,43 @@ scripts/
   prepare-assets.mjs       logo/icon/cover derivation, font subsetting
   check-build.mjs          post-build constraint gate
   audit.mjs                responsive + accessibility audit
-  test-contact.mjs         contact-handler tests
+  generate-qr.mjs          print-ready QR for /livre, decode-verified
+  patch-authored.mjs       applies the 14 Aug brief to the authored content
+  test-contact.mjs         contact-form tests
+  test-forms.mjs           book-order + newsletter tests
+  test-vercel-api.mjs      Vercel (req,res) adapter tests
   shot.mjs                 screenshot helper
 
 src/
-  config/site.ts           locales, feature flags, section order + band tones
+  config/site.ts           locales, flags, section order + archetypes + grounds
   content/
     i18n/*.json            GENERATED — do not edit by hand
     authored/*.json        hand-written UI strings (see CONTENT.md)
     _audit/                raw pack text, for client cross-checking
   lib/                     i18n access, text helpers
+  scripts/                 motion.ts (reveals, counters), forms.ts (submit)
   layouts/                 Base (document shell), Page (short pages)
   components/
-    sections/              one component per numbered section, 01–21
-    Header / Footer / Band / StatusBadge / ContactForm
+    sections/              one component per section
+    Header / Footer / Band / StatusBadge
+    FormShell + ContactForm / BookOrderForm / NewsletterForm
   pages/
     index.astro            language gateway + redirect to /fr/
+    livre.astro            PERMANENT QR destination — bilingual, must not move
     [lang]/index.astro     the single page
     [lang]/privacy.astro
     [lang]/legal-notice.astro     (only built when the legal flag is on)
-    [lang]/message-sent.astro     (no-JS form result)
-    [lang]/message-error.astro
+    [lang]/message-sent.astro     (no-JS contact result)
+    [lang]/order-sent.astro       (no-JS book-order result)
+    [lang]/newsletter-sent.astro  (no-JS newsletter result)
     robots.txt.ts
 
+qr/                        print assets — deliberately NOT under public/
+
+api/contact.mjs            Vercel entry point for POST /api/contact
 functions/
-  contact.mjs              Netlify entry point for POST /api/contact
-  lib/contact-core.mjs     host-independent validation + sending
+  contact.mjs              Netlify entry point
+  lib/contact-core.mjs     host-independent validation + sending, all 3 forms
 ```
 
 ---
@@ -117,7 +132,8 @@ build.**
 - **Copy that comes from the client's content pack**: edit the `.docx`, then run
   `npm run content:extract`. The parser maps the 21 numbered sections in each of
   the four language blocks onto a fixed shape.
-- **UI strings, form labels, legal pages, and public copy for §18/§19**: edit
+- **UI strings, form labels, legal pages, and public copy the pack does not
+  provide**: edit
   `src/content/authored/{fr,en,de,it}.json`. These are merged over the extracted
   content and win where the keys collide.
 
@@ -145,6 +161,57 @@ in German, say). It also fails on retired wording such as "Beyond Football".
 
 Routing, `hreflang`, the sitemap, the language switcher and the footer index all
 derive from `LOCALES`, so nothing else needs touching.
+
+---
+
+## Design system
+
+The ground is **navy**, not black. The approved logo's shield is `#001D49`;
+black sits badly beside it. Gold is an accent only — rules, active states,
+small marks — never a large fill.
+
+```css
+--navy: #0C1D3A;  --navy-deep: #071426;  --navy-raise: #14284A;
+--gold: #D4AF37;  --gold-soft: #E8C877;  --gold-ink: #7A6224;  /* gold on light */
+--bone: #F5F3EF;  --white: #FFFFFF;
+```
+
+`--gold-ink` exists because `--gold` on `--bone` is 2.6:1 and fails AA. Never
+set `--gold` as text on a light band.
+
+### Section archetypes
+
+Every section takes one of five types, declared once in `SECTION_ORDER`. Each
+has its own measure and vertical rhythm — identical slab heights were what made
+a 21-section page read as 21 slides.
+
+| Type | Used for | Character |
+| --- | --- | --- |
+| `hero` | the hero alone | Full viewport, the largest type on the site |
+| `statement` | who we are, vision, programmes, founder | Wide measure, large text, lots of air |
+| `grid` | mission, services, ecosystem, team, roadmap | Cards or columns |
+| `feature` | MITIPS®, programmes & fees, book, newsletter, contact | Asymmetric |
+| `quiet` | who we support, inclusion, identity | Narrow, understated, recessive |
+
+**There are no section numbers.** The 01–21 numbering is the content pack's
+internal editorial index, not website copy. On wide screens a sticky margin
+label shows the short navigation name instead, which actually orients.
+
+**There are no dividers between sections.** Separation is space plus an
+occasional change of ground — about every third or fourth section, gradiented
+over ~160px rather than hard-cut.
+
+### Motion
+
+Scroll reveals (fade + 20px rise, 700ms), staggered children, a drawn pathway
+line, counters on concrete figures, and 150–200ms transitions on every
+interactive state.
+
+**`prefers-reduced-motion: reduce` disables all of it.** The reveal styles only
+apply under `html.js`, and that class is added by script *after* the preference
+check — so with reduced motion, or with JavaScript off, nothing is ever hidden
+and nothing animates. Verified: 0 elements with an active transition or
+animation.
 
 ---
 

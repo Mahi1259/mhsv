@@ -1,24 +1,32 @@
 ---
 /**
- * A numbered content band — the page's repeating unit.
+ * A content band — the page's repeating unit, in five archetypes.
  *
- * Renders <section aria-labelledby> with the two-digit section number from the
- * content pack as an eyebrow, an <h2>, an optional status badge and lead, then
- * the caller's content. Tone alternates dark / raised / light down the page.
+ * The two-digit section numbers are gone. They were the content pack's
+ * internal editorial index ("check section 14"), never website copy, and
+ * printing them on every section was the main reason the page read as a slide
+ * deck.
+ *
+ * What replaces them is the sticky margin label: on wide screens the section
+ * name pins beside its content while you scroll, which actually orients you.
+ * It is aria-hidden — the <h2> already names the section for assistive
+ * technology, and the label must not be announced twice.
  */
 import StatusBadge from '@/components/StatusBadge.astro';
-import type { Locale } from '@/lib/i18n';
-import type { BandTone, StatusKey } from '@/config/site';
+import { getContent, type Locale } from '@/lib/i18n';
+import type { BandTone, SectionType, StatusKey } from '@/config/site';
 
 interface Props {
   locale: Locale;
   anchor: string;
-  num: string;
   title: string;
+  type: SectionType;
   tone: BandTone;
+  /** True when this band opens a new ground — fades the transition in. */
+  fade?: boolean;
   lead?: string;
   status?: { key: string; detail: string } | null;
-  /** Set when the band's content already provides its own inner container. */
+  /** Skips the built-in header so a section can lay out its own. */
   bare?: boolean;
   class?: string;
 }
@@ -26,9 +34,10 @@ interface Props {
 const {
   locale,
   anchor,
-  num,
   title,
+  type,
   tone,
+  fade = false,
   lead,
   status = null,
   bare = false,
@@ -36,34 +45,69 @@ const {
 } = Astro.props;
 
 const headingId = `${anchor}-title`;
+const isDark = tone !== 'bone';
+const titleClass = type === 'statement' ? 'statement-title' : 'section-title';
+
+/**
+ * The margin label uses the short navigation label where one exists, not the
+ * full heading — printing the heading twice, side by side, reads as a mistake
+ * rather than as orientation.
+ */
+const navLabel = getContent(locale).nav.items.find((item) => item.id === anchor)?.label;
+const label = navLabel ?? title;
 ---
 
 <section
   id={anchor}
-  class:list={['band', `band-${tone}`, className]}
+  class:list={[
+    'band',
+    `band--${tone}`,
+    `band--${type}`,
+    fade && 'band--fade',
+    isDark && 'band--grain',
+    className,
+  ]}
   aria-labelledby={headingId}
 >
-  <div class="shell">
-    <div class="band__head">
-      <p class="eyebrow"><span>{num}</span></p>
-      <h2 id={headingId} class="section-title">{title}</h2>
+  <div class="shell band__shell">
+    <p class="band__label mono-label" aria-hidden="true">{label}</p>
+
+    <div class="band__main">
       {
-        status && (
-          <StatusBadge
-            locale={locale}
-            status={status.key as StatusKey}
-            detail={status.detail}
-            class="band__status"
-          />
+        !bare && (
+          <header class="band__head" data-reveal>
+            <h2 id={headingId} class={titleClass}>
+              {title}
+            </h2>
+            {status && (
+              <StatusBadge
+                locale={locale}
+                status={status.key as StatusKey}
+                class="band__status"
+              />
+            )}
+            {lead && <p class="lead band__lead">{lead}</p>}
+          </header>
         )
       }
-      {lead && <p class="lead band__lead">{lead}</p>}
+      <div class="band__body" data-reveal>
+        <slot />
+      </div>
     </div>
-    {bare ? <slot /> : <div class="band__body"><slot /></div>}
   </div>
 </section>
 
 <style>
+  .band__shell {
+    display: block;
+  }
+
+  /* The margin label is decorative orientation; it only exists where there is
+     room for it beside the content. */
+  .band__label {
+    display: none;
+  }
+
   .band__head {
     max-width: 62rem;
   }
@@ -74,10 +118,56 @@ const headingId = `${anchor}-title`;
 
   .band__lead {
     margin-block-start: 1.5rem;
-    color: var(--band-fg);
   }
 
   .band__body {
-    margin-block-start: clamp(2rem, 1.4rem + 2.4vw, 3.5rem);
+    margin-block-start: clamp(1.75rem, 1.2rem + 2.2vw, 3.25rem);
+  }
+
+  /* Statement sections are mostly air: a large line and nothing else. */
+  .band--statement .band__head {
+    max-width: 46rem;
+  }
+
+  .band--statement .band__body {
+    margin-block-start: clamp(2rem, 1.4rem + 2.6vw, 3.75rem);
+  }
+
+  /* Quiet sections are narrow and recessive by design. */
+  .band--quiet .band__main {
+    max-width: 46rem;
+  }
+
+  .band--quiet .section-title {
+    font-size: var(--text-h3);
+    font-weight: 700;
+  }
+
+  .band--quiet .band__body {
+    margin-block-start: 1.5rem;
+  }
+
+  @media (min-width: 64rem) {
+    .band__shell {
+      display: grid;
+      grid-template-columns: 10rem minmax(0, 1fr);
+      gap: 3.5rem;
+      align-items: start;
+    }
+
+    .band__label {
+      display: block;
+      position: sticky;
+      top: 7rem;
+      margin: 0;
+      color: var(--band-muted);
+      line-height: 1.4;
+      /* Long German section names must not widen the rail. */
+      overflow-wrap: anywhere;
+    }
+
+    .band__main {
+      min-width: 0;
+    }
   }
 </style>

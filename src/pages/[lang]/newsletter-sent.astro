@@ -1,0 +1,28 @@
+---
+/** Newsletter double-opt-in notice, for visitors without JavaScript.
+    Nobody is subscribed until they click the link in the confirmation email. */
+import Page from '@/layouts/Page.astro';
+import { getContent, localePath } from '@/lib/i18n';
+import { LOCALES, type Locale } from '@/config/site';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const locale = Astro.params.lang as Locale;
+const c = getContent(locale);
+---
+
+<Page locale={locale} path="newsletter-sent/" title={c.newsletterForm.successTitle} noindex>
+  <p class="result">{c.newsletterForm.successBody}</p>
+  <a class="btn btn--ghost" href={localePath('', locale)}>{c.nav.items[0].label}</a>
+</Page>
+
+<style>
+  .result {
+    margin: 0 0 2rem;
+    font-size: var(--text-lead);
+    color: var(--band-muted);
+    max-width: 56ch;
+  }
+</style>

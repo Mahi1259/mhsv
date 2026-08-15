@@ -1,12 +1,17 @@
 ---
 /**
- * Site footer: full section index, contact details, legal links.
+ * Site footer.
  *
- * The association / legal-status block is withheld unless
- * PUBLIC_SHOW_LEGAL_STATUS is true — see BLOCKERS.md #1.
+ * Deliberately short. It previously repeated all 20 section links and the full
+ * contact block, so the page ended with a second copy of its own navigation
+ * and a third copy of the contact details. Now: five section links, the legal
+ * links, and one summary line.
+ *
+ * The association / legal-status block stays withheld unless
+ * PUBLIC_SHOW_LEGAL_STATUS is true.
  */
 import { getContent, localePath, type Locale } from '@/lib/i18n';
-import { SECTION_ORDER, SHOW_LEGAL_STATUS } from '@/config/site';
+import { SECTION_ORDER, FOOTER_LINKS, SHOW_LEGAL_STATUS } from '@/config/site';
 
 interface Props {
   locale: Locale;
@@ -16,34 +21,31 @@ const { locale } = Astro.props;
 const c = getContent(locale);
 const home = localePath('', locale);
 
-// All 21 sections, so every anchor is reachable without the primary nav.
-const index = SECTION_ORDER.filter((s) => s.id !== 'hero').map((s) => ({
-  anchor: s.anchor,
-  title: (c.sections as Record<string, { title: string; num: string }>)[s.id].title,
-  num: (c.sections as Record<string, { title: string; num: string }>)[s.id].num,
+// Labels come from the navigation, not the section titles: the content pack
+// writes its headings in capitals ("WHO WE ARE", "CONTACT & LEGAL"), which
+// reads badly in a short link list next to the sentence-case authored ones.
+const sections = c.sections as Record<string, { title: string }>;
+const navLabels = new Map(c.nav.items.map((item) => [item.id, item.label]));
+const links = FOOTER_LINKS.map((id) => ({
+  anchor: SECTION_ORDER.find((s) => s.id === id)!.anchor,
+  title: navLabels.get(id) ?? sections[id].title,
 }));
 
-const contact = c.sections.contact;
 const year = new Date().getFullYear();
 ---
 
-<footer class="band band-ink site-footer">
+<footer class="band band--navy-deep site-footer">
   <div class="shell">
-    {/* The §21 tagline already closes the contact band directly above, so the
-        footer carries the baseline instead of repeating it. */}
-    <p class="site-footer__tagline">{c.brand.baseline}</p>
+    <p class="site-footer__baseline">{c.brand.baseline}</p>
 
     <div class="site-footer__grid">
-      <nav class="site-footer__col site-footer__col--index" aria-label={c.ui.sectionIndex}>
+      <nav class="site-footer__col" aria-label={c.ui.sectionIndex}>
         <h2 class="mono-label site-footer__title">{c.footer.navTitle}</h2>
-        <ul class="site-footer__index">
+        <ul class="site-footer__links">
           {
-            index.map((item) => (
+            links.map((item) => (
               <li>
-                <a href={`${home}#${item.anchor}`}>
-                  <span class="site-footer__num">{item.num}</span>
-                  {item.title}
-                </a>
+                <a href={`${home}#${item.anchor}`}>{item.title}</a>
               </li>
             ))
           }
@@ -51,25 +53,13 @@ const year = new Date().getFullYear();
       </nav>
 
       <div class="site-footer__col">
-        <h2 class="mono-label site-footer__title">{c.footer.contactTitle}</h2>
-        <address class="site-footer__address">
-          <span>{contact.institutional}</span>
-          <span>{contact.place}</span>
-          <a class="link" href={`tel:${contact.phone.replace(/\s+/g, '')}`}>{contact.phone}</a>
-          <a class="link" href={`mailto:${contact.email}`}>{contact.email}</a>
-        </address>
-      </div>
-
-      <div class="site-footer__col">
         <h2 class="mono-label site-footer__title">{c.footer.legalTitle}</h2>
         <ul class="site-footer__links">
-          <li><a class="link" href={localePath('privacy/', locale)}>{c.footer.privacyLink}</a></li>
+          <li><a href={localePath('privacy/', locale)}>{c.footer.privacyLink}</a></li>
           {
             SHOW_LEGAL_STATUS && (
               <li>
-                <a class="link" href={localePath('legal-notice/', locale)}>
-                  {c.footer.legalLink}
-                </a>
+                <a href={localePath('legal-notice/', locale)}>{c.footer.legalLink}</a>
               </li>
             )
           }
@@ -78,39 +68,35 @@ const year = new Date().getFullYear();
     </div>
 
     {
-      /* BLOCKER #1 — the content pack specifies this block, a later client
-         instruction withholds it pending validation of the statutes. */
+      /* Specified by the content pack, withheld by a later client instruction
+         pending validation of the statutes. */
       SHOW_LEGAL_STATUS && (
         <div class="site-footer__legal">
-          {contact.legalFooter.map((line) => (
+          {c.sections.contact.legalFooter.map((line) => (
             <span>{line}</span>
           ))}
         </div>
       )
     }
 
-    <hr class="rule site-footer__rule" />
-
     <div class="site-footer__base">
-      <p>© {year} {c.brand.name}. {c.footer.copyright}</p>
-      <p>{c.footer.trademarkNote}</p>
-      <p><a class="link" href="#top">{c.ui.backToTop}</a></p>
+      <p>{c.footer.summary}</p>
+      <p>© {year} {c.brand.name}. {c.footer.copyright} {c.footer.trademarkNote}</p>
     </div>
   </div>
 </footer>
 
 <style>
   .site-footer {
-    padding-block: clamp(3rem, 2rem + 4vw, 5rem);
-    border-block-start: 1px solid var(--band-rule);
+    padding-block: clamp(3rem, 2rem + 4vw, 4.5rem);
   }
 
-  .site-footer__tagline {
+  .site-footer__baseline {
     font-family: var(--font-display);
     font-weight: 700;
     font-size: var(--text-h3);
     letter-spacing: -0.02em;
-    color: var(--band-accent);
+    color: var(--gold);
     max-width: 24ch;
     margin: 0 0 clamp(2rem, 1.5rem + 2vw, 3rem);
   }
@@ -120,55 +106,13 @@ const year = new Date().getFullYear();
     gap: 2.5rem;
   }
 
-  /* Grid items default to min-width:auto, so a long unbreakable string —
-     "Datenschutzerklärung", or the contact address — forces its track wider
-     than its share and pushes the page sideways. */
   .site-footer__col {
     min-width: 0;
   }
 
   .site-footer__title {
-    color: var(--band-muted);
+    color: var(--muted-on-dark);
     margin: 0 0 1rem;
-  }
-
-  .site-footer__index {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 0.375rem;
-  }
-
-  .site-footer__index a {
-    display: flex;
-    gap: 0.625rem;
-    align-items: baseline;
-    color: var(--band-fg);
-    text-decoration: none;
-    font-size: 0.9375rem;
-    /* Keeps the row at a 24px target without opening up the list. */
-    padding-block: 0.25rem;
-  }
-
-  .site-footer__index a:hover {
-    color: var(--band-accent);
-  }
-
-  .site-footer__num {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    color: var(--band-muted);
-    flex: 0 0 auto;
-  }
-
-  .site-footer__address {
-    display: grid;
-    gap: 0.375rem;
-    font-style: normal;
-    color: var(--band-muted);
-    font-size: 0.9375rem;
-    overflow-wrap: anywhere;
   }
 
   .site-footer__links {
@@ -177,8 +121,20 @@ const year = new Date().getFullYear();
     padding: 0;
     display: grid;
     gap: 0.5rem;
-    font-size: 0.9375rem;
     overflow-wrap: anywhere;
+  }
+
+  .site-footer__links a {
+    display: inline-block;
+    padding-block: 0.1875rem;
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.9375rem;
+    transition: color 180ms var(--ease);
+  }
+
+  .site-footer__links a:hover {
+    color: var(--gold-soft);
   }
 
   .site-footer__legal {
@@ -187,22 +143,20 @@ const year = new Date().getFullYear();
     gap: 0.375rem 1rem;
     margin-block-start: 2.5rem;
     padding-block-start: 1.5rem;
-    border-block-start: 1px solid var(--band-rule);
-    color: var(--band-muted);
+    border-block-start: 1px solid var(--hairline);
+    color: var(--muted-on-dark);
     font-size: 0.8125rem;
-  }
-
-  .site-footer__rule {
-    margin-block: 2.5rem 1.5rem;
   }
 
   .site-footer__base {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
-    justify-content: space-between;
-    color: var(--band-muted);
+    display: grid;
+    gap: 0.5rem;
+    margin-block-start: 2.5rem;
+    padding-block-start: 1.5rem;
+    border-block-start: 1px solid var(--hairline);
+    color: var(--muted-on-dark);
     font-size: 0.8125rem;
+    overflow-wrap: anywhere;
   }
 
   .site-footer__base p {
@@ -211,13 +165,8 @@ const year = new Date().getFullYear();
 
   @media (min-width: 48rem) {
     .site-footer__grid {
-      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 14rem));
       gap: 3rem;
-    }
-
-    .site-footer__index {
-      grid-template-columns: 1fr 1fr;
-      gap: 0.375rem 1.5rem;
     }
   }
 </style>

@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "npm run content:check && astro build && npm run build:check",
+    "build": "npm run content:check && npm run check:contrast && astro build && npm run build:check",
     "preview": "astro preview",
     "astro": "astro",
     "content:extract": "node scripts/extract-content.mjs",
@@ -16,7 +16,11 @@
     "test:contact": "node scripts/test-contact.mjs",
     "build:from-pack": "npm run content:extract && npm run assets:prepare && npm run build",
     "test:api": "node scripts/test-vercel-api.mjs",
-    "test": "npm run test:contact && npm run test:api"
+    "test": "npm run test:contact && npm run test:forms && npm run test:api",
+    "qr": "node scripts/generate-qr.mjs",
+    "test:forms": "node scripts/test-forms.mjs",
+    "check:qr": "node scripts/check-qr-target.mjs",
+    "check:contrast": "node scripts/check-contrast.mjs"
   },
   "description": "MHSV® — International Centre for Development and Transition. Phase 1 showcase website (FR/EN/DE/IT).",
   "dependencies": {
@@ -36,8 +40,10 @@
     "@types/node": "^26.2.0",
     "@types/nodemailer": "^8.0.1",
     "axe-core": "^4.13.0",
+    "jsqr": "^1.4.0",
     "lighthouse": "^12.8.2",
     "puppeteer-core": "^24.43.1",
+    "qrcode": "^1.5.4",
     "typescript": "^6.0.3"
   },
   "private": true,

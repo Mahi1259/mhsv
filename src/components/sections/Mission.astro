@@ -1,24 +1,31 @@
 ---
-/** §04 — Our mission: six mission areas. */
+/**
+ * Our mission — grid type.
+ *
+ * Unnumbered on purpose. These six areas are a set, not a sequence: numbering
+ * them added a second layer of "slide deck" on top of the section numbers,
+ * and implied a precedence the content pack never states.
+ */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
-import type { BandTone } from '@/config/site';
+import type { BandTone, SectionType } from '@/config/site';
 
 interface Props {
   locale: Locale;
+  type: SectionType;
   tone: BandTone;
+  fade?: boolean;
 }
 
-const { locale, tone } = Astro.props;
+const { locale, type, tone, fade } = Astro.props;
 const s = getContent(locale).sections.mission;
 ---
 
-<Band locale={locale} anchor={s.anchor} num={s.num} title={s.title} tone={tone}>
-  <ul class="mission">
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} fade={fade}>
+  <ul class="mission" data-stagger>
     {
-      s.items.map((item, i) => (
-        <li class="mission__item">
-          <span class="mission__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+      s.items.map((item) => (
+        <li class="mission__item card">
           <h3 class="mission__title">{item.title}</h3>
           <p class="mission__body">{item.body}</p>
         </li>
@@ -30,32 +37,22 @@ const s = getContent(locale).sections.mission;
 <style>
   .mission {
     display: grid;
-    gap: 1px;
+    gap: 1rem;
     list-style: none;
     margin: 0;
     padding: 0;
-    background: var(--band-rule);
-    border: 1px solid var(--band-rule);
-    border-radius: var(--radius-card);
-    overflow: hidden;
   }
 
   .mission__item {
-    background: var(--band-bg);
-    padding: clamp(1.25rem, 1rem + 1vw, 2rem);
-  }
-
-  .mission__num {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    color: var(--band-accent);
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+    border-block-start: 2px solid var(--band-accent);
   }
 
   .mission__title {
+    margin: 0;
     font-size: var(--text-h3);
-    margin: 0.625rem 0 0.5rem;
   }
 
   .mission__body {
@@ -73,6 +70,7 @@ const s = getContent(locale).sections.mission;
   @media (min-width: 64rem) {
     .mission {
       grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
     }
   }
 </style>

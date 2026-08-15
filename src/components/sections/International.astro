@@ -1,32 +1,17 @@
 ---
-/**
- * §11 — International & events.
- *
- * Status badge required: no club, academy or organisation may read as a
- * confirmed partner, and no professional placement is promised.
- */
+/** International & events — statement type.
+    Status required: no club, academy or organisation may read as a confirmed
+    partner, and no professional placement is promised. */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
-import type { BandTone } from '@/config/site';
+import type { BandTone, SectionType } from '@/config/site';
 
-interface Props {
-  locale: Locale;
-  tone: BandTone;
-}
-
-const { locale, tone } = Astro.props;
+interface Props { locale: Locale; type: SectionType; tone: BandTone; fade?: boolean }
+const { locale, type, tone, fade } = Astro.props;
 const s = getContent(locale).sections.international;
 ---
 
-<Band
-  locale={locale}
-  anchor={s.anchor}
-  num={s.num}
-  title={s.title}
-  tone={tone}
-  lead={s.lead}
-  status={s.status}
->
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} fade={fade} lead={s.lead} status={s.status}>
   <div class="prose-body">
     {s.paragraphs.map((text) => <p>{text}</p>)}
   </div>

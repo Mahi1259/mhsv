@@ -1,19 +1,29 @@
 ---
-/** §05 — Who we support. */
+/** Who we support — quiet type: narrow, understated, deliberately recessive. */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
-import type { BandTone } from '@/config/site';
+import type { BandTone, SectionType } from '@/config/site';
 
 interface Props {
   locale: Locale;
+  type: SectionType;
   tone: BandTone;
+  fade?: boolean;
 }
 
-const { locale, tone } = Astro.props;
+const { locale, type, tone, fade } = Astro.props;
 const s = getContent(locale).sections.audience;
 ---
 
-<Band locale={locale} anchor={s.anchor} num={s.num} title={s.title} tone={tone} lead={s.lead}>
+<Band
+  locale={locale}
+  anchor={s.anchor}
+  title={s.title}
+  type={type}
+  tone={tone}
+  fade={fade}
+  lead={s.lead}
+>
   <ul class="audience">
     {s.items.map((item) => <li class="audience__item">{item}</li>)}
   </ul>
@@ -21,41 +31,20 @@ const s = getContent(locale).sections.audience;
 
 <style>
   .audience {
-    display: grid;
-    gap: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
   .audience__item {
-    position: relative;
-    padding: 0.875rem 1rem 0.875rem 2.25rem;
-    background: var(--band-raised);
+    padding: 0.4375rem 0.8125rem;
     border: 1px solid var(--band-rule);
-    border-radius: var(--radius-card);
-    font-size: 0.9375rem;
-  }
-
-  .audience__item::before {
-    content: '';
-    position: absolute;
-    inset-inline-start: 1rem;
-    inset-block-start: 1.375rem;
-    width: 0.5rem;
-    height: 1px;
-    background: var(--band-accent);
-  }
-
-  @media (min-width: 40rem) {
-    .audience {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (min-width: 64rem) {
-    .audience {
-      grid-template-columns: repeat(3, 1fr);
-    }
+    border-radius: 999px;
+    font-size: 0.875rem;
+    line-height: 1.35;
+    color: var(--band-muted);
   }
 </style>

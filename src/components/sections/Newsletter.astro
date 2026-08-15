@@ -1,0 +1,46 @@
+---
+/** Newsletter — feature type. Separate from the contact form by requirement. */
+import Band from '@/components/Band.astro';
+import NewsletterForm from '@/components/NewsletterForm.astro';
+import { getContent, type Locale } from '@/lib/i18n';
+import type { BandTone, SectionType } from '@/config/site';
+
+interface Props {
+  locale: Locale;
+  type: SectionType;
+  tone: BandTone;
+  fade?: boolean;
+}
+
+const { locale, type, tone, fade } = Astro.props;
+const s = getContent(locale).sections.newsletter;
+---
+
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} tone={tone} fade={fade}>
+  <div class="newsletter">
+    <p class="newsletter__lead lead">{s.lead}</p>
+    <div class="newsletter__form">
+      <NewsletterForm locale={locale} />
+    </div>
+  </div>
+</Band>
+
+<style>
+  .newsletter {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .newsletter__lead {
+    margin: 0;
+    color: var(--band-muted);
+  }
+
+  @media (min-width: 56rem) {
+    .newsletter {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      gap: 3.5rem;
+    }
+  }
+</style>

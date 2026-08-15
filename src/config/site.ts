@@ -26,7 +26,7 @@ export const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'http://localhost:432
 export const IS_PRODUCTION = import.meta.env.PUBLIC_IS_PRODUCTION !== 'false';
 
 /**
- * BLOCKER #1 — legal / association status.
+ * BLOCKER — legal / association status.
  *
  * The content pack states "Swiss non-profit association — Geneva" in §01 and a
  * full legal footer in §21. A later client instruction says not to display the
@@ -34,15 +34,12 @@ export const IS_PRODUCTION = import.meta.env.PUBLIC_IS_PRODUCTION !== 'false';
  *
  * Until the client says which applies, this ships false: the hero status line,
  * the legal footer block and the legal-notice page link are all withheld.
- * Set PUBLIC_SHOW_LEGAL_STATUS=true to reveal all three at once.
  */
 export const SHOW_LEGAL_STATUS = import.meta.env.PUBLIC_SHOW_LEGAL_STATUS === 'true';
 
 /**
- * BLOCKER #5 — the privacy policy has not been written. The page ships as a
- * developer draft carrying a visible notice. Set false once the client's
- * lawyer supplies the final text (and replace the body copy in the authored
- * locale files).
+ * The privacy policy has not been written. The page ships as a developer draft
+ * carrying a visible notice. Set false once the lawyer supplies final text.
  */
 export const PRIVACY_IS_DRAFT = import.meta.env.PUBLIC_PRIVACY_IS_DRAFT !== 'false';
 
@@ -57,54 +54,68 @@ export const STATUS_KEYS = [
 export type StatusKey = (typeof STATUS_KEYS)[number];
 
 /**
- * Section order and band tone for the single page.
+ * Section archetypes.
  *
- * Tone works in five long movements rather than alternating section by
- * section. The brief asks for "alternating dark and light bands — dark for
- * vision and ambition, light for concrete programmes and method", which is a
- * grouping instruction: flipping on every section turns a 21-section scroll
- * into a strobe and makes the change meaningless, because it no longer marks
- * anything.
+ * Previously every section was the same shape — eyebrow, heading, block of
+ * content — which is precisely what made a 21-section page read as 21 slides.
+ * Each section now takes one of five types, and each type has its own measure,
+ * rhythm and vertical padding.
  *
- *   01–03  ink    identity and ambition
- *   04–10  bone   the model: mission, method, services, programmes, offer
- *   11–15  ink    reach and ambition: international, ecosystem, fees, digital
- *   16–19  bone   the people and the brand
- *   20–21  ink    what is coming, and the close
+ *   hero       one only: full viewport, the largest type on the site
+ *   statement  wide measure, large text, lots of air, almost no chrome
+ *   grid       cards or columns
+ *   feature    asymmetric — a visual or figure one side, text the other
+ *   quiet      narrow, understated, low contrast; deliberately recessive
+ */
+export const SECTION_TYPES = ['hero', 'statement', 'grid', 'feature', 'quiet'] as const;
+export type SectionType = (typeof SECTION_TYPES)[number];
+
+/**
+ * Section order, archetype and ground for the single page.
  *
- * Within a movement the "-raised" variants shift the surface by a step —
- * enough to separate adjacent sections, far too little to read as a switch.
- * Four hard transitions in the whole page, each one landing on a real change
- * of subject.
+ * `tone` changes roughly every third or fourth section rather than alternating
+ * — a switch on every section marks nothing, and the constant flipping was the
+ * second reason the page felt paginated. Transitions between grounds are
+ * gradients, not hard cuts (see .band--fade in global.css).
+ *
+ * Note: the content pack's §10 (Founding programmes) and §13 (Fees) are merged
+ * into one "Programmes & fees" section, because the CHF 15,000 launch rate was
+ * otherwise stated three times on one page.
  */
 export const SECTION_ORDER = [
-  // ── identity and ambition ────────────────────────────────────────────────
-  { id: 'hero', anchor: 'top', tone: 'ink' },
-  { id: 'about', anchor: 'about', tone: 'ink-raised' },
-  { id: 'vision', anchor: 'vision', tone: 'ink' },
-  // ── the model ────────────────────────────────────────────────────────────
-  { id: 'mission', anchor: 'mission', tone: 'bone' },
-  { id: 'audience', anchor: 'audience', tone: 'bone-raised' },
-  { id: 'method', anchor: 'method', tone: 'bone' },
-  { id: 'services', anchor: 'services', tone: 'bone-raised' },
-  { id: 'pathway', anchor: 'pathway', tone: 'bone' },
-  { id: 'programmes', anchor: 'programmes', tone: 'bone-raised' },
-  { id: 'founding', anchor: 'founding', tone: 'bone' },
-  // ── reach and ambition ───────────────────────────────────────────────────
-  { id: 'international', anchor: 'international', tone: 'ink' },
-  { id: 'ecosystem', anchor: 'ecosystem', tone: 'ink-raised' },
-  { id: 'fees', anchor: 'fees', tone: 'ink' },
-  { id: 'inclusion', anchor: 'inclusion', tone: 'ink-raised' },
-  { id: 'digital', anchor: 'digital', tone: 'ink' },
-  // ── the people and the brand ─────────────────────────────────────────────
-  { id: 'team', anchor: 'team', tone: 'bone' },
-  { id: 'founder', anchor: 'founder', tone: 'bone-raised' },
-  { id: 'book', anchor: 'book', tone: 'bone' },
-  { id: 'identity', anchor: 'identity', tone: 'bone-raised' },
-  // ── what is coming, and the close ────────────────────────────────────────
-  { id: 'roadmap', anchor: 'roadmap', tone: 'ink' },
-  { id: 'contact', anchor: 'contact', tone: 'ink-raised' },
+  { id: 'hero', anchor: 'top', type: 'hero', tone: 'navy-deep' },
+  { id: 'about', anchor: 'about', type: 'statement', tone: 'navy' },
+  { id: 'vision', anchor: 'vision', type: 'statement', tone: 'navy' },
+
+  { id: 'mission', anchor: 'mission', type: 'grid', tone: 'bone' },
+  { id: 'audience', anchor: 'audience', type: 'quiet', tone: 'bone' },
+  { id: 'method', anchor: 'method', type: 'feature', tone: 'bone' },
+  { id: 'services', anchor: 'services', type: 'grid', tone: 'bone' },
+
+  { id: 'pathway', anchor: 'pathway', type: 'feature', tone: 'navy' },
+  { id: 'programmes', anchor: 'programmes', type: 'statement', tone: 'navy' },
+  { id: 'founding', anchor: 'founding', type: 'feature', tone: 'navy' },
+  { id: 'international', anchor: 'international', type: 'statement', tone: 'navy' },
+
+  { id: 'ecosystem', anchor: 'ecosystem', type: 'grid', tone: 'bone' },
+  { id: 'inclusion', anchor: 'inclusion', type: 'quiet', tone: 'bone' },
+  { id: 'digital', anchor: 'digital', type: 'grid', tone: 'bone' },
+  { id: 'team', anchor: 'team', type: 'grid', tone: 'bone' },
+
+  { id: 'founder', anchor: 'founder', type: 'statement', tone: 'navy' },
+  { id: 'book', anchor: 'book', type: 'feature', tone: 'navy' },
+  { id: 'identity', anchor: 'identity', type: 'quiet', tone: 'navy' },
+  { id: 'roadmap', anchor: 'roadmap', type: 'grid', tone: 'navy' },
+
+  { id: 'newsletter', anchor: 'newsletter', type: 'feature', tone: 'bone' },
+  { id: 'contact', anchor: 'contact', type: 'feature', tone: 'navy' },
 ] as const;
 
 export type SectionId = (typeof SECTION_ORDER)[number]['id'];
 export type BandTone = (typeof SECTION_ORDER)[number]['tone'];
+
+/** Sections listed in the footer. Deliberately short — it was 20 links. */
+export const FOOTER_LINKS = ['about', 'programmes', 'book', 'newsletter', 'contact'] as const;
+
+/** Permanent route encoded in the printed QR code. Must never change. */
+export const BOOK_PAGE_PATH = '/livre';
