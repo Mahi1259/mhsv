@@ -296,6 +296,12 @@
      No horizontal rules between sections — separation is space, and the
      occasional change of ground.
      ---------------------------------------------------------------------- */
+  .flow > *,
+  .flow > .panel {
+    position: relative;
+    z-index: 1;
+  }
+
   .band {
     /* Vertical rhythm, per archetype below. Held in a variable because the
        anchor maths needs to know it. */
@@ -339,8 +345,13 @@
      ---------------------------------------------------------------------- */
   .flow {
     position: relative;
-    background: var(--navy-deep);
-    isolation: isolate;
+    /*
+     * Deliberately transparent. `body` already paints the navy ground, and an
+     * opaque background here sat ABOVE the floodlight (main is z-index 1, the
+     * light is 0) and hid it completely. `isolation: isolate` sealed it out
+     * for the same reason, so that is gone too.
+     */
+    background: transparent;
   }
 
   /*
@@ -352,7 +363,9 @@
     content: '';
     position: absolute;
     inset: 0;
-    z-index: -1;
+    /* Behind the sections, but still translucent, so the floodlight reads
+       through both. */
+    z-index: 0;
     pointer-events: none;
     background:
       radial-gradient(70rem 48rem at 84% 6%, rgb(20 40 74 / 0.62), transparent 62%),
@@ -403,8 +416,14 @@
     --band-fg: var(--color-navy-deep);
     --band-muted: #5a6273;
     --band-accent: var(--color-gold-ink);
-    --band-rule: rgb(12 29 58 / 0.14);
-    --band-raised: rgb(12 29 58 / 0.032);
+    --band-rule: rgb(12 29 58 / 0.16);
+    /*
+     * Cards are a cool blue-grey, not a lighter shade of the panel. A neutral
+     * tint on a warm bone panel just reads as "white box on white"; leaning the
+     * surface toward the brand navy ties the panel back to the ground around
+     * it. Verified 5.08:1 for muted text, 5.57:1 for links.
+     */
+    --band-raised: #e7eaf0;
     --focus-ring: var(--color-navy);
   }
 

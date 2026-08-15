@@ -68,8 +68,16 @@ function composite(overlay, alpha, ground) {
   );
 }
 
-/** Card surfaces, as actually rendered. */
-const CARD_ON_BONE = composite(C.navy, 0.032, C.bone);
+/**
+ * Card surfaces, as actually rendered.
+ *
+ * The panel's card is now an explicit cool colour rather than a translucent
+ * tint, so read it straight out of the stylesheet instead of compositing.
+ */
+const PANEL_CARD = /\.band--panel[^}]*--band-raised:\s*(#[0-9a-fA-F]{6})/s.exec(css)?.[1];
+if (!PANEL_CARD) throw new Error('panel --band-raised colour not found in global.css');
+
+const CARD_ON_BONE = PANEL_CARD;
 const CARD_ON_NAVY = composite(C.white, 0.05, C.navy);
 const CARD_ON_NAVY_DEEP = composite(C.white, 0.045, C.navyDeep);
 

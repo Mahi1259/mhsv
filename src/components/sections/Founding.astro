@@ -88,6 +88,10 @@ const qualifier = match ? match[2] : null;
   .offer__programmes {
     display: grid;
     gap: 1.25rem;
+    /* Cards size to their own content. Stretching them to a common height left
+       the shorter one with a large empty tail — the two programmes genuinely
+       have different numbers of rows. */
+    align-items: start;
   }
 
   .programme {
