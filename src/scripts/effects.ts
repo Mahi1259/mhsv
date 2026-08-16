@@ -1,6 +1,5 @@
 /**
- * Ambient effects: masthead shrink, floodlight, scroll progress, magnetic
- * buttons.
+ * Ambient effects: masthead shrink, floodlight, magnetic buttons.
  *
  * ONE passive, rAF-throttled scroll listener for the page — see `onScroll`.
  *
@@ -119,27 +118,6 @@ function initFloodlight() {
 }
 
 /* ---------------------------------------------------------------------------
-   Scroll progress
-
-   scaleX, never width: animating width relayouts the element every frame.
-   On a 21-section page this earns its place — it tells the visitor how much
-   of a long document is left.
-   --------------------------------------------------------------------------- */
-function initScrollProgress() {
-  const bar = document.querySelector<HTMLElement>('.scroll-progress__bar');
-  if (!bar || calm) return;
-
-  const update = () => {
-    const max = document.documentElement.scrollHeight - innerHeight;
-    const ratio = max > 0 ? Math.min(scrollY / max, 1) : 0;
-    bar.style.transform = `scaleX(${ratio})`;
-  };
-
-  onScroll(update);
-  addEventListener('resize', update, { passive: true });
-}
-
-/* ---------------------------------------------------------------------------
    Shrink the masthead on scroll — desktop only
 
    Past the entry threshold the shell contracts into a floating pill. This adds
@@ -194,9 +172,8 @@ function initNavShrink() {
    * yet, so `scrollY` still reads 0 while the document is about to land deep
    * in the page — which is exactly the case a language switch produces, since
    * it carries the current section across as a fragment. Reading the target
-   * instead means the bar is already shrunk in the FIRST painted frame. That
-   * matters twice over: the reader never sees it contract, and the
-   * cross-document view transition snapshots the new masthead at that frame.
+   * instead keeps this agreeing with the inline script in Base.astro, which
+   * has already set the state from the same fragment before first paint.
    */
   let first = true;
   const position = () => {
@@ -260,5 +237,4 @@ function initMagnetic() {
 
 initNavShrink();
 initFloodlight();
-initScrollProgress();
 initMagnetic();

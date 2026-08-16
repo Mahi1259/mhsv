@@ -313,13 +313,15 @@ try {
     });
     await new Promise((r) => setTimeout(r, 800));
 
-    // Sample the chip FILL, 13px left of centre — dead centre lands on the
-    // glyph, which is navy over gold and reads as neither.
+    // Sample the chip FILL just inside its left edge. Dead centre lands on the
+    // glyph, which is navy over gold and reads as neither — and the chips
+    // contract with the bar, so an offset from the centre would drift off the
+    // end of them.
     const chip = await page.evaluate(() =>
       Object.fromEntries(
         [...document.querySelectorAll('.lang a')].map((a) => {
           const r = a.getBoundingClientRect();
-          return [a.getAttribute('hreflang'), [Math.round(r.left + r.width / 2) - 13, Math.round(r.top + r.height / 2)]];
+          return [a.getAttribute('hreflang'), [Math.round(r.left) + 4, Math.round(r.top + r.height / 2)]];
         }),
       ),
     );

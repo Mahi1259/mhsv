@@ -126,10 +126,9 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
 
     <a class="skip-link" href="#main">{c.ui.skipToContent}</a>
 
-    {/* Decorative only. Both are removed entirely under reduced motion, and
-        the floodlight never registers on a touch device. */}
+    {/* Decorative only. Removed entirely under reduced motion, and never
+        registered on a touch device — there is no cursor for it to follow. */}
     <div class="floodlight" aria-hidden="true"></div>
-    <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar"></div></div>
     <Header locale={locale} path={path} />
 
     <script is:inline>

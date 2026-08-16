@@ -130,8 +130,7 @@
     }
 
     /* Decorative, and pure motion: remove entirely. */
-    .floodlight,
-    .scroll-progress {
+    .floodlight {
       display: none !important;
     }
 
@@ -808,26 +807,6 @@
   footer {
     position: relative;
     z-index: 1;
-  }
-
-  /* ------------------------------------------------------------------------
-     Scroll progress — a hairline of gold under the masthead.
-     ---------------------------------------------------------------------- */
-  .scroll-progress {
-    position: fixed;
-    inset-inline: 0;
-    top: 0;
-    height: 2px;
-    z-index: 60;
-    pointer-events: none;
-    background: transparent;
-  }
-
-  .scroll-progress__bar {
-    height: 100%;
-    background: linear-gradient(to right, var(--gold), var(--gold-soft));
-    transform: scaleX(0);
-    transform-origin: left;
   }
 
   /* ------------------------------------------------------------------------

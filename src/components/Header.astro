@@ -464,13 +464,16 @@ const navHref = (item: { id: string; href?: string }) =>
     :global(html.is-booting) .site-header__shell,
     :global(html.is-booting) .brand__name,
     :global(html.is-booting) .brand img,
-    :global(html.is-booting) #main-nav ul {
+    :global(html.is-booting) #main-nav ul,
+    :global(html.is-booting) .lang ul,
+    :global(html.is-booting) .lang a {
       transition: none;
     }
 
     .brand__name,
     .brand :global(img),
-    #main-nav ul {
+    #main-nav ul,
+    .lang ul {
       transition:
         max-width var(--nav-geo),
         margin var(--nav-geo),
@@ -478,6 +481,17 @@ const navHref = (item: { id: string; href?: string }) =>
         gap var(--nav-geo),
         font-size var(--nav-geo),
         opacity var(--nav-skin);
+    }
+
+    /* Restates the hover colours from the base rule: a bare `transition` here
+       would replace them and the chips would snap on hover. */
+    .lang a {
+      transition:
+        min-width var(--nav-geo),
+        min-height var(--nav-geo),
+        font-size var(--nav-geo),
+        color var(--dur-fast) var(--ease),
+        background-color var(--dur-fast) var(--ease);
     }
 
     /* --- the pill ------------------------------------------------------- */
@@ -528,6 +542,17 @@ const navHref = (item: { id: string; href?: string }) =>
     .site-header.is-shrunk #main-nav ul {
       gap: 0.25rem 1.15rem;
       font-size: 0.86rem;
+    }
+
+    /* The language chips contract with everything else — left at full size
+       they were the one part of the bar that visibly did not move, which made
+       the contraction read as a glitch rather than a change of state. Also
+       returns ~19px to the nav, so the longest locale keeps more slack.
+       1.75×2rem is 28×32px: still well over the 24px minimum target size. */
+    .site-header.is-shrunk .lang a {
+      min-width: 1.75rem;
+      min-height: 2rem;
+      font-size: 0.6875rem;
     }
   }
 </style>
