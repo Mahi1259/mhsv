@@ -129,11 +129,6 @@
       transition-delay: 0ms !important;
     }
 
-    /* Decorative, and pure motion: remove entirely. */
-    .floodlight {
-      display: none !important;
-    }
-
     [data-magnetic] {
       transform: none !important;
     }
@@ -340,18 +335,17 @@
      */
     display: flow-root;
     /*
-     * Deliberately transparent. `body` already paints the navy ground, and an
-     * opaque background here sat ABOVE the floodlight (main is z-index 1, the
-     * light is 0) and hid it completely. `isolation: isolate` sealed it out
-     * for the same reason, so that is gone too.
+     * Deliberately transparent: `body` already paints the navy ground, and an
+     * opaque background here would cover the depth washes below.
      */
     background: transparent;
   }
 
   /*
-   * Depth: four large, very soft washes placed by percentage of the WHOLE page,
-   * so they deliberately never line up with a section boundary. That is what
-   * stops a long dark page reading as flat.
+   * Depth: three large, very soft NAVY washes placed by percentage of the
+   * WHOLE page, so they deliberately never line up with a section boundary.
+   * That is what stops a long dark page reading as flat. Navy only — a gold
+   * wash among them read as a yellow circle sitting on the background.
    */
   .flow::before {
     content: '';
@@ -366,13 +360,11 @@
      * translucent and the visitor sees straight through it.
      */
     inset: calc(-1 * var(--header-h)) 0 0;
-    /* Behind the sections, but still translucent, so the floodlight reads
-       through both. */
+    /* Behind the sections. */
     z-index: 0;
     pointer-events: none;
     background:
       radial-gradient(70rem 48rem at 84% 6%, rgb(20 40 74 / 0.62), transparent 62%),
-      radial-gradient(60rem 44rem at 8% 34%, rgb(212 175 55 / 0.05), transparent 60%),
       radial-gradient(76rem 54rem at 92% 63%, rgb(20 40 74 / 0.55), transparent 64%),
       radial-gradient(56rem 40rem at 6% 88%, rgb(20 40 74 / 0.45), transparent 62%);
   }
@@ -767,41 +759,8 @@
    Ambient effects
    ========================================================================== */
 @layer components {
-  /* ------------------------------------------------------------------------
-     Floodlight
-
-     A soft gold light that drifts after the cursor. Sits behind the content
-     (z-index 0, with header/main/footer lifted to 1) so it never washes over
-     text — contrast is measured against the ground, not against the light.
-
-     13% peak. If you can point at it, it is too strong.
-     ---------------------------------------------------------------------- */
-  .floodlight {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 62vmax;
-    height: 62vmax;
-    margin: -31vmax 0 0 -31vmax;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0;
-    transition: opacity 900ms ease-out;
-    background: radial-gradient(
-      circle closest-side,
-      rgb(212 175 55 / 0.13) 0%,
-      rgb(212 175 55 / 0.07) 34%,
-      rgb(212 175 55 / 0.025) 58%,
-      transparent 76%
-    );
-    will-change: transform;
-  }
-
-  .floodlight.is-lit {
-    opacity: 1;
-  }
-
-  /* The light lives behind everything the visitor reads. */
+  /* Keeps the page's own stacking predictable: the depth washes on .flow sit
+     at z-index 0 beneath these, and the grain overlay above them. */
   .site-header,
   main,
   footer {

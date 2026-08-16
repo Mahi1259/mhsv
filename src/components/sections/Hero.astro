@@ -121,14 +121,14 @@ const CTA_TARGETS = ['#about', '#programmes', '#contact', '#contact'];
     align-items: center;
   }
 
-  /* A single soft gold wash behind the mark, and a navy lift at the top. */
+  /* A navy lift at the top, and nothing else. There was a gold wash behind the
+     mark too; at 14% it read as a yellow circle on the background rather than
+     as light. */
   .hero::before {
     content: '';
     position: absolute;
     inset: 0;
-    background:
-      radial-gradient(52rem 34rem at 78% 22%, rgb(212 175 55 / 0.14), transparent 66%),
-      radial-gradient(40rem 30rem at 10% 0%, rgb(20 40 74 / 0.85), transparent 70%);
+    background: radial-gradient(40rem 30rem at 10% 0%, rgb(20 40 74 / 0.85), transparent 70%);
     pointer-events: none;
   }
 
