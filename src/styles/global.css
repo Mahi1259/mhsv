@@ -363,6 +363,12 @@
   .flow {
     position: relative;
     /*
+     * A block formatting context, so the hero's negative top margin — which
+     * pulls its ground up behind the fixed masthead — cannot collapse through
+     * this container and drag the whole page up with it.
+     */
+    display: flow-root;
+    /*
      * Deliberately transparent. `body` already paints the navy ground, and an
      * opaque background here sat ABOVE the floodlight (main is z-index 1, the
      * light is 0) and hid it completely. `isolation: isolate` sealed it out
@@ -379,7 +385,16 @@
   .flow::before {
     content: '';
     position: absolute;
-    inset: 0;
+    /*
+     * Reaches up over the strip `body` reserves for the fixed masthead.
+     *
+     * Without this the washes start where <main> does, so the reserved strip
+     * showed flat --navy-deep and the page opened with a hard horizontal edge
+     * straight across the top — a rectangle sitting behind the navbar. The
+     * ground has to run continuously under the bar, because the bar is
+     * translucent and the visitor sees straight through it.
+     */
+    inset: calc(-1 * var(--header-h)) 0 0;
     /* Behind the sections, but still translucent, so the floodlight reads
        through both. */
     z-index: 0;

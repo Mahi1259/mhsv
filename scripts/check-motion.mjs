@@ -279,6 +279,50 @@ try {
     await page.close();
   }
 
+  /* The ground has to run continuously UNDER the bar.
+   *
+   * The bar is fixed and translucent, so `body` reserves --header-h for it.
+   * When that strip is painted by something other than the page's own ground,
+   * the page opens with a hard-edged rectangle straight across the top —
+   * which is exactly what happened once the masthead stopped being sticky.
+   * Sampling a column clear of the pill catches it; nothing else does. */
+  {
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1440, height: 900 });
+    for (const path of ['/fr/', '/en/', '/en/privacy/', '/livre']) {
+      await page.goto(`${BASE}${path}`, { waitUntil: 'networkidle0' });
+      const shot = await page.screenshot({ clip: { x: 0, y: 0, width: 200, height: 160 } });
+      const png = Buffer.from(shot);
+      // Decode nothing: compare through the browser instead, on a canvas.
+      const seam = await page.evaluate(async (bytes) => {
+        const bitmap = await createImageBitmap(new Blob([new Uint8Array(bytes)]));
+        const c = new OffscreenCanvas(bitmap.width, bitmap.height);
+        const ctx = c.getContext('2d');
+        ctx.drawImage(bitmap, 0, 0);
+        const { data } = ctx.getImageData(60, 0, 1, bitmap.height);
+        let worst = 0;
+        let at = 0;
+        // Only the band around the reserved strip; real content starts lower.
+        for (let y = 30; y < 130; y++) {
+          const i = y * 4;
+          const d = Math.max(
+            Math.abs(data[i] - data[i + 4]),
+            Math.abs(data[i + 1] - data[i + 5]),
+            Math.abs(data[i + 2] - data[i + 6]),
+          );
+          if (d > worst) {
+            worst = d;
+            at = y;
+          }
+        }
+        return { worst, at };
+      }, [...png]);
+      // Grain and gradient account for a few levels; a seam is 20+.
+      check(seam.worst <= 8, `${path}: no seam where the bar reserves its space`, `Δ${seam.worst} at y=${seam.at}`);
+    }
+    await page.close();
+  }
+
   // Reduced motion still shrinks — it is a space saving, not decoration —
   // but arrives instantly.
   {

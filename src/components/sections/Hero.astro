@@ -91,15 +91,32 @@ const CTA_TARGETS = ['#about', '#programmes', '#contact', '#contact'];
 <style>
   .hero {
     overflow: hidden;
+
     /*
-     * Fill the screen BELOW the sticky masthead, not the whole screen.
-     * `100svh` alone made the hero taller than the space it actually had, so
-     * the calls to action fell past the fold on a laptop.
+     * Run the hero's ground up behind the masthead.
+     *
+     * The bar is fixed and translucent, and `body` reserves --header-h for it.
+     * Left alone, that strip showed flat body navy while the hero's own wash
+     * (below, anchored `at 10% 0%`) started at the hero's top edge — so the
+     * page opened with a hard-edged rectangle straight across the top, right
+     * behind the navbar. Cancelling the reservation here and taking the same
+     * amount back as top padding puts the hero's box at y=0: the wash anchors
+     * at the true top of the page, the ground is continuous under the bar, and
+     * the hero's CONTENT does not move by a pixel.
+     */
+    margin-block-start: calc(-1 * var(--header-h));
+    --band-pad-top: calc(var(--band-pad) + var(--header-h));
+
+    /*
+     * Fill the screen. The hero's box now spans the masthead too, so this is
+     * the full viewport rather than the space below the bar — `100svh` alone
+     * used to make it taller than the room it actually had, and the calls to
+     * action fell past the fold on a laptop.
      *
      * Capped so a very tall window does not stretch it absurdly, and it is a
      * min-height, so short windows let the content grow rather than clip it.
      */
-    min-height: min(calc(100svh - var(--header-h)), 46rem);
+    min-height: min(100svh, calc(46rem + var(--header-h)));
     display: grid;
     align-items: center;
   }
