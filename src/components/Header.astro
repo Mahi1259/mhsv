@@ -457,6 +457,17 @@ const navHref = (item: { id: string; href?: string }) =>
       will-change: max-width, padding, border-radius;
     }
 
+    /* Arriving part-way down a page — a language switch carries the section
+       across — the bar must simply BE shrunk, not contract while the reader
+       watches. The inline script in Base.astro lifts this after first paint. */
+    :global(html.is-booting) .site-header,
+    :global(html.is-booting) .site-header__shell,
+    :global(html.is-booting) .brand__name,
+    :global(html.is-booting) .brand img,
+    :global(html.is-booting) #main-nav ul {
+      transition: none;
+    }
+
     .brand__name,
     .brand :global(img),
     #main-nav ul {

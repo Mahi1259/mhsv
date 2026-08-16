@@ -279,6 +279,52 @@ try {
     await page.close();
   }
 
+  /* Arriving on a deep fragment — which is exactly what the language switcher
+   * produces, since it carries the reader's section across — must be STILL.
+   *
+   * Two regressions live here. `scroll-behavior: smooth` also applies to the
+   * fragment scroll the browser performs on load, so the translated page
+   * opened at the top and glided down: the page appearing to move on
+   * translate. And if the bar is not already shrunk in the first painted
+   * frame, the cross-document view transition snapshots it expanded, then
+   * animates it — which is what put two mastheads on screen at once. */
+  {
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1440, height: 900 });
+    await page.goto(`${BASE}/de/#team`, { waitUntil: 'domcontentloaded' });
+
+    const arrival = [];
+    for (let i = 0; i < 8; i++) {
+      arrival.push(
+        await page.evaluate(() => ({
+          y: Math.round(scrollY),
+          shrunk: !!document.querySelector('.site-header')?.classList.contains('is-shrunk'),
+        })),
+      );
+      await new Promise((r) => setTimeout(r, 50));
+    }
+    const ys = [...new Set(arrival.map((a) => a.y))];
+    check(ys.length === 1 && ys[0] > 1000, 'a carried fragment lands instantly, no glide', `y=${ys.join('→')}`);
+    check(
+      arrival.every((a) => a.shrunk),
+      'and the bar is already shrunk in the first frame',
+      `${arrival.filter((a) => a.shrunk).length}/${arrival.length} samples`,
+    );
+
+    // ...and smooth scrolling is handed back, or in-page nav clicks would jump.
+    await new Promise((r) => setTimeout(r, 600));
+    const after = await page.evaluate(() => ({
+      behaviour: getComputedStyle(document.documentElement).scrollBehavior,
+      booting: document.documentElement.classList.contains('is-booting'),
+    }));
+    check(
+      after.behaviour === 'smooth' && !after.booting,
+      'smooth scrolling is restored once the page has settled',
+      `${after.behaviour}, booting=${after.booting}`,
+    );
+    await page.close();
+  }
+
   /* The ground has to run continuously UNDER the bar.
    *
    * The bar is fixed and translucent, so `body` reserves --header-h for it.

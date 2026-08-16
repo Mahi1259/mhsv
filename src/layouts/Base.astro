@@ -95,6 +95,38 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
   </head>
 
   <body>
+    <script is:inline>
+      /*
+       * Two things have to be settled before the first paint, or switching
+       * language from the middle of the page looks broken. Inline and in the
+       * document head region on purpose: a bundled module would run too late
+       * to matter.
+       *
+       * 1. THE FRAGMENT LANDING MUST BE INSTANT. `scroll-behavior: smooth` is
+       *    set on :root for in-page navigation, but the browser also applies
+       *    it to the fragment scroll it performs on load. Arriving at
+       *    /de/#team therefore opened the German page at the top and glided
+       *    down to the section — the page appearing to move on translate.
+       *    Forced to `auto` here and handed back afterwards, so clicking a
+       *    section in the nav is still smooth.
+       *
+       * 2. THE MASTHEAD MUST NOT ANIMATE INTO ITS SHRUNK STATE ON ARRIVAL.
+       *    Landing part-way down the page, it would otherwise play its 480ms
+       *    contraction while the reader watches.
+       */
+      (function () {
+        var root = document.documentElement;
+        root.classList.add('is-booting');
+        root.style.scrollBehavior = 'auto';
+        addEventListener('load', function () {
+          requestAnimationFrame(function () {
+            root.style.scrollBehavior = '';
+            root.classList.remove('is-booting');
+          });
+        });
+      })();
+    </script>
+
     <a class="skip-link" href="#main">{c.ui.skipToContent}</a>
 
     {/* Decorative only. Both are removed entirely under reduced motion, and

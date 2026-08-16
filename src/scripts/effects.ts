@@ -185,13 +185,34 @@ function initNavShrink() {
     settle = setTimeout(() => header.classList.remove('is-animating'), SHRINK_SETTLE);
   };
 
+  /*
+   * Where the page is about to be, not only where it is.
+   *
+   * On arrival the browser has not necessarily applied the fragment scroll
+   * yet, so `scrollY` still reads 0 while the document is about to land deep
+   * in the page — which is exactly the case a language switch produces, since
+   * it carries the current section across as a fragment. Reading the target
+   * instead means the bar is already shrunk in the FIRST painted frame. That
+   * matters twice over: the reader never sees it contract, and the
+   * cross-document view transition snapshots the new masthead at that frame.
+   */
+  let first = true;
+  const position = () => {
+    if (!first) return scrollY;
+    first = false;
+    if (scrollY > 0 || location.hash.length < 2) return scrollY;
+    const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    return target ? target.getBoundingClientRect().top + scrollY : scrollY;
+  };
+
   const update = () => {
     if (!desktop.matches) {
       setShrunk(false);
       return;
     }
-    if (!shrunk && scrollY > SHRINK_ENTER) setShrunk(true);
-    else if (shrunk && scrollY < SHRINK_EXIT) setShrunk(false);
+    const y = position();
+    if (!shrunk && y > SHRINK_ENTER) setShrunk(true);
+    else if (shrunk && y < SHRINK_EXIT) setShrunk(false);
   };
 
   // Without this, rotating a phone to landscape or dragging a desktop window

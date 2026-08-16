@@ -161,31 +161,20 @@
   }
 
   /*
-   * A curtain wipe rather than a crossfade. cubic-bezier(0.76, 0, 0.24, 1) is
-   * sharp in and sharp out — mechanical and precise, which suits the register.
+   * A cross-fade — the browser default — and deliberately NOT the curtain wipe
+   * that used to be here.
+   *
+   * Switching language happens mid-document: the reader is already somewhere
+   * in the page and expects to stay there. Sliding the whole viewport
+   * vertically on top of that read as the site jumping rather than as a
+   * transition, and at 420/480ms it was long enough to watch. Nothing is
+   * declared for the root, so the default short cross-fade applies and the
+   * page stays put.
    */
-  ::view-transition-old(root) {
-    animation: wipe-out 420ms cubic-bezier(0.76, 0, 0.24, 1) both;
-  }
-
-  ::view-transition-new(root) {
-    animation: wipe-in 480ms cubic-bezier(0.76, 0, 0.24, 1) both;
-  }
-
-  @keyframes wipe-out {
-    from { transform: translateY(0); }
-    to { transform: translateY(-100%); }
-  }
-
-  @keyframes wipe-in {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
-  }
 
   /*
-   * The masthead is given its own transition name so it is animated
-   * independently of the page body — it stays put instead of wiping with the
-   * content, which is what stops the nav flickering on a language switch.
+   * The masthead is given its own transition name so it is not part of the
+   * page's cross-fade — it stays put instead of fading with the content.
    * Done with cross-document view transitions rather than an SPA router: no
    * client-side routing to re-initialise every script against.
    */
@@ -193,8 +182,34 @@
     view-transition-name: masthead;
   }
 
-  ::view-transition-old(masthead),
+  /*
+   * ONLY the incoming masthead is drawn.
+   *
+   * `animation: none` on both — which is what this used to say — paints the
+   * outgoing and incoming bars at full opacity, one over the other, for the
+   * whole transition. That is invisible while the two match, and shows as TWO
+   * NAVBARS the moment they do not: leaving a scrolled page the old bar is a
+   * shrunk pill while the new document, arriving at the top before its
+   * fragment lands, still has the full-width bar. Hiding the outgoing one
+   * leaves a single bar that is already in its final state.
+   */
+  ::view-transition-old(masthead) {
+    animation: none;
+    opacity: 0;
+  }
+
   ::view-transition-new(masthead) {
+    animation: none;
+    opacity: 1;
+  }
+
+  /*
+   * And the group holds still too. Left to animate, it interpolates the bar's
+   * BOX from the outgoing page's geometry to the incoming one's — so a switch
+   * made from a scrolled page stretched the pill wide and pulled it back
+   * again mid-fade. There is nothing to interpolate: it is the same bar.
+   */
+  ::view-transition-group(masthead) {
     animation: none;
   }
 
