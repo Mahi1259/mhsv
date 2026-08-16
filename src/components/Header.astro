@@ -30,6 +30,8 @@ const { locale, path = '' } = Astro.props;
 const c = getContent(locale);
 const home = localePath('', locale);
 const alternates = localeAlternates(path);
+/** Shown alone once the bar contracts and the other three collapse away. */
+const current = alternates.find((alt) => alt.locale === locale)!;
 
 const anchorFor = (id: string) => SECTION_ORDER.find((s) => s.id === id)?.anchor ?? id;
 // On sub-pages the in-page anchors have to point back at the home document.
@@ -72,28 +74,45 @@ const navHref = (item: { id: string; href?: string }) =>
       the visitor who needs it. The brand name is protected for the same reason.
     */}
     <nav class="lang notranslate" aria-label={c.ui.languageNav} translate="no">
-      <ul>
-        {
-          alternates.map((alt) => (
-            <li>
-              {/* data-base is the locale root; scripts/lang-anchor.ts appends
-                  the section currently on screen so switching language keeps
-                  your place instead of returning to the top. */}
-              <a
-                href={alt.path}
-                data-lang-link
-                data-base={alt.path}
-                hreflang={alt.hreflang}
-                lang={alt.hreflang}
-                aria-current={alt.locale === locale ? 'true' : undefined}
-              >
-                <span class="visually-hidden">{alt.name}</span>
-                <span aria-hidden="true">{alt.nameShort}</span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+      {/*
+        ONE list, never two. A real <details> so the collapse is a native
+        disclosure — keyboard-operable and announced as one, rather than a
+        hover-only menu.
+
+        It ships `open`, and the summary is hidden while the bar is full
+        width, so the four codes sit inline exactly as before. The shrink
+        closes it (scripts/effects.ts), leaving only the current language.
+        Without JavaScript nothing shrinks, so nothing collapses either and
+        all four stay reachable.
+      */}
+      <details class="lang__menu" open>
+        <summary class="lang__current">
+          <span class="visually-hidden">{c.ui.languageNav} — {current.name}</span>
+          <span aria-hidden="true">{current.nameShort}</span>
+        </summary>
+        <ul>
+          {
+            alternates.map((alt) => (
+              <li>
+                {/* data-base is the locale root; scripts/lang-anchor.ts appends
+                    the section currently on screen so switching language keeps
+                    your place instead of returning to the top. */}
+                <a
+                  href={alt.path}
+                  data-lang-link
+                  data-base={alt.path}
+                  hreflang={alt.hreflang}
+                  lang={alt.hreflang}
+                  aria-current={alt.locale === locale ? 'true' : undefined}
+                >
+                  <span class="visually-hidden">{alt.name}</span>
+                  <span aria-hidden="true">{alt.nameShort}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </details>
     </nav>
   </div>
 </header>
@@ -360,6 +379,18 @@ const navHref = (item: { id: string; href?: string }) =>
     order: 2;
     flex: 0 0 auto;
     margin-inline-start: auto;
+    /* Anchors the collapsed dropdown. */
+    position: relative;
+  }
+
+  /* The trigger only exists once the bar contracts; until then the four codes
+     are inline and there is nothing to disclose. */
+  .lang__current {
+    display: none;
+  }
+
+  .lang__current::-webkit-details-marker {
+    display: none;
   }
 
   @media (min-width: 62rem) {
@@ -544,15 +575,71 @@ const navHref = (item: { id: string; href?: string }) =>
       font-size: 0.86rem;
     }
 
-    /* The language chips contract with everything else — left at full size
-       they were the one part of the bar that visibly did not move, which made
-       the contraction read as a glitch rather than a change of state. Also
-       returns ~19px to the nav, so the longest locale keeps more slack.
-       1.75×2rem is 28×32px: still well over the 24px minimum target size. */
-    .site-header.is-shrunk .lang a {
+    /*
+     * The four codes collapse into the current one.
+     *
+     * Four language chips are a lot of the pill's width to spend on something
+     * a reader uses once, and at full size they were the one part of the bar
+     * that visibly did not move when everything else contracted. Collapsed,
+     * the block goes from 118px to ~44px and hands the difference to the nav.
+     *
+     * scripts/effects.ts closes the <details> as the bar shrinks and reopens
+     * it at the top of the page; everything here is just how the two states
+     * look.
+     */
+    .site-header.is-shrunk .lang__current {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
       min-width: 1.75rem;
       min-height: 2rem;
+      padding-inline: 0.4rem;
+      cursor: pointer;
+      list-style: none;
+      font-family: var(--font-mono);
       font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      /* Navy on gold, the same pairing the active chip already used. */
+      color: var(--navy-deep);
+      background: var(--gold);
+      border-radius: 3px;
+    }
+
+    /* A chevron drawn from a rotated corner — no icon font, no SVG. */
+    .site-header.is-shrunk .lang__current::after {
+      content: '';
+      width: 0.3rem;
+      height: 0.3rem;
+      border-inline-end: 1.5px solid currentColor;
+      border-block-end: 1.5px solid currentColor;
+      transform: translateY(-1px) rotate(45deg);
+      transition: transform var(--dur-fast) var(--ease);
+    }
+
+    .site-header.is-shrunk .lang__menu[open] .lang__current::after {
+      transform: translateY(1px) rotate(-135deg);
+    }
+
+    /* Out of the bar's flow, so opening the menu cannot stretch the pill. */
+    .site-header.is-shrunk .lang ul {
+      position: absolute;
+      top: calc(100% + 0.55rem);
+      inset-inline-end: 0;
+      flex-direction: column;
+      gap: 0.125rem;
+      min-width: 4.5rem;
+      padding: 0.3rem;
+      background: var(--navy-raise);
+      border: 1px solid var(--hairline-strong);
+      border-radius: 6px;
+      box-shadow: 0 18px 40px rgb(0 0 0 / 0.45);
+    }
+
+    .site-header.is-shrunk .lang ul a {
+      justify-content: flex-start;
+      min-height: 2rem;
+      padding-inline: 0.55rem;
     }
   }
 </style>

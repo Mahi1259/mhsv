@@ -280,16 +280,86 @@ try {
     await page.close();
   }
 
+  /* The language switcher collapses with the bar.
+   *
+   * Four codes inline while the bar is full width; only the current one once
+   * it contracts, the rest behind a native disclosure. The thing to guard is
+   * that it stays OPERABLE in the collapsed state — a menu that opens but
+   * will not close, or that cannot be reached from the keyboard, is worse
+   * than not collapsing at all. */
+  {
+    const page = await browser.newPage();
+    const lang = () =>
+      page.evaluate(() => {
+        const shown = (el) =>
+          !!el && el.checkVisibility({ checkVisibilityCSS: true, contentVisibilityAuto: true });
+        return {
+          trigger: shown(document.querySelector('.lang__current')),
+          codes: [...document.querySelectorAll('.lang ul a')].filter(shown).length,
+          width: Math.round(document.querySelector('.lang').getBoundingClientRect().width),
+        };
+      });
+
+    await page.setViewport({ width: 1440, height: 900 });
+    await page.goto(`${BASE}/fr/`, { waitUntil: 'networkidle0' });
+    const top = await lang();
+    check(!top.trigger && top.codes === 4, 'all four codes are inline at full width', `${top.width}px`);
+
+    await page.evaluate(() => {
+      document.documentElement.style.scrollBehavior = 'auto';
+      scrollTo(0, 900);
+    });
+    await new Promise((r) => setTimeout(r, 800));
+    const collapsed = await lang();
+    check(
+      collapsed.trigger && collapsed.codes === 0,
+      'they collapse to the current language when the bar shrinks',
+      `${top.width}px → ${collapsed.width}px`,
+    );
+
+    // Keyboard: focus the trigger, Enter opens, Tab reaches a language.
+    await page.evaluate(() => document.querySelector('.lang__current').focus());
+    await page.keyboard.press('Enter');
+    await new Promise((r) => setTimeout(r, 250));
+    const opened = await lang();
+    await page.keyboard.press('Tab');
+    const reached = await page.evaluate(() => !!document.activeElement.closest('.lang ul'));
+    check(opened.codes === 4 && reached, 'the menu opens and is reachable by keyboard');
+
+    await page.keyboard.press('Escape');
+    await new Promise((r) => setTimeout(r, 250));
+    check((await lang()).codes === 0, 'Escape closes it');
+
+    await page.evaluate(() => document.querySelector('.lang__current').click());
+    await new Promise((r) => setTimeout(r, 200));
+    await page.mouse.click(200, 500);
+    await new Promise((r) => setTimeout(r, 250));
+    check((await lang()).codes === 0, 'clicking away closes it');
+
+    await page.evaluate(() => scrollTo(0, 0));
+    await new Promise((r) => setTimeout(r, 800));
+    const back = await lang();
+    check(!back.trigger && back.codes === 4, 'and they go back inline at the top');
+
+    // Mobile never collapses: there is no shrink to collapse with.
+    await page.setViewport({ width: 390, height: 844, isMobile: true });
+    await page.goto(`${BASE}/de/`, { waitUntil: 'networkidle0' });
+    await page.evaluate(() => scrollTo(0, 1500));
+    await new Promise((r) => setTimeout(r, 700));
+    const mobile = await lang();
+    check(!mobile.trigger && mobile.codes === 4, 'mobile: all four stay visible throughout');
+    await page.close();
+  }
+
   /* A language switch from mid-page, watched frame by frame.
    *
    * This is the one journey a four-language site does constantly, and it has
    * gone wrong twice: the page glided down to the section on arrival, and the
    * bar expanded and contracted while the reader watched. Neither shows up in
    * a screenshot or a settled DOM read — only in the painted frames. So this
-   * screencasts a real FR→DE switch and asserts three things across EVERY
-   * frame: the bar never changes size, no frame shows two languages active
-   * (which is what a page transition's double-exposure looks like), and no
-   * frame is missing the bar altogether. */
+   * screencasts a real FR→DE switch, made the way a reader makes it (open the
+   * collapsed language menu, click a language), and asserts across EVERY
+   * painted frame that the bar never changes size and is never missing. */
   {
     const page = await browser.newPage();
     await page.setViewport({ width: 1440, height: 900 });
@@ -313,18 +383,16 @@ try {
     });
     await new Promise((r) => setTimeout(r, 800));
 
-    // Sample the chip FILL just inside its left edge. Dead centre lands on the
-    // glyph, which is navy over gold and reads as neither — and the chips
-    // contract with the bar, so an offset from the centre would drift off the
-    // end of them.
-    const chip = await page.evaluate(() =>
-      Object.fromEntries(
-        [...document.querySelectorAll('.lang a')].map((a) => {
-          const r = a.getBoundingClientRect();
-          return [a.getAttribute('hreflang'), [Math.round(r.left) + 4, Math.round(r.top + r.height / 2)]];
-        }),
-      ),
-    );
+    // The bar is shrunk here, so the four codes are collapsed. Open the menu
+    // first — clicking a link that is not on screen would test a path no
+    // reader takes. Sample the trigger's gold fill just inside its left edge:
+    // dead centre lands on the glyph, which is navy over gold.
+    await page.evaluate(() => document.querySelector('.lang__current').click());
+    await new Promise((r) => setTimeout(r, 250));
+    const trigger = await page.evaluate(() => {
+      const r = document.querySelector('.lang__current').getBoundingClientRect();
+      return [Math.round(r.left) + 4, Math.round(r.top + r.height / 2)];
+    });
 
     frames.length = 0;
     await page.evaluate(() => document.querySelector('.lang a[hreflang="de"]').click());
@@ -332,10 +400,8 @@ try {
     await cdp.send('Page.stopScreencast');
 
     const sizes = new Set();
-    let both = 0;
-    let neither = 0;
-    let before = 0;
-    let after = 0;
+    const inkPerFrame = new Set();
+    let barless = 0;
     for (const encoded of frames) {
       const { data, info } = await sharp(Buffer.from(encoded, 'base64'))
         .raw()
@@ -361,26 +427,29 @@ try {
       };
       sizes.add(`${edge(150, 340, 1)}..${edge(1300, 1100, -1)}`);
 
-      const lit = (c) => c[0] > 150 && c[1] > 120 && c[2] < 110; // the gold fill
-      const fr = lit(at(...chip.fr));
-      const de = lit(at(...chip.de));
-      if (fr && de) both += 1;
-      if (!fr && !de) neither += 1;
-      if (fr && !de) before += 1;
-      if (de && !fr) after += 1;
+      // The trigger keeps its gold fill in both languages, so this says the
+      // bar is drawn — not which language is showing.
+      const gold = at(...trigger);
+      if (!(gold[0] > 150 && gold[1] > 120 && gold[2] < 110)) barless += 1;
+
+      // How much text sits on the nav row. The French and German label sets
+      // differ, so this changes when the page does — a cheap way to prove the
+      // capture actually spanned the switch rather than sitting on one state.
+      let ink = 0;
+      for (let x = 340; x < 1060; x += 2) if (at(x, 39)[0] > 120) ink += 1;
+      inkPerFrame.add(ink);
     }
 
-    // The screencast only emits on repaint, so the frame COUNT varies. What
-    // has to hold is that the window actually spans the switch — otherwise
-    // the assertions below pass vacuously on one static state.
+    // The screencast only emits on repaint, so the frame COUNT varies; what
+    // has to hold is that the window covered both languages, or everything
+    // below passes vacuously on a single static state.
     check(
-      before > 0 && after > 0,
+      inkPerFrame.size > 1,
       'language switch: the capture spans the switch',
-      `${frames.length} frames, ${before} before / ${after} after`,
+      `${frames.length} frames, ${inkPerFrame.size} distinct nav rows`,
     );
     check(sizes.size === 1, 'the bar never changes size mid-switch', `pill edges ${[...sizes].join(' / ')}`);
-    check(both === 0, 'no frame shows two languages active', `${both} double-exposed`);
-    check(neither === 0, 'the bar is present in every frame', `${neither} without it`);
+    check(barless === 0, 'the bar is present in every frame', `${barless} without it`);
     await page.close();
   }
 
