@@ -2,7 +2,7 @@
 /**
  * The Phase 1 single page — one static document per locale.
  *
- * The page is a single continuous navy ground (`.flow`). Sections that call
+ * The page is a single continuous navy ground (`.page-flow`). Sections that call
  * for light relief are grouped into a few inset panels that float on it,
  * rather than being full-bleed light slabs: a stack of edge-to-edge colour
  * blocks is the slide-deck pattern, and no amount of tuning the numbering or
@@ -70,7 +70,7 @@ const sections = SECTION_ORDER.filter((section) => section.id !== 'hero');
 ---
 
 <Base locale={locale}>
-  <div class="flow">
+  <div class="page-flow">
     <Hero locale={locale} />
     {
       sections.map((section) => {

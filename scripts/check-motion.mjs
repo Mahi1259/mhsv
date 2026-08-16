@@ -567,6 +567,41 @@ try {
     await page.close();
   }
 
+  /* The page's depth washes are painted EXACTLY ONCE.
+   *
+   * They come from an unscoped `::before` on the page container, so the class
+   * name leaks into any component that happens to reuse it. The container was
+   * `.flow`; the pathway section has its own `.flow` block, and the page-wide
+   * washes were being drawn inside it — a translucent rectangle sitting across
+   * the steps. Renamed to `.page-flow`, but the way to keep it fixed is to
+   * count what actually paints them. */
+  {
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1440, height: 900 });
+    for (const path of ['/fr/', '/en/', '/de/', '/it/']) {
+      await page.goto(`${BASE}${path}`, { waitUntil: 'networkidle0' });
+      const painted = await page.evaluate(() => {
+        const found = [];
+        for (const el of document.querySelectorAll('*')) {
+          const bg = getComputedStyle(el, '::before').backgroundImage;
+          // Identified by being a STACK of navy radials. The hero paints a
+          // single navy lift of its own, which is legitimate and must not be
+          // confused with the page-wide set.
+          const navy = bg && bg.includes('20, 40, 74');
+          const stacked = navy && (bg.match(/radial-gradient\(/g) || []).length >= 3;
+          if (stacked) found.push(el.className || el.tagName);
+        }
+        return found;
+      });
+      check(
+        painted.length === 1 && String(painted[0]).includes('page-flow'),
+        `${path}: the page washes are painted once, on the page container`,
+        painted.join(', ') || 'nowhere',
+      );
+    }
+    await page.close();
+  }
+
   /* The ground has to run continuously UNDER the bar.
    *
    * The bar is fixed and translucent, so `body` reserves --header-h for it.

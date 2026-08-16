@@ -268,7 +268,7 @@
      No horizontal rules between sections — separation is space, and the
      occasional change of ground.
      ---------------------------------------------------------------------- */
-  .flow > * {
+  .page-flow > * {
     position: relative;
     z-index: 1;
   }
@@ -310,12 +310,18 @@
      full-bleed colour slabs — navy, hard edge, light, hard edge — which is the
      slide-deck pattern itself, whatever you do about numbering and dividers.
 
+     The container is `.page-flow`, NOT `.flow`. The washes below are painted
+     by an unscoped ::before, so a generic name leaks into any component that
+     happens to use it — the pathway section has its own `.flow` block, and
+     the page's washes were being drawn inside it as a translucent rectangle
+     across the steps.
+
      Nothing is laid ON the ground as a slab. Four sections used to be — light
      panels first, then raised navy ones — and both read as a big rectangle
      covering the page rather than as part of it. Sections are told apart by
      layout and rhythm; only individual pieces of information get a card.
      ---------------------------------------------------------------------- */
-  .flow {
+  .page-flow {
     position: relative;
     /*
      * A block formatting context, so the hero's negative top margin — which
@@ -336,7 +342,7 @@
    * That is what stops a long dark page reading as flat. Navy only — a gold
    * wash among them read as a yellow circle sitting on the background.
    */
-  .flow::before {
+  .page-flow::before {
     content: '';
     position: absolute;
     /*
@@ -713,7 +719,7 @@
    Ambient effects
    ========================================================================== */
 @layer components {
-  /* Keeps the page's own stacking predictable: the depth washes on .flow sit
+  /* Keeps the page's own stacking predictable: the depth washes on .page-flow sit
      at z-index 0 beneath these, and the grain overlay above them. */
   .site-header,
   main,
