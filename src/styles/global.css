@@ -15,18 +15,6 @@
   --color-navy-raise: #14284a;
   --color-gold: #d4af37;
   --color-gold-soft: #e8c877;
-  /* Gold on a light ground fails AA at any usable size (1.9:1); this is the
-     light-band substitute. Kept a step darker than strictly necessary so it
-     still clears AA on the slightly-tinted card surface, where small link text
-     sits: 6.06:1 on --bone, 5.70:1 on a card. */
-  --color-gold-ink: #6f5920;
-  /*
-   * The panel surface. Never pure white — #FFF glares against navy — and
-   * deliberately cool rather than a warm bone: a warm off-white sitting on a
-   * navy ground reads as an unrelated sheet of paper, while a blue-leaning
-   * light tone belongs to the same family as the ground it floats on.
-   */
-  --color-bone: #f0f3f8;
   --color-white: #ffffff;
 
   --font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
@@ -77,7 +65,8 @@
     --band-muted: var(--muted-on-dark);
     --band-accent: var(--color-gold);
     --band-rule: var(--hairline);
-    --band-raised: rgb(255 255 255 / 0.045);
+    --band-raised: rgb(255 255 255 / 0.06);
+    --card-edge: rgb(255 255 255 / 0.14);
     --focus-ring: var(--color-gold-soft);
 
     /* Expanded masthead height, and the breathing room a heading should keep
@@ -279,8 +268,7 @@
      No horizontal rules between sections — separation is space, and the
      occasional change of ground.
      ---------------------------------------------------------------------- */
-  .flow > *,
-  .flow > .panel {
+  .flow > * {
     position: relative;
     z-index: 1;
   }
@@ -322,9 +310,10 @@
      full-bleed colour slabs — navy, hard edge, light, hard edge — which is the
      slide-deck pattern itself, whatever you do about numbering and dividers.
 
-     Four sections carry commercial weight — the offer, the people, the book and
-     the contact form — and those become inset panels floating on the ground.
-     Nothing produces a full-width horizontal seam.
+     Nothing is laid ON the ground as a slab. Four sections used to be — light
+     panels first, then raised navy ones — and both read as a big rectangle
+     covering the page rather than as part of it. Sections are told apart by
+     layout and rhythm; only individual pieces of information get a card.
      ---------------------------------------------------------------------- */
   .flow {
     position: relative;
@@ -369,56 +358,15 @@
       radial-gradient(56rem 40rem at 6% 88%, rgb(20 40 74 / 0.45), transparent 62%);
   }
 
-  /* --- inset panels ------------------------------------------------------
-     A panel with a margin reads as content resting on the page; the identical
-     panel run full-bleed reads as the next slide. Same colour, opposite
-     perception — which is the whole reason for the margin. */
-  .panel {
-    position: relative;
-    margin-inline: clamp(0.75rem, 3.5vw, 5rem);
-    margin-block: clamp(1.25rem, 2.5vw, 3rem);
-    border-radius: clamp(8px, 0.9vw, 12px);
-    background: var(--color-bone);
-    box-shadow: 0 40px 90px -30px rgb(0 0 0 / 0.55);
-  }
-
-  /* The panel's inset already separates it; its edge sections do not need
-     their full archetype padding as well. Set through the variable so the
-     anchor maths on .band stays correct. */
-  .panel > .band:first-child {
-    --band-pad-top: clamp(3rem, 2rem + 3.5vw, 5rem);
-  }
-
-  .panel > .band:last-child {
-    --band-pad-bottom: clamp(3rem, 2rem + 3.5vw, 5rem);
-  }
-
-  /* Two surfaces only: the continuous navy ground, and the inset light panel. */
   .band--ground {
     --band-bg: transparent;
     --band-fg: var(--color-white);
     --band-muted: var(--muted-on-dark);
     --band-accent: var(--color-gold);
     --band-rule: var(--hairline);
-    --band-raised: rgb(255 255 255 / 0.045);
+    --band-raised: rgb(255 255 255 / 0.06);
+    --card-edge: rgb(255 255 255 / 0.14);
     --focus-ring: var(--color-gold-soft);
-  }
-
-  .band--panel {
-    /* The .panel wrapper paints the bone; the section itself stays clear. */
-    color-scheme: light;
-    --band-bg: transparent;
-    --band-fg: var(--color-navy-deep);
-    --band-muted: #5a6273;
-    --band-accent: var(--color-gold-ink);
-    --band-rule: rgb(12 29 58 / 0.16);
-    /*
-     * Cards are a step deeper than the panel and share its blue cast, so they
-     * read as raised surfaces rather than as white boxes on white. Verified
-     * 5.03:1 for muted text, 5.51:1 for links, 15.2:1 for body copy.
-     */
-    --band-raised: #e4e9f2;
-    --focus-ring: var(--color-navy);
   }
 
   /* ------------------------------------------------------------------------
@@ -515,10 +463,16 @@
 
   /* ------------------------------------------------------------------------
      Surfaces
+
+     The card is the ONLY thing on the page that gets a surface of its own.
+     With the section panels gone it carries all of the "this is set apart"
+     work, so it is a touch more present than it was when it sat inside one:
+     a slightly stronger lift and a visible hairline, still small and still
+     reserved for a single piece of information rather than a whole section.
      ---------------------------------------------------------------------- */
   .card {
     background: var(--band-raised);
-    border: 1px solid var(--band-rule);
+    border: 1px solid var(--card-edge);
     border-radius: var(--radius);
     padding: clamp(1.25rem, 1rem + 1vw, 1.875rem);
     transition:

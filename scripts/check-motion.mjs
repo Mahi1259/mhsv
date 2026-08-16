@@ -389,6 +389,15 @@ try {
     });
     await new Promise((r) => setTimeout(r, 800));
 
+    // Where the pill's edges actually are, so the scan below can be confined
+    // to them. Windowed on purpose: the page shows THROUGH the translucent
+    // bar, and a card edge behind it out-measured the pill's own edge (46 vs
+    // 28) — the scan was reporting the page, not the bar.
+    const pill = await page.evaluate(() => {
+      const r = document.querySelector('.site-header__shell').getBoundingClientRect();
+      return { left: Math.round(r.left), right: Math.round(r.right) };
+    });
+
     // The bar shows the language label in gold in every locale, so finding
     // gold in its box says the bar is DRAWN — not which language is showing.
     // Its BOX, not one pixel: the label is thin text now rather than a filled
@@ -411,7 +420,8 @@ try {
     await new Promise((r) => setTimeout(r, 2000));
     await cdp.send('Page.stopScreencast');
 
-    const sizes = new Set();
+    const lefts = [];
+    const rights = [];
     const inkPerFrame = new Set();
     let barless = 0;
     for (const encoded of frames) {
@@ -422,22 +432,27 @@ try {
         const i = (y * info.width + x) * info.channels;
         return [data[i], data[i + 1], data[i + 2]];
       };
-      // Strongest edge on a text-free row inside the bar: the pill's border.
-      const edge = (from, to, step) => {
+      // Strongest edge on a text-free row inside the bar, within ±25px of
+      // where the pill says it is. A pill that moved further than that leaves
+      // the window, and the reading changes — which is the failure we want.
+      const edge = (centre) => {
         let best = 0;
         let found = 0;
-        for (let x = from; x !== to; x += step) {
+        for (let x = centre - 25; x < centre + 25; x++) {
           const a = at(x, 60);
-          const c = at(x + step, 60);
+          const c = at(x + 1, 60);
           const d = Math.max(...[0, 1, 2].map((k) => Math.abs(a[k] - c[k])));
           if (d > best) {
             best = d;
             found = x;
           }
         }
-        return found;
+        // No real edge in the window means the pill is not where it claims to
+        // be; report it rather than letting a flat reading pass.
+        return best < 8 ? 'none' : found;
       };
-      sizes.add(`${edge(150, 340, 1)}..${edge(1300, 1100, -1)}`);
+      lefts.push(edge(pill.left));
+      rights.push(edge(pill.right));
 
       let gold = 0;
       for (let x = label.x; x < label.x + label.w; x++) {
@@ -448,23 +463,60 @@ try {
       }
       if (gold === 0) barless += 1;
 
-      // How much text sits on the nav row. The French and German label sets
-      // differ, so this changes when the page does — a cheap way to prove the
-      // capture actually spanned the switch rather than sitting on one state.
-      let ink = 0;
-      for (let x = 340; x < 1060; x += 2) if (at(x, 39)[0] > 120) ink += 1;
-      inkPerFrame.add(ink);
+      // WHERE the text sits on the nav row, as a bit pattern — the French and
+      // German label sets lay out differently, so this identifies which page
+      // a frame belongs to. A count alone is not enough: the two sets light
+      // the same NUMBER of samples.
+      let row = '';
+      for (let x = 340; x < 1060; x += 2) row += at(x, 39)[0] > 120 ? '1' : '0';
+      inkPerFrame.add(row);
     }
 
-    // The screencast only emits on repaint, so the frame COUNT varies; what
-    // has to hold is that the window covered both languages, or everything
-    // below passes vacuously on a single static state.
+    /*
+     * Every painted frame belongs to the DESTINATION, and shows one nav row.
+     *
+     * This used to assert the capture spanned both languages. It cannot any
+     * more, and for a good reason: the switch is now clean enough that the
+     * browser never paints a frame of the outgoing page after the navigation
+     * starts — the first frame captured is already the German page, fully
+     * formed. Asserting a transitional state exists would be asserting the
+     * bug back.
+     *
+     * So the claim is the stronger one: nothing intermediate was ever drawn.
+     * One nav row across the capture, one pill size, and that size is the
+     * settled one — so the bar was correct in the first painted frame rather
+     * than arriving at correct.
+     */
+    const settled = await page.evaluate(() => {
+      const r = document.querySelector('.site-header__shell').getBoundingClientRect();
+      return { left: Math.round(r.left), right: Math.round(r.right) };
+    });
+    /* Tolerance of 2px, not exact equality: antialiasing on the pill's 1px
+       border moves the strongest step by a pixel between frames, and demanding
+       an identical reading made this fail at random. A real resize is tens of
+       pixels, so 2 still catches it. */
+    const spread = (xs) => {
+      const ns = xs.filter((x) => x !== 'none');
+      return ns.length === xs.length ? Math.max(...ns) - Math.min(...ns) : Infinity;
+    };
+    const ml = lefts[0];
+
+    check(frames.length > 3, 'language switch: frames captured', `${frames.length}`);
     check(
-      inkPerFrame.size > 1,
-      'language switch: the capture spans the switch',
-      `${frames.length} frames, ${inkPerFrame.size} distinct nav rows`,
+      inkPerFrame.size === 1,
+      'no half-drawn frame: every frame shows one page',
+      `${inkPerFrame.size} distinct nav row(s)`,
     );
-    check(sizes.size === 1, 'the bar never changes size mid-switch', `pill edges ${[...sizes].join(' / ')}`);
+    check(
+      spread(lefts) <= 2 && spread(rights) <= 2,
+      'the bar never changes size mid-switch',
+      `left ±${spread(lefts)}px, right ±${spread(rights)}px over ${frames.length} frames`,
+    );
+    check(
+      ml !== 'none' && Math.abs(Number(ml) - settled.left) <= 12,
+      'and that size is the settled one, from the first frame',
+      `measured ${ml}, settled ${settled.left}`,
+    );
     check(barless === 0, 'the bar is present in every frame', `${barless} without it`);
     await page.close();
   }

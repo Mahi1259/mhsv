@@ -9,19 +9,18 @@
  */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
-import type { Surface, SectionType } from '@/config/site';
+import type { SectionType } from '@/config/site';
 
 interface Props {
   locale: Locale;
   type: SectionType;
-  surface: Surface;
 }
 
-const { locale, type, surface } = Astro.props;
+const { locale, type } = Astro.props;
 const s = getContent(locale).sections.pathway;
 ---
 
-<Band locale={locale} anchor={s.anchor} title={s.title} type={type} surface={surface}>
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type}>
   <div class="flow" data-flow>
     <span class="flow__line" aria-hidden="true"></span>
     <ol class="flow__list">

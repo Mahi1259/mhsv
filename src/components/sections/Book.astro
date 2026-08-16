@@ -12,17 +12,16 @@
 import { Picture } from 'astro:assets';
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
-import { BOOK_PAGE_PATH, type Surface, type SectionType } from '@/config/site';
+import { BOOK_PAGE_PATH, type SectionType } from '@/config/site';
 import coverFr from '@/assets/book/founding-book-fr.png';
 import coverEn from '@/assets/book/founding-book-en.png';
 
 interface Props {
   locale: Locale;
   type: SectionType;
-  surface: Surface;
 }
 
-const { locale, type, surface } = Astro.props;
+const { locale, type } = Astro.props;
 const s = getContent(locale).sections.book;
 
 const covers = [
@@ -31,7 +30,7 @@ const covers = [
 ];
 ---
 
-<Band locale={locale} anchor={s.anchor} title={s.title} type={type} surface={surface}>
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type}>
   <div class="book">
     <ul class="book__covers" data-reveal-x>
       {

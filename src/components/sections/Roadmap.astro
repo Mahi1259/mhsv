@@ -11,15 +11,14 @@
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import { capitalizeFirst } from '@/lib/text';
-import { STATUS_KEYS, type Surface, type SectionType } from '@/config/site';
+import { STATUS_KEYS, type SectionType } from '@/config/site';
 
 interface Props {
   locale: Locale;
   type: SectionType;
-  surface: Surface;
 }
 
-const { locale, type, surface } = Astro.props;
+const { locale, type } = Astro.props;
 const c = getContent(locale);
 const s = c.sections.roadmap;
 const items = s.items.map((item) => capitalizeFirst(item, locale));
@@ -30,7 +29,7 @@ const items = s.items.map((item) => capitalizeFirst(item, locale));
   anchor={s.anchor}
   title={s.title}
   type={type}
-  surface={surface}
+ 
   lead={s.lead}
   status={s.status}
 >

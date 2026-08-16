@@ -12,7 +12,7 @@
  * would just be nine rounded slides.
  */
 import Base from '@/layouts/Base.astro';
-import { LOCALES, SECTION_ORDER, type Locale, type SectionId } from '@/config/site';
+import { LOCALES, SECTION_ORDER, type Locale } from '@/config/site';
 
 import Hero from '@/components/sections/Hero.astro';
 import About from '@/components/sections/About.astro';
@@ -65,43 +65,18 @@ const COMPONENTS = {
   contact: Contact,
 } as const;
 
-/** Collapse consecutive same-surface sections into runs. */
-type Run = { surface: 'ground' | 'panel'; ids: SectionId[] };
-
-const runs: Run[] = [];
-for (const section of SECTION_ORDER) {
-  if (section.id === 'hero') continue;
-  const surface: Run['surface'] = section.surface;
-  const last = runs.at(-1);
-  if (last?.surface === surface) last.ids.push(section.id);
-  else runs.push({ surface, ids: [section.id] });
-}
-
-const propsFor = (id: SectionId) => {
-  const section = SECTION_ORDER.find((s) => s.id === id)!;
-  return { type: section.type, surface: section.surface };
-};
+/** The hero renders itself; everything after it is a band in document order. */
+const sections = SECTION_ORDER.filter((section) => section.id !== 'hero');
 ---
 
 <Base locale={locale}>
   <div class="flow">
     <Hero locale={locale} />
     {
-      runs.map((run) =>
-        run.surface === 'panel' ? (
-          <div class="panel">
-            {run.ids.map((id) => {
-              const Section = COMPONENTS[id as keyof typeof COMPONENTS];
-              return <Section locale={locale} {...propsFor(id)} />;
-            })}
-          </div>
-        ) : (
-          run.ids.map((id) => {
-            const Section = COMPONENTS[id as keyof typeof COMPONENTS];
-            return <Section locale={locale} {...propsFor(id)} />;
-          })
-        ),
-      )
+      sections.map((section) => {
+        const Section = COMPONENTS[section.id as keyof typeof COMPONENTS];
+        return <Section locale={locale} type={section.type} />;
+      })
     }
   </div>
 </Base>

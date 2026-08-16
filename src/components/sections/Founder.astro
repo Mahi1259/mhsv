@@ -2,14 +2,14 @@
 /** The founder — statement type. No photo in this phase. */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
-import type { Surface, SectionType } from '@/config/site';
+import type { SectionType } from '@/config/site';
 
-interface Props { locale: Locale; type: SectionType; surface: Surface }
-const { locale, type, surface } = Astro.props;
+interface Props { locale: Locale; type: SectionType }
+const { locale, type } = Astro.props;
 const s = getContent(locale).sections.founder;
 ---
 
-<Band locale={locale} anchor={s.anchor} title={s.title} titleLines={s.titleLines} type={type} surface={surface}>
+<Band locale={locale} anchor={s.anchor} title={s.title} titleLines={s.titleLines} type={type}>
   <blockquote class="founder__quote">
     <p>{s.quote}</p>
   </blockquote>

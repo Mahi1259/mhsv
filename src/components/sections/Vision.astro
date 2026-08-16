@@ -8,15 +8,14 @@
  */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
-import type { Surface, SectionType } from '@/config/site';
+import type { SectionType } from '@/config/site';
 
 interface Props {
   locale: Locale;
   type: SectionType;
-  surface: Surface;
 }
 
-const { locale, type, surface } = Astro.props;
+const { locale, type } = Astro.props;
 const s = getContent(locale).sections.vision;
 ---
 
@@ -25,7 +24,7 @@ const s = getContent(locale).sections.vision;
   anchor={s.anchor}
   title={s.title} titleLines={s.titleLines}
   type={type}
-  surface={surface}
+ 
   lead={s.lead}
 >
   <ol class="arc">

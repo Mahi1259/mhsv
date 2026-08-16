@@ -14,7 +14,7 @@
  */
 import StatusBadge from '@/components/StatusBadge.astro';
 import { getContent, type Locale } from '@/lib/i18n';
-import type { Surface, SectionType, StatusKey } from '@/config/site';
+import type { SectionType, StatusKey } from '@/config/site';
 
 interface Props {
   locale: Locale;
@@ -28,7 +28,6 @@ interface Props {
    */
   titleLines?: string[];
   type: SectionType;
-  surface: Surface;
   lead?: string;
   status?: { key: string; detail: string } | null;
   /** Skips the built-in header so a section can lay out its own. */
@@ -42,7 +41,6 @@ const {
   title,
   titleLines,
   type,
-  surface,
   lead,
   status = null,
   bare = false,
@@ -65,7 +63,6 @@ const label = navLabel ?? title;
   id={anchor}
   class:list={[
     'band',
-    `band--${surface}`,
     `band--${type}`,
     className,
   ]}

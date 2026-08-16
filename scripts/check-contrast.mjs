@@ -42,14 +42,9 @@ const C = {
   navyRaise: token('color-navy-raise'),
   gold: token('color-gold'),
   goldSoft: token('color-gold-soft'),
-  goldInk: token('color-gold-ink'),
-  bone: token('color-bone'),
   white: token('color-white'),
   mutedOnDark: token('muted-on-dark'),
-  mutedOnLight: /\.band--panel[^}]*--band-muted:\s*(#[0-9a-fA-F]{6})/s.exec(css)?.[1],
 };
-
-if (!C.mutedOnLight) throw new Error('panel --band-muted not found in global.css');
 
 /**
  * Composite a translucent overlay onto a ground.
@@ -71,15 +66,20 @@ function composite(overlay, alpha, ground) {
 /**
  * Card surfaces, as actually rendered.
  *
- * The panel's card is now an explicit cool colour rather than a translucent
- * tint, so read it straight out of the stylesheet instead of compositing.
+ * The card is the only surface left on the page — a translucent white tint
+ * over whatever the ground composites to underneath it. Checking type against
+ * the raw ground missed that small link text on a card sits a step lighter.
+ *
+ * Read the tint out of the stylesheet so a change to it cannot slip past.
  */
-const PANEL_CARD = /\.band--panel[^}]*--band-raised:\s*(#[0-9a-fA-F]{6})/s.exec(css)?.[1];
-if (!PANEL_CARD) throw new Error('panel --band-raised colour not found in global.css');
+const TINT = Number(/--band-raised: rgb\(255 255 255 \/ ([\d.]+)\)/.exec(css)?.[1]);
+if (!Number.isFinite(TINT)) throw new Error('--band-raised tint not found in global.css');
 
-const CARD_ON_BONE = PANEL_CARD;
-const CARD_ON_NAVY = composite(C.white, 0.05, C.navy);
-const CARD_ON_NAVY_DEEP = composite(C.white, 0.045, C.navyDeep);
+const CARD_ON_NAVY = composite(C.white, TINT, C.navy);
+const CARD_ON_NAVY_DEEP = composite(C.white, TINT, C.navyDeep);
+/* The depth washes lift parts of the ground as far as navy-raise, so a card
+   sitting on one of those is the lightest surface the page ever paints. */
+const CARD_AT_LIGHTEST = composite(C.white, TINT, C.navyRaise);
 
 /**
  * The masthead, as actually rendered.
@@ -87,13 +87,15 @@ const CARD_ON_NAVY_DEEP = composite(C.white, 0.045, C.navyDeep);
  * Once scrolled, the bar is a translucent pill floating OVER the page, so its
  * effective background depends on whatever is behind it. It travels the whole
  * document, which means the worst case is the lightest thing it can ever cross
- * — the bone panels. Checking the bar against navy alone says nothing.
+ * — the raised panels and the cards on them.
  *
  * `backdrop-filter: blur()` redistributes what is behind but does not change
  * its average luminance, so straight alpha compositing is the right model.
  *
- * This is what fixes the bar's opacity at 82% rather than the 72% that reads
- * as more glassy: at 72% the language codes fall to 3.57:1 over bone.
+ * The lightest thing it crosses is now a card sitting on the lightest part of
+ * the ground — it was a light bone panel, which is why the bar's opacity was
+ * pinned at 82%. That constraint has relaxed a long way; the opacity is left
+ * where it is rather than re-tuned for a reason that no longer applies.
  */
 const header = readFileSync(resolve(ROOT, 'src/components/Header.astro'), 'utf8');
 const shrunkRule = /\.is-shrunk\s+\.site-header__shell\s*\{([^}]*)\}/.exec(header)?.[1];
@@ -101,15 +103,15 @@ if (!shrunkRule) throw new Error('shrunk masthead rule not found in Header.astro
 const HEADER_ALPHA = Number(/--navy-deep\)\s*(\d+)%/.exec(shrunkRule)?.[1]);
 if (!Number.isFinite(HEADER_ALPHA)) throw new Error('shrunk masthead opacity not found');
 
-const SHRUNK_BAR_ON_BONE = composite(C.navyDeep, HEADER_ALPHA / 100, C.bone);
-const SHRUNK_BAR_ON_CARD = composite(C.navyDeep, HEADER_ALPHA / 100, CARD_ON_BONE);
+const SHRUNK_BAR_ON_GROUND = composite(C.navyDeep, HEADER_ALPHA / 100, C.navyRaise);
+const SHRUNK_BAR_ON_CARD = composite(C.navyDeep, HEADER_ALPHA / 100, CARD_AT_LIGHTEST);
 
 /** AA: 4.5 for body text, 3.0 for large text (>=24px, or >=18.66px bold). */
 const CHECKS = [
   // Card surfaces — where the small print actually lives.
-  ['muted text on bone card', C.mutedOnLight, CARD_ON_BONE, 4.5],
-  ['gold-ink link on bone card', C.goldInk, CARD_ON_BONE, 4.5],
-  ['body text on bone card', C.navyDeep, CARD_ON_BONE, 4.5],
+  ['body text on a card', C.white, CARD_AT_LIGHTEST, 4.5],
+  ['muted text on a card', C.mutedOnDark, CARD_AT_LIGHTEST, 4.5],
+  ['gold link on a card', C.gold, CARD_AT_LIGHTEST, 4.5],
   ['muted text on navy card', C.mutedOnDark, CARD_ON_NAVY, 4.5],
   ['gold link on navy card', C.gold, CARD_ON_NAVY, 4.5],
   ['muted text on navy-deep card', C.mutedOnDark, CARD_ON_NAVY_DEEP, 4.5],
@@ -127,11 +129,6 @@ const CHECKS = [
   ['gold-soft on navy-deep', C.goldSoft, C.navyDeep, 4.5],
   ['gold-soft on navy', C.goldSoft, C.navy, 4.5],
 
-  // Light ground
-  ['body text on bone', C.navyDeep, C.bone, 4.5],
-  ['muted text on bone', C.mutedOnLight, C.bone, 4.5],
-  ['gold-ink accent on bone', C.goldInk, C.bone, 4.5],
-
   // Buttons: gold fill with navy label
   ['primary button label', C.navyDeep, C.gold, 4.5],
   ['primary button label (hover)', C.navyDeep, C.goldSoft, 4.5],
@@ -140,20 +137,23 @@ const CHECKS = [
   ['active language chip', C.navyDeep, C.gold, 4.5],
 
   // The shrunk masthead, over the lightest ground it ever floats across.
-  ['nav link on bar over bone', C.white, SHRUNK_BAR_ON_BONE, 4.5],
-  ['language code on bar over bone', C.mutedOnDark, SHRUNK_BAR_ON_BONE, 4.5],
+  ['nav link on bar over ground', C.white, SHRUNK_BAR_ON_GROUND, 4.5],
+  ['language code on bar over ground', C.mutedOnDark, SHRUNK_BAR_ON_GROUND, 4.5],
   ['nav link on bar over card', C.white, SHRUNK_BAR_ON_CARD, 4.5],
   ['language code on bar over card', C.mutedOnDark, SHRUNK_BAR_ON_CARD, 4.5],
   // The shrunk bar drops the switcher and states the current language instead.
-  ['current language on bar over bone', C.gold, SHRUNK_BAR_ON_BONE, 4.5],
+  ['current language on bar over card', C.gold, SHRUNK_BAR_ON_CARD, 4.5],
 ];
 
 /** Pairings that must NEVER be used — verified as failing, so the ban is real. */
 const BANNED = [
-  ['gold on bone (use --color-gold-ink)', C.gold, C.bone],
-  // Keeps the masthead's opacity honest: the glassier 72% bar the reference
-  // spec calls for is verified here as failing, so nobody re-lowers it.
-  ['language code on a 72% bar', C.mutedOnDark, composite(C.navyDeep, 0.72, C.bone)],
+  /*
+   * The page is navy end to end and its type is white-on-dark. If a light
+   * surface is ever reintroduced, this is what it costs: the entire type
+   * scheme stops working on it and has to be rethought, not nudged. Verified
+   * failing, which is the point of keeping it here.
+   */
+  ['white body text on a light surface', C.white, '#f0f3f8'],
 ];
 
 let failed = 0;
