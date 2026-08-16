@@ -15,6 +15,7 @@
  *      mobile — including that the pill still fits every locale on one row
  */
 import puppeteer from 'puppeteer-core';
+import sharp from 'sharp';
 
 const BASE = process.env.AUDIT_BASE_URL || 'http://localhost:4321';
 const CHROME =
@@ -276,6 +277,108 @@ try {
     );
     check(after.radius === 0 && !after.blurred && !after.lifted, 'mobile: solid bar, no glass');
     check(after.duration === 0, 'mobile: no transitions declared at all');
+    await page.close();
+  }
+
+  /* A language switch from mid-page, watched frame by frame.
+   *
+   * This is the one journey a four-language site does constantly, and it has
+   * gone wrong twice: the page glided down to the section on arrival, and the
+   * bar expanded and contracted while the reader watched. Neither shows up in
+   * a screenshot or a settled DOM read — only in the painted frames. So this
+   * screencasts a real FR→DE switch and asserts three things across EVERY
+   * frame: the bar never changes size, no frame shows two languages active
+   * (which is what a page transition's double-exposure looks like), and no
+   * frame is missing the bar altogether. */
+  {
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1440, height: 900 });
+    const cdp = await page.createCDPSession();
+    const frames = [];
+    await cdp.send('Page.startScreencast', { format: 'png', maxWidth: 1440, maxHeight: 900, everyNthFrame: 1 });
+    cdp.on('Page.screencastFrame', async (f) => {
+      frames.push(f.data);
+      try {
+        await cdp.send('Page.screencastFrameAck', { sessionId: f.sessionId });
+      } catch {
+        /* the cast is already stopped */
+      }
+    });
+
+    await page.goto(`${BASE}/fr/`, { waitUntil: 'networkidle0' });
+    await page.evaluate(() => {
+      document.documentElement.style.scrollBehavior = 'auto';
+      const team = document.querySelector('#team');
+      scrollTo(0, team.getBoundingClientRect().top + scrollY + 300);
+    });
+    await new Promise((r) => setTimeout(r, 800));
+
+    // Sample the chip FILL, 13px left of centre — dead centre lands on the
+    // glyph, which is navy over gold and reads as neither.
+    const chip = await page.evaluate(() =>
+      Object.fromEntries(
+        [...document.querySelectorAll('.lang a')].map((a) => {
+          const r = a.getBoundingClientRect();
+          return [a.getAttribute('hreflang'), [Math.round(r.left + r.width / 2) - 13, Math.round(r.top + r.height / 2)]];
+        }),
+      ),
+    );
+
+    frames.length = 0;
+    await page.evaluate(() => document.querySelector('.lang a[hreflang="de"]').click());
+    await new Promise((r) => setTimeout(r, 2000));
+    await cdp.send('Page.stopScreencast');
+
+    const sizes = new Set();
+    let both = 0;
+    let neither = 0;
+    let before = 0;
+    let after = 0;
+    for (const encoded of frames) {
+      const { data, info } = await sharp(Buffer.from(encoded, 'base64'))
+        .raw()
+        .toBuffer({ resolveWithObject: true });
+      const at = (x, y) => {
+        const i = (y * info.width + x) * info.channels;
+        return [data[i], data[i + 1], data[i + 2]];
+      };
+      // Strongest edge on a text-free row inside the bar: the pill's border.
+      const edge = (from, to, step) => {
+        let best = 0;
+        let found = 0;
+        for (let x = from; x !== to; x += step) {
+          const a = at(x, 60);
+          const c = at(x + step, 60);
+          const d = Math.max(...[0, 1, 2].map((k) => Math.abs(a[k] - c[k])));
+          if (d > best) {
+            best = d;
+            found = x;
+          }
+        }
+        return found;
+      };
+      sizes.add(`${edge(150, 340, 1)}..${edge(1300, 1100, -1)}`);
+
+      const lit = (c) => c[0] > 150 && c[1] > 120 && c[2] < 110; // the gold fill
+      const fr = lit(at(...chip.fr));
+      const de = lit(at(...chip.de));
+      if (fr && de) both += 1;
+      if (!fr && !de) neither += 1;
+      if (fr && !de) before += 1;
+      if (de && !fr) after += 1;
+    }
+
+    // The screencast only emits on repaint, so the frame COUNT varies. What
+    // has to hold is that the window actually spans the switch — otherwise
+    // the assertions below pass vacuously on one static state.
+    check(
+      before > 0 && after > 0,
+      'language switch: the capture spans the switch',
+      `${frames.length} frames, ${before} before / ${after} after`,
+    );
+    check(sizes.size === 1, 'the bar never changes size mid-switch', `pill edges ${[...sizes].join(' / ')}`);
+    check(both === 0, 'no frame shows two languages active', `${both} double-exposed`);
+    check(neither === 0, 'the bar is present in every frame', `${neither} without it`);
     await page.close();
   }
 

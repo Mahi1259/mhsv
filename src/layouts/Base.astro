@@ -97,22 +97,19 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
   <body>
     <script is:inline>
       /*
-       * Two things have to be settled before the first paint, or switching
-       * language from the middle of the page looks broken. Inline and in the
-       * document head region on purpose: a bundled module would run too late
-       * to matter.
+       * THE FRAGMENT LANDING MUST BE INSTANT.
        *
-       * 1. THE FRAGMENT LANDING MUST BE INSTANT. `scroll-behavior: smooth` is
-       *    set on :root for in-page navigation, but the browser also applies
-       *    it to the fragment scroll it performs on load. Arriving at
-       *    /de/#team therefore opened the German page at the top and glided
-       *    down to the section — the page appearing to move on translate.
-       *    Forced to `auto` here and handed back afterwards, so clicking a
-       *    section in the nav is still smooth.
+       * `scroll-behavior: smooth` is set on :root for in-page navigation, but
+       * the browser applies it to the fragment scroll it performs on load too.
+       * Since the language switcher carries the reader's section across,
+       * arriving at /de/#team opened the German page at the top and glided
+       * down to the section — the page appearing to move on translate.
        *
-       * 2. THE MASTHEAD MUST NOT ANIMATE INTO ITS SHRUNK STATE ON ARRIVAL.
-       *    Landing part-way down the page, it would otherwise play its 480ms
-       *    contraction while the reader watches.
+       * Forced to `auto` for the landing and handed back on load, so clicking
+       * a section in the nav is still smooth. `is-booting` suppresses the
+       * masthead's transitions for the same window.
+       *
+       * Inline, and first thing in the body: a bundled module runs too late.
        */
       (function () {
         var root = document.documentElement;
@@ -134,6 +131,34 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
     <div class="floodlight" aria-hidden="true"></div>
     <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar"></div></div>
     <Header locale={locale} path={path} />
+
+    <script is:inline>
+      /*
+       * THE BAR MUST ALREADY BE SHRUNK IN THE FIRST PAINTED FRAME.
+       *
+       * A fragment in the URL means the page is about to land deep in the
+       * document, where the bar is a pill — the language switcher produces
+       * exactly that. Deciding it in scripts/effects.ts is too late: that is a
+       * bundled module, so the browser is free to paint the full-width bar
+       * first and contract it afterwards, which is the bar seen expanding and
+       * shrinking during a translate.
+       *
+       * Placed immediately after the masthead so the element exists, and run
+       * during parsing so the class is set before any style is resolved for
+       * paint — no state change, therefore nothing to animate.
+       *
+       * `#main` is the skip link's target and sits at the top of the page, so
+       * it is not a deep landing.
+       */
+      (function () {
+        var hash = location.hash;
+        if (hash.length < 2 || hash === '#main' || hash === '#top') return;
+        if (!matchMedia('(min-width: 62rem)').matches) return;
+        var header = document.querySelector('.site-header');
+        if (header) header.classList.add('is-shrunk');
+      })();
+    </script>
+
     <main id="main" tabindex="-1">
       <slot />
     </main>

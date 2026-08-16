@@ -145,73 +145,30 @@
       position: static !important;
     }
 
-    ::view-transition-old(root),
-    ::view-transition-new(root) {
-      animation: none !important;
-    }
   }
 
   /*
-   * Cross-document view transitions — CSS only, no router and no JavaScript.
-   * Supporting browsers cross-fade between pages; the rest navigate normally.
-   * Kept short: switching language should feel instant, not cinematic.
-   */
-  @view-transition {
-    navigation: auto;
-  }
-
-  /*
-   * A cross-fade — the browser default — and deliberately NOT the curtain wipe
-   * that used to be here.
+   * NO PAGE TRANSITION. Deliberate, and it should stay that way.
    *
-   * Switching language happens mid-document: the reader is already somewhere
-   * in the page and expects to stay there. Sliding the whole viewport
-   * vertically on top of that read as the site jumping rather than as a
-   * transition, and at 420/480ms it was long enough to watch. Nothing is
-   * declared for the root, so the default short cross-fade applies and the
-   * page stays put.
-   */
-
-  /*
-   * The masthead is given its own transition name so it is not part of the
-   * page's cross-fade — it stays put instead of fading with the content.
-   * Done with cross-document view transitions rather than an SPA router: no
-   * client-side routing to re-initialise every script against.
-   */
-  .site-header {
-    view-transition-name: masthead;
-  }
-
-  /*
-   * ONLY the incoming masthead is drawn.
+   * This carried a cross-document view transition — first a curtain wipe,
+   * then a cross-fade — and it was wrong for this site's most common
+   * navigation, which is switching language from the middle of the document.
    *
-   * `animation: none` on both — which is what this used to say — paints the
-   * outgoing and incoming bars at full opacity, one over the other, for the
-   * whole transition. That is invisible while the two match, and shows as TWO
-   * NAVBARS the moment they do not: leaving a scrolled page the old bar is a
-   * shrunk pill while the new document, arriving at the top before its
-   * fragment lands, still has the full-width bar. Hiding the outgoing one
-   * leaves a single bar that is already in its final state.
+   * A language switch does not land where it left. The switcher carries the
+   * reader's SECTION across, and the new page lands on that section's
+   * heading, so the outgoing and incoming documents sit at different scroll
+   * offsets — 540px apart in the case measured. Cross-fading them
+   * double-exposes the same content at two positions, which is not a
+   * transition, it is a glitch. No amount of tuning the animation fixes that,
+   * because the two frames genuinely disagree about where the page is.
+   *
+   * The masthead's own `view-transition-name` went with it. It only existed
+   * to hold the bar still through the page animation, and it brought its own
+   * failure — two bars painted at once whenever the snapshots disagreed.
+   *
+   * Restoring transitions means restoring the position problem. If they ever
+   * come back, they must be skipped for locale switches specifically.
    */
-  ::view-transition-old(masthead) {
-    animation: none;
-    opacity: 0;
-  }
-
-  ::view-transition-new(masthead) {
-    animation: none;
-    opacity: 1;
-  }
-
-  /*
-   * And the group holds still too. Left to animate, it interpolates the bar's
-   * BOX from the outgoing page's geometry to the incoming one's — so a switch
-   * made from a scrolled page stretched the pill wide and pulled it back
-   * again mid-fade. There is nothing to interpolate: it is the same bar.
-   */
-  ::view-transition-group(masthead) {
-    animation: none;
-  }
 
   /*
    * Static grain over the whole viewport. Flat navy across a long page looks

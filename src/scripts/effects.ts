@@ -171,7 +171,9 @@ function initNavShrink() {
   // and backdrop-filter is the most expensive property on a mobile GPU.
   const desktop = matchMedia('(min-width: 62rem)');
 
-  let shrunk = false;
+  // Adopt whatever the inline script in Base.astro already decided, rather
+  // than assuming expanded and toggling the bar back and forth on arrival.
+  let shrunk = header.classList.contains('is-shrunk');
   let settle: ReturnType<typeof setTimeout>;
 
   const setShrunk = (next: boolean) => {
