@@ -70,6 +70,10 @@ const covers = [
 
   .book__covers {
     display: flex;
+    /* The two supplied files do not share an aspect ratio once their pale
+       borders are trimmed, so stand them on one baseline rather than letting
+       them float at different heights. */
+    align-items: flex-end;
     gap: 1rem;
     list-style: none;
     margin: 0;

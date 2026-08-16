@@ -274,6 +274,25 @@
   }
 
   .band {
+    /*
+     * The ground tone, on the band itself.
+     *
+     * These lived on a `.band--ground` class that a `surface` prop put there.
+     * Removing panels removed the prop, and with it the class — so every
+     * section silently fell back to the opaque default on :root, painted over
+     * the page's depth washes, and drew a hard horizontal edge wherever it met
+     * the hero, which sets its own class. There is one surface now, so the
+     * tokens belong here and cannot go missing again.
+     */
+    --band-bg: transparent;
+    --band-fg: var(--color-white);
+    --band-muted: var(--muted-on-dark);
+    --band-accent: var(--color-gold);
+    --band-rule: var(--hairline);
+    --band-raised: rgb(255 255 255 / 0.06);
+    --card-edge: rgb(255 255 255 / 0.14);
+    --focus-ring: var(--color-gold-soft);
+
     /* Vertical rhythm, per archetype below. Held in a variable because the
        anchor maths needs to know it. */
     --band-pad: 4rem;
@@ -362,17 +381,6 @@
       radial-gradient(70rem 48rem at 84% 6%, rgb(20 40 74 / 0.62), transparent 62%),
       radial-gradient(76rem 54rem at 92% 63%, rgb(20 40 74 / 0.55), transparent 64%),
       radial-gradient(56rem 40rem at 6% 88%, rgb(20 40 74 / 0.45), transparent 62%);
-  }
-
-  .band--ground {
-    --band-bg: transparent;
-    --band-fg: var(--color-white);
-    --band-muted: var(--muted-on-dark);
-    --band-accent: var(--color-gold);
-    --band-rule: var(--hairline);
-    --band-raised: rgb(255 255 255 / 0.06);
-    --card-edge: rgb(255 255 255 / 0.14);
-    --focus-ring: var(--color-gold-soft);
   }
 
   /* ------------------------------------------------------------------------

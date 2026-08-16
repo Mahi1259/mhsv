@@ -473,19 +473,20 @@ try {
     }
 
     /*
-     * Every painted frame belongs to the DESTINATION, and shows one nav row.
+     * NOTHING HALF-DRAWN: every frame shows one page or the other, never a
+     * blend of the two.
      *
-     * This used to assert the capture spanned both languages. It cannot any
-     * more, and for a good reason: the switch is now clean enough that the
-     * browser never paints a frame of the outgoing page after the navigation
-     * starts — the first frame captured is already the German page, fully
-     * formed. Asserting a transitional state exists would be asserting the
-     * bug back.
+     * Whether the outgoing page gets painted at all before the swap depends on
+     * how much work the page is doing, and it varies — this has captured
+     * anywhere from zero to a handful of French frames. So the count of
+     * distinct nav rows is 1 or 2, and both are correct. What must never
+     * appear is a THIRD: the page cross-fading would put frames at
+     * intermediate states, which is exactly the double exposure a page
+     * transition produced and the reason there is no longer one.
      *
-     * So the claim is the stronger one: nothing intermediate was ever drawn.
-     * One nav row across the capture, one pill size, and that size is the
-     * settled one — so the bar was correct in the first painted frame rather
-     * than arriving at correct.
+     * Measured on the nav row because the French and German label sets are
+     * laid out differently — the two clusters here sit 148 samples of 360
+     * apart, so this is not picking up noise behind the translucent bar.
      */
     const settled = await page.evaluate(() => {
       const r = document.querySelector('.site-header__shell').getBoundingClientRect();
@@ -503,8 +504,8 @@ try {
 
     check(frames.length > 3, 'language switch: frames captured', `${frames.length}`);
     check(
-      inkPerFrame.size === 1,
-      'no half-drawn frame: every frame shows one page',
+      inkPerFrame.size <= 2,
+      'no half-drawn frame: every frame shows one page or the other',
       `${inkPerFrame.size} distinct nav row(s)`,
     );
     check(

@@ -687,7 +687,8 @@
     "hostingTitle": "Hébergement",
     "hostingBody": "Hébergeur à confirmer avant la mise en production.",
     "propertyTitle": "Propriété intellectuelle",
-    "propertyBody": "L’ensemble des contenus, marques et éléments graphiques présents sur ce site sont la propriété de MHSV® ou de leurs titulaires respectifs et ne peuvent être reproduits sans autorisation écrite."
+    "propertyBody": "L’ensemble des contenus, marques et éléments graphiques présents sur ce site sont la propriété de MHSV® ou de leurs titulaires respectifs et ne peuvent être reproduits sans autorisation écrite.",
+    "placeholder": "Les informations légales seront publiées après validation."
   },
   "bookOrder": {
     "title": "Demande de commande",

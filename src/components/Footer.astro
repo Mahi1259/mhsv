@@ -2,16 +2,20 @@
 /**
  * Site footer.
  *
- * Deliberately short. It previously repeated all 20 section links and the full
- * contact block, so the page ended with a second copy of its own navigation
- * and a third copy of the contact details. Now: five section links, the legal
- * links, and one summary line.
+ * Deliberately short. It repeated all 20 section links and the full contact
+ * block at one point, so the page ended with a second copy of its own
+ * navigation and a third copy of the contact details. The section list has
+ * since gone too: the masthead is fixed and carries every one of them, so
+ * repeating five of them at the bottom was a third navigation, not a service.
+ *
+ * What is left is the pair of legal pages, which are the only things a reader
+ * cannot reach from the masthead.
  *
  * The association / legal-status block stays withheld unless
  * PUBLIC_SHOW_LEGAL_STATUS is true.
  */
 import { getContent, localePath, type Locale } from '@/lib/i18n';
-import { SECTION_ORDER, FOOTER_LINKS, SHOW_LEGAL_STATUS } from '@/config/site';
+import { SHOW_LEGAL_STATUS } from '@/config/site';
 
 interface Props {
   locale: Locale;
@@ -21,50 +25,22 @@ const { locale } = Astro.props;
 const c = getContent(locale);
 const home = localePath('', locale);
 
-// Labels come from the navigation, not the section titles: the content pack
-// writes its headings in capitals ("WHO WE ARE", "CONTACT & LEGAL"), which
-// reads badly in a short link list next to the sentence-case authored ones.
-const sections = c.sections as Record<string, { title: string }>;
-const navLabels = new Map(c.nav.items.map((item) => [item.id, item.label]));
-const links = FOOTER_LINKS.map((id) => ({
-  anchor: SECTION_ORDER.find((s) => s.id === id)!.anchor,
-  title: navLabels.get(id) ?? sections[id].title,
-}));
-
 const year = new Date().getFullYear();
 ---
 
-<footer class="band band--ground site-footer">
+<footer class="band site-footer">
   <div class="shell">
     <p class="site-footer__baseline">{c.brand.baseline}</p>
 
-    <div class="site-footer__grid">
-      <nav class="site-footer__col" aria-label={c.ui.sectionIndex}>
-        <h2 class="mono-label site-footer__title">{c.footer.navTitle}</h2>
-        <ul class="site-footer__links">
-          {
-            links.map((item) => (
-              <li>
-                <a href={`${home}#${item.anchor}`}>{item.title}</a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-
-      <div class="site-footer__col">
-        <h2 class="mono-label site-footer__title">{c.footer.legalTitle}</h2>
-        <ul class="site-footer__links">
-          <li><a href={localePath('privacy/', locale)}>{c.footer.privacyLink}</a></li>
-          {
-            SHOW_LEGAL_STATUS && (
-              <li>
-                <a href={localePath('legal-notice/', locale)}>{c.footer.legalLink}</a>
-              </li>
-            )
-          }
-        </ul>
-      </div>
+    <div class="site-footer__col">
+      <h2 class="mono-label site-footer__title">{c.footer.legalTitle}</h2>
+      <ul class="site-footer__links">
+        <li><a href={localePath('privacy/', locale)}>{c.footer.privacyLink}</a></li>
+        {/* Always present. While the statutes are unvalidated the page itself
+            says so — see src/pages/[lang]/legal.astro — rather than the link
+            disappearing and leaving the brief's second placeholder missing. */}
+        <li><a href={localePath('legal/', locale)}>{c.footer.legalLink}</a></li>
+      </ul>
     </div>
 
     {
@@ -99,11 +75,6 @@ const year = new Date().getFullYear();
     color: var(--gold);
     max-width: 24ch;
     margin: 0 0 clamp(2rem, 1.5rem + 2vw, 3rem);
-  }
-
-  .site-footer__grid {
-    display: grid;
-    gap: 2.5rem;
   }
 
   .site-footer__col {
@@ -163,10 +134,4 @@ const year = new Date().getFullYear();
     margin: 0;
   }
 
-  @media (min-width: 48rem) {
-    .site-footer__grid {
-      grid-template-columns: repeat(2, minmax(0, 14rem));
-      gap: 3rem;
-    }
-  }
 </style>

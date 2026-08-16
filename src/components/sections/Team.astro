@@ -38,16 +38,6 @@ const s = getContent(locale).sections.team;
         <li class="team__card card">
           <h3 class="team__name">{member.name}</h3>
           <p class="team__role">{member.role}</p>
-          {member.email ? (
-            <a class="link team__email" href={`mailto:${member.email}`}>
-              {member.email}
-            </a>
-          ) : (
-            <p class="team__pending">
-              <span class="mono-label">{s.emailPending}</span>
-              <span class="visually-hidden">{s.emailPendingHint}</span>
-            </p>
-          )}
         </li>
       ))
     }
@@ -82,27 +72,6 @@ const s = getContent(locale).sections.team;
     color: var(--band-muted);
     font-size: 0.875rem;
     line-height: 1.4;
-  }
-
-  .team__email {
-    align-self: flex-start;
-    padding-block: 0.1875rem;
-    font-size: 0.8125rem;
-    overflow-wrap: anywhere;
-  }
-
-  .team__pending {
-    margin: 0;
-  }
-
-  .team__pending .mono-label {
-    display: inline-block;
-    padding: 0.1875rem 0.5rem;
-    border: 1px dashed var(--band-rule);
-    border-radius: var(--radius);
-    color: var(--band-muted);
-    font-size: 0.625rem;
-    letter-spacing: 0.08em;
   }
 
   @media (min-width: 40rem) {

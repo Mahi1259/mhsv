@@ -664,7 +664,8 @@
     "hostingTitle": "Hosting",
     "hostingBody": "Hosting-Anbieter vor dem Produktionsstart zu bestätigen.",
     "propertyTitle": "Geistiges Eigentum",
-    "propertyBody": "Sämtliche Inhalte, Marken und grafischen Elemente dieser Website sind Eigentum von MHSV® oder der jeweiligen Rechteinhaber und dürfen ohne schriftliche Genehmigung nicht reproduziert werden."
+    "propertyBody": "Sämtliche Inhalte, Marken und grafischen Elemente dieser Website sind Eigentum von MHSV® oder der jeweiligen Rechteinhaber und dürfen ohne schriftliche Genehmigung nicht reproduziert werden.",
+    "placeholder": "Die rechtlichen Angaben werden nach der Validierung veröffentlicht."
   },
   "bookOrder": {
     "title": "Bestellanfrage",

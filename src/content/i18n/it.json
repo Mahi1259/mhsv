@@ -664,7 +664,8 @@
     "hostingTitle": "Hosting",
     "hostingBody": "Provider di hosting da confermare prima della messa in produzione.",
     "propertyTitle": "Proprietà intellettuale",
-    "propertyBody": "Tutti i contenuti, i marchi e gli elementi grafici presenti su questo sito sono di proprietà di MHSV® o dei rispettivi titolari e non possono essere riprodotti senza autorizzazione scritta."
+    "propertyBody": "Tutti i contenuti, i marchi e gli elementi grafici presenti su questo sito sono di proprietà di MHSV® o dei rispettivi titolari e non possono essere riprodotti senza autorizzazione scritta.",
+    "placeholder": "Le informazioni legali saranno pubblicate dopo la validazione."
   },
   "bookOrder": {
     "title": "Richiesta di ordine",

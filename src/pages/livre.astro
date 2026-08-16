@@ -125,7 +125,7 @@ const columns = [
     </header>
 
     <main id="book">
-      <section class="band band--ground livre">
+      <section class="band livre">
         <div class="shell livre__inner">
           <div class="livre__covers">
             <ul>
@@ -171,7 +171,7 @@ const columns = [
         </div>
       </section>
 
-      <section class="band band--ground livre-order" aria-labelledby="order-title">
+      <section class="band livre-order" aria-labelledby="order-title">
         <div class="shell shell--mid">
           <h2 id="order-title" class="section-title livre-order__title">
             <Bilingual fr={fr.bookOrder.title} en={en.bookOrder.title} />
@@ -183,7 +183,7 @@ const columns = [
       </section>
     </main>
 
-    <footer class="band band--ground livre-footer">
+    <footer class="band livre-footer">
       <div class="shell">
         <p><Bilingual fr={fr.footer.summary} en={en.footer.summary} /></p>
       </div>
@@ -394,6 +394,10 @@ const columns = [
 
   .livre__covers ul {
     display: flex;
+    /* The two supplied files do not share an aspect ratio once their pale
+       borders are trimmed, so stand them on one baseline rather than letting
+       them float at different heights. */
+    align-items: flex-end;
     gap: 1rem;
     list-style: none;
     margin: 0;

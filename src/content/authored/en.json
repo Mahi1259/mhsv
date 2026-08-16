@@ -331,7 +331,8 @@
     "hostingTitle": "Hosting",
     "hostingBody": "Host to be confirmed before going into production.",
     "propertyTitle": "Intellectual property",
-    "propertyBody": "All content, trademarks and graphic elements on this site are the property of MHSV® or their respective owners and may not be reproduced without written permission."
+    "propertyBody": "All content, trademarks and graphic elements on this site are the property of MHSV® or their respective owners and may not be reproduced without written permission.",
+    "placeholder": "Legal information will be published following validation."
   },
   "bookOrder": {
     "title": "Order request",

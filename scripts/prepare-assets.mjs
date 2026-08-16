@@ -336,6 +336,57 @@ async function buildLogo() {
   return { meta, bounds, crest };
 }
 
+/**
+ * The content box of a cover, ignoring any pale border the export left on it.
+ *
+ * The supplied files are both 1489x2105 but neither fills that box: the
+ * English cover carries 124px of white across the top and the French one 22px
+ * down the left side. Rendered as-is, the English cover floated below its own
+ * frame with a white band above it. Measured rather than guessed, and applied
+ * per file, so a re-export with clean edges simply trims nothing.
+ *
+ * `sharp().trim()` is not used: it keys off the corner pixel and would take
+ * the navy with it on a cover whose artwork reaches the edge.
+ */
+async function contentBox(file) {
+  const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const at = (x, y) => {
+    const i = (y * info.width + x) * info.channels;
+    return [data[i], data[i + 1], data[i + 2], data[i + 3]];
+  };
+  const pale = (c) => c[3] < 20 || (c[0] > 230 && c[1] > 230 && c[2] > 230);
+  // Sampled every 6px: a border is uniform, and this keeps a 3MP scan quick.
+  const rowPale = (y) => {
+    let n = 0;
+    let k = 0;
+    for (let x = 0; x < info.width; x += 6) {
+      n += 1;
+      if (pale(at(x, y))) k += 1;
+    }
+    return k / n > 0.98;
+  };
+  const colPale = (x) => {
+    let n = 0;
+    let k = 0;
+    for (let y = 0; y < info.height; y += 6) {
+      n += 1;
+      if (pale(at(x, y))) k += 1;
+    }
+    return k / n > 0.98;
+  };
+
+  let top = 0;
+  while (top < info.height && rowPale(top)) top += 1;
+  let bottom = info.height - 1;
+  while (bottom > top && rowPale(bottom)) bottom -= 1;
+  let left = 0;
+  while (left < info.width && colPale(left)) left += 1;
+  let right = info.width - 1;
+  while (right > left && colPale(right)) right -= 1;
+
+  return { left, top, width: right - left + 1, height: bottom - top + 1 };
+}
+
 async function buildBookCovers() {
   mkdirSync(resolve(ROOT, 'src/assets/book'), { recursive: true });
   for (const [loc, rel] of [
@@ -344,13 +395,19 @@ async function buildBookCovers() {
   ]) {
     assertPublishable(rel);
     const out = resolve(ROOT, `src/assets/book/founding-book-${loc}.png`);
-    // Covers render at most 240px wide. Capping the source at 600px keeps the
+    const source = resolve(PACK, rel);
+    const box = await contentBox(source);
+    // Covers render at most ~264px wide. Capping the source at 600px keeps the
     // PNG fallback that <Picture> emits from weighing ~900 kB.
-    await sharp(resolve(PACK, rel))
+    await sharp(source)
+      .extract(box)
       .resize({ width: 600, withoutEnlargement: true })
       .png({ compressionLevel: 9 })
       .toFile(out);
-    record(`src/assets/book/founding-book-${loc}.png`, 'approved cover, capped at 600px');
+    record(
+      `src/assets/book/founding-book-${loc}.png`,
+      `approved cover, pale border trimmed to ${box.width}x${box.height}, capped at 600px`,
+    );
   }
 }
 
