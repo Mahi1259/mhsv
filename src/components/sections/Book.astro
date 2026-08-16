@@ -42,7 +42,7 @@ const covers = [
               formats={['webp']}
               fallbackFormat="png"
               widths={[240, 400]}
-              sizes="(min-width: 52rem) 14rem, 40vw"
+              sizes="(min-width: 52rem) 13rem, 40vw"
               loading="lazy"
               decoding="async"
             />
@@ -79,7 +79,7 @@ const covers = [
   .book__cover {
     position: relative;
     flex: 1 1 0;
-    max-width: 14rem;
+    max-width: 18rem;
     transition: transform 250ms var(--ease);
   }
 
@@ -128,7 +128,9 @@ const covers = [
 
   @media (min-width: 52rem) {
     .book {
-      grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+      /* The covers ARE the section here — they were sized like a thumbnail
+         beside the copy. */
+      grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
       gap: 3.5rem;
     }
   }

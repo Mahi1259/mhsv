@@ -402,6 +402,17 @@
     --band-pad: clamp(3.5rem, 2.4rem + 4.5vw, 6rem);
   }
 
+  /*
+   * The book section ENDS on its call to action, so the feature archetype's
+   * full 9.5rem bottom padding — landing on top of the next section's own —
+   * left a large empty band between the button and what follows. Closing
+   * tighter is not a rhythm break: a section that finishes on an action has
+   * nothing left to breathe after.
+   */
+  #book {
+    --band-pad-bottom: clamp(2.5rem, 1.75rem + 2.5vw, 4rem);
+  }
+
   /* ------------------------------------------------------------------------
      Typography
      ---------------------------------------------------------------------- */
