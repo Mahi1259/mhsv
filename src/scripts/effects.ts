@@ -154,42 +154,16 @@ function initNavShrink() {
   let shrunk = header.classList.contains('is-shrunk');
   let settle: ReturnType<typeof setTimeout>;
 
-  /*
-   * The four language codes are inline while the bar is full width and
-   * collapse into the current one when it contracts. The <details> ships
-   * `open` so the codes are inline without JavaScript — where nothing shrinks
-   * either — and closing it here is what performs the collapse.
-   */
-  const langMenu = header.querySelector<HTMLDetailsElement>('.lang__menu');
-
   const setShrunk = (next: boolean) => {
     if (next === shrunk) return;
     shrunk = next;
     header.classList.toggle('is-shrunk', next);
-    if (langMenu) langMenu.open = !next;
 
     if (calm) return;
     header.classList.add('is-animating');
     clearTimeout(settle);
     settle = setTimeout(() => header.classList.remove('is-animating'), SHRINK_SETTLE);
   };
-
-  // A native disclosure closes on neither of these by itself, and a menu that
-  // will not go away is worse than one that never opened.
-  if (langMenu) {
-    document.addEventListener('click', (event) => {
-      if (!shrunk || !langMenu.open) return;
-      if (!langMenu.contains(event.target as Node)) langMenu.open = false;
-    });
-
-    // On the document, not the disclosure: Escape has to work wherever focus
-    // happens to be, including straight after a pointer opened the menu.
-    document.addEventListener('keydown', (event) => {
-      if (event.key !== 'Escape' || !shrunk || !langMenu.open) return;
-      langMenu.open = false;
-      langMenu.querySelector('summary')?.focus();
-    });
-  }
 
   /*
    * Where the page is about to be, not only where it is.

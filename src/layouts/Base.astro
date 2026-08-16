@@ -154,13 +154,7 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
         if (hash.length < 2 || hash === '#main' || hash === '#top') return;
         if (!matchMedia('(min-width: 62rem)').matches) return;
         var header = document.querySelector('.site-header');
-        if (!header) return;
-        header.classList.add('is-shrunk');
-        // The language codes ship inline, inside a <details open>. In the
-        // shrunk bar that markup is a dropdown, so leaving it open would
-        // render the menu hanging below the pill on arrival.
-        var menu = header.querySelector('.lang__menu');
-        if (menu) menu.open = false;
+        if (header) header.classList.add('is-shrunk');
       })();
     </script>
 

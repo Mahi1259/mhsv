@@ -144,6 +144,8 @@ const CHECKS = [
   ['language code on bar over bone', C.mutedOnDark, SHRUNK_BAR_ON_BONE, 4.5],
   ['nav link on bar over card', C.white, SHRUNK_BAR_ON_CARD, 4.5],
   ['language code on bar over card', C.mutedOnDark, SHRUNK_BAR_ON_CARD, 4.5],
+  // The shrunk bar drops the switcher and states the current language instead.
+  ['current language on bar over bone', C.gold, SHRUNK_BAR_ON_BONE, 4.5],
 ];
 
 /** Pairings that must NEVER be used — verified as failing, so the ban is real. */

@@ -73,23 +73,9 @@ const navHref = (item: { id: string; href?: string }) =>
       "OF" on the French page, which leaves the switcher unusable for exactly
       the visitor who needs it. The brand name is protected for the same reason.
     */}
-    <nav class="lang notranslate" aria-label={c.ui.languageNav} translate="no">
-      {/*
-        ONE list, never two. A real <details> so the collapse is a native
-        disclosure — keyboard-operable and announced as one, rather than a
-        hover-only menu.
-
-        It ships `open`, and the summary is hidden while the bar is full
-        width, so the four codes sit inline exactly as before. The shrink
-        closes it (scripts/effects.ts), leaving only the current language.
-        Without JavaScript nothing shrinks, so nothing collapses either and
-        all four stay reachable.
-      */}
-      <details class="lang__menu" open>
-        <summary class="lang__current">
-          <span class="visually-hidden">{c.ui.languageNav} — {current.name}</span>
-          <span aria-hidden="true">{current.nameShort}</span>
-        </summary>
+    <div class="lang notranslate" translate="no">
+      {/* ONE list, never two. It is simply not shown once the bar contracts. */}
+      <nav class="lang__switch" aria-label={c.ui.languageNav}>
         <ul>
           {
             alternates.map((alt) => (
@@ -112,8 +98,19 @@ const navHref = (item: { id: string; href?: string }) =>
             ))
           }
         </ul>
-      </details>
-    </nav>
+      </nav>
+
+      {/*
+        What the shrunk bar shows instead: the current language, stated and
+        nothing more. Not a control — no link, no button, nothing to open.
+
+        aria-hidden because it says nothing new: the document's own `lang`
+        already tells assistive technology which language this is, and the
+        switcher itself is simply absent from the collapsed bar rather than
+        being represented by a label that does nothing.
+      */}
+      <span class="lang__current" aria-hidden="true">{current.nameShort}</span>
+    </div>
   </div>
 </header>
 
@@ -379,17 +376,11 @@ const navHref = (item: { id: string; href?: string }) =>
     order: 2;
     flex: 0 0 auto;
     margin-inline-start: auto;
-    /* Anchors the collapsed dropdown. */
-    position: relative;
   }
 
-  /* The trigger only exists once the bar contracts; until then the four codes
-     are inline and there is nothing to disclose. */
+  /* Only ever one of the two is shown. Full width: the switcher. Contracted:
+     the current language, stated. */
   .lang__current {
-    display: none;
-  }
-
-  .lang__current::-webkit-details-marker {
     display: none;
   }
 
@@ -495,16 +486,16 @@ const navHref = (item: { id: string; href?: string }) =>
     :global(html.is-booting) .site-header__shell,
     :global(html.is-booting) .brand__name,
     :global(html.is-booting) .brand img,
-    :global(html.is-booting) #main-nav ul,
-    :global(html.is-booting) .lang ul,
-    :global(html.is-booting) .lang a {
+    :global(html.is-booting) #main-nav ul {
       transition: none;
     }
 
+    /* The language block is absent from the shrunk bar rather than resized,
+       so it has nothing to animate and keeps the hover colours from its base
+       rule. */
     .brand__name,
     .brand :global(img),
-    #main-nav ul,
-    .lang ul {
+    #main-nav ul {
       transition:
         max-width var(--nav-geo),
         margin var(--nav-geo),
@@ -514,29 +505,18 @@ const navHref = (item: { id: string; href?: string }) =>
         opacity var(--nav-skin);
     }
 
-    /* Restates the hover colours from the base rule: a bare `transition` here
-       would replace them and the chips would snap on hover. */
-    .lang a {
-      transition:
-        min-width var(--nav-geo),
-        min-height var(--nav-geo),
-        font-size var(--nav-geo),
-        color var(--dur-fast) var(--ease),
-        background-color var(--dur-fast) var(--ease);
-    }
-
     /* --- the pill ------------------------------------------------------- */
     .site-header.is-shrunk {
       padding: 0.85rem 1rem 0;
     }
 
     .site-header.is-shrunk .site-header__shell {
-      /* 78rem → 61rem, a 22% contraction. Not the deeper cut the reference
-         spec suggests: at 61rem the French labels — the longest set — still
-         fit on one row beside all four language codes, with ~60px to spare.
-         Going narrower would mean either hiding the language switcher behind
-         a dropdown or dropping two sections from the nav, and on a
-         four-language institutional site the switcher earns its space. */
+      /* 78rem → 61rem, a 22% contraction. Sized when the four language codes
+         still rode in the pill: the French labels, the longest set, needed
+         all but ~60px of it. Now that the switcher is not offered here there
+         is roughly 100px more slack than the nav needs, so this could
+         contract further — a deliberate choice not to, since narrowing it is
+         a visual change nobody asked for. */
       max-width: 61rem;
       min-height: 3.25rem;
       padding-inline: 1.4rem;
@@ -576,70 +556,35 @@ const navHref = (item: { id: string; href?: string }) =>
     }
 
     /*
-     * The four codes collapse into the current one.
+     * The switcher is not offered by the contracted bar at all.
      *
-     * Four language chips are a lot of the pill's width to spend on something
-     * a reader uses once, and at full size they were the one part of the bar
-     * that visibly did not move when everything else contracted. Collapsed,
-     * the block goes from 118px to ~44px and hands the difference to the nav.
+     * Four chips are a lot of a pill's width to spend on something a reader
+     * uses once, and the intent is that changing language is a decision made
+     * at the top of the page, not something to trip over mid-read. So the
+     * switcher is simply not there, and the bar states which language you are
+     * in. `display: none` and not merely hidden: nothing left focusable, so a
+     * keyboard user cannot land on a control that is not on screen.
      *
-     * scripts/effects.ts closes the <details> as the bar shrinks and reopens
-     * it at the top of the page; everything here is just how the two states
-     * look.
+     * The trade is real — from here, changing language means returning to the
+     * top of the page.
+     */
+    .site-header.is-shrunk .lang__switch {
+      display: none;
+    }
+
+    /*
+     * Gold TEXT, not the filled gold chip the active language wears in the
+     * switcher: a filled chip reads as a control, and this one does nothing.
+     * 5.31:1 over the bar at its lightest — see scripts/check-contrast.mjs.
      */
     .site-header.is-shrunk .lang__current {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      min-width: 1.75rem;
-      min-height: 2rem;
-      padding-inline: 0.4rem;
-      cursor: pointer;
-      list-style: none;
+      display: block;
+      padding-inline: 0.25rem;
       font-family: var(--font-mono);
-      font-size: 0.6875rem;
+      font-size: 0.75rem;
       font-weight: 500;
-      letter-spacing: 0.04em;
-      /* Navy on gold, the same pairing the active chip already used. */
-      color: var(--navy-deep);
-      background: var(--gold);
-      border-radius: 3px;
-    }
-
-    /* A chevron drawn from a rotated corner — no icon font, no SVG. */
-    .site-header.is-shrunk .lang__current::after {
-      content: '';
-      width: 0.3rem;
-      height: 0.3rem;
-      border-inline-end: 1.5px solid currentColor;
-      border-block-end: 1.5px solid currentColor;
-      transform: translateY(-1px) rotate(45deg);
-      transition: transform var(--dur-fast) var(--ease);
-    }
-
-    .site-header.is-shrunk .lang__menu[open] .lang__current::after {
-      transform: translateY(1px) rotate(-135deg);
-    }
-
-    /* Out of the bar's flow, so opening the menu cannot stretch the pill. */
-    .site-header.is-shrunk .lang ul {
-      position: absolute;
-      top: calc(100% + 0.55rem);
-      inset-inline-end: 0;
-      flex-direction: column;
-      gap: 0.125rem;
-      min-width: 4.5rem;
-      padding: 0.3rem;
-      background: var(--navy-raise);
-      border: 1px solid var(--hairline-strong);
-      border-radius: 6px;
-      box-shadow: 0 18px 40px rgb(0 0 0 / 0.45);
-    }
-
-    .site-header.is-shrunk .lang ul a {
-      justify-content: flex-start;
-      min-height: 2rem;
-      padding-inline: 0.55rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
     }
   }
 </style>
