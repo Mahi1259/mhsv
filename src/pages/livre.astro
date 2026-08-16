@@ -78,14 +78,23 @@ const columns = [
     <a class="skip-link" href="#book">Aller au contenu / Skip to content</a>
 
     <header class="livre-header">
-      <div class="shell livre-header__inner">
-        <a class="livre-brand" href={localePath('', 'fr')}>
+      <div class="livre-header__inner">
+        <a class="livre-brand notranslate" href={localePath('', 'fr')} translate="no">
           <Image src={crest} alt="" width={32} height={36} loading="eager" densities={[1, 2]} />
           <span>MHSV®</span>
         </a>
-        <nav class="livre-header__nav" aria-label="Langues du site / Site languages">
-          <a href={localePath('', 'fr')} hreflang="fr">Site FR</a>
-          <a href={localePath('', 'en')} hreflang="en">Site EN</a>
+        {/*
+          NOT a language switcher — this page is bilingual, so there is nothing
+          to switch. Both links lead to the main site, and they are labelled as
+          destinations rather than as an action on this page, because "Site FR /
+          Site EN" read as a toggle and surprised people when it navigated away.
+
+          translate="no" for the same reason it is on the main masthead: Chrome
+          auto-translation rewrites the two-letter codes, turning EN into IN.
+        */}
+        <nav class="livre-header__nav notranslate" aria-label="Site MHSV® — MHSV® website" translate="no">
+          <a href={localePath('', 'fr')} hreflang="fr" lang="fr">Site français</a>
+          <a href={localePath('', 'en')} hreflang="en" lang="en">English site</a>
         </nav>
       </div>
     </header>
@@ -166,21 +175,61 @@ const columns = [
 </html>
 
 <style>
+  /*
+   * FIXED, matching the main masthead.
+   *
+   * It was sticky, so it sat BELOW the space `body` reserves for the site's
+   * fixed bar — 68.8px of dead navy above it, which is the gap this page had
+   * between the top of the window and its own header. Fixed, it occupies that
+   * reserved space instead of adding to it.
+   */
   .livre-header {
-    position: sticky;
+    position: fixed;
+    inset-inline: 0;
     top: 0;
     z-index: 50;
-    background: color-mix(in srgb, var(--navy-deep) 85%, transparent);
-    backdrop-filter: blur(14px);
-    border-block-end: 1px solid var(--hairline);
   }
 
+  /* Mobile, and the base case: a plain solid bar, exactly as the site's. */
   .livre-header__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    min-height: 4rem;
+    width: 100%;
+    max-width: 78rem;
+    min-height: 4.25rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 0.5rem + 3.4vw, 4rem);
+    background: color-mix(in srgb, var(--navy-deep) 94%, transparent);
+    border-block-end: 1px solid var(--hairline);
+  }
+
+  /*
+   * On desktop it wears the same floating pill the site's masthead does once
+   * scrolled — held in that state permanently rather than shrinking, since
+   * there are no sections here to scroll past. Same measurements, so the two
+   * pages read as one site.
+   */
+  @media (min-width: 62rem) {
+    .livre-header {
+      padding: 0.85rem 1rem 0;
+    }
+
+    .livre-header__inner {
+      max-width: 61rem;
+      min-height: 3.25rem;
+      padding-inline: 1.4rem;
+      border: 1px solid color-mix(in srgb, var(--gold) 18%, transparent);
+      border-block-end: 1px solid color-mix(in srgb, var(--gold) 18%, transparent);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--navy-deep) 82%, transparent);
+      backdrop-filter: blur(18px) saturate(140%);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
+      box-shadow:
+        0 8px 32px rgb(0 0 0 / 0.3),
+        0 1px 0 rgb(255 255 255 / 0.05) inset;
+    }
   }
 
   .livre-brand {
@@ -201,7 +250,7 @@ const columns = [
 
   .livre-header__nav {
     display: flex;
-    gap: 1rem;
+    gap: 1.25rem;
   }
 
   .livre-header__nav a {
@@ -223,7 +272,9 @@ const columns = [
   }
 
   .livre {
-    padding-block: clamp(3rem, 2rem + 6vw, 6rem);
+    /* Opens tighter than it closes: the fixed bar already leaves --header-h of
+       clear space above this, so a full 6rem on top read as a hole. */
+    padding-block: clamp(2rem, 1.25rem + 2.5vw, 3rem) clamp(3rem, 2rem + 6vw, 6rem);
   }
 
   .livre__inner {
