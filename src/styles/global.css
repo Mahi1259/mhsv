@@ -80,9 +80,11 @@
     --band-raised: rgb(255 255 255 / 0.045);
     --focus-ring: var(--color-gold-soft);
 
-    /* Sticky masthead height, and the breathing room a heading should keep
+    /* Expanded masthead height, and the breathing room a heading should keep
        below it after an anchor jump. Used by the scroll-margin maths on
-       .band — see there. */
+       .band, and by `body` to reserve the space the fixed bar no longer
+       occupies. Measured against the EXPANDED bar: the shrunk pill is ~3px
+       shorter, which only ever lands a heading marginally lower. */
     --header-h: 4.3rem;
     --anchor-gap: 1.5rem;
 
@@ -217,6 +219,16 @@
   }
 
   body {
+    /*
+     * Gives back the space the masthead no longer occupies.
+     *
+     * The masthead is `position: fixed` so that contracting it on scroll
+     * cannot reflow the document — a sticky bar stays in flow, and shortening
+     * it mid-scroll shunts every section up by the difference. Out of flow it
+     * needs the room reserving here instead, and the page then lays out
+     * exactly as it did when the bar was sticky: --header-h, then content.
+     */
+    padding-block-start: var(--header-h);
     background-color: var(--navy-deep);
     color: var(--white);
     font-family: var(--font-body);

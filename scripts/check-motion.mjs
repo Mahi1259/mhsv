@@ -11,6 +11,8 @@
  *   5. the cascade is capped (~400ms), not one item at a time forever
  *   6. hover is ~180ms and :active is quicker than :hover
  *   7. focus rings appear instantly
+ *   8. the masthead shrinks on desktop, holds its state, and stays inert on
+ *      mobile — including that the pill still fits every locale on one row
  */
 import puppeteer from 'puppeteer-core';
 
@@ -159,6 +161,136 @@ try {
       `${Math.round(durations.hover * 1000)}ms`,
     );
     check(!durations.outlineTransitioned, 'focus ring is not transitioned (appears instantly)');
+    await page.close();
+  }
+
+  /* --- 8: the resizable masthead ------------------------------------------
+   *
+   * Screenshots cannot show any of this. The failures worth catching are a
+   * bar that flickers at the threshold, one that renders expanded and then
+   * snaps after the first wheel event, a pill too narrow for the longest
+   * locale, and a phone paying for a backdrop-filter it never sees.
+   */
+  const bar = () => ({
+    shrunk: document.querySelector('.site-header').classList.contains('is-shrunk'),
+    animating: document.querySelector('.site-header').classList.contains('is-animating'),
+    ...(({ width, height }) => ({ width: Math.round(width), height: Math.round(height) }))(
+      document.querySelector('.site-header__shell').getBoundingClientRect(),
+    ),
+    ...(({ borderRadius, backdropFilter, boxShadow, backgroundColor, transitionDuration }) => ({
+      radius: parseFloat(borderRadius),
+      blurred: backdropFilter !== 'none' && backdropFilter.includes('blur(0px)') === false,
+      lifted: boxShadow !== 'none',
+      alpha: Number((/rgba?\([^)]*?([\d.]+)\)/.exec(backgroundColor) ?? [, '1'])[1]),
+      duration: parseFloat(transitionDuration),
+    }))(getComputedStyle(document.querySelector('.site-header__shell'))),
+    /* One row, or the pill has burst and the links have wrapped. */
+    rows: new Set(
+      [...document.querySelectorAll('#main-nav li')].map((li) =>
+        Math.round(li.getBoundingClientRect().top),
+      ),
+    ).size,
+  });
+
+  {
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1440, height: 900 });
+    await page.goto(`${BASE}/fr/`, { waitUntil: 'networkidle0' });
+
+    const top = await page.evaluate(bar);
+    check(!top.shrunk && top.alpha === 0, 'at the top the bar has no surface of its own');
+
+    await page.evaluate(() => scrollTo(0, 600));
+    await new Promise((r) => setTimeout(r, 700));
+    const down = await page.evaluate(bar);
+
+    check(down.shrunk, 'scrolling shrinks the bar');
+    check(down.width < top.width, 'the shell contracts', `${top.width}px → ${down.width}px`);
+    check(down.height < top.height, 'and shortens', `${top.height}px → ${down.height}px`);
+    check(down.radius >= 24, 'it rounds into a pill', `${down.radius}px`);
+    check(down.blurred && down.lifted, 'the background materialises and it lifts');
+    check(!down.animating, 'will-change is dropped once the transition settles');
+
+    // Rest on the threshold and jiggle: hysteresis must make this impossible.
+    let flips = 0;
+    await page.evaluate(() => scrollTo(0, 56));
+    await new Promise((r) => setTimeout(r, 300));
+    let last = (await page.evaluate(bar)).shrunk;
+    for (let i = 0; i < 12; i++) {
+      await page.evaluate((y) => scrollTo(0, y), 56 + (i % 2 ? 3 : -3));
+      await new Promise((r) => setTimeout(r, 60));
+      const now = (await page.evaluate(bar)).shrunk;
+      if (now !== last) flips++;
+      last = now;
+    }
+    check(flips === 0, 'resting on the threshold does not oscillate', `${flips} flips`);
+
+    // A refresh part-way down must render the right state, not snap into it.
+    await page.evaluate(() => scrollTo(0, 2400));
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await new Promise((r) => setTimeout(r, 120));
+    const restored = await page.evaluate(bar);
+    check(restored.shrunk, 'a refresh part-way down renders shrunk immediately');
+    await page.close();
+  }
+
+  // The pill has to hold the longest locale on one row at the narrowest
+  // desktop, or the nav wraps and the pill bursts into a lozenge.
+  {
+    const page = await browser.newPage();
+    for (const width of [1440, 1024]) {
+      await page.setViewport({ width, height: 900 });
+      for (const locale of ['fr', 'en', 'de', 'it']) {
+        await page.goto(`${BASE}/${locale}/`, { waitUntil: 'networkidle0' });
+        await page.evaluate(() => scrollTo(0, 600));
+        await new Promise((r) => setTimeout(r, 600));
+        const state = await page.evaluate(bar);
+        const overflow = await page.evaluate(
+          () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+        );
+        check(
+          state.shrunk && state.rows === 1 && !overflow,
+          `${locale} at ${width}px: pill holds the nav on one row`,
+          `${state.width}px shell, ${state.rows} row(s)`,
+        );
+      }
+    }
+    await page.close();
+  }
+
+  // Mobile: nothing about the bar may move, and it must not pay for glass.
+  {
+    const page = await browser.newPage();
+    await page.setViewport({ width: 375, height: 720, isMobile: true, hasTouch: true });
+    await page.goto(`${BASE}/fr/`, { waitUntil: 'networkidle0' });
+    const before = await page.evaluate(bar);
+    await page.evaluate(() => scrollTo(0, 1800));
+    await new Promise((r) => setTimeout(r, 700));
+    const after = await page.evaluate(bar);
+
+    check(!after.shrunk, 'mobile: the bar never shrinks');
+    check(
+      before.width === after.width && before.height === after.height,
+      'mobile: the bar never changes size',
+      `${before.width}×${before.height} → ${after.width}×${after.height}`,
+    );
+    check(after.radius === 0 && !after.blurred && !after.lifted, 'mobile: solid bar, no glass');
+    check(after.duration === 0, 'mobile: no transitions declared at all');
+    await page.close();
+  }
+
+  // Reduced motion still shrinks — it is a space saving, not decoration —
+  // but arrives instantly.
+  {
+    const page = await browser.newPage();
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    await page.setViewport({ width: 1280, height: 900 });
+    await page.goto(`${BASE}/fr/`, { waitUntil: 'networkidle0' });
+    await page.evaluate(() => scrollTo(0, 600));
+    await new Promise((r) => setTimeout(r, 300));
+    const calm = await page.evaluate(bar);
+    check(calm.shrunk, 'reduced motion: the bar still shrinks');
+    check(calm.duration <= 0.01, 'reduced motion: it shrinks instantly', `${calm.duration}s`);
     await page.close();
   }
 } finally {

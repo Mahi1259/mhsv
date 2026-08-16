@@ -1,6 +1,6 @@
 ---
 /**
- * Sticky masthead: brand, primary navigation, language switcher.
+ * Fixed masthead: brand, primary navigation, language switcher.
  *
  * The navigation list is rendered EXACTLY ONCE (#main-nav). It was previously
  * emitted twice — a desktop bar plus a mobile panel with one hidden by CSS —
@@ -10,6 +10,11 @@
  * The mobile disclosure is a <details> whose panel is its *sibling*, toggled
  * with `[open] ~ #main-nav`. That keeps one nav in the document, needs no
  * JavaScript, and still works if scripts fail.
+ *
+ * ON DESKTOP the shell contracts into a floating pill once the page is
+ * scrolled — see the `.is-shrunk` block below. Three things move together
+ * (width, background, elevation); any one of them alone reads as a bug.
+ * scripts/effects.ts adds the class.
  */
 import { Image } from 'astro:assets';
 import { getContent, localeAlternates, localePath, type Locale } from '@/lib/i18n';
@@ -33,9 +38,11 @@ const navHref = (item: { id: string; href?: string }) =>
 ---
 
 <header class="site-header">
-  <div class="shell site-header__inner">
+  <div class="site-header__shell">
     <a class="brand" href={home}>
       <Image src={crest} alt="" width={36} height={40} loading="eager" densities={[1, 2]} />
+      {/* Collapses to nothing when the bar shrinks. Hidden with max-width and
+          opacity rather than display, so it stays the link's accessible name. */}
       <span class="brand__name notranslate" translate="no">{c.brand.name}</span>
       <span class="visually-hidden">— {c.brand.institutional}</span>
     </a>
@@ -92,24 +99,53 @@ const navHref = (item: { id: string; href?: string }) =>
 </header>
 
 <style>
+  /*
+   * FIXED, not sticky, and never anything else.
+   *
+   * A sticky masthead stays in flow, so contracting it would shorten the
+   * document and shunt everything below up by the difference — a visible jump
+   * mid-scroll. Out of flow, the geometry can move for free. `body` carries
+   * `padding-block-start: var(--header-h)` to give back the space, so the page
+   * lays out exactly as it did when this was sticky.
+   *
+   * The position must be identical in both states: switching it would break
+   * scroll anchoring.
+   */
   .site-header {
-    position: sticky;
+    /* Geometry on one curve, skin slightly quicker: two durations stop the
+       change landing as a single mechanical snap. */
+    --nav-geo: 480ms var(--ease-out);
+    --nav-skin: 380ms ease-out;
+
+    position: fixed;
+    inset-inline: 0;
     top: 0;
     z-index: 50;
-    background: color-mix(in srgb, var(--navy-deep) 82%, transparent);
-    backdrop-filter: blur(14px) saturate(140%);
-    border-block-end: 1px solid var(--hairline);
   }
 
-  .site-header__inner {
+  /*
+   * Mobile is the base case and it is deliberately inert: solid navy, no
+   * blur, and — because nothing here declares a transition — nothing to
+   * disable later. On a phone the bar sits directly over content with no
+   * margin either side, so translucency costs legibility, and backdrop-filter
+   * is the most expensive property on a mobile GPU.
+   */
+  .site-header__shell {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    width: 100%;
+    max-width: 78rem;
     min-height: 4.25rem;
+    margin-inline: auto;
+    /* Matches .shell, so the crest lines up with the page's text edge. */
+    padding-inline: clamp(1.25rem, 0.5rem + 3.4vw, 4rem);
+    background: color-mix(in srgb, var(--navy-deep) 94%, transparent);
+    border-block-end: 1px solid var(--hairline);
   }
 
   @media (min-width: 24rem) {
-    .site-header__inner {
+    .site-header__shell {
       gap: 1rem;
     }
   }
@@ -118,7 +154,8 @@ const navHref = (item: { id: string; href?: string }) =>
   .brand {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    /* No gap: the wordmark carries its own leading margin, so when it
+       collapses on the shrunk desktop bar the space goes with it. */
     text-decoration: none;
     color: var(--white);
     flex: 0 0 auto;
@@ -135,6 +172,10 @@ const navHref = (item: { id: string; href?: string }) =>
   }
 
   .brand__name {
+    margin-inline-start: 0.5rem;
+    max-width: 7rem;
+    overflow: hidden;
+    white-space: nowrap;
     font-family: var(--font-display);
     font-weight: 800;
     font-size: 1.0625rem;
@@ -206,15 +247,17 @@ const navHref = (item: { id: string; href?: string }) =>
       min-width: 0;
     }
 
+    /* Sized on the list, not on each link: one animated property instead of
+       eight when the bar contracts. */
     #main-nav ul {
       flex-wrap: wrap;
       justify-content: center;
       gap: 0.25rem 1.25rem;
+      font-size: 0.875rem;
     }
 
     #main-nav a {
       padding-block: 0.25rem;
-      font-size: 0.875rem;
       position: relative;
     }
 
@@ -362,6 +405,118 @@ const navHref = (item: { id: string; href?: string }) =>
   @media (min-width: 26rem) {
     .lang a {
       min-width: 2rem;
+    }
+  }
+
+  /* ======================================================================
+     Shrink on scroll — desktop only
+
+     Past ~90px the shell contracts into a floating pill. THREE things move
+     together, and the combination is the whole effect: the width contracts,
+     the background materialises, and it lifts off the page. Any one of them
+     alone reads as a rendering bug.
+
+     Everything below lives inside the desktop query — the same 62rem
+     boundary at which the inline nav exists at all. Below it nothing here
+     applies, so the mobile bar has no transitions to disable and no
+     backdrop-filter to pay for.
+
+     Under `prefers-reduced-motion` the global rule collapses every duration
+     to 0.001ms, so the bar still shrinks — it is a functional space saving,
+     not decoration — it simply arrives instantly.
+     ====================================================================== */
+  @media (min-width: 62rem) {
+    .site-header {
+      transition: padding var(--nav-geo);
+    }
+
+    /* Expanded: no surface at all. The page runs to the top of the window and
+       the bar is only its contents. */
+    .site-header__shell {
+      border: 1px solid transparent;
+      border-radius: 0;
+      background: transparent;
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+      box-shadow: 0 0 0 0 rgb(0 0 0 / 0);
+      transition:
+        max-width var(--nav-geo),
+        min-height var(--nav-geo),
+        padding var(--nav-geo),
+        border-radius var(--nav-geo),
+        background var(--nav-skin),
+        border-color var(--nav-skin),
+        box-shadow var(--nav-skin),
+        backdrop-filter var(--nav-skin);
+    }
+
+    /* Only while the geometry is actually moving. Left on permanently,
+       will-change pins a compositing layer for the life of the page;
+       scripts/effects.ts drops the class once the transition has settled. */
+    .site-header.is-animating .site-header__shell {
+      will-change: max-width, padding, border-radius;
+    }
+
+    .brand__name,
+    .brand :global(img),
+    #main-nav ul {
+      transition:
+        max-width var(--nav-geo),
+        margin var(--nav-geo),
+        width var(--nav-geo),
+        gap var(--nav-geo),
+        font-size var(--nav-geo),
+        opacity var(--nav-skin);
+    }
+
+    /* --- the pill ------------------------------------------------------- */
+    .site-header.is-shrunk {
+      padding: 0.85rem 1rem 0;
+    }
+
+    .site-header.is-shrunk .site-header__shell {
+      /* 78rem → 61rem, a 22% contraction. Not the deeper cut the reference
+         spec suggests: at 61rem the French labels — the longest set — still
+         fit on one row beside all four language codes, with ~60px to spare.
+         Going narrower would mean either hiding the language switcher behind
+         a dropdown or dropping two sections from the nav, and on a
+         four-language institutional site the switcher earns its space. */
+      max-width: 61rem;
+      min-height: 3.25rem;
+      padding-inline: 1.4rem;
+      /* A pill, not a rounded rectangle. This is what reads as floating
+         rather than docked. */
+      border-radius: 999px;
+      /* 82% navy. The reference spec says 72%; measured against the bone
+         panels this bar passes over, 72% drops the language codes to 3.2:1.
+         82% keeps them above AA and is still inside the 60–85% band where
+         the glass reads as glass — see scripts/check-contrast.mjs. */
+      background: color-mix(in srgb, var(--navy-deep) 82%, transparent);
+      border-color: color-mix(in srgb, var(--gold) 18%, transparent);
+      /* saturate() is the detail that matters: without it the blurred
+         content behind goes grey and dead, and the bar reads as frosted
+         plastic rather than glass. */
+      backdrop-filter: blur(18px) saturate(140%);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
+      box-shadow:
+        0 8px 32px rgb(0 0 0 / 0.3),
+        0 1px 0 rgb(255 255 255 / 0.05) inset;
+    }
+
+    /* --- contents tighten ----------------------------------------------- */
+    .site-header.is-shrunk .brand__name {
+      max-width: 0;
+      margin-inline-start: 0;
+      opacity: 0;
+    }
+
+    .site-header.is-shrunk .brand :global(img) {
+      width: 1.5625rem;
+    }
+
+    .site-header.is-shrunk #main-nav ul {
+      gap: 0.25rem 1.15rem;
+      font-size: 0.86rem;
     }
   }
 </style>

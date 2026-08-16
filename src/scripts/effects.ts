@@ -1,5 +1,8 @@
 /**
- * Ambient effects: floodlight, scroll progress, magnetic buttons.
+ * Ambient effects: masthead shrink, floodlight, scroll progress, magnetic
+ * buttons.
+ *
+ * ONE passive, rAF-throttled scroll listener for the page — see `onScroll`.
  *
  * ONE requestAnimationFrame loop for the entire site. Each effect registers a
  * step function; the loop runs only while at least one of them still has work
@@ -32,6 +35,42 @@ function wake() {
 
 const fine = matchMedia('(pointer: fine)').matches;
 const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------------------------------------------------------------------------
+   One scroll listener for the page, rAF-throttled and passive.
+
+   Several things react to scroll position; each adding its own listener means
+   several handlers competing for the same frame. Registering here gives one
+   listener, one frame, and one place to keep `passive: true` — which is what
+   stops scrolling being blocked on the main thread.
+
+   The callback also fires immediately on registration, so a page loaded or
+   refreshed part-way down renders the correct state instead of snapping into
+   it on the first wheel event.
+   --------------------------------------------------------------------------- */
+const scrollHandlers = new Set<() => void>();
+let scrollQueued = false;
+
+function runScrollHandlers() {
+  scrollQueued = false;
+  for (const handler of scrollHandlers) handler();
+}
+
+function onScroll(handler: () => void) {
+  if (scrollHandlers.size === 0) {
+    addEventListener(
+      'scroll',
+      () => {
+        if (scrollQueued) return;
+        scrollQueued = true;
+        requestAnimationFrame(runScrollHandlers);
+      },
+      { passive: true },
+    );
+  }
+  scrollHandlers.add(handler);
+  handler();
+}
 
 /* ---------------------------------------------------------------------------
    Floodlight
@@ -90,25 +129,75 @@ function initScrollProgress() {
   const bar = document.querySelector<HTMLElement>('.scroll-progress__bar');
   if (!bar || calm) return;
 
-  let pending = false;
   const update = () => {
-    pending = false;
     const max = document.documentElement.scrollHeight - innerHeight;
     const ratio = max > 0 ? Math.min(scrollY / max, 1) : 0;
     bar.style.transform = `scaleX(${ratio})`;
   };
 
-  addEventListener(
-    'scroll',
-    () => {
-      if (pending) return;
-      pending = true;
-      requestAnimationFrame(update);
-    },
-    { passive: true },
-  );
+  onScroll(update);
   addEventListener('resize', update, { passive: true });
-  update();
+}
+
+/* ---------------------------------------------------------------------------
+   Shrink the masthead on scroll — desktop only
+
+   Past the entry threshold the shell contracts into a floating pill. This adds
+   the class; src/components/Header.astro does the rest.
+
+   Two thresholds, not one. With a single threshold a visitor resting exactly
+   on it gets the bar flapping between states on every micro-scroll; 60px of
+   hysteresis makes that impossible.
+
+   The entry point is deliberately shorter than the masthead. The expanded bar
+   has no background of its own, so it must have materialised before page text
+   can reach the row the nav links sit on — measured at 72px of scroll.
+
+   This runs under reduced motion. The shrink is a functional space saving, and
+   the global stylesheet already collapses the durations to nothing, so it
+   simply happens instantly.
+   --------------------------------------------------------------------------- */
+const SHRINK_ENTER = 56;
+const SHRINK_EXIT = 8;
+/** Must outlast the longest transition in the header (480ms). */
+const SHRINK_SETTLE = 560;
+
+function initNavShrink() {
+  const header = document.querySelector<HTMLElement>('.site-header');
+  if (!header) return;
+
+  // The same breakpoint at which the inline nav exists at all. Below it there
+  // is nothing to contract into, translucency costs legibility over content,
+  // and backdrop-filter is the most expensive property on a mobile GPU.
+  const desktop = matchMedia('(min-width: 62rem)');
+
+  let shrunk = false;
+  let settle: ReturnType<typeof setTimeout>;
+
+  const setShrunk = (next: boolean) => {
+    if (next === shrunk) return;
+    shrunk = next;
+    header.classList.toggle('is-shrunk', next);
+
+    if (calm) return;
+    header.classList.add('is-animating');
+    clearTimeout(settle);
+    settle = setTimeout(() => header.classList.remove('is-animating'), SHRINK_SETTLE);
+  };
+
+  const update = () => {
+    if (!desktop.matches) {
+      setShrunk(false);
+      return;
+    }
+    if (!shrunk && scrollY > SHRINK_ENTER) setShrunk(true);
+    else if (shrunk && scrollY < SHRINK_EXIT) setShrunk(false);
+  };
+
+  // Without this, rotating a phone to landscape or dragging a desktop window
+  // across the breakpoint leaves the bar stuck in the wrong state.
+  desktop.addEventListener('change', update);
+  onScroll(update);
 }
 
 /* ---------------------------------------------------------------------------
@@ -146,6 +235,7 @@ function initMagnetic() {
   }
 }
 
+initNavShrink();
 initFloodlight();
 initScrollProgress();
 initMagnetic();
