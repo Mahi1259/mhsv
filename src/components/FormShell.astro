@@ -12,6 +12,12 @@ import { getContent, type Locale } from '@/lib/i18n';
 
 interface Props {
   locale: Locale;
+  /**
+   * A second language to show alongside the first. Set on a page that is
+   * itself bilingual — /livre — so its form does not end up in one language
+   * while the copy around it is in two.
+   */
+  altLocale?: Locale;
   /** Matches FORM_KINDS in functions/lib/contact-core.mjs. */
   kind: 'contact' | 'book-order' | 'newsletter';
   id: string;
@@ -26,8 +32,12 @@ interface Props {
   class?: string;
 }
 
-const { locale, kind, id, submitLabel, strings, class: className } = Astro.props;
+const { locale, altLocale, kind, id, submitLabel, strings, class: className } = Astro.props;
 const c = getContent(locale);
+const alt = altLocale ? getContent(altLocale) : null;
+
+/** "Champs requis / Required fields" — and just one when they coincide. */
+const both = (a: string, b?: string) => (b && b !== a ? `${a} / ${b}` : a);
 ---
 
 <form
@@ -52,12 +62,16 @@ const c = getContent(locale);
   <slot />
 
   <div class="form__actions">
-    <button class="btn btn--primary" type="submit" data-sending-label={c.form.submitting}>
+    <button
+      class="btn btn--primary"
+      type="submit"
+      data-sending-label={both(c.form.submitting, alt?.form.submitting)}
+    >
       {submitLabel}
     </button>
     <p class="form__note">
       <span aria-hidden="true">*</span>
-      {c.ui.required}
+      {both(c.ui.required, alt?.ui.required)}
     </p>
   </div>
 

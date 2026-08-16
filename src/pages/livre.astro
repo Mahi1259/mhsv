@@ -21,8 +21,6 @@ import { SITE_URL, IS_PRODUCTION, BOOK_PAGE_PATH } from '@/config/site';
 import preloadFonts from '@/config/preload-fonts.json';
 import coverFr from '@/assets/book/founding-book-fr.png';
 import coverEn from '@/assets/book/founding-book-en.png';
-import crest from '@/assets/logo/mhsv-crest.png';
-import { Image } from 'astro:assets';
 import '@/styles/global.css';
 
 const fr = getContent('fr');
@@ -77,14 +75,43 @@ const columns = [
   <body>
     <a class="skip-link" href="#book">Aller au contenu / Skip to content</a>
 
+    {/*
+      A way back, not a masthead.
+
+      It is a real LINK to the site, not a bare history.back() button: most
+      arrivals here are a QR scan or a direct hit, where there is no previous
+      page and a back button would do nothing. The script below upgrades it to
+      history.back() only when the visitor actually came from this site, so it
+      is right in both cases and works with scripts off.
+    */}
     <header class="livre-header">
       <div class="livre-header__inner">
-        <a class="livre-brand notranslate" href={localePath('', 'fr')} translate="no">
-          <Image src={crest} alt="" width={32} height={36} loading="eager" densities={[1, 2]} />
-          <span>MHSV®</span>
+        <a class="livre-back" href={localePath('', 'fr')} data-back>
+          <span class="livre-back__arrow" aria-hidden="true">&#8592;</span>
+          <span lang="fr">Retour</span>
+          <span class="livre-back__sep" aria-hidden="true">/</span>
+          <span lang="en">Back</span>
         </a>
       </div>
     </header>
+
+    <script is:inline>
+      (function () {
+        var link = document.querySelector('[data-back]');
+        if (!link) return;
+        var internal = false;
+        try {
+          internal = !!document.referrer && new URL(document.referrer).origin === location.origin;
+        } catch (e) {
+          /* an opaque referrer; treat it as external and keep the href */
+        }
+        if (!internal) return;
+        link.addEventListener('click', function (event) {
+          event.preventDefault();
+          history.back();
+        });
+      })();
+    </script>
 
     <main id="book">
       <section class="band band--ground livre">
@@ -140,12 +167,9 @@ const columns = [
             <span class="livre-order__sep" aria-hidden="true">/</span>
             <span lang="en">{en.bookOrder.title}</span>
           </h2>
-          <p class="livre-order__note">
-            <span lang="fr-CH">{fr.bookOrder.intro}</span>
-            <span lang="en">{en.bookOrder.intro}</span>
-          </p>
-          {/* Defaults to French; the visitor picks the edition in the form. */}
-          <BookOrderForm locale="fr" />
+          {/* French first, English beside it — the form matches the page. The
+              visitor still picks which EDITION of the book they want inside. */}
+          <BookOrderForm locale="fr" altLocale="en" />
         </div>
       </section>
     </main>
@@ -214,10 +238,10 @@ const columns = [
     }
 
     .livre-header__inner {
-      /* Hugs the brand rather than holding it at one end of a 976px pill.
-         There is nothing else in this bar — the page is bilingual, so it has
-         no language switcher, and there are no sections to navigate. */
+      /* Hugs its one control, and sits at the left edge of the page's measure
+         so the way back lines up with the content below it. */
       width: fit-content;
+      margin-inline: max(0px, calc((100% - 78rem) / 2)) auto;
       max-width: 61rem;
       min-height: 3.25rem;
       padding-inline: 1.4rem;
@@ -233,20 +257,32 @@ const columns = [
     }
   }
 
-  .livre-brand {
+  .livre-back {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
+    /* 44px target. */
+    min-height: 2.75rem;
     color: var(--white);
     text-decoration: none;
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 180ms var(--ease);
   }
 
-  .livre-brand :global(img) {
-    width: 1.75rem;
-    height: auto;
+  .livre-back:hover {
+    color: var(--gold-soft);
+  }
+
+  .livre-back__arrow {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .livre-back__sep {
+    color: var(--muted-on-dark);
   }
 
   .livre {
