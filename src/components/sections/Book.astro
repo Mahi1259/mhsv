@@ -35,14 +35,19 @@ const covers = [
     <ul class="book__covers" data-reveal-x>
       {
         covers.map((cover) => (
-          <li class="book__cover">
+          <li class="book__cover" style={`flex-grow: ${cover.src.width / cover.src.height}`}>
+            {/* Flex-grow set to the cover's own aspect ratio, so the two
+                widths come out in proportion to their shapes and the two
+                HEIGHTS come out equal. The supplied files no longer share a
+                ratio once their pale borders are trimmed — 0.697 and 0.752 —
+                and equal widths made one book look smaller than the other. */}
             <Picture
               src={cover.src}
               alt={cover.alt}
               formats={['webp']}
               fallbackFormat="png"
-              widths={[240, 400]}
-              sizes="(min-width: 52rem) 13rem, 40vw"
+              widths={[280, 460, 620]}
+              sizes="(min-width: 52rem) 14rem, 40vw"
               loading="lazy"
               decoding="async"
             />
@@ -70,10 +75,6 @@ const covers = [
 
   .book__covers {
     display: flex;
-    /* The two supplied files do not share an aspect ratio once their pale
-       borders are trimmed, so stand them on one baseline rather than letting
-       them float at different heights. */
-    align-items: flex-end;
     gap: 1rem;
     list-style: none;
     margin: 0;
@@ -82,7 +83,8 @@ const covers = [
 
   .book__cover {
     position: relative;
-    flex: 1 1 0;
+    /* grow is set per cover, inline, from its aspect ratio. */
+    flex: 0 1 0;
     max-width: 18rem;
     transition: transform 250ms var(--ease);
   }

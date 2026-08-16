@@ -397,16 +397,18 @@ async function buildBookCovers() {
     const out = resolve(ROOT, `src/assets/book/founding-book-${loc}.png`);
     const source = resolve(PACK, rel);
     const box = await contentBox(source);
-    // Covers render at most ~264px wide. Capping the source at 600px keeps the
-    // PNG fallback that <Picture> emits from weighing ~900 kB.
+    // Covers render at most ~264 CSS px, which is ~528 real pixels on a 2x
+    // screen, so a 600px cap left nothing in hand. 900 keeps the covers sharp
+    // on a retina display and still holds the PNG fallback that <Picture>
+    // emits well under a megabyte.
     await sharp(source)
       .extract(box)
-      .resize({ width: 600, withoutEnlargement: true })
+      .resize({ width: 900, withoutEnlargement: true })
       .png({ compressionLevel: 9 })
       .toFile(out);
     record(
       `src/assets/book/founding-book-${loc}.png`,
-      `approved cover, pale border trimmed to ${box.width}x${box.height}, capped at 600px`,
+      `approved cover, pale border trimmed to ${box.width}x${box.height}, capped at 900px`,
     );
   }
 }

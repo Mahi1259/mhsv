@@ -131,13 +131,18 @@ const columns = [
             <ul>
               {
                 covers.map((cover) => (
-                  <li>
+                  <li style={`flex-grow: ${cover.src.width / cover.src.height}`}>
+                    {/* Flex-grow set to the cover's own aspect ratio, so the two
+                        widths come out in proportion to their shapes and the two
+                        HEIGHTS come out equal. The supplied files no longer share a
+                        ratio once their pale borders are trimmed — 0.697 and 0.752 —
+                        and equal widths made one book look smaller than the other. */}
                     <Picture
                       src={cover.src}
                       alt={cover.alt}
                       formats={['webp']}
                       fallbackFormat="png"
-                      widths={[260, 440]}
+                      widths={[300, 520, 700]}
                       sizes="(min-width: 60rem) 17rem, 42vw"
                       loading="eager"
                     />
@@ -394,10 +399,6 @@ const columns = [
 
   .livre__covers ul {
     display: flex;
-    /* The two supplied files do not share an aspect ratio once their pale
-       borders are trimmed, so stand them on one baseline rather than letting
-       them float at different heights. */
-    align-items: flex-end;
     gap: 1rem;
     list-style: none;
     margin: 0;
@@ -406,7 +407,8 @@ const columns = [
 
   .livre__covers li {
     position: relative;
-    flex: 1 1 0;
+    /* grow is set per cover, inline, from its aspect ratio. */
+    flex: 0 1 0;
     max-width: 21rem;
   }
 
