@@ -1,6 +1,6 @@
 ---
 /**
- * A content band — the page's repeating unit, in five archetypes.
+ * A content band - the page's repeating unit, in five archetypes.
  *
  * The two-digit section numbers are gone. They were the content pack's
  * internal editorial index ("check section 14"), never website copy, and
@@ -9,7 +9,7 @@
  *
  * What replaces them is the sticky margin label: on wide screens the section
  * name pins beside its content while you scroll, which actually orients you.
- * It is aria-hidden — the <h2> already names the section for assistive
+ * It is aria-hidden - the <h2> already names the section for assistive
  * technology, and the label must not be announced twice.
  */
 import StatusBadge from '@/components/StatusBadge.astro';
@@ -22,7 +22,7 @@ interface Props {
   title: string;
   /**
    * The heading pre-split into display lines, for the masked reveal. Splitting
-   * MUST be manual and per language — German wraps into a different number of
+   * MUST be manual and per language - German wraps into a different number of
    * lines than English, and an automatic splitter produces mismatched counts.
    * Omit it and the heading simply uses the ordinary reveal.
    */
@@ -52,7 +52,7 @@ const titleClass = type === 'statement' ? 'statement-title' : 'section-title';
 
 /**
  * The margin label uses the short navigation label where one exists, not the
- * full heading — printing the heading twice, side by side, reads as a mistake
+ * full heading - printing the heading twice, side by side, reads as a mistake
  * rather than as orientation.
  */
 const navLabel = getContent(locale).nav.items.find((item) => item.id === anchor)?.label;

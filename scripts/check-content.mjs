@@ -3,10 +3,10 @@
  *
  * Fails the build when:
  *   1. any locale is missing a key present in another (semantic parity is a
- *      client requirement — every language must say the same things);
+ *      client requirement - every language must say the same things);
  *   2. parallel arrays have different lengths (e.g. 6 mission areas in FR but
  *      5 in DE);
- *   3. a string value is empty — usually a silent extraction failure;
+ *   3. a string value is empty - usually a silent extraction failure;
  *   4. banned wording appears (hard constraint: "Beyond Football" is retired,
  *      the baseline is "Beyond Sport – Beyond Human Potential");
  *   5. content references an asset the client has not cleared for publication.
@@ -32,8 +32,8 @@ const BANNED = [
  * Keys whose ARRAY LENGTH is allowed to differ between locales.
  *
  * `titleLines` is a heading pre-split into display lines for the masked
- * reveal. The split is deliberately per language — "WHO / WE ARE" is two lines
- * in English while "ÜBER UNS" is one in German — so demanding equal lengths
+ * reveal. The split is deliberately per language - "WHO / WE ARE" is two lines
+ * in English while "ÜBER UNS" is one in German - so demanding equal lengths
  * here would force a wrong line break into one of the languages. The key must
  * still exist everywhere, and every locale's lines must still join back to its
  * own heading (checked below); only the count is free to vary.
@@ -67,7 +67,7 @@ for (const loc of LOCALES) {
   try {
     data[loc] = JSON.parse(readFileSync(file, 'utf8'));
   } catch (e) {
-    console.error(`✗ cannot read src/content/i18n/${loc}.json — run "npm run content:extract" first`);
+    console.error(`✗ cannot read src/content/i18n/${loc}.json - run "npm run content:extract" first`);
     process.exit(1);
   }
 }
@@ -134,7 +134,7 @@ for (const loc of LOCALES) {
   const serialised = JSON.stringify(data[loc]);
   for (const { pattern, why } of BANNED) {
     const m = pattern.exec(serialised);
-    if (m) errors.push(`[${loc}] banned wording "${m[0]}" — ${why}`);
+    if (m) errors.push(`[${loc}] banned wording "${m[0]}" - ${why}`);
   }
 }
 
@@ -148,4 +148,4 @@ if (errors.length) {
 }
 
 const n = flat[REF].size;
-console.log(`  ✓ content parity OK — ${n} keys identical across ${LOCALES.join(', ')}`);
+console.log(`  ✓ content parity OK - ${n} keys identical across ${LOCALES.join(', ')}`);

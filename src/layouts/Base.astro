@@ -3,8 +3,8 @@
  * Document shell: head metadata, skip link, header, footer.
  *
  * `path` is the route *within* a locale ("" for the home page, "privacy/" for
- * the privacy page). Everything locale-aware — canonical, hreflang, the
- * language switcher — is derived from it, so a new page only has to pass its
+ * the privacy page). Everything locale-aware - canonical, hreflang, the
+ * language switcher - is derived from it, so a new page only has to pass its
  * own path once.
  */
 import { getContent, localeAlternates, localePath, type Locale } from '@/lib/i18n';
@@ -26,7 +26,7 @@ interface Props {
 const { locale, path = '', title, description, noindex = false } = Astro.props;
 const c = getContent(locale);
 
-const pageTitle = title ? `${title} — ${c.brand.name}` : c.seo.title;
+const pageTitle = title ? `${title} | ${c.brand.name}` : c.seo.title;
 const pageDescription = description ?? c.seo.description;
 
 const alternates = localeAlternates(path);
@@ -103,7 +103,7 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
        * the browser applies it to the fragment scroll it performs on load too.
        * Since the language switcher carries the reader's section across,
        * arriving at /de/#team opened the German page at the top and glided
-       * down to the section — the page appearing to move on translate.
+       * down to the section - the page appearing to move on translate.
        *
        * Forced to `auto` for the landing and handed back on load, so clicking
        * a section in the nav is still smooth. `is-booting` suppresses the
@@ -133,7 +133,7 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
        * THE BAR MUST ALREADY BE SHRUNK IN THE FIRST PAINTED FRAME.
        *
        * A fragment in the URL means the page is about to land deep in the
-       * document, where the bar is a pill — the language switcher produces
+       * document, where the bar is a pill - the language switcher produces
        * exactly that. Deciding it in scripts/effects.ts is too late: that is a
        * bundled module, so the browser is free to paint the full-width bar
        * first and contract it afterwards, which is the bar seen expanding and
@@ -141,7 +141,7 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
        *
        * Placed immediately after the masthead so the element exists, and run
        * during parsing so the class is set before any style is resolved for
-       * paint — no state change, therefore nothing to animate.
+       * paint - no state change, therefore nothing to animate.
        *
        * `#main` is the skip link's target and sits at the top of the page, so
        * it is not a deep landing.

@@ -5,7 +5,7 @@ import type { Locale } from '@/config/site';
  *
  * Several lists in the content pack are written as one running sentence
  * ("Sports performance; mental & human development; …"), so only the first
- * item is capitalised. CSS `text-transform: capitalize` is not an option — it
+ * item is capitalised. CSS `text-transform: capitalize` is not an option - it
  * would title-case every word, which is wrong in French and Italian.
  */
 export function capitalizeFirst(value: string, locale: Locale): string {
@@ -13,7 +13,7 @@ export function capitalizeFirst(value: string, locale: Locale): string {
   return value.charAt(0).toLocaleUpperCase(locale) + value.slice(1);
 }
 
-/** Lowercase, strip accents and punctuation — for comparing wording only. */
+/** Lowercase, strip accents and punctuation - for comparing wording only. */
 function normalise(value: string): string {
   return value
     .toLocaleLowerCase()

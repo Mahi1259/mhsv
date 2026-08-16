@@ -5,12 +5,12 @@
  *   AUDIT_BASE_URL=https://www.mhsv.ch npm run check:qr
  *
  * The QR code printed on the back cover of both editions of the Founding Book
- * encodes `https://www.mhsv.ch/livre` — no trailing slash. Once printed it is
+ * encodes `https://www.mhsv.ch/livre` - no trailing slash. Once printed it is
  * permanent. This checks, end to end, that:
  *
  *   1. the QR files on disk decode to exactly that path;
  *   2. the encoded path is what src/config/site.ts calls permanent;
- *   3. requesting it — with and without the trailing slash — reaches the page,
+ *   3. requesting it - with and without the trailing slash - reaches the page,
  *      following at most one redirect;
  *   4. the page that answers is the book page and offers no download.
  *
@@ -41,12 +41,12 @@ const QR_FILES = ['qr/mhsv-livre-qr-30mm.png', 'qr/mhsv-livre-qr-25mm.png', 'qr/
 
 // The print files are gated until the domain is live and the client has
 // approved the page (see scripts/generate-qr.mjs). Their absence is the
-// expected state before then — the destination checks below still run, because
+// expected state before then - the destination checks below still run, because
 // the URL has to be right long before anything is generated.
 const generated = existsSync(resolve(ROOT, 'qr'));
 if (!generated) {
   console.log('  · QR print files not generated yet (gated until the domain is live');
-  console.log('    and MHSV® has approved the page) — checking the destination only.');
+  console.log('    and MHSV® has approved the page) - checking the destination only.');
 }
 
 for (const file of generated ? QR_FILES : []) {
@@ -91,7 +91,7 @@ try {
   for (const path of [EXPECTED_PATH, `${EXPECTED_PATH}/`]) {
     const { response, hops } = await resolvePath(path);
     if (response.status !== 200) {
-      fail(`${path} → HTTP ${response.status} after ${hops} redirect(s) — the printed QR would fail`);
+      fail(`${path} → HTTP ${response.status} after ${hops} redirect(s) - the printed QR would fail`);
       continue;
     }
     if (hops > 1) {
@@ -109,7 +109,7 @@ try {
     }
   }
 } catch (error) {
-  fail(`could not reach ${BASE} — is the preview server running? (${error.message})`);
+  fail(`could not reach ${BASE} - is the preview server running? (${error.message})`);
 }
 
 console.log('');
@@ -119,6 +119,6 @@ if (failures.length) {
 }
 console.log(
   generated
-    ? `  ✓ QR target OK — ${EXPECTED_URL} resolves and the print files match`
-    : `  ✓ QR target OK — ${EXPECTED_URL} resolves (print files correctly not yet generated)`,
+    ? `  ✓ QR target OK - ${EXPECTED_URL} resolves and the print files match`
+    : `  ✓ QR target OK - ${EXPECTED_URL} resolves (print files correctly not yet generated)`,
 );

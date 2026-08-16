@@ -6,7 +6,7 @@
 
    The ground is navy, not black. The approved logo's shield is #001D49; black
    sits badly beside it and reads as muddy, while navy lets the crest belong to
-   the page. Gold is an accent only — rules, active states, small marks — and
+   the page. Gold is an accent only - rules, active states, small marks - and
    is never used as a large fill.
    ========================================================================== */
 @theme {
@@ -106,7 +106,7 @@
      * Nothing may be left hidden or displaced.
      *
      * Masked line reveals are the most common way a site accidentally hides
-     * all of its own text — the mask stays and the text never slides in. Every
+     * all of its own text - the mask stays and the text never slides in. Every
      * reveal mechanism is listed here explicitly for that reason.
      */
     [data-reveal],
@@ -122,7 +122,7 @@
       transform: none !important;
     }
 
-    /* Sticky panes become normal flow — a pinned column with no motion to
+    /* Sticky panes become normal flow - a pinned column with no motion to
        justify it just eats the viewport. */
     .method__sticky {
       position: static !important;
@@ -133,21 +133,21 @@
   /*
    * NO PAGE TRANSITION. Deliberate, and it should stay that way.
    *
-   * This carried a cross-document view transition — first a curtain wipe,
-   * then a cross-fade — and it was wrong for this site's most common
+   * This carried a cross-document view transition - first a curtain wipe,
+   * then a cross-fade - and it was wrong for this site's most common
    * navigation, which is switching language from the middle of the document.
    *
    * A language switch does not land where it left. The switcher carries the
    * reader's SECTION across, and the new page lands on that section's
    * heading, so the outgoing and incoming documents sit at different scroll
-   * offsets — 540px apart in the case measured. Cross-fading them
+   * offsets - 540px apart in the case measured. Cross-fading them
    * double-exposes the same content at two positions, which is not a
    * transition, it is a glitch. No amount of tuning the animation fixes that,
    * because the two frames genuinely disagree about where the page is.
    *
    * The masthead's own `view-transition-name` went with it. It only existed
    * to hold the bar still through the page animation, and it brought its own
-   * failure — two bars painted at once whenever the snapshots disagreed.
+   * failure - two bars painted at once whenever the snapshots disagreed.
    *
    * Restoring transitions means restoring the position problem. If they ever
    * come back, they must be skipped for locale switches specifically.
@@ -156,7 +156,7 @@
   /*
    * Static grain over the whole viewport. Flat navy across a long page looks
    * dead; 2.5% noise gives it a surface. Fixed, so it never slides against the
-   * content, and NEVER animated — animated noise is both distracting and a
+   * content, and NEVER animated - animated noise is both distracting and a
    * guaranteed repaint every frame.
    */
   body::after {
@@ -178,7 +178,7 @@
      * Gives back the space the masthead no longer occupies.
      *
      * The masthead is `position: fixed` so that contracting it on scroll
-     * cannot reflow the document — a sticky bar stays in flow, and shortening
+     * cannot reflow the document - a sticky bar stays in flow, and shortening
      * it mid-scroll shunts every section up by the difference. Out of flow it
      * needs the room reserving here instead, and the page then lays out
      * exactly as it did when the bar was sticky: --header-h, then content.
@@ -265,7 +265,7 @@
   /* ------------------------------------------------------------------------
      Bands and grounds
 
-     No horizontal rules between sections — separation is space, and the
+     No horizontal rules between sections - separation is space, and the
      occasional change of ground.
      ---------------------------------------------------------------------- */
   .page-flow > * {
@@ -278,7 +278,7 @@
      * The ground tone, on the band itself.
      *
      * These lived on a `.band--ground` class that a `surface` prop put there.
-     * Removing panels removed the prop, and with it the class — so every
+     * Removing panels removed the prop, and with it the class - so every
      * section silently fell back to the opaque default on :root, painted over
      * the page's depth washes, and drew a hard horizontal edge wherever it met
      * the hero, which sets its own class. There is one surface now, so the
@@ -313,7 +313,7 @@
      * viewport, so:
      *     headingTop = scrollMarginTop + bandPadTop
      * and we want headingTop = headerHeight + gap. Solving for the margin
-     * gives the expression below — negative for the roomier archetypes, which
+     * gives the expression below - negative for the roomier archetypes, which
      * is exactly right: it scrolls past their padding.
      *
      * Without this, a section with 9rem of top padding left ~200px of empty
@@ -326,25 +326,25 @@
      The continuous ground
 
      The page is ONE navy ground from top to bottom. It used to be a stack of
-     full-bleed colour slabs — navy, hard edge, light, hard edge — which is the
+     full-bleed colour slabs - navy, hard edge, light, hard edge - which is the
      slide-deck pattern itself, whatever you do about numbering and dividers.
 
      The container is `.page-flow`, NOT `.flow`. The washes below are painted
      by an unscoped ::before, so a generic name leaks into any component that
-     happens to use it — the pathway section has its own `.flow` block, and
+     happens to use it - the pathway section has its own `.flow` block, and
      the page's washes were being drawn inside it as a translucent rectangle
      across the steps.
 
-     Nothing is laid ON the ground as a slab. Four sections used to be — light
-     panels first, then raised navy ones — and both read as a big rectangle
+     Nothing is laid ON the ground as a slab. Four sections used to be - light
+     panels first, then raised navy ones - and both read as a big rectangle
      covering the page rather than as part of it. Sections are told apart by
      layout and rhythm; only individual pieces of information get a card.
      ---------------------------------------------------------------------- */
   .page-flow {
     position: relative;
     /*
-     * A block formatting context, so the hero's negative top margin — which
-     * pulls its ground up behind the fixed masthead — cannot collapse through
+     * A block formatting context, so the hero's negative top margin - which
+     * pulls its ground up behind the fixed masthead - cannot collapse through
      * this container and drag the whole page up with it.
      */
     display: flow-root;
@@ -358,7 +358,7 @@
   /*
    * Depth: three large, very soft NAVY washes placed by percentage of the
    * WHOLE page, so they deliberately never line up with a section boundary.
-   * That is what stops a long dark page reading as flat. Navy only — a gold
+   * That is what stops a long dark page reading as flat. Navy only - a gold
    * wash among them read as a yellow circle sitting on the background.
    */
   .page-flow::before {
@@ -369,7 +369,7 @@
      *
      * Without this the washes start where <main> does, so the reserved strip
      * showed flat --navy-deep and the page opened with a hard horizontal edge
-     * straight across the top — a rectangle sitting behind the navbar. The
+     * straight across the top - a rectangle sitting behind the navbar. The
      * ground has to run continuously under the bar, because the bar is
      * translucent and the visitor sees straight through it.
      */
@@ -384,11 +384,11 @@
   }
 
   /* ------------------------------------------------------------------------
-     Section archetypes — each has its own vertical rhythm. Identical slab
+     Section archetypes - each has its own vertical rhythm. Identical slab
      heights were what made the page feel paginated.
      ---------------------------------------------------------------------- */
   /* The hero centres its content in the space below the masthead, so it needs
-     far less padding than the scrolling sections — 8rem here simply pushed the
+     far less padding than the scrolling sections - 8rem here simply pushed the
      title down and shunted the buttons off the bottom of the screen. */
   .band--hero {
     --band-pad: clamp(1.75rem, 1rem + 2.5vw, 3rem);
@@ -412,7 +412,7 @@
 
   /*
    * The book section ENDS on its call to action, so the feature archetype's
-   * full 9.5rem bottom padding — landing on top of the next section's own —
+   * full 9.5rem bottom padding - landing on top of the next section's own -
    * left a large empty band between the button and what follows. Closing
    * tighter is not a rhythm break: a section that finishes on an action has
    * nothing left to breathe after.
@@ -511,7 +511,7 @@
   }
 
   /* ------------------------------------------------------------------------
-     Buttons — 150–200ms on every state change.
+     Buttons - 150–200ms on every state change.
      ---------------------------------------------------------------------- */
   .btn {
     display: inline-flex;
@@ -541,7 +541,7 @@
     transform: translateY(-1px);
   }
 
-  /* A press must feel immediate — faster than the hover it interrupts. */
+  /* A press must feel immediate - faster than the hover it interrupts. */
   .btn:active {
     transform: translateY(0);
     transition-duration: 80ms;
@@ -623,8 +623,8 @@
      Scroll reveal
 
      Elements are only hidden once the script has confirmed it will observe
-     them (html.js), so with scripting off — or with reduced motion, where the
-     class is never added — nothing is ever invisible.
+     them (html.js), so with scripting off - or with reduced motion, where the
+     class is never added - nothing is ever invisible.
 
      16px, not 40: a large distance reads as sliding, a small one as settling.
      translate3d rather than translateY to keep it on the compositor.
@@ -658,7 +658,7 @@
   html.js [data-stagger].is-in > *:nth-child(n + 6) { transition-delay: calc(5 * var(--stagger)); }
 
   /*
-   * Multi-column grids stagger by ROW, not by item — a 9-item grid staggered
+   * Multi-column grids stagger by ROW, not by item - a 9-item grid staggered
    * per item cascades for far too long and reads as items arriving one by one
    * across a row, which looks mechanical.
    */
@@ -751,7 +751,7 @@
      Masked line reveal
 
      Each line sits in its own crop and slides up from behind it. Headings
-     only — masking body copy while someone is trying to read it is irritating.
+     only - masking body copy while someone is trying to read it is irritating.
      ---------------------------------------------------------------------- */
   .reveal-lines .line {
     display: block;
@@ -779,7 +779,7 @@
   html.js .reveal-lines.is-in .line:nth-child(n + 5) > span { transition-delay: 360ms; }
 
   /* ------------------------------------------------------------------------
-     Hover rows — for the service and roadmap lists.
+     Hover rows - for the service and roadmap lists.
 
      The fill and the label move at different speeds (460ms / 320ms). Matching
      them makes the whole thing read as one flat state change; the offset is

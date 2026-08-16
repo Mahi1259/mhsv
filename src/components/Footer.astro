@@ -37,7 +37,7 @@ const year = new Date().getFullYear();
       <ul class="site-footer__links">
         <li><a href={localePath('privacy/', locale)}>{c.footer.privacyLink}</a></li>
         {/* Always present. While the statutes are unvalidated the page itself
-            says so — see src/pages/[lang]/legal.astro — rather than the link
+            says so - see src/pages/[lang]/legal.astro - rather than the link
             disappearing and leaving the brief's second placeholder missing. */}
         <li><a href={localePath('legal/', locale)}>{c.footer.legalLink}</a></li>
       </ul>

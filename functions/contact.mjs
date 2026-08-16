@@ -1,5 +1,5 @@
 /**
- * Netlify Function — POST /api/contact
+ * Netlify Function - POST /api/contact
  *
  * Netlify Functions v2 uses the Web Request/Response API, so this is a thin
  * adapter over the host-independent core. The Cloudflare Workers equivalent is

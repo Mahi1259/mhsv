@@ -38,7 +38,7 @@ let files;
 try {
   files = walk(DIST);
 } catch {
-  console.error('✗ dist/ not found — run "astro build" first');
+  console.error('✗ dist/ not found - run "astro build" first');
   process.exit(1);
 }
 
@@ -54,7 +54,7 @@ const FORBIDDEN = [
   { pattern: /REVIEW_REQUIRED/i, why: 'asset not cleared for publication' },
   {
     pattern: /mhsv-international\.org/i,
-    why: 'retired domain — superseded by mhsv.ch on 14 August 2026',
+    why: 'retired domain - superseded by mhsv.ch on 14 August 2026',
   },
 ];
 
@@ -62,7 +62,7 @@ for (const file of textFiles) {
   const content = readFileSync(file, 'utf8');
   for (const { pattern, why } of FORBIDDEN) {
     const match = pattern.exec(content);
-    if (match) errors.push(`${relative(DIST, file)}: contains "${match[0]}" — ${why}`);
+    if (match) errors.push(`${relative(DIST, file)}: contains "${match[0]}" - ${why}`);
   }
 }
 
@@ -70,7 +70,7 @@ for (const file of textFiles) {
 for (const file of files) {
   const name = relative(DIST, file);
   if (extname(file).toLowerCase() === '.pdf') {
-    errors.push(`${name}: PDF in build output — the full Founding Book must not be published`);
+    errors.push(`${name}: PDF in build output - the full Founding Book must not be published`);
   }
 }
 
@@ -104,7 +104,7 @@ if (!SHOW_LEGAL_STATUS) {
       }
     }
   }
-  notes.push('PUBLIC_SHOW_LEGAL_STATUS is off — legal footer, hero status line and /legal-notice/ withheld.');
+  notes.push('PUBLIC_SHOW_LEGAL_STATUS is off - legal footer, hero status line and /legal-notice/ withheld.');
 }
 
 // --- 5: structure -----------------------------------------------------------
@@ -114,7 +114,7 @@ for (const locale of LOCALES) {
   try {
     html = readFileSync(home, 'utf8');
   } catch {
-    errors.push(`${locale}/index.html: missing — locale did not build`);
+    errors.push(`${locale}/index.html: missing - locale did not build`);
     continue;
   }
 
@@ -126,8 +126,8 @@ for (const locale of LOCALES) {
     errors.push(`${locale}/index.html: ${sections.length} labelled sections, expected 21`);
   }
 
-  // The navigation list must exist exactly once. It used to be emitted twice —
-  // a desktop bar and a mobile panel — duplicating every link in the DOM.
+  // The navigation list must exist exactly once. It used to be emitted twice -
+  // a desktop bar and a mobile panel - duplicating every link in the DOM.
   const navs = html.match(/id="main-nav"/g) ?? [];
   if (navs.length !== 1) {
     errors.push(`${locale}/index.html: ${navs.length} #main-nav elements, expected exactly 1`);
@@ -135,7 +135,7 @@ for (const locale of LOCALES) {
 
   // The section numbers are the content pack's editorial index, not copy.
   if (/class="[^"]*\beyebrow\b/.test(html)) {
-    errors.push(`${locale}/index.html: section-number eyebrow rendered — numbers must not appear`);
+    errors.push(`${locale}/index.html: section-number eyebrow rendered - numbers must not appear`);
   }
 
   // The launch rate must be stated once. It was previously in both programme
@@ -183,7 +183,7 @@ for (const locale of LOCALES) {
   try {
     html = readFileSync(livre, 'utf8');
   } catch {
-    errors.push('livre/index.html: missing — the printed QR code has nowhere to land');
+    errors.push('livre/index.html: missing - the printed QR code has nowhere to land');
   }
 
   if (html) {
@@ -192,12 +192,12 @@ for (const locale of LOCALES) {
       errors.push('livre/index.html: canonical does not point at /livre');
     }
     if (/href="[^"]*\.pdf"/i.test(html)) {
-      errors.push('livre/index.html: links to a PDF — the complete book must never be downloadable');
+      errors.push('livre/index.html: links to a PDF - the complete book must never be downloadable');
     }
     // It is an order request, not a purchase: pricing is not approved.
     for (const word of ['checkout', 'add to cart', 'panier', 'stripe', 'paypal']) {
       if (html.toLowerCase().includes(word)) {
-        errors.push(`livre/index.html: contains "${word}" — this is an order request, not a purchase`);
+        errors.push(`livre/index.html: contains "${word}" - this is an order request, not a purchase`);
       }
     }
     if (!/name="edition"/.test(html) || !/name="consent"/.test(html)) {
@@ -227,4 +227,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`  ✓ build check OK — ${files.length} files, ${LOCALES.length} locales, constraints honoured`);
+console.log(`  ✓ build check OK - ${files.length} files, ${LOCALES.length} locales, constraints honoured`);

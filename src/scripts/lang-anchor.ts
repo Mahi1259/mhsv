@@ -10,7 +10,7 @@
  * navigation link, and is stale as soon as they scroll away. So this tracks the
  * section actually on screen.
  *
- * Progressive enhancement — without JavaScript the links still work, they just
+ * Progressive enhancement - without JavaScript the links still work, they just
  * land at the top of the translated page.
  */
 const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-lang-link]'));

@@ -11,7 +11,7 @@
  *   - heading order and landmark structure
  *   - tap-target size on interactive elements
  *
- * German is the widest language — its compounds run ~30% longer than English —
+ * German is the widest language - its compounds run ~30% longer than English -
  * so 320px German is the case that breaks layouts first.
  */
 import puppeteer from 'puppeteer-core';
@@ -91,7 +91,7 @@ try {
 
         if (overflow) {
           failures.push(
-            `${label}: horizontal overflow — document is ${overflow.scrollWidth}px wide\n` +
+            `${label}: horizontal overflow - document is ${overflow.scrollWidth}px wide\n` +
               overflow.offenders
                 .map((o) => `        <${o.tag} class="${o.cls}"> left=${o.left} right=${o.right}`)
                 .join('\n'),
@@ -107,7 +107,7 @@ try {
               if (el.type === 'hidden' || el.closest('[aria-hidden="true"]')) continue;
               const r = el.getBoundingClientRect();
               if (r.width === 0 && r.height === 0) continue;
-              // Inline links inside running text are exempt — WCAG 2.1 AA
+              // Inline links inside running text are exempt - WCAG 2.1 AA
               // does not require 44px for links in a sentence.
               const inline = el.tagName === 'A' && getComputedStyle(el).display === 'inline';
               if (inline) continue;
@@ -119,7 +119,7 @@ try {
             }
             return out.slice(0, 6);
           });
-          for (const s of small) warnings.push(`${label}: small tap target — ${s}`);
+          for (const s of small) warnings.push(`${label}: small tap target - ${s}`);
         }
 
         // --- axe -------------------------------------------------------------
@@ -158,7 +158,7 @@ try {
           });
           for (const v of results.violations) {
             failures.push(
-              `${label}: axe [${v.impact}] ${v.id} — ${v.help}\n` +
+              `${label}: axe [${v.impact}] ${v.id} - ${v.help}\n` +
                 v.nodes.slice(0, 3).map((n) => `        ${n.html.slice(0, 120)}`).join('\n'),
             );
           }
@@ -185,5 +185,5 @@ if (unique.length) {
 }
 
 console.log(
-  `  ✓ audit OK — ${TARGETS.length} pages × ${VIEWPORTS.length} viewports, no overflow, no WCAG 2.1 AA violations`,
+  `  ✓ audit OK - ${TARGETS.length} pages × ${VIEWPORTS.length} viewports, no overflow, no WCAG 2.1 AA violations`,
 );

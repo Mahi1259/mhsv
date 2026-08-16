@@ -1,5 +1,5 @@
 {
-  "_note": "Chaînes rédigées par le développeur — absentes du pack de contenu V3. À VALIDER PAR MHSV® avant mise en production. Voir CONTENT.md.",
+  "_note": "Chaînes rédigées par le développeur, absentes du pack de contenu V3. À VALIDER PAR MHSV® avant mise en production. Voir CONTENT.md.",
   "meta": {
     "htmlLang": "fr-CH",
     "ogLocale": "fr_CH",
@@ -8,9 +8,9 @@
     "hreflang": "fr"
   },
   "seo": {
-    "title": "MHSV® — Centre International de Développement et de Transition",
+    "title": "MHSV®, Centre International de Développement et de Transition",
     "description": "MHSV® conçoit et coordonne des parcours sportifs, humains, éducatifs, sociaux et professionnels. Genève, Suisse.",
-    "ogImageAlt": "Logo MHSV® — Centre International de Développement et de Transition"
+    "ogImageAlt": "Logo MHSV®, Centre International de Développement et de Transition"
   },
   "ui": {
     "skipToContent": "Aller au contenu principal",
@@ -92,7 +92,7 @@
   },
   "sections": {
     "about": {
-      "leadNoLegalStatus": "MHSV® — Centre International de Développement et de Transition est une organisation basée à Genève, en Suisse.",
+      "leadNoLegalStatus": "MHSV®, Centre International de Développement et de Transition, est une organisation basée à Genève, en Suisse.",
       "titleLines": [
         "QUI",
         "SOMMES-NOUS ?"
@@ -114,7 +114,7 @@
         "Préparation physique, prévention et récupération.",
         "Communication, responsabilité et rôle dans le collectif."
       ],
-      "pillarNotesDisclaimer": "Descriptions provisoires — libellés définitifs à fournir par MHSV®."
+      "pillarNotesDisclaimer": "Descriptions provisoires. Libellés définitifs à fournir par MHSV®."
     },
     "pathway": {
       "stepLabel": "Étape"
@@ -153,7 +153,7 @@
         },
         {
           "name": "Laetitia PILLER",
-          "role": "Membre du Comité — Responsable de la communication",
+          "role": "Membre du Comité, Responsable de la communication",
           "email": "infos@mhsv.ch",
           "emailPending": false
         },
@@ -165,7 +165,7 @@
         },
         {
           "name": "Diego FUIANO",
-          "role": "Coordinateur Web & Digital et développement institutionnel et des partenariats — Italie",
+          "role": "Coordinateur Web & Digital et développement institutionnel et des partenariats (Italie)",
           "email": "infos@mhsv.ch",
           "emailPending": false
         },
@@ -178,11 +178,11 @@
       ]
     },
     "book": {
-      "lead": "LE LIVRE FONDATEUR PREMIUM MHSV® — ÉDITION FONDATRICE 2026",
+      "lead": "LE LIVRE FONDATEUR PREMIUM MHSV®, ÉDITION FONDATRICE 2026",
       "body": "Publication institutionnelle exclusive, le Livre Fondateur Premium présente la vision, les programmes, la gouvernance, l’impact et la feuille de route de MHSV®. Son contenu stratégique et méthodologique n’est pas proposé en téléchargement public. Les éditions française et anglaise peuvent être commandées depuis le site, sous réserve de disponibilité et de confirmation par MHSV®.",
       "notice": "Aucun téléchargement du livre complet n’est proposé. Seules les couvertures validées sont publiées.",
-      "coverAltFr": "Couverture du Livre Fondateur MHSV® — édition française",
-      "coverAltEn": "Couverture du Livre Fondateur MHSV® — édition anglaise",
+      "coverAltFr": "Couverture du Livre Fondateur MHSV®, édition française",
+      "coverAltEn": "Couverture du Livre Fondateur MHSV®, édition anglaise",
       "ctaLabel": "Commander le livre",
       "title": "LE LIVRE FONDATEUR PREMIUM",
       "qrCaption": "Découvrez le Livre Fondateur Premium MHSV® et transmettez votre demande de commande.",
@@ -196,7 +196,7 @@
       "placeholderOfficial": "Logo officiel",
       "placeholderInstitutional": "Logo institutionnel",
       "placeholderEquipment": "Logo équipement",
-      "placeholderNote": "Emplacement réservé — en attente de validation."
+      "placeholderNote": "Emplacement réservé, en attente de validation."
     },
     "roadmap": {
       "lead": "Ces rubriques sont annoncées comme feuille de route et ne constituent pas des services déjà opérationnels."
@@ -281,17 +281,17 @@
     "privacyLink": "Politique de confidentialité",
     "legalLink": "Mentions légales",
     "copyright": "Tous droits réservés.",
-    "summary": "MHSV® — Centre International de Développement et de Transition | Genève — Suisse | www.mhsv.ch | infos@mhsv.ch"
+    "summary": "MHSV®, Centre International de Développement et de Transition | Genève, Suisse | www.mhsv.ch | infos@mhsv.ch"
   },
   "privacy": {
     "title": "Politique de confidentialité",
-    "draftBadge": "Projet — en attente de validation juridique",
+    "draftBadge": "Projet, en attente de validation juridique",
     "draftNotice": "Ce texte est un projet préparé par le développeur pour le prototype. La version définitive doit être rédigée et validée par le conseil juridique de MHSV® avant la mise en production.",
     "updated": "Dernière mise à jour",
     "sections": [
       {
         "title": "Responsable du traitement",
-        "body": "MHSV® — Centre International de Développement et de Transition, Genève, Suisse. Les coordonnées complètes figurent dans la rubrique Contact."
+        "body": "MHSV®, Centre International de Développement et de Transition, Genève, Suisse. Les coordonnées complètes figurent dans la rubrique Contact."
       },
       {
         "title": "Données traitées",

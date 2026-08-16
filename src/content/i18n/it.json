@@ -27,7 +27,7 @@
         "La sua missione è promuovere lo sviluppo globale della persona attraverso lo sport, l’educazione, la formazione, l’accompagnamento umano e la preparazione delle transizioni personali, sportive, scolastiche e professionali.",
         "Il calcio è il principale programma di lancio, ma la missione si estende a tutti gli sport e soprattutto alla persona dietro la performance. MHSV® non promette un accesso automatico allo sport professionistico; costruisce percorsi realistici, individualizzati e coordinati."
       ],
-      "leadNoLegalStatus": "MHSV® — Centro Internazionale di Sviluppo e Transizione è un'organizzazione con sede a Ginevra, in Svizzera.",
+      "leadNoLegalStatus": "MHSV®, Centro Internazionale di Sviluppo e Transizione, è un'organizzazione con sede a Ginevra, in Svizzera.",
       "titleLines": [
         "CHI SIAMO"
       ],
@@ -139,7 +139,7 @@
         "Preparazione fisica, prevenzione e recupero.",
         "Comunicazione, responsabilità e ruolo nel collettivo."
       ],
-      "pillarNotesDisclaimer": "Descrizioni provvisorie — formulazioni definitive da fornire da parte di MHSV®."
+      "pillarNotesDisclaimer": "Descrizioni provvisorie. Formulazioni definitive da fornire da parte di MHSV®."
     },
     "services": {
       "num": "07",
@@ -356,7 +356,7 @@
         },
         {
           "name": "Laetitia PILLER",
-          "role": "Membro del Comitato — Responsabile della comunicazione",
+          "role": "Membro del Comitato, Responsabile della comunicazione",
           "email": "infos@mhsv.ch",
           "emailPending": false
         },
@@ -368,7 +368,7 @@
         },
         {
           "name": "Diego FUIANO",
-          "role": "Coordinatore Web & Digital e sviluppo istituzionale e delle partnership — Italia",
+          "role": "Coordinatore Web & Digital e sviluppo istituzionale e delle partnership (Italia)",
           "email": "infos@mhsv.ch",
           "emailPending": false
         },
@@ -400,11 +400,11 @@
       "num": "18",
       "anchor": "book",
       "title": "IL LIBRO FONDATORE PREMIUM",
-      "lead": "IL LIBRO FONDATORE PREMIUM MHSV® — EDIZIONE FONDATRICE 2026",
+      "lead": "IL LIBRO FONDATORE PREMIUM MHSV®, EDIZIONE FONDATRICE 2026",
       "body": "Pubblicazione istituzionale esclusiva, il Libro Fondatore Premium presenta la visione, i programmi, la governance, l’impatto e la roadmap di MHSV®. I suoi contenuti strategici e metodologici non sono disponibili per il download pubblico. Le edizioni francese e inglese possono essere ordinate dal sito, salvo disponibilità e conferma da parte di MHSV®.",
       "notice": "Non è offerto alcun download del libro completo. Sono pubblicate soltanto le copertine approvate.",
-      "coverAltFr": "Copertina del Libro Fondatore MHSV® — edizione francese",
-      "coverAltEn": "Copertina del Libro Fondatore MHSV® — edizione inglese",
+      "coverAltFr": "Copertina del Libro Fondatore MHSV®, edizione francese",
+      "coverAltEn": "Copertina del Libro Fondatore MHSV®, edizione inglese",
       "ctaLabel": "Ordina il libro",
       "qrCaption": "Scoprite il Libro Fondatore Premium MHSV® e inviate la vostra richiesta di ordine.",
       "qrAlt": "Codice QR verso la pagina del Libro Fondatore MHSV®"
@@ -425,7 +425,7 @@
       "placeholderOfficial": "Logo ufficiale",
       "placeholderInstitutional": "Logo istituzionale",
       "placeholderEquipment": "Logo equipaggiamento",
-      "placeholderNote": "Spazio riservato — in attesa di validazione."
+      "placeholderNote": "Spazio riservato, in attesa di validazione."
     },
     "roadmap": {
       "num": "20",
@@ -482,7 +482,7 @@
     "legalStatus": "Associazione svizzera senza scopo di lucro - Ginevra",
     "baseline": "Beyond Sport - Beyond Human Potential"
   },
-  "_note": "Testi redatti dallo sviluppatore — non presenti nel content pack V3. DA VALIDARE DA PARTE DI MHSV® prima della messa in produzione. Vedi CONTENT.md.",
+  "_note": "Testi redatti dallo sviluppatore, non presenti nel content pack V3. DA VALIDARE DA PARTE DI MHSV® prima della messa in produzione. Vedi CONTENT.md.",
   "meta": {
     "htmlLang": "it-CH",
     "ogLocale": "it_CH",
@@ -491,9 +491,9 @@
     "hreflang": "it"
   },
   "seo": {
-    "title": "MHSV® — Centro Internazionale di Sviluppo e Transizione",
+    "title": "MHSV®, Centro Internazionale di Sviluppo e Transizione",
     "description": "MHSV® progetta e coordina percorsi sportivi, umani, educativi, sociali e professionali. Ginevra, Svizzera.",
-    "ogImageAlt": "Logo MHSV® — Centro Internazionale di Sviluppo e Transizione"
+    "ogImageAlt": "Logo MHSV®, Centro Internazionale di Sviluppo e Transizione"
   },
   "ui": {
     "skipToContent": "Vai al contenuto principale",
@@ -614,17 +614,17 @@
     "privacyLink": "Politica sulla privacy",
     "legalLink": "Note legali",
     "copyright": "Tutti i diritti riservati.",
-    "summary": "MHSV® — Centro Internazionale di Sviluppo e Transizione | Ginevra — Svizzera | www.mhsv.ch | infos@mhsv.ch"
+    "summary": "MHSV®, Centro Internazionale di Sviluppo e Transizione | Ginevra, Svizzera | www.mhsv.ch | infos@mhsv.ch"
   },
   "privacy": {
     "title": "Politica sulla privacy",
-    "draftBadge": "Bozza — in attesa di validazione legale",
+    "draftBadge": "Bozza, in attesa di validazione legale",
     "draftNotice": "Questo testo è una bozza preparata dallo sviluppatore per il prototipo. La versione definitiva deve essere redatta e approvata dal consulente legale di MHSV® prima della messa in produzione.",
     "updated": "Ultimo aggiornamento",
     "sections": [
       {
         "title": "Titolare del trattamento",
-        "body": "MHSV® — Centro Internazionale di Sviluppo e Transizione, Ginevra, Svizzera. I recapiti completi sono indicati nella sezione Contatti."
+        "body": "MHSV®, Centro Internazionale di Sviluppo e Transizione, Ginevra, Svizzera. I recapiti completi sono indicati nella sezione Contatti."
       },
       {
         "title": "Dati trattati",
@@ -694,7 +694,7 @@
     "consent": "Accetto di ricevere la newsletter MHSV® e posso disiscrivermi in qualsiasi momento.",
     "submit": "Iscrivimi",
     "successTitle": "Ci siamo quasi",
-    "successBody": "Grazie. Un’e-mail di conferma è in arrivo — cliccate sul link che contiene per completare l’iscrizione.",
+    "successBody": "Grazie. Un’e-mail di conferma è in arrivo. Cliccate sul link che contiene per completare l’iscrizione.",
     "errors": {
       "email": "Indicate un indirizzo e-mail valido.",
       "language": "Scegliete una lingua.",

@@ -1,7 +1,7 @@
 /**
  * Motion runtime: scroll reveals and number counters.
  *
- * Reduced motion is checked FIRST and is absolute — if the user has asked for
+ * Reduced motion is checked FIRST and is absolute - if the user has asked for
  * less motion nothing here runs, the `js` class is never added, and every
  * element renders in its final state. Accessibility requirement, not a
  * preference.
@@ -62,7 +62,7 @@ function init() {
 
   /**
    * Count the first number in the element's text up to its final value, once.
-   * The surrounding text — currency, separators, units — is preserved.
+   * The surrounding text - currency, separators, units - is preserved.
    */
   const counters = document.querySelectorAll<HTMLElement>('[data-count]');
   if (counters.length) {

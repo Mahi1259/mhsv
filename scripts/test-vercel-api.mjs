@@ -42,7 +42,7 @@ function makeRes() {
   return res;
 }
 
-/** Stream-backed request — how Vercel delivers multipart. */
+/** Stream-backed request - how Vercel delivers multipart. */
 function streamReq(body, contentType, accept) {
   const req = Readable.from([Buffer.from(body)]);
   req.method = 'POST';
@@ -56,7 +56,7 @@ function streamReq(body, contentType, accept) {
   return req;
 }
 
-/** Pre-parsed request — how Vercel delivers urlencoded. */
+/** Pre-parsed request - how Vercel delivers urlencoded. */
 function parsedReq(fields, accept) {
   const req = Readable.from([]);
   req.method = 'POST';

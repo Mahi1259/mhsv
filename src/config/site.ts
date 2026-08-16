@@ -15,7 +15,7 @@ export const isLocale = (value: string): value is Locale =>
 /**
  * Canonical origin for this build. Resolved in astro.config.mjs (see
  * site-url.mjs) and injected here, so there is exactly one place the domain is
- * decided. Changing domain is one environment variable — no code edit.
+ * decided. Changing domain is one environment variable - no code edit.
  */
 export const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321';
 
@@ -26,9 +26,9 @@ export const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'http://localhost:432
 export const IS_PRODUCTION = import.meta.env.PUBLIC_IS_PRODUCTION !== 'false';
 
 /**
- * BLOCKER — legal / association status.
+ * BLOCKER - legal / association status.
  *
- * The content pack states "Swiss non-profit association — Geneva" in §01 and a
+ * The content pack states "Swiss non-profit association - Geneva" in §01 and a
  * full legal footer in §21. A later client instruction says not to display the
  * association or legal status until the lawyer has validated the statutes.
  *
@@ -56,15 +56,15 @@ export type StatusKey = (typeof STATUS_KEYS)[number];
 /**
  * Section archetypes.
  *
- * Previously every section was the same shape — eyebrow, heading, block of
- * content — which is precisely what made a 21-section page read as 21 slides.
+ * Previously every section was the same shape - eyebrow, heading, block of
+ * content - which is precisely what made a 21-section page read as 21 slides.
  * Each section now takes one of five types, and each type has its own measure,
  * rhythm and vertical padding.
  *
  *   hero       one only: full viewport, the largest type on the site
  *   statement  wide measure, large text, lots of air, almost no chrome
  *   grid       cards or columns
- *   feature    asymmetric — a visual or figure one side, text the other
+ *   feature    asymmetric - a visual or figure one side, text the other
  *   quiet      narrow, understated, low contrast; deliberately recessive
  */
 export const SECTION_TYPES = ['hero', 'statement', 'grid', 'feature', 'quiet'] as const;
@@ -74,7 +74,7 @@ export type SectionType = (typeof SECTION_TYPES)[number];
  * Section order and archetype for the single page.
  *
  * There is no panel surface any more. Four sections used to sit on inset
- * slabs — light at first, then a raised navy — and both readings were the
+ * slabs - light at first, then a raised navy - and both readings were the
  * same mistake: a big rectangle laid over the page. The page is ONE navy
  * ground from top to bottom, and sections are told apart by layout and by
  * rhythm. Where a specific piece of information has to be set apart, it gets
@@ -117,7 +117,7 @@ export const SECTION_ORDER = [
 
 export type SectionId = (typeof SECTION_ORDER)[number]['id'];
 
-/** Sections listed in the footer. Deliberately short — it was 20 links. */
+/** Sections listed in the footer. Deliberately short - it was 20 links. */
 export const FOOTER_LINKS = ['about', 'programmes', 'book', 'newsletter', 'contact'] as const;
 
 /** Permanent route encoded in the printed QR code. Must never change. */

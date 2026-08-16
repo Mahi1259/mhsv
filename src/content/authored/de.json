@@ -1,5 +1,5 @@
 {
-  "_note": "Vom Entwickler verfasste Texte — nicht im Content-Pack V3 enthalten. VOR PRODUKTIONSSTART VON MHSV® ZU VALIDIEREN. Siehe CONTENT.md. Schweizer Hochdeutsch: durchgehend «ss» statt «ß».",
+  "_note": "Vom Entwickler verfasste Texte, nicht im Content-Pack V3 enthalten. VOR PRODUKTIONSSTART VON MHSV® ZU VALIDIEREN. Siehe CONTENT.md. Schweizer Hochdeutsch: durchgehend «ss» statt «ß».",
   "meta": {
     "htmlLang": "de-CH",
     "ogLocale": "de_CH",
@@ -8,9 +8,9 @@
     "hreflang": "de"
   },
   "seo": {
-    "title": "MHSV® — Internationales Zentrum für Entwicklung und Transition",
+    "title": "MHSV®, Internationales Zentrum für Entwicklung und Transition",
     "description": "MHSV® entwickelt und koordiniert sportliche, menschliche, schulische, soziale und berufliche Entwicklungswege. Genf, Schweiz.",
-    "ogImageAlt": "MHSV®-Logo — Internationales Zentrum für Entwicklung und Transition"
+    "ogImageAlt": "MHSV®-Logo, Internationales Zentrum für Entwicklung und Transition"
   },
   "ui": {
     "skipToContent": "Zum Hauptinhalt springen",
@@ -92,7 +92,7 @@
   },
   "sections": {
     "about": {
-      "leadNoLegalStatus": "MHSV® — Internationales Zentrum für Entwicklung und Transition ist eine in Genf (Schweiz) ansässige Organisation.",
+      "leadNoLegalStatus": "MHSV®, Internationales Zentrum für Entwicklung und Transition, ist eine in Genf (Schweiz) ansässige Organisation.",
       "titleLines": [
         "ÜBER UNS"
       ]
@@ -113,7 +113,7 @@
         "Athletische Vorbereitung, Prävention und Regeneration.",
         "Kommunikation, Verantwortung und Rolle im Kollektiv."
       ],
-      "pillarNotesDisclaimer": "Provisorische Beschreibungen — definitive Formulierungen durch MHSV® zu liefern."
+      "pillarNotesDisclaimer": "Provisorische Beschreibungen. Definitive Formulierungen werden von MHSV® geliefert."
     },
     "pathway": {
       "stepLabel": "Schritt"
@@ -152,7 +152,7 @@
         },
         {
           "name": "Laetitia PILLER",
-          "role": "Vorstandsmitglied — Verantwortliche Kommunikation",
+          "role": "Vorstandsmitglied, Verantwortliche Kommunikation",
           "email": "infos@mhsv.ch",
           "emailPending": false
         },
@@ -164,7 +164,7 @@
         },
         {
           "name": "Diego FUIANO",
-          "role": "Koordinator Web & Digital sowie institutionelle Entwicklung und Partnerschaften — Italien",
+          "role": "Koordinator Web & Digital sowie institutionelle Entwicklung und Partnerschaften (Italien)",
           "email": "infos@mhsv.ch",
           "emailPending": false
         },
@@ -177,11 +177,11 @@
       ]
     },
     "book": {
-      "lead": "DAS MHSV® PREMIUM FOUNDING BOOK — GRÜNDUNGSAUSGABE 2026",
+      "lead": "DAS MHSV® PREMIUM FOUNDING BOOK, GRÜNDUNGSAUSGABE 2026",
       "body": "Als exklusive institutionelle Publikation stellt das Premium-Gründungsbuch Vision, Programme, Governance, Wirkung und Roadmap von MHSV® vor. Die strategischen und methodologischen Inhalte stehen nicht zum öffentlichen Download bereit. Die französische und die englische Ausgabe können über die Website bestellt werden, vorbehältlich Verfügbarkeit und Bestätigung durch MHSV®.",
       "notice": "Es wird kein Download des vollständigen Buches angeboten. Veröffentlicht werden ausschliesslich die freigegebenen Titelseiten.",
-      "coverAltFr": "Titelseite des MHSV®-Gründungsbuchs — französische Ausgabe",
-      "coverAltEn": "Titelseite des MHSV®-Gründungsbuchs — englische Ausgabe",
+      "coverAltFr": "Titelseite des MHSV®-Gründungsbuchs, französische Ausgabe",
+      "coverAltEn": "Titelseite des MHSV®-Gründungsbuchs, englische Ausgabe",
       "ctaLabel": "Buch bestellen",
       "title": "DAS PREMIUM-GRÜNDUNGSBUCH",
       "qrCaption": "Entdecken Sie das MHSV® Premium Founding Book und senden Sie Ihre Bestellanfrage.",
@@ -195,7 +195,7 @@
       "placeholderOfficial": "Offizielles Logo",
       "placeholderInstitutional": "Institutionelles Logo",
       "placeholderEquipment": "Ausrüstungslogo",
-      "placeholderNote": "Platz reserviert — Validierung ausstehend."
+      "placeholderNote": "Platz reserviert, Validierung ausstehend."
     },
     "roadmap": {
       "lead": "Diese Rubriken werden als Roadmap angekündigt und sind keine bereits operativen Leistungen."
@@ -280,17 +280,17 @@
     "privacyLink": "Datenschutzerklärung",
     "legalLink": "Impressum",
     "copyright": "Alle Rechte vorbehalten.",
-    "summary": "MHSV® — Internationales Zentrum für Entwicklung und Transition | Genf — Schweiz | www.mhsv.ch | infos@mhsv.ch"
+    "summary": "MHSV®, Internationales Zentrum für Entwicklung und Transition | Genf, Schweiz | www.mhsv.ch | infos@mhsv.ch"
   },
   "privacy": {
     "title": "Datenschutzerklärung",
-    "draftBadge": "Entwurf — juristische Validierung ausstehend",
+    "draftBadge": "Entwurf, juristische Validierung ausstehend",
     "draftNotice": "Dieser Text ist ein vom Entwickler für den Prototyp erstellter Entwurf. Die definitive Fassung muss vor dem Produktionsstart von der Rechtsberatung von MHSV® verfasst und freigegeben werden.",
     "updated": "Letzte Aktualisierung",
     "sections": [
       {
         "title": "Verantwortliche Stelle",
-        "body": "MHSV® — Internationales Zentrum für Entwicklung und Transition, Genf, Schweiz. Die vollständigen Angaben finden Sie in der Rubrik Kontakt."
+        "body": "MHSV®, Internationales Zentrum für Entwicklung und Transition, Genf, Schweiz. Die vollständigen Angaben finden Sie in der Rubrik Kontakt."
       },
       {
         "title": "Bearbeitete Daten",
@@ -360,7 +360,7 @@
     "consent": "Ich bin damit einverstanden, den MHSV®-Newsletter zu erhalten, und kann mich jederzeit abmelden.",
     "submit": "Anmelden",
     "successTitle": "Fast geschafft",
-    "successBody": "Vielen Dank. Eine Bestätigungs-E-Mail ist unterwegs — klicken Sie auf den darin enthaltenen Link, um Ihre Anmeldung abzuschliessen.",
+    "successBody": "Vielen Dank. Eine Bestätigungs-E-Mail ist unterwegs. Klicken Sie auf den darin enthaltenen Link, um Ihre Anmeldung abzuschliessen.",
     "errors": {
       "email": "Bitte geben Sie eine gültige E-Mail-Adresse an.",
       "language": "Bitte wählen Sie eine Sprache.",

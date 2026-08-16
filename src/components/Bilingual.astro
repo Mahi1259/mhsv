@@ -3,12 +3,12 @@
  * One string in two languages, as two elements rather than one joined string.
  *
  * /livre carries its French and English copy together and shows one at a time,
- * so every translatable fragment has to be an element the page can hide — a
+ * so every translatable fragment has to be an element the page can hide - a
  * joined "Prénom / First name" cannot be filtered. Each half is marked `.l10n`
  * with its own `lang`; the rules in livre.astro do the hiding, and with no
  * JavaScript the French half is what shows.
  *
- * When the two languages produce the same word — "Organisation" — it is
+ * When the two languages produce the same word - "Organisation" - it is
  * emitted once and left alone, so the page never repeats itself.
  */
 interface Props {

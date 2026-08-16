@@ -1,6 +1,6 @@
 ---
 /**
- * /livre — the permanent destination of the printed QR code.
+ * /livre - the permanent destination of the printed QR code.
  *
  * THIS URL MUST NOT CHANGE. It is encoded in the QR on the back cover of both
  * editions; once printed, it cannot be corrected. If the page ever moves,
@@ -48,7 +48,7 @@ const columns = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{fr.sections.book.title} — MHSV®</title>
+    <title>{fr.sections.book.title} | MHSV®</title>
     <meta
       name="description"
       content={`${fr.sections.book.body.slice(0, 150)}…`}
@@ -58,7 +58,7 @@ const columns = [
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="MHSV®" />
-    <meta property="og:title" content={`${fr.sections.book.title} — MHSV®`} />
+    <meta property="og:title" content={`${fr.sections.book.title} | MHSV®`} />
     <meta property="og:description" content={fr.sections.book.lead} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
@@ -80,7 +80,7 @@ const columns = [
      * Page language, decided before the first paint.
      *
      * The document carries both languages; `?lang=en` selects English and
-     * anything else — including no query at all — leaves French, which is the
+     * anything else - including no query at all - leaves French, which is the
      * default and the state the printed QR lands on. The stylesheet does the
      * hiding, so this only has to set the attribute, and it has to do it here
      * rather than at the end of the body or both languages flash first.
@@ -97,8 +97,8 @@ const columns = [
 
     {/*
       The site's masthead, reduced to what this page needs: the mark, and the
-      two languages this page is published in. No section links — there are no
-      sections here — and no DE or IT, because the book is not.
+      two languages this page is published in. No section links - there are no
+      sections here - and no DE or IT, because the book is not.
 
       Real links carrying `?lang=`, so a choice is shareable and survives a
       reload. translate="no" for the same reason as the main masthead: Chrome
@@ -135,7 +135,7 @@ const columns = [
                     {/* Flex-grow set to the cover's own aspect ratio, so the two
                         widths come out in proportion to their shapes and the two
                         HEIGHTS come out equal. The supplied files no longer share a
-                        ratio once their pale borders are trimmed — 0.697 and 0.752 —
+                        ratio once their pale borders are trimmed - 0.697 and 0.752 -
                         and equal widths made one book look smaller than the other. */}
                     <Picture
                       src={cover.src}
@@ -181,7 +181,7 @@ const columns = [
           <h2 id="order-title" class="section-title livre-order__title">
             <Bilingual fr={fr.bookOrder.title} en={en.bookOrder.title} />
           </h2>
-          {/* French first, English beside it — the form matches the page. The
+          {/* French first, English beside it - the form matches the page. The
               visitor still picks which EDITION of the book they want inside. */}
           <BookOrderForm locale="fr" altLocale="en" />
         </div>
@@ -229,7 +229,7 @@ const columns = [
    * ONE LANGUAGE AT A TIME.
    *
    * Every translatable fragment on this page is an element marked `.l10n`
-   * carrying its own `lang` — in the copy, and inside the order form via
+   * carrying its own `lang` - in the copy, and inside the order form via
    * components/Bilingual.astro. French is the default and needs no attribute,
    * so with no JavaScript, or on a bare /livre, the French half is what shows
    * and the page is complete. `?lang=en` sets data-lang on <html> and the two
@@ -252,7 +252,7 @@ const columns = [
    * FIXED, matching the main masthead.
    *
    * It was sticky, so it sat BELOW the space `body` reserves for the site's
-   * fixed bar — 68.8px of dead navy above it, which is the gap this page had
+   * fixed bar - 68.8px of dead navy above it, which is the gap this page had
    * between the top of the window and its own header. Fixed, it occupies that
    * reserved space instead of adding to it.
    */
@@ -280,7 +280,7 @@ const columns = [
 
   /*
    * On desktop it wears the same floating pill the site's masthead does once
-   * scrolled — held in that state permanently rather than shrinking, since
+   * scrolled - held in that state permanently rather than shrinking, since
    * there are no sections here to scroll past. Same measurements, so the two
    * pages read as one site.
    */
@@ -360,7 +360,7 @@ const columns = [
 
   /*
    * On desktop it wears the same floating pill the site's masthead does once
-   * scrolled — held in that state permanently rather than shrinking, since
+   * scrolled - held in that state permanently rather than shrinking, since
    * there are no sections here to scroll past. Same measurements, so the two
    * pages read as one site.
    */
@@ -432,7 +432,7 @@ const columns = [
 
   /*
    * Divided the two language blocks when both were on screen. Only one is
-   * now, so the rule would sit above it dividing nothing — `display: none`
+   * now, so the rule would sit above it dividing nothing - `display: none`
    * does not stop `+` matching, and the hidden block is still the previous
    * sibling. Reinstated only if a build ever shows both again.
    */

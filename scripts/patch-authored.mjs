@@ -8,7 +8,7 @@
  * addresses, the governance list, the Founding Book copy, the order-request
  * flow and the newsletter. FR and EN wording is reproduced verbatim from the
  * brief. DE and IT are translated by the developer and need client validation
- * — they are listed in CONTENT.md alongside the other authored strings.
+ * - they are listed in CONTENT.md alongside the other authored strings.
  *
  * Kept in the repository rather than run and deleted so the provenance of
  * every one of these strings stays auditable.
@@ -24,11 +24,11 @@ const GOVERNANCE = {
   fr: [
     ['Martial HAPPI', 'Fondateur et Président', 'm.happi@mhsv.ch'],
     ['Marc DJEA', 'Vice-président', 'infos@mhsv.ch'],
-    ['Laetitia PILLER', 'Membre du Comité — Responsable de la communication', 'infos@mhsv.ch'],
+    ['Laetitia PILLER', 'Membre du Comité - Responsable de la communication', 'infos@mhsv.ch'],
     ['Paule ESSAI', 'Secrétaire générale', 'infos@mhsv.ch'],
     [
       'Diego FUIANO',
-      'Coordinateur Web & Digital et développement institutionnel et des partenariats — Italie',
+      'Coordinateur Web & Digital et développement institutionnel et des partenariats - Italie',
       'infos@mhsv.ch',
     ],
     ['Xavier MARTI', 'Directeur du développement institutionnel et des partenariats', 'infos@mhsv.ch'],
@@ -36,11 +36,11 @@ const GOVERNANCE = {
   en: [
     ['Martial HAPPI', 'Founder and President', 'm.happi@mhsv.ch'],
     ['Marc DJEA', 'Vice-President', 'infos@mhsv.ch'],
-    ['Laetitia PILLER', 'Committee Member — Communications Officer', 'infos@mhsv.ch'],
+    ['Laetitia PILLER', 'Committee Member - Communications Officer', 'infos@mhsv.ch'],
     ['Paule ESSAI', 'Secretary General', 'infos@mhsv.ch'],
     [
       'Diego FUIANO',
-      'Web & Digital Coordinator and Institutional Development & Partnerships — Italy',
+      'Web & Digital Coordinator and Institutional Development & Partnerships - Italy',
       'infos@mhsv.ch',
     ],
     ['Xavier MARTI', 'Director of Institutional Development and Partnerships', 'infos@mhsv.ch'],
@@ -48,11 +48,11 @@ const GOVERNANCE = {
   de: [
     ['Martial HAPPI', 'Gründer und Präsident', 'm.happi@mhsv.ch'],
     ['Marc DJEA', 'Vizepräsident', 'infos@mhsv.ch'],
-    ['Laetitia PILLER', 'Vorstandsmitglied — Verantwortliche Kommunikation', 'infos@mhsv.ch'],
+    ['Laetitia PILLER', 'Vorstandsmitglied - Verantwortliche Kommunikation', 'infos@mhsv.ch'],
     ['Paule ESSAI', 'Generalsekretärin', 'infos@mhsv.ch'],
     [
       'Diego FUIANO',
-      'Koordinator Web & Digital sowie institutionelle Entwicklung und Partnerschaften — Italien',
+      'Koordinator Web & Digital sowie institutionelle Entwicklung und Partnerschaften - Italien',
       'infos@mhsv.ch',
     ],
     ['Xavier MARTI', 'Direktor Institutionelle Entwicklung und Partnerschaften', 'infos@mhsv.ch'],
@@ -60,11 +60,11 @@ const GOVERNANCE = {
   it: [
     ['Martial HAPPI', 'Fondatore e Presidente', 'm.happi@mhsv.ch'],
     ['Marc DJEA', 'Vicepresidente', 'infos@mhsv.ch'],
-    ['Laetitia PILLER', 'Membro del Comitato — Responsabile della comunicazione', 'infos@mhsv.ch'],
+    ['Laetitia PILLER', 'Membro del Comitato - Responsabile della comunicazione', 'infos@mhsv.ch'],
     ['Paule ESSAI', 'Segretaria generale', 'infos@mhsv.ch'],
     [
       'Diego FUIANO',
-      'Coordinatore Web & Digital e sviluppo istituzionale e delle partnership — Italia',
+      'Coordinatore Web & Digital e sviluppo istituzionale e delle partnership - Italia',
       'infos@mhsv.ch',
     ],
     ['Xavier MARTI', 'Direttore dello sviluppo istituzionale e delle partnership', 'infos@mhsv.ch'],
@@ -98,11 +98,11 @@ const PATCH = {
       },
       book: {
         title: 'Le Livre Fondateur Premium',
-        lead: 'LE LIVRE FONDATEUR PREMIUM MHSV® — ÉDITION FONDATRICE 2026',
+        lead: 'LE LIVRE FONDATEUR PREMIUM MHSV® - ÉDITION FONDATRICE 2026',
         body: 'Publication institutionnelle exclusive, le Livre Fondateur Premium présente la vision, les programmes, la gouvernance, l’impact et la feuille de route de MHSV®. Son contenu stratégique et méthodologique n’est pas proposé en téléchargement public. Les éditions française et anglaise peuvent être commandées depuis le site, sous réserve de disponibilité et de confirmation par MHSV®.',
         notice: 'Aucun téléchargement du livre complet n’est proposé. Seules les couvertures validées sont publiées.',
-        coverAltFr: 'Couverture du Livre Fondateur MHSV® — édition française',
-        coverAltEn: 'Couverture du Livre Fondateur MHSV® — édition anglaise',
+        coverAltFr: 'Couverture du Livre Fondateur MHSV® - édition française',
+        coverAltEn: 'Couverture du Livre Fondateur MHSV® - édition anglaise',
         ctaLabel: 'Commander le livre',
         qrCaption: 'Découvrez le Livre Fondateur Premium MHSV® et transmettez votre demande de commande.',
         qrAlt: 'Code QR vers la page du Livre Fondateur MHSV®',
@@ -161,7 +161,7 @@ const PATCH = {
     footer: {
       navTitle: 'Rubriques',
       legalTitle: 'Informations',
-      summary: 'MHSV® — Centre International de Développement et de Transition | Genève — Suisse | www.mhsv.ch | infos@mhsv.ch',
+      summary: 'MHSV® - Centre International de Développement et de Transition | Genève - Suisse | www.mhsv.ch | infos@mhsv.ch',
     },
   },
 
@@ -191,11 +191,11 @@ const PATCH = {
       },
       book: {
         title: 'The Premium Founding Book',
-        lead: 'THE MHSV® PREMIUM FOUNDING BOOK — FOUNDING EDITION 2026',
+        lead: 'THE MHSV® PREMIUM FOUNDING BOOK - FOUNDING EDITION 2026',
         body: 'An exclusive institutional publication, the Premium Founding Book presents MHSV®’s vision, programmes, governance, impact and roadmap. Its strategic and methodological content is not available as a public download. French and English editions may be ordered through the website, subject to availability and confirmation by MHSV®.',
         notice: 'No download of the complete book is offered. Only the approved covers are published.',
-        coverAltFr: 'MHSV® Founding Book cover — French edition',
-        coverAltEn: 'MHSV® Founding Book cover — English edition',
+        coverAltFr: 'MHSV® Founding Book cover - French edition',
+        coverAltEn: 'MHSV® Founding Book cover - English edition',
         ctaLabel: 'Order the book',
         qrCaption: 'Discover the MHSV® Premium Founding Book and submit your order request.',
         qrAlt: 'QR code linking to the MHSV® Founding Book page',
@@ -243,7 +243,7 @@ const PATCH = {
       consent: 'I agree to receive the MHSV® newsletter and may unsubscribe at any time.',
       submit: 'Subscribe',
       successTitle: 'Almost there',
-      successBody: 'Thank you. A confirmation email is on its way — click the link inside it to complete your subscription.',
+      successBody: 'Thank you. A confirmation email is on its way - click the link inside it to complete your subscription.',
       errors: {
         email: 'Please enter a valid email address.',
         language: 'Please choose a language.',
@@ -254,7 +254,7 @@ const PATCH = {
     footer: {
       navTitle: 'Sections',
       legalTitle: 'Information',
-      summary: 'MHSV® — International Centre for Development and Transition | Geneva — Switzerland | www.mhsv.ch | infos@mhsv.ch',
+      summary: 'MHSV® - International Centre for Development and Transition | Geneva - Switzerland | www.mhsv.ch | infos@mhsv.ch',
     },
   },
 
@@ -284,11 +284,11 @@ const PATCH = {
       },
       book: {
         title: 'Das Premium-Gründungsbuch',
-        lead: 'DAS MHSV® PREMIUM FOUNDING BOOK — GRÜNDUNGSAUSGABE 2026',
+        lead: 'DAS MHSV® PREMIUM FOUNDING BOOK - GRÜNDUNGSAUSGABE 2026',
         body: 'Als exklusive institutionelle Publikation stellt das Premium-Gründungsbuch Vision, Programme, Governance, Wirkung und Roadmap von MHSV® vor. Die strategischen und methodologischen Inhalte stehen nicht zum öffentlichen Download bereit. Die französische und die englische Ausgabe können über die Website bestellt werden, vorbehältlich Verfügbarkeit und Bestätigung durch MHSV®.',
         notice: 'Es wird kein Download des vollständigen Buches angeboten. Veröffentlicht werden ausschliesslich die freigegebenen Titelseiten.',
-        coverAltFr: 'Titelseite des MHSV®-Gründungsbuchs — französische Ausgabe',
-        coverAltEn: 'Titelseite des MHSV®-Gründungsbuchs — englische Ausgabe',
+        coverAltFr: 'Titelseite des MHSV®-Gründungsbuchs - französische Ausgabe',
+        coverAltEn: 'Titelseite des MHSV®-Gründungsbuchs - englische Ausgabe',
         ctaLabel: 'Buch bestellen',
         qrCaption: 'Entdecken Sie das MHSV® Premium Founding Book und senden Sie Ihre Bestellanfrage.',
         qrAlt: 'QR-Code zur Seite des MHSV®-Gründungsbuchs',
@@ -336,7 +336,7 @@ const PATCH = {
       consent: 'Ich bin damit einverstanden, den MHSV®-Newsletter zu erhalten, und kann mich jederzeit abmelden.',
       submit: 'Anmelden',
       successTitle: 'Fast geschafft',
-      successBody: 'Vielen Dank. Eine Bestätigungs-E-Mail ist unterwegs — klicken Sie auf den darin enthaltenen Link, um Ihre Anmeldung abzuschliessen.',
+      successBody: 'Vielen Dank. Eine Bestätigungs-E-Mail ist unterwegs - klicken Sie auf den darin enthaltenen Link, um Ihre Anmeldung abzuschliessen.',
       errors: {
         email: 'Bitte geben Sie eine gültige E-Mail-Adresse an.',
         language: 'Bitte wählen Sie eine Sprache.',
@@ -347,7 +347,7 @@ const PATCH = {
     footer: {
       navTitle: 'Rubriken',
       legalTitle: 'Informationen',
-      summary: 'MHSV® — Internationales Zentrum für Entwicklung und Transition | Genf — Schweiz | www.mhsv.ch | infos@mhsv.ch',
+      summary: 'MHSV® - Internationales Zentrum für Entwicklung und Transition | Genf - Schweiz | www.mhsv.ch | infos@mhsv.ch',
     },
   },
 
@@ -377,11 +377,11 @@ const PATCH = {
       },
       book: {
         title: 'Il Libro Fondatore Premium',
-        lead: 'IL LIBRO FONDATORE PREMIUM MHSV® — EDIZIONE FONDATRICE 2026',
+        lead: 'IL LIBRO FONDATORE PREMIUM MHSV® - EDIZIONE FONDATRICE 2026',
         body: 'Pubblicazione istituzionale esclusiva, il Libro Fondatore Premium presenta la visione, i programmi, la governance, l’impatto e la roadmap di MHSV®. I suoi contenuti strategici e metodologici non sono disponibili per il download pubblico. Le edizioni francese e inglese possono essere ordinate dal sito, salvo disponibilità e conferma da parte di MHSV®.',
         notice: 'Non è offerto alcun download del libro completo. Sono pubblicate soltanto le copertine approvate.',
-        coverAltFr: 'Copertina del Libro Fondatore MHSV® — edizione francese',
-        coverAltEn: 'Copertina del Libro Fondatore MHSV® — edizione inglese',
+        coverAltFr: 'Copertina del Libro Fondatore MHSV® - edizione francese',
+        coverAltEn: 'Copertina del Libro Fondatore MHSV® - edizione inglese',
         ctaLabel: 'Ordina il libro',
         qrCaption: 'Scoprite il Libro Fondatore Premium MHSV® e inviate la vostra richiesta di ordine.',
         qrAlt: 'Codice QR verso la pagina del Libro Fondatore MHSV®',
@@ -429,7 +429,7 @@ const PATCH = {
       consent: 'Accetto di ricevere la newsletter MHSV® e posso disiscrivermi in qualsiasi momento.',
       submit: 'Iscrivimi',
       successTitle: 'Ci siamo quasi',
-      successBody: 'Grazie. Un’e-mail di conferma è in arrivo — cliccate sul link che contiene per completare l’iscrizione.',
+      successBody: 'Grazie. Un’e-mail di conferma è in arrivo - cliccate sul link che contiene per completare l’iscrizione.',
       errors: {
         email: 'Indicate un indirizzo e-mail valido.',
         language: 'Scegliete una lingua.',
@@ -440,7 +440,7 @@ const PATCH = {
     footer: {
       navTitle: 'Sezioni',
       legalTitle: 'Informazioni',
-      summary: 'MHSV® — Centro Internazionale di Sviluppo e Transizione | Ginevra — Svizzera | www.mhsv.ch | infos@mhsv.ch',
+      summary: 'MHSV® - Centro Internazionale di Sviluppo e Transizione | Ginevra - Svizzera | www.mhsv.ch | infos@mhsv.ch',
     },
   },
 };
@@ -468,5 +468,5 @@ for (const [loc, patch] of Object.entries(PATCH)) {
 
   // The pack's §21 contact tagline and place stay; the addresses are superseded.
   writeFileSync(file, JSON.stringify(merged, null, 2) + '\n');
-  console.log(`  ✓ src/content/authored/${loc}.json  — governance (6), book, newsletter, contact`);
+  console.log(`  ✓ src/content/authored/${loc}.json  - governance (6), book, newsletter, contact`);
 }

@@ -1,7 +1,7 @@
 /**
  * Masthead shrink, and magnetic buttons.
  *
- * ONE passive, rAF-throttled scroll listener for the page — see `onScroll`.
+ * ONE passive, rAF-throttled scroll listener for the page - see `onScroll`.
  * There is no longer an animation loop here: the cursor-following floodlight
  * was the only thing that needed one, and nothing that remains animates from
  * JavaScript. Do not reintroduce a loop without a reason.
@@ -17,7 +17,7 @@ const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
    Several things react to scroll position; each adding its own listener means
    several handlers competing for the same frame. Registering here gives one
-   listener, one frame, and one place to keep `passive: true` — which is what
+   listener, one frame, and one place to keep `passive: true` - which is what
    stops scrolling being blocked on the main thread.
 
    The callback also fires immediately on registration, so a page loaded or
@@ -49,7 +49,7 @@ function onScroll(handler: () => void) {
 }
 
 /* ---------------------------------------------------------------------------
-   Shrink the masthead on scroll — desktop only
+   Shrink the masthead on scroll - desktop only
 
    Past the entry threshold the shell contracts into a floating pill. This adds
    the class; src/components/Header.astro does the rest.
@@ -60,7 +60,7 @@ function onScroll(handler: () => void) {
 
    The entry point is deliberately shorter than the masthead. The expanded bar
    has no background of its own, so it must have materialised before page text
-   can reach the row the nav links sit on — measured at 72px of scroll.
+   can reach the row the nav links sit on - measured at 72px of scroll.
 
    This runs under reduced motion. The shrink is a functional space saving, and
    the global stylesheet already collapses the durations to nothing, so it
@@ -101,7 +101,7 @@ function initNavShrink() {
    *
    * On arrival the browser has not necessarily applied the fragment scroll
    * yet, so `scrollY` still reads 0 while the document is about to land deep
-   * in the page — which is exactly the case a language switch produces, since
+   * in the page - which is exactly the case a language switch produces, since
    * it carries the current section across as a fragment. Reading the target
    * instead keeps this agreeing with the inline script in Base.astro, which
    * has already set the state from the same fragment before first paint.

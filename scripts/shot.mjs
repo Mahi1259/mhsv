@@ -5,7 +5,7 @@
  *
  * Uses Puppeteer rather than `chrome --screenshot --window-size`, which clamps
  * the window below roughly 500px and then crops a wider layout instead of
- * reflowing it — that produces convincing but wrong "overflow" at 320px.
+ * reflowing it - that produces convincing but wrong "overflow" at 320px.
  */
 import puppeteer from 'puppeteer-core';
 
@@ -22,4 +22,4 @@ await page.goto(`${BASE}/${locale}/`, { waitUntil: 'networkidle0' });
 await page.screenshot({ path: out, fullPage: full });
 await browser.close();
 
-console.log(`  ✓ ${out} — ${locale} @ ${width}px${full ? ' (full page)' : ''}`);
+console.log(`  ✓ ${out} - ${locale} @ ${width}px${full ? ' (full page)' : ''}`);

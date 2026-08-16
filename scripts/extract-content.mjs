@@ -6,15 +6,15 @@
  * The .docx is the client's source of truth. Nothing in this repo retypes it.
  * The document holds four parallel language blocks (FR / EN / DE / IT), each
  * with the same 21 numbered sections, so extraction is: segment by language
- * marker -> segment by "NN — TITLE" -> map blocks to a semantic shape.
+ * marker -> segment by "NN - TITLE" -> map blocks to a semantic shape.
  *
  * Two things the .docx does NOT contain, which are merged in from
  * src/content/authored/{loc}.json:
  *   1. UI chrome (nav labels, form labels, validation messages, footer, legal
- *      page bodies) — the pack is website copy, not interface copy.
+ *      page bodies) - the pack is website copy, not interface copy.
  *   2. Public copy for §18/§19, where the pack text is an instruction to the
  *      developer ("Show the cover of…") rather than publishable prose.
- * Everything authored is flagged for client validation — see CONTENT.md.
+ * Everything authored is flagged for client validation - see CONTENT.md.
  *
  * Run `npm run content:check` after this to enforce key parity across locales.
  */
@@ -30,7 +30,7 @@ const DOCX =
 
 const LOCALES = ['fr', 'en', 'de', 'it'];
 const LANG_MARKERS = { fr: '🇫🇷', en: '🇬🇧', de: '🇩🇪', it: '🇮🇹' };
-/** First appendix heading after the Italian block — bounds the last locale. */
+/** First appendix heading after the Italian block - bounds the last locale. */
 const APPENDIX_MARKER = /^[D-G]\s*[—–-]\s/;
 
 // ---------------------------------------------------------------------------
@@ -53,7 +53,7 @@ const DASH = /\s[-–—]\s/;
 const clean = (s) => String(s ?? '').replace(/\s+/g, ' ').trim();
 const dropTrailingDot = (s) => clean(s).replace(/[.。]\s*$/, '');
 
-/** Everything after the first colon — strips "Roadmap:", "CTA :", "Footer légal :" … */
+/** Everything after the first colon - strips "Roadmap:", "CTA :", "Footer légal :" … */
 function afterColon(s, fallback = s) {
   const i = String(s).indexOf(':');
   return i === -1 ? clean(fallback) : clean(String(s).slice(i + 1));
@@ -172,7 +172,7 @@ function readStatusLegend(blocks) {
 }
 
 // ---------------------------------------------------------------------------
-// section extractors — one per numbered section of the content pack
+// section extractors - one per numbered section of the content pack
 // ---------------------------------------------------------------------------
 const p = (s, i) => clean(s.blocks[i]?.text ?? '');
 const tbl = (s, i) => s.blocks.filter((b) => b.type === 'tbl')[i]?.rows ?? [];
@@ -355,7 +355,7 @@ const SECTIONS = [
           name: clean(name),
           role: clean(role),
           email,
-          // Client has not created these mailboxes yet — BLOCKER #3.
+          // Client has not created these mailboxes yet - BLOCKER #3.
           emailPending: email === null,
         };
       }),
@@ -381,7 +381,7 @@ const SECTIONS = [
     num: '18',
     anchor: 'book',
     // Both source blocks are instructions to the developer. Public copy for
-    // this section is authored — see src/content/authored/{loc}.json.
+    // this section is authored - see src/content/authored/{loc}.json.
     extract: () => ({}),
   },
   {
@@ -420,7 +420,7 @@ const SECTIONS = [
         phone,
         email,
         website,
-        // Rendered only when PUBLIC_SHOW_LEGAL_STATUS=true — BLOCKER #1.
+        // Rendered only when PUBLIC_SHOW_LEGAL_STATUS=true - BLOCKER #1.
         legalFooter: splitList(afterColon(p(s, 4)), '|', true),
       };
     },
@@ -435,7 +435,7 @@ const SECTIONS = [
  * Corrections applied to every extracted string.
  *
  * The client's 14 August update brief supersedes the 10 August content pack:
- * mhsv.ch was acquired and mhsv-international.org is retired everywhere —
+ * mhsv.ch was acquired and mhsv-international.org is retired everywhere -
  * visible copy, links, mailto attributes, metadata. Rewriting here rather than
  * per-field means a stale address cannot survive anywhere in the pack, and
  * `npm run content:check` fails the build if one ever reappears.
@@ -477,7 +477,7 @@ function build() {
         '  which lives outside the repository and is not committed.',
         '',
         '  If you are deploying: you do not need this. The generated JSON is',
-        '  committed — run "npm run build", which validates it and builds.',
+        '  committed - run "npm run build", which validates it and builds.',
         '',
         '  If you are updating content: put the .docx next to the repo, or set',
         '    MHSV_CONTENT_DOCX=/path/to/…V3.docx npm run content:extract',
@@ -517,7 +517,7 @@ function build() {
       );
     }
 
-    // Brand identity is stated in §01 — lift it so components don't reach
+    // Brand identity is stated in §01 - lift it so components don't reach
     // into the hero for it.
     const hero = out.sections.hero;
     out.brand = {
@@ -552,7 +552,7 @@ function build() {
     try {
       authored = JSON.parse(readFileSync(resolve(ROOT, `src/content/authored/${loc}.json`), 'utf8'));
     } catch {
-      console.warn(`  ! no authored overlay for "${loc}" — UI strings will be missing`);
+      console.warn(`  ! no authored overlay for "${loc}" - UI strings will be missing`);
     }
     const merged = merge(applySupersessions(results[loc]), authored);
     writeFileSync(resolve(outDir, `${loc}.json`), JSON.stringify(merged, null, 2) + '\n');

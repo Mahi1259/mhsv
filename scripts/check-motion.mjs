@@ -12,7 +12,7 @@
  *   6. hover is ~180ms and :active is quicker than :hover
  *   7. focus rings appear instantly
  *   8. the masthead shrinks on desktop, holds its state, and stays inert on
- *      mobile — including that the pill still fits every locale on one row
+ *      mobile - including that the pill still fits every locale on one row
  */
 import puppeteer from 'puppeteer-core';
 import sharp from 'sharp';
@@ -24,7 +24,7 @@ const CHROME =
 const failures = [];
 const check = (ok, label, detail = '') => {
   if (!ok) failures.push(label);
-  console.log(`  ${ok ? '✓' : '✗'} ${label}${detail ? `  — ${detail}` : ''}`);
+  console.log(`  ${ok ? '✓' : '✗'} ${label}${detail ? `  - ${detail}` : ''}`);
 };
 
 const browser = await puppeteer.launch({
@@ -284,7 +284,7 @@ try {
    *
    * Four codes inline while the bar is full width; once it contracts the
    * switcher is gone and the bar simply states which language you are in.
-   * The property that matters is that nothing is left FOCUSABLE — a control
+   * The property that matters is that nothing is left FOCUSABLE - a control
    * off screen that a keyboard user can still tab into is the failure mode
    * of hiding things this way. */
   {
@@ -362,7 +362,7 @@ try {
    * This is the one journey a four-language site does constantly, and it has
    * gone wrong twice: the page glided down to the section on arrival, and the
    * bar expanded and contracted while the reader watched. Neither shows up in
-   * a screenshot or a settled DOM read — only in the painted frames. So this
+   * a screenshot or a settled DOM read - only in the painted frames. So this
    * screencasts a real FR→DE switch, made the way a reader makes it (open the
    * collapsed language menu, click a language), and asserts across EVERY
    * painted frame that the bar never changes size and is never missing. */
@@ -392,14 +392,14 @@ try {
     // Where the pill's edges actually are, so the scan below can be confined
     // to them. Windowed on purpose: the page shows THROUGH the translucent
     // bar, and a card edge behind it out-measured the pill's own edge (46 vs
-    // 28) — the scan was reporting the page, not the bar.
+    // 28) - the scan was reporting the page, not the bar.
     const pill = await page.evaluate(() => {
       const r = document.querySelector('.site-header__shell').getBoundingClientRect();
       return { left: Math.round(r.left), right: Math.round(r.right) };
     });
 
     // The bar shows the language label in gold in every locale, so finding
-    // gold in its box says the bar is DRAWN — not which language is showing.
+    // gold in its box says the bar is DRAWN - not which language is showing.
     // Its BOX, not one pixel: the label is thin text now rather than a filled
     // chip, and a single sample lands between the letterforms.
     const label = await page.evaluate(() => {
@@ -434,7 +434,7 @@ try {
       };
       // Strongest edge on a text-free row inside the bar, within ±25px of
       // where the pill says it is. A pill that moved further than that leaves
-      // the window, and the reading changes — which is the failure we want.
+      // the window, and the reading changes - which is the failure we want.
       const edge = (centre) => {
         let best = 0;
         let found = 0;
@@ -463,7 +463,7 @@ try {
       }
       if (gold === 0) barless += 1;
 
-      // WHERE the text sits on the nav row, as a bit pattern — the French and
+      // WHERE the text sits on the nav row, as a bit pattern - the French and
       // German label sets lay out differently, so this identifies which page
       // a frame belongs to. A count alone is not enough: the two sets light
       // the same NUMBER of samples.
@@ -477,7 +477,7 @@ try {
      * blend of the two.
      *
      * Whether the outgoing page gets painted at all before the swap depends on
-     * how much work the page is doing, and it varies — this has captured
+     * how much work the page is doing, and it varies - this has captured
      * anywhere from zero to a handful of French frames. So the count of
      * distinct nav rows is 1 or 2, and both are correct. What must never
      * appear is a THIRD: the page cross-fading would put frames at
@@ -485,7 +485,7 @@ try {
      * transition produced and the reason there is no longer one.
      *
      * Measured on the nav row because the French and German label sets are
-     * laid out differently — the two clusters here sit 148 samples of 360
+     * laid out differently - the two clusters here sit 148 samples of 360
      * apart, so this is not picking up noise behind the translucent bar.
      */
     const settled = await page.evaluate(() => {
@@ -522,15 +522,15 @@ try {
     await page.close();
   }
 
-  /* Arriving on a deep fragment — which is exactly what the language switcher
-   * produces, since it carries the reader's section across — must be STILL.
+  /* Arriving on a deep fragment - which is exactly what the language switcher
+   * produces, since it carries the reader's section across - must be STILL.
    *
    * Two regressions live here. `scroll-behavior: smooth` also applies to the
    * fragment scroll the browser performs on load, so the translated page
    * opened at the top and glided down: the page appearing to move on
    * translate. And if the bar is not already shrunk in the first painted
    * frame, the cross-document view transition snapshots it expanded, then
-   * animates it — which is what put two mastheads on screen at once. */
+   * animates it - which is what put two mastheads on screen at once. */
   {
     const page = await browser.newPage();
     await page.setViewport({ width: 1440, height: 900 });
@@ -573,7 +573,7 @@ try {
    * They come from an unscoped `::before` on the page container, so the class
    * name leaks into any component that happens to reuse it. The container was
    * `.flow`; the pathway section has its own `.flow` block, and the page-wide
-   * washes were being drawn inside it — a translucent rectangle sitting across
+   * washes were being drawn inside it - a translucent rectangle sitting across
    * the steps. Renamed to `.page-flow`, but the way to keep it fixed is to
    * count what actually paints them. */
   {
@@ -607,7 +607,7 @@ try {
    *
    * The bar is fixed and translucent, so `body` reserves --header-h for it.
    * When that strip is painted by something other than the page's own ground,
-   * the page opens with a hard-edged rectangle straight across the top —
+   * the page opens with a hard-edged rectangle straight across the top -
    * which is exactly what happened once the masthead stopped being sticky.
    * Sampling a column clear of the pill catches it; nothing else does. */
   {
@@ -647,7 +647,7 @@ try {
     await page.close();
   }
 
-  // Reduced motion still shrinks — it is a space saving, not decoration —
+  // Reduced motion still shrinks - it is a space saving, not decoration -
   // but arrives instantly.
   {
     const page = await browser.newPage();

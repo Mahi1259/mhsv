@@ -1,9 +1,9 @@
 ---
 /**
- * The Premium Founding Book — feature type.
+ * The Premium Founding Book - feature type.
  *
  * Covers only. The full PDFs are INTERNAL_REFERENCE and are never copied into
- * the build — there is deliberately no download link here and no path that
+ * the build - there is deliberately no download link here and no path that
  * could become one.
  *
  * The primary action is the order request, which lives on the permanent
@@ -39,7 +39,7 @@ const covers = [
             {/* Flex-grow set to the cover's own aspect ratio, so the two
                 widths come out in proportion to their shapes and the two
                 HEIGHTS come out equal. The supplied files no longer share a
-                ratio once their pale borders are trimmed — 0.697 and 0.752 —
+                ratio once their pale borders are trimmed - 0.697 and 0.752 -
                 and equal widths made one book look smaller than the other. */}
             <Picture
               src={cover.src}
@@ -134,7 +134,7 @@ const covers = [
 
   @media (min-width: 52rem) {
     .book {
-      /* The covers ARE the section here — they were sized like a thumbnail
+      /* The covers ARE the section here - they were sized like a thumbnail
          beside the copy. */
       grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
       gap: 3.5rem;

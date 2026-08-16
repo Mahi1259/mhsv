@@ -11,5 +11,5 @@
 /it               /it/    301
 
 # The printed QR code on the Founding Book encodes /livre with no trailing
-# slash. That exact URL must resolve — it cannot be corrected after printing.
+# slash. That exact URL must resolve - it cannot be corrected after printing.
 /livre            /livre/ 308

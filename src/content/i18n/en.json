@@ -27,7 +27,7 @@
         "Its mission is to promote holistic human development through sport, education, training, human support and preparation for personal, sporting, educational and professional transitions.",
         "Football is the principal launch programme, while the mission extends to all sports and, above all, to the person behind performance. MHSV® does not promise automatic access to professional sport; it builds realistic, individualised and coordinated pathways."
       ],
-      "leadNoLegalStatus": "MHSV® — International Centre for Development and Transition is an organisation based in Geneva, Switzerland.",
+      "leadNoLegalStatus": "MHSV®, International Centre for Development and Transition, is an organisation based in Geneva, Switzerland.",
       "titleLines": [
         "WHO",
         "WE ARE"
@@ -140,7 +140,7 @@
         "Physical preparation, prevention and recovery.",
         "Communication, responsibility and role within the group."
       ],
-      "pillarNotesDisclaimer": "Provisional descriptions — final wording to be supplied by MHSV®."
+      "pillarNotesDisclaimer": "Provisional descriptions. Final wording to be supplied by MHSV®."
     },
     "services": {
       "num": "07",
@@ -357,7 +357,7 @@
         },
         {
           "name": "Laetitia PILLER",
-          "role": "Committee Member — Communications Officer",
+          "role": "Committee Member, Communications Officer",
           "email": "infos@mhsv.ch",
           "emailPending": false
         },
@@ -369,7 +369,7 @@
         },
         {
           "name": "Diego FUIANO",
-          "role": "Web & Digital Coordinator and Institutional Development & Partnerships — Italy",
+          "role": "Web & Digital Coordinator and Institutional Development & Partnerships (Italy)",
           "email": "infos@mhsv.ch",
           "emailPending": false
         },
@@ -401,11 +401,11 @@
       "num": "18",
       "anchor": "book",
       "title": "THE PREMIUM FOUNDING BOOK",
-      "lead": "THE MHSV® PREMIUM FOUNDING BOOK — FOUNDING EDITION 2026",
+      "lead": "THE MHSV® PREMIUM FOUNDING BOOK, FOUNDING EDITION 2026",
       "body": "An exclusive institutional publication, the Premium Founding Book presents MHSV®’s vision, programmes, governance, impact and roadmap. Its strategic and methodological content is not available as a public download. French and English editions may be ordered through the website, subject to availability and confirmation by MHSV®.",
       "notice": "No download of the complete book is offered. Only the approved covers are published.",
-      "coverAltFr": "MHSV® Founding Book cover — French edition",
-      "coverAltEn": "MHSV® Founding Book cover — English edition",
+      "coverAltFr": "MHSV® Founding Book cover, French edition",
+      "coverAltEn": "MHSV® Founding Book cover, English edition",
       "ctaLabel": "Order the book",
       "qrCaption": "Discover the MHSV® Premium Founding Book and submit your order request.",
       "qrAlt": "QR code linking to the MHSV® Founding Book page"
@@ -426,7 +426,7 @@
       "placeholderOfficial": "Official logo",
       "placeholderInstitutional": "Institutional logo",
       "placeholderEquipment": "Equipment logo",
-      "placeholderNote": "Placement reserved — pending validation."
+      "placeholderNote": "Placement reserved, pending validation."
     },
     "roadmap": {
       "num": "20",
@@ -483,7 +483,7 @@
     "legalStatus": "Swiss non-profit association - Geneva",
     "baseline": "Beyond Sport - Beyond Human Potential"
   },
-  "_note": "Strings written by the developer — not present in content pack V3. TO BE VALIDATED BY MHSV® before production. See CONTENT.md.",
+  "_note": "Strings written by the developer, not present in content pack V3. TO BE VALIDATED BY MHSV® before production. See CONTENT.md.",
   "meta": {
     "htmlLang": "en",
     "ogLocale": "en_GB",
@@ -492,9 +492,9 @@
     "hreflang": "en"
   },
   "seo": {
-    "title": "MHSV® — International Centre for Development and Transition",
+    "title": "MHSV®, International Centre for Development and Transition",
     "description": "MHSV® designs and coordinates sporting, human, educational, social and professional pathways. Geneva, Switzerland.",
-    "ogImageAlt": "MHSV® logo — International Centre for Development and Transition"
+    "ogImageAlt": "MHSV® logo, International Centre for Development and Transition"
   },
   "ui": {
     "skipToContent": "Skip to main content",
@@ -615,17 +615,17 @@
     "privacyLink": "Privacy policy",
     "legalLink": "Legal notice",
     "copyright": "All rights reserved.",
-    "summary": "MHSV® — International Centre for Development and Transition | Geneva — Switzerland | www.mhsv.ch | infos@mhsv.ch"
+    "summary": "MHSV®, International Centre for Development and Transition | Geneva, Switzerland | www.mhsv.ch | infos@mhsv.ch"
   },
   "privacy": {
     "title": "Privacy policy",
-    "draftBadge": "Draft — pending legal validation",
+    "draftBadge": "Draft, pending legal validation",
     "draftNotice": "This text is a draft prepared by the developer for the prototype. The final version must be written and approved by MHSV®'s legal counsel before going into production.",
     "updated": "Last updated",
     "sections": [
       {
         "title": "Data controller",
-        "body": "MHSV® — International Centre for Development and Transition, Geneva, Switzerland. Full details are given in the Contact section."
+        "body": "MHSV®, International Centre for Development and Transition, Geneva, Switzerland. Full details are given in the Contact section."
       },
       {
         "title": "Data processed",
@@ -695,7 +695,7 @@
     "consent": "I agree to receive the MHSV® newsletter and may unsubscribe at any time.",
     "submit": "Subscribe",
     "successTitle": "Almost there",
-    "successBody": "Thank you. A confirmation email is on its way — click the link inside it to complete your subscription.",
+    "successBody": "Thank you. A confirmation email is on its way. Click the link inside it to complete your subscription.",
     "errors": {
       "email": "Please enter a valid email address.",
       "language": "Please choose a language.",

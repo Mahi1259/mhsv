@@ -1,10 +1,10 @@
 ---
 /**
- * Founding programmes & fees — feature type.
+ * Founding programmes & fees - feature type.
  *
  * MERGE: the content pack keeps these as two sections (§10 Founding
  * programmes, §13 Fees & access). Rendered separately, the CHF 15,000 launch
- * rate was stated three times on one page — once in each programme table and
+ * rate was stated three times on one page - once in each programme table and
  * again in the fees section. They are one section now, and the rate is stated
  * exactly once.
  *
@@ -92,7 +92,7 @@ const qualifier = match ? match[2] : null;
     display: grid;
     gap: 1.25rem;
     /* Cards size to their own content. Stretching them to a common height left
-       the shorter one with a large empty tail — the two programmes genuinely
+       the shorter one with a large empty tail - the two programmes genuinely
        have different numbers of rows. */
     align-items: start;
   }
@@ -144,7 +144,7 @@ const qualifier = match ? match[2] : null;
   }
 
   /*
-   * The launch rate — stated once on the page, as a wide strip rather than a
+   * The launch rate - stated once on the page, as a wide strip rather than a
    * tall third column. As a column it forced the two programme cards into
    * ~390px each, which was too narrow to set a label beside its value.
    */
@@ -226,7 +226,7 @@ const qualifier = match ? match[2] : null;
   }
 
   @media (min-width: 52rem) {
-    /* Headline left, terms right — one line rather than a stacked block. */
+    /* Headline left, terms right - one line rather than a stacked block. */
     .fee {
       grid-template-columns: minmax(0, auto) minmax(0, 1fr);
       gap: 2.5rem;

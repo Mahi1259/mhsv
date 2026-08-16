@@ -2,7 +2,7 @@
  * Minimal WordprocessingML reader.
  *
  * We only need the linear block order of `word/document.xml` (paragraphs and
- * tables) — not styling. That is a small enough surface to read with an
+ * tables) - not styling. That is a small enough surface to read with an
  * ordered token scan, which avoids pulling a full DOCX library into the
  * handover repo.
  */
@@ -60,7 +60,7 @@ function parseTable(xml) {
 export function readDocxBlocks(path) {
   const zip = unzipSync(readFileSync(path));
   const entry = zip['word/document.xml'];
-  if (!entry) throw new Error(`${path}: no word/document.xml — not a .docx?`);
+  if (!entry) throw new Error(`${path}: no word/document.xml - not a .docx?`);
   const xml = strFromU8(entry);
 
   const body = /<w:body(?:\s[^>]*)?>([\s\S]*)<\/w:body>/.exec(xml);

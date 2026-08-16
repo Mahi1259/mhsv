@@ -5,7 +5,7 @@
  * foreground/background pairing the design system actually permits, so a
  * palette change cannot quietly drop a role below WCAG AA.
  *
- * Tokens are read from src/styles/global.css rather than duplicated here — if
+ * Tokens are read from src/styles/global.css rather than duplicated here - if
  * the palette moves, this moves with it.
  */
 import { readFileSync } from 'node:fs';
@@ -66,7 +66,7 @@ function composite(overlay, alpha, ground) {
 /**
  * Card surfaces, as actually rendered.
  *
- * The card is the only surface left on the page — a translucent white tint
+ * The card is the only surface left on the page - a translucent white tint
  * over whatever the ground composites to underneath it. Checking type against
  * the raw ground missed that small link text on a card sits a step lighter.
  *
@@ -87,13 +87,13 @@ const CARD_AT_LIGHTEST = composite(C.white, TINT, C.navyRaise);
  * Once scrolled, the bar is a translucent pill floating OVER the page, so its
  * effective background depends on whatever is behind it. It travels the whole
  * document, which means the worst case is the lightest thing it can ever cross
- * — the raised panels and the cards on them.
+ * - the raised panels and the cards on them.
  *
  * `backdrop-filter: blur()` redistributes what is behind but does not change
  * its average luminance, so straight alpha compositing is the right model.
  *
  * The lightest thing it crosses is now a card sitting on the lightest part of
- * the ground — it was a light bone panel, which is why the bar's opacity was
+ * the ground - it was a light bone panel, which is why the bar's opacity was
  * pinned at 82%. That constraint has relaxed a long way; the opacity is left
  * where it is rather than re-tuned for a reason that no longer applies.
  */
@@ -108,7 +108,7 @@ const SHRUNK_BAR_ON_CARD = composite(C.navyDeep, HEADER_ALPHA / 100, CARD_AT_LIG
 
 /** AA: 4.5 for body text, 3.0 for large text (>=24px, or >=18.66px bold). */
 const CHECKS = [
-  // Card surfaces — where the small print actually lives.
+  // Card surfaces - where the small print actually lives.
   ['body text on a card', C.white, CARD_AT_LIGHTEST, 4.5],
   ['muted text on a card', C.mutedOnDark, CARD_AT_LIGHTEST, 4.5],
   ['gold link on a card', C.gold, CARD_AT_LIGHTEST, 4.5],
@@ -145,7 +145,7 @@ const CHECKS = [
   ['current language on bar over card', C.gold, SHRUNK_BAR_ON_CARD, 4.5],
 ];
 
-/** Pairings that must NEVER be used — verified as failing, so the ban is real. */
+/** Pairings that must NEVER be used - verified as failing, so the ban is real. */
 const BANNED = [
   /*
    * The page is navy end to end and its type is white-on-dark. If a light
@@ -172,7 +172,7 @@ for (const [label, fg, bg] of BANNED) {
   const stillBad = r < 4.5;
   if (!stillBad) failed++;
   console.log(
-    `  ${stillBad ? '✓' : '✗'} banned: ${label.padEnd(22)} ${r.toFixed(2)}:1 — ${stillBad ? 'correctly avoided in the CSS' : 'now passes; update the note'}`,
+    `  ${stillBad ? '✓' : '✗'} banned: ${label.padEnd(22)} ${r.toFixed(2)}:1 - ${stillBad ? 'correctly avoided in the CSS' : 'now passes; update the note'}`,
   );
 }
 
@@ -181,4 +181,4 @@ if (failed) {
   console.error(`✗ contrast check failed (${failed})\n`);
   process.exit(1);
 }
-console.log(`  ✓ contrast OK — ${CHECKS.length} pairings meet WCAG AA`);
+console.log(`  ✓ contrast OK - ${CHECKS.length} pairings meet WCAG AA`);

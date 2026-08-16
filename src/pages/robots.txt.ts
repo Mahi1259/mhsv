@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { SITE_URL, IS_PRODUCTION } from '@/config/site';
 
 /**
- * Generated so the sitemap URL always matches the resolved origin — a
+ * Generated so the sitemap URL always matches the resolved origin - a
  * hard-coded robots.txt would point at the wrong host on a preview deploy.
  *
  * Preview and local builds disallow everything, so a Vercel preview URL cannot
@@ -11,7 +11,7 @@ import { SITE_URL, IS_PRODUCTION } from '@/config/site';
 export const GET: APIRoute = () => {
   if (!IS_PRODUCTION) {
     return new Response(
-      ['# Non-production deployment — not for indexing.', 'User-agent: *', 'Disallow: /', ''].join('\n'),
+      ['# Non-production deployment - not for indexing.', 'User-agent: *', 'Disallow: /', ''].join('\n'),
       { headers: { 'Content-Type': 'text/plain; charset=utf-8' } },
     );
   }

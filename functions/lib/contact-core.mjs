@@ -9,7 +9,7 @@
  * functions/contact.mjs are thin adapters over this. Keeping the logic here
  * means switching host does not mean rewriting validation.
  *
- * Validation always runs here regardless of what the browser did — client-side
+ * Validation always runs here regardless of what the browser did - client-side
  * checks are a convenience, not a control.
  *
  * The recipient is never hard-coded: it comes from CONTACT_RECIPIENT.
@@ -56,7 +56,7 @@ function normaliseKind(value) {
  * Shared gate: honeypot and timing.
  *
  * The timing field is stamped by JavaScript on page load, so it is absent for
- * visitors without JavaScript — those fall back to the honeypot alone rather
+ * visitors without JavaScript - those fall back to the honeypot alone rather
  * than being locked out. A stale stamp (a page left open) is fine; only
  * implausibly fast submissions are rejected.
  */
@@ -139,7 +139,7 @@ export function validate(form) {
     return fields.length ? { ok: false, fields } : { ok: true, kind, data };
   }
 
-  // newsletter — deliberately minimal: we store only what is needed to send it.
+  // newsletter - deliberately minimal: we store only what is needed to send it.
   const language = get('language');
   const data = {
     kind,
@@ -154,24 +154,24 @@ export function validate(form) {
   return fields.length ? { ok: false, fields } : { ok: true, kind, data };
 }
 
-/** Plain-text body. No HTML mail — nothing here needs it. */
+/** Plain-text body. No HTML mail - nothing here needs it. */
 export function renderEmail(data) {
   const rows =
     data.kind === 'book-order'
       ? [
-          ['Request', 'Founding Book — order request (NOT a payment)'],
+          ['Request', 'Founding Book - order request (NOT a payment)'],
           ['Edition', data.edition === 'fr' ? 'French' : 'English'],
           ['Quantity', String(data.quantity)],
           ['Name', `${data.firstName} ${data.lastName}`],
           ['Organisation', data.organisation],
           ['Country', data.country],
           ['Email', data.email],
-          ['Phone', data.phone || '—'],
+          ['Phone', data.phone || '-'],
         ]
       : [
           ['Name', `${data.firstName} ${data.lastName}`],
           ['Email', data.email],
-          ['Phone', data.phone || '—'],
+          ['Phone', data.phone || '-'],
           ['Profile', data.profile],
           ['Subject', data.subject],
         ];
@@ -199,12 +199,12 @@ async function sendEmail(data, env) {
   const tag = data.kind === 'book-order' ? 'BOOK' : 'CONTACT';
   const subject =
     data.kind === 'book-order'
-      ? `[MHSV® ${tag}] Order request — ${data.quantity}× ${data.edition.toUpperCase()}`
+      ? `[MHSV® ${tag}] Order request - ${data.quantity}× ${data.edition.toUpperCase()}`
       : `[MHSV® ${tag} ${data.locale.toUpperCase()}] ${data.subject}`;
   const text = renderEmail(data);
 
   if (transport === 'log') {
-    console.log('[form] transport=log — not sent\n', { to: recipient, subject, text });
+    console.log('[form] transport=log - not sent\n', { to: recipient, subject, text });
     return;
   }
 
@@ -255,9 +255,9 @@ async function subscribe(data, env) {
   const provider = (env.NEWSLETTER_PROVIDER || 'log').toLowerCase();
 
   if (provider === 'log') {
-    console.log('[newsletter] provider=log — not subscribed\n', {
+    console.log('[newsletter] provider=log - not subscribed\n', {
       email: data.email,
-      firstName: data.firstName || '—',
+      firstName: data.firstName || '-',
       language: data.language,
     });
     return;
@@ -330,7 +330,7 @@ export async function handleContact(request, env) {
     // A caught spam attempt gets the same shape a human sees, so a bot learns
     // nothing from probing. Nothing is sent.
     if (result.reason === 'spam') {
-      console.warn('[form] honeypot triggered — discarded');
+      console.warn('[form] honeypot triggered - discarded');
       return respond(wantsJson, locale, kind, { ok: true }, 200);
     }
     return respond(wantsJson, locale, kind, result, 422);
