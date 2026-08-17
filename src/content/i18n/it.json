@@ -27,7 +27,7 @@
         "La sua missione è promuovere lo sviluppo globale della persona attraverso lo sport, l’educazione, la formazione, l’accompagnamento umano e la preparazione delle transizioni personali, sportive, scolastiche e professionali.",
         "Il calcio è il principale programma di lancio, ma la missione si estende a tutti gli sport e soprattutto alla persona dietro la performance. MHSV® non promette un accesso automatico allo sport professionistico; costruisce percorsi realistici, individualizzati e coordinati."
       ],
-      "leadNoLegalStatus": "MHSV®, Centro Internazionale di Sviluppo e Transizione, è un'organizzazione con sede a Ginevra, in Svizzera.",
+      "leadNoLegalStatus": "MHSV® — Centro Internazionale di Sviluppo e Transizione è un'organizzazione con sede a Ginevra, in Svizzera.",
       "titleLines": [
         "CHI SIAMO"
       ],
@@ -368,7 +368,7 @@
         },
         {
           "name": "Diego FUIANO",
-          "role": "Coordinatore Web & Digital e sviluppo istituzionale e delle partnership (Italia)",
+          "role": "Coordinatore Web & Digital e sviluppo istituzionale e delle partnership",
           "email": "infos@mhsv.ch",
           "emailPending": false
         },
@@ -491,9 +491,9 @@
     "hreflang": "it"
   },
   "seo": {
-    "title": "MHSV®, Centro Internazionale di Sviluppo e Transizione",
+    "title": "MHSV® — Centro Internazionale di Sviluppo e Transizione",
     "description": "MHSV® progetta e coordina percorsi sportivi, umani, educativi, sociali e professionali. Ginevra, Svizzera.",
-    "ogImageAlt": "Logo MHSV®, Centro Internazionale di Sviluppo e Transizione"
+    "ogImageAlt": "Logo MHSV® — Centro Internazionale di Sviluppo e Transizione"
   },
   "ui": {
     "skipToContent": "Vai al contenuto principale",
@@ -614,7 +614,7 @@
     "privacyLink": "Politica sulla privacy",
     "legalLink": "Note legali",
     "copyright": "Tutti i diritti riservati.",
-    "summary": "MHSV®, Centro Internazionale di Sviluppo e Transizione | Ginevra, Svizzera | www.mhsv.ch | infos@mhsv.ch"
+    "summary": "MHSV® — Centro Internazionale di Sviluppo e Transizione | Ginevra, Svizzera | www.mhsv.ch | infos@mhsv.ch"
   },
   "privacy": {
     "title": "Politica sulla privacy",
@@ -624,7 +624,7 @@
     "sections": [
       {
         "title": "Titolare del trattamento",
-        "body": "MHSV®, Centro Internazionale di Sviluppo e Transizione, Ginevra, Svizzera. I recapiti completi sono indicati nella sezione Contatti."
+        "body": "MHSV® — Centro Internazionale di Sviluppo e Transizione, Ginevra, Svizzera. I recapiti completi sono indicati nella sezione Contatti."
       },
       {
         "title": "Dati trattati",

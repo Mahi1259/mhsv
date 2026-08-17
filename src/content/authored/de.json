@@ -8,9 +8,9 @@
     "hreflang": "de"
   },
   "seo": {
-    "title": "MHSV®, Internationales Zentrum für Entwicklung und Transition",
+    "title": "MHSV® — Internationales Zentrum für Entwicklung und Transition",
     "description": "MHSV® entwickelt und koordiniert sportliche, menschliche, schulische, soziale und berufliche Entwicklungswege. Genf, Schweiz.",
-    "ogImageAlt": "MHSV®-Logo, Internationales Zentrum für Entwicklung und Transition"
+    "ogImageAlt": "MHSV®-Logo — Internationales Zentrum für Entwicklung und Transition"
   },
   "ui": {
     "skipToContent": "Zum Hauptinhalt springen",
@@ -92,7 +92,7 @@
   },
   "sections": {
     "about": {
-      "leadNoLegalStatus": "MHSV®, Internationales Zentrum für Entwicklung und Transition, ist eine in Genf (Schweiz) ansässige Organisation.",
+      "leadNoLegalStatus": "MHSV® — Internationales Zentrum für Entwicklung und Transition ist eine in Genf (Schweiz) ansässige Organisation.",
       "titleLines": [
         "ÜBER UNS"
       ]
@@ -164,7 +164,7 @@
         },
         {
           "name": "Diego FUIANO",
-          "role": "Koordinator Web & Digital sowie institutionelle Entwicklung und Partnerschaften (Italien)",
+          "role": "Koordinator Web & Digital sowie institutionelle Entwicklung und Partnerschaften",
           "email": "infos@mhsv.ch",
           "emailPending": false
         },
@@ -280,7 +280,7 @@
     "privacyLink": "Datenschutzerklärung",
     "legalLink": "Impressum",
     "copyright": "Alle Rechte vorbehalten.",
-    "summary": "MHSV®, Internationales Zentrum für Entwicklung und Transition | Genf, Schweiz | www.mhsv.ch | infos@mhsv.ch"
+    "summary": "MHSV® — Internationales Zentrum für Entwicklung und Transition | Genf, Schweiz | www.mhsv.ch | infos@mhsv.ch"
   },
   "privacy": {
     "title": "Datenschutzerklärung",
@@ -290,7 +290,7 @@
     "sections": [
       {
         "title": "Verantwortliche Stelle",
-        "body": "MHSV®, Internationales Zentrum für Entwicklung und Transition, Genf, Schweiz. Die vollständigen Angaben finden Sie in der Rubrik Kontakt."
+        "body": "MHSV® — Internationales Zentrum für Entwicklung und Transition, Genf, Schweiz. Die vollständigen Angaben finden Sie in der Rubrik Kontakt."
       },
       {
         "title": "Bearbeitete Daten",

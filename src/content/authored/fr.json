@@ -8,9 +8,9 @@
     "hreflang": "fr"
   },
   "seo": {
-    "title": "MHSV®, Centre International de Développement et de Transition",
+    "title": "MHSV® — Centre International de Développement et de Transition",
     "description": "MHSV® conçoit et coordonne des parcours sportifs, humains, éducatifs, sociaux et professionnels. Genève, Suisse.",
-    "ogImageAlt": "Logo MHSV®, Centre International de Développement et de Transition"
+    "ogImageAlt": "Logo MHSV® — Centre International de Développement et de Transition"
   },
   "ui": {
     "skipToContent": "Aller au contenu principal",
@@ -92,7 +92,7 @@
   },
   "sections": {
     "about": {
-      "leadNoLegalStatus": "MHSV®, Centre International de Développement et de Transition, est une organisation basée à Genève, en Suisse.",
+      "leadNoLegalStatus": "MHSV® — Centre International de Développement et de Transition est une organisation basée à Genève, en Suisse.",
       "titleLines": [
         "QUI",
         "SOMMES-NOUS ?"
@@ -165,7 +165,7 @@
         },
         {
           "name": "Diego FUIANO",
-          "role": "Coordinateur Web & Digital et développement institutionnel et des partenariats (Italie)",
+          "role": "Coordinateur Web & Digital et développement institutionnel et des partenariats",
           "email": "infos@mhsv.ch",
           "emailPending": false
         },
@@ -281,7 +281,7 @@
     "privacyLink": "Politique de confidentialité",
     "legalLink": "Mentions légales",
     "copyright": "Tous droits réservés.",
-    "summary": "MHSV®, Centre International de Développement et de Transition | Genève, Suisse | www.mhsv.ch | infos@mhsv.ch"
+    "summary": "MHSV® — Centre International de Développement et de Transition | Genève, Suisse | www.mhsv.ch | infos@mhsv.ch"
   },
   "privacy": {
     "title": "Politique de confidentialité",
@@ -291,7 +291,7 @@
     "sections": [
       {
         "title": "Responsable du traitement",
-        "body": "MHSV®, Centre International de Développement et de Transition, Genève, Suisse. Les coordonnées complètes figurent dans la rubrique Contact."
+        "body": "MHSV® — Centre International de Développement et de Transition, Genève, Suisse. Les coordonnées complètes figurent dans la rubrique Contact."
       },
       {
         "title": "Données traitées",
