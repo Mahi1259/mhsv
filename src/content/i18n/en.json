@@ -738,5 +738,21 @@
     "inclusion": {
       "alt": "A person in a professional setting"
     }
+  },
+  "railLabels": {
+    "about": "About",
+    "mission": "Mission",
+    "audience": "Audience",
+    "services": "Services",
+    "pathway": "Pathway",
+    "founding": "Founding programmes",
+    "international": "International",
+    "ecosystem": "Ecosystem",
+    "fees": "Fees",
+    "inclusion": "Inclusion",
+    "digital": "Digital",
+    "founder": "Founder",
+    "identity": "Identity",
+    "roadmap": "Coming soon"
   }
 }

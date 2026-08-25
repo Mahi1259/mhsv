@@ -457,5 +457,21 @@
     "inclusion": {
       "alt": "Personne en situation professionnelle"
     }
+  },
+  "railLabels": {
+    "about": "À propos",
+    "mission": "Mission",
+    "audience": "Public",
+    "services": "Services",
+    "pathway": "Parcours",
+    "founding": "Programmes fondateurs",
+    "international": "International",
+    "ecosystem": "Écosystème",
+    "fees": "Tarifs",
+    "inclusion": "Inclusion",
+    "digital": "Numérique",
+    "founder": "Fondateur",
+    "identity": "Identité",
+    "roadmap": "À venir"
   }
 }

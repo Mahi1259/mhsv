@@ -51,12 +51,18 @@ const headingId = `${anchor}-title`;
 const titleClass = type === 'statement' ? 'statement-title' : 'section-title';
 
 /**
- * The margin label uses the short navigation label where one exists, not the
- * full heading - printing the heading twice, side by side, reads as a mistake
- * rather than as orientation.
+ * The margin label is SHORT - one or two words - and never the heading again.
+ *
+ * It read from the navigation, which only covers eight of the twenty-one
+ * sections; the other thirteen fell back to the heading and printed it twice
+ * side by side, which reads as a mistake rather than as orientation. There is
+ * now a rail label per section, and the navigation is the fallback rather than
+ * the source.
  */
-const navLabel = getContent(locale).nav.items.find((item) => item.id === anchor)?.label;
-const label = navLabel ?? title;
+const c = getContent(locale);
+const rails = c.railLabels as Record<string, string>;
+const navLabel = c.nav.items.find((item) => item.id === anchor)?.label;
+const label = rails[anchor] ?? navLabel ?? title;
 ---
 
 <section
