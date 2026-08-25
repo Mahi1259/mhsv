@@ -14,3 +14,4 @@ npm-debug.log*
 src/assets/**/*INTERNAL_REFERENCE*
 public/**/*INTERNAL_REFERENCE*
 *REFERENCE_ONLY*
+scripts/tmp/

@@ -1,0 +1,31 @@
+# Cloudflare Pages - MHSV® website
+#
+# The site is a STATIC build; `dist/` is uploaded as-is and the three forms are
+# served by the Pages Function in functions/api/. There is no Astro adapter and
+# no SSR route - see DEPLOY.md for why.
+#
+# Secrets are NOT here. Set them per environment so they are never in the
+# repository:
+#
+#   wrangler pages secret put CONTACT_RECIPIENT
+#   wrangler pages secret put CONTACT_SENDER
+#   wrangler pages secret put CONTACT_TRANSPORT      # log | resend | smtp
+#   wrangler pages secret put RESEND_API_KEY         # if transport=resend
+#   wrangler pages secret put NEWSLETTER_PROVIDER    # log | brevo
+#   wrangler pages secret put BREVO_API_KEY          # if provider=brevo
+#
+# Local: `npm run dev:cf` after `npm run build`.
+
+name = "mhsv-website"
+pages_build_output_dir = "dist"
+# Pinned to a date this project has actually been RUN against. The installed
+# wrangler supports up to 2026-05-03; a later date makes the local runtime
+# refuse to start, and pinning to something untested is how a deploy discovers
+# a behaviour change that local never saw.
+compatibility_date = "2026-05-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# Safe defaults. Neither sends anything anywhere until a real transport is set.
+CONTACT_TRANSPORT = "log"
+NEWSLETTER_PROVIDER = "log"
