@@ -613,8 +613,18 @@ try {
   {
     const page = await browser.newPage();
     await page.setViewport({ width: 1440, height: 900 });
-    for (const path of ['/fr/', '/en/', '/en/privacy/', '/livre']) {
-      await page.goto(`${BASE}${path}`, { waitUntil: 'networkidle0' });
+    for (const path of ['/fr/', '/en/', '/en/data-protection/', '/livre']) {
+      const response = await page.goto(`${BASE}${path}`, { waitUntil: 'networkidle0' });
+      /*
+       * A 404 is flat, so it reports "no seam" and passes while testing
+       * nothing - this check lost a page to a rename once already. Only a real
+       * error counts: 304 is the preview server answering "not modified" on a
+       * repeat visit, which is a hit, not a miss.
+       */
+      if (response && response.status() >= 400) {
+        check(false, `${path}: page exists`, `HTTP ${response.status()}`);
+        continue;
+      }
       const shot = await page.screenshot({ clip: { x: 0, y: 0, width: 200, height: 160 } });
       const png = Buffer.from(shot);
       // Decode nothing: compare through the browser instead, on a canvas.
