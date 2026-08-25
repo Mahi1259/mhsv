@@ -120,7 +120,55 @@
     },
     "founding": {
       "lead": "Die beiden Gründungsprogramme des ersten Umsetzungsjahres und der Einführungstarif.",
-      "title": "GRÜNDUNGSPROGRAMME & TARIFE"
+      "title": "GRÜNDUNGSPROGRAMME & TARIFE",
+      "tables": [
+        {
+          "title": "GRÜNDUNGSPROGRAMM FUSSBALL",
+          "entries": [
+            {
+              "label": "Zielkapazität",
+              "value": "Bis zu 40 Athletinnen, Athleten und Programmbegünstigte im ersten Umsetzungsjahr"
+            },
+            {
+              "label": "Organisation",
+              "value": "Gruppen nach Alter und Niveau"
+            },
+            {
+              "label": "Zyklus",
+              "value": "Empfohlenes Programm: 3 Jahre"
+            },
+            {
+              "label": "Inhalt",
+              "value": "Training + Leistung + Gesundheit + persönliche Entwicklung + Bildung + Transition + Chancen"
+            },
+            {
+              "label": "Tarif",
+              "value": "CHF 15’000 / Jahr - Einführungstarif"
+            }
+          ]
+        },
+        {
+          "title": "ANDERE SPORTARTEN",
+          "entries": [
+            {
+              "label": "Ansatz",
+              "value": "Gleiche 360°-Begleitphilosophie"
+            },
+            {
+              "label": "Anpassung",
+              "value": "Weg an die Anforderungen der Sportart angepasst"
+            },
+            {
+              "label": "Disziplinen",
+              "value": "Team- und Einzelsportarten"
+            },
+            {
+              "label": "Tarif",
+              "value": "Komplettprogramm: CHF 15’000 / Jahr - Einführungstarif"
+            }
+          ]
+        }
+      ]
     },
     "ecosystem": {
       "disciplinesTitle": "Koordinierte Kompetenzen"
@@ -225,6 +273,11 @@
       "titleLines": [
         "SPORTPROGRAMME",
         "IN DER PRAXIS"
+      ],
+      "paragraphs": [
+        "Für die erste Umsetzungsphase setzt sich MHSV® das Ziel, bis zu 40 Athletinnen und Athleten aus dem Fussball und anderen Sportarten sowie Begünstigte unserer Bildungs-, Personalentwicklungs- und Berufsintegrationsprogramme aufzunehmen und in passende Alters- und Leistungsgruppen einzuteilen.",
+        "Das Programm kann technische, taktische und körperliche Trainings, interne MHSV®-Spiele, periodische Evaluationen, Freundschaftsspiele gegen lokale, nationale oder Elite-Strukturen je nach Kalender sowie Aktivitäten in Vorbereitungsphasen, Wettbewerbspausen oder ausgewählten Sportferien und Entwicklungs-Camps umfassen.",
+        "Das Modell ist auf andere Sportarten übertragbar: Gruppenstrukturen für Teamsportarten und individuelle Begleitung rund um Training, Wettkampf und Ziele für Einzelsportarten."
       ]
     },
     "international": {

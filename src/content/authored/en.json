@@ -121,7 +121,55 @@
     },
     "founding": {
       "lead": "The two founding programmes for the first deployment year, and the launch rate.",
-      "title": "FOUNDING PROGRAMMES & FEES"
+      "title": "FOUNDING PROGRAMMES & FEES",
+      "tables": [
+        {
+          "title": "FOUNDING FOOTBALL PROGRAMME",
+          "entries": [
+            {
+              "label": "Target capacity",
+              "value": "Up to 40 athletes and programme beneficiaries during the first deployment year"
+            },
+            {
+              "label": "Organisation",
+              "value": "Groups structured by age and level"
+            },
+            {
+              "label": "Cycle",
+              "value": "Recommended programme: 3 years"
+            },
+            {
+              "label": "Content",
+              "value": "Training + performance + health + human development + education + transition + opportunities"
+            },
+            {
+              "label": "Fee",
+              "value": "CHF 15,000 / year - launch rate"
+            }
+          ]
+        },
+        {
+          "title": "OTHER SPORTS",
+          "entries": [
+            {
+              "label": "Approach",
+              "value": "Same 360° support philosophy"
+            },
+            {
+              "label": "Adaptation",
+              "value": "Pathway adapted to each sport"
+            },
+            {
+              "label": "Disciplines",
+              "value": "Team and individual sports"
+            },
+            {
+              "label": "Fee",
+              "value": "Complete Programme: CHF 15,000 / year - launch rate"
+            }
+          ]
+        }
+      ]
     },
     "ecosystem": {
       "disciplinesTitle": "Coordinated expertise"
@@ -226,6 +274,11 @@
       "titleLines": [
         "SPORT PROGRAMMES",
         "IN ACTION"
+      ],
+      "paragraphs": [
+        "For its first deployment phase, MHSV® has set the objective of welcoming up to 40 athletes across football and other sports, as well as beneficiaries of our educational, human-development and socio-professional programmes, selected and organised into coherent age and level groups.",
+        "The programme may include technical, tactical and physical training; internal MHSV® matches; periodic assessments; friendly matches against local, national or elite-structure teams when schedules allow; activities during preparation periods, competition breaks or selected sporting holidays; camps and development experiences.",
+        "The model is designed to extend to other sports: group structures for team sports and individual monitoring around training, competition and goals for individual sports."
       ]
     },
     "international": {

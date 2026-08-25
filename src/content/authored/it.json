@@ -120,7 +120,55 @@
     },
     "founding": {
       "lead": "I due programmi fondatori del primo anno di sviluppo e la tariffa di lancio.",
-      "title": "PROGRAMMI FONDATORI E TARIFFE"
+      "title": "PROGRAMMI FONDATORI E TARIFFE",
+      "tables": [
+        {
+          "title": "PROGRAMMA FONDATORE CALCIO",
+          "entries": [
+            {
+              "label": "Capacità obiettivo",
+              "value": "Fino a 40 atleti e beneficiari dei programmi nel primo anno di sviluppo"
+            },
+            {
+              "label": "Organizzazione",
+              "value": "Gruppi strutturati per età e livello"
+            },
+            {
+              "label": "Ciclo",
+              "value": "Programma raccomandato: 3 anni"
+            },
+            {
+              "label": "Contenuto",
+              "value": "Allenamento + performance + salute + sviluppo umano + educazione + transizione + opportunità"
+            },
+            {
+              "label": "Tariffa",
+              "value": "CHF 15’000 / anno - tariffa di lancio"
+            }
+          ]
+        },
+        {
+          "title": "ALTRI SPORT",
+          "entries": [
+            {
+              "label": "Approccio",
+              "value": "Stessa filosofia di accompagnamento a 360°"
+            },
+            {
+              "label": "Adattamento",
+              "value": "Percorso adattato alle esigenze di ogni disciplina"
+            },
+            {
+              "label": "Discipline",
+              "value": "Sport di squadra e individuali"
+            },
+            {
+              "label": "Tariffa",
+              "value": "Programma Completo: CHF 15’000 / anno - tariffa di lancio"
+            }
+          ]
+        }
+      ]
     },
     "ecosystem": {
       "disciplinesTitle": "Competenze coordinate"
@@ -225,6 +273,11 @@
       "titleLines": [
         "IL PROGRAMMA",
         "SPORTIVO IN AZIONE"
+      ],
+      "paragraphs": [
+        "Per la prima fase di sviluppo, MHSV® si pone l’obiettivo di accogliere fino a 40 atleti provenienti dal calcio e da altre discipline sportive, nonché beneficiari dei nostri programmi educativi, di sviluppo umano e socioprofessionali, selezionati e suddivisi in gruppi coerenti per età e livello.",
+        "Il programma potrà comprendere allenamenti tecnici, tattici e fisici; partite e opposizioni interne MHSV®; valutazioni periodiche; amichevoli contro squadre locali, nazionali o strutture élite quando i calendari lo consentono; attività durante periodi di preparazione, pause di competizione o alcune vacanze sportive; stage, camp e esperienze di sviluppo.",
+        "Il modello è pensato per essere adattato agli altri sport: gruppi per gli sport di squadra e monitoraggio individuale di allenamento, competizione e obiettivi per gli sport individuali."
       ]
     },
     "international": {
