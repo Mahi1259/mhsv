@@ -9,6 +9,7 @@
  * definition each time, which put the same sentence six times down the page.
  */
 import Band from '@/components/Band.astro';
+import StatusBadge from '@/components/StatusBadge.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import { capitalizeFirst } from '@/lib/text';
 import { STATUS_KEYS, type SectionType } from '@/config/site';
@@ -44,6 +45,22 @@ const items = s.items.map((item) => capitalizeFirst(item, locale));
     }
   </ul>
 
+  {/*
+    A separation notice, not an announcement.
+
+    GST FC is a legally distinct project and is NOT a confirmed partnership, so
+    it sits inside the roadmap rather than anywhere a reader would take for an
+    operating service, and it carries the same "in development" badge as
+    everything else here. It names no governing body: no ACGF, no ASF. The
+    German and Italian are faithful translations of the English and add nothing
+    the English does not say.
+  */}
+  <aside class="gst" aria-labelledby="gst-title">
+    <StatusBadge locale={locale} status="inDevelopment" class="gst__badge" />
+    <h3 class="gst__title" id="gst-title">{s.gstFc.title}</h3>
+    <p class="gst__body">{s.gstFc.body}</p>
+  </aside>
+
   <aside class="legend">
     <h3 class="mono-label legend__title">{c.status.legendTitle}</h3>
     <p class="legend__intro">{c.status.legendIntro}</p>
@@ -64,6 +81,29 @@ const items = s.items.map((item) => capitalizeFirst(item, locale));
 </Band>
 
 <style>
+  .gst {
+    display: grid;
+    gap: 0.625rem;
+    justify-items: start;
+    margin-block-start: clamp(2rem, 1.5rem + 2vw, 3rem);
+    padding: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+    border: 1px solid var(--card-edge);
+    border-radius: var(--radius);
+    background: var(--band-raised);
+    max-width: 68ch;
+  }
+
+  .gst__title {
+    margin: 0;
+    font-size: var(--text-h3);
+  }
+
+  .gst__body {
+    margin: 0;
+    color: var(--band-muted);
+    line-height: 1.6;
+  }
+
   .roadmap {
     display: grid;
     gap: 0.75rem;

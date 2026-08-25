@@ -445,7 +445,11 @@
         "key": "inDevelopment",
         "detail": "IN DEVELOPMENT / PROGRESSIVE DEPLOYMENT"
       },
-      "lead": "These sections are announced as a roadmap and are not services already in operation."
+      "lead": "These sections are announced as a roadmap and are not services already in operation.",
+      "gstFc": {
+        "title": "MHSV® and GST FC",
+        "body": "Geneva Sport Transition FC (GST FC) is a separate legal project currently under development. MHSV® and GST FC are legally distinct entities. No official affiliation with football governing bodies has been confirmed at this stage."
+      }
     },
     "contact": {
       "num": "21",

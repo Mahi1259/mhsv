@@ -246,7 +246,11 @@
       "placeholderNote": "Spazio riservato, in attesa di validazione."
     },
     "roadmap": {
-      "lead": "Queste sezioni sono annunciate come roadmap e non costituiscono servizi già operativi."
+      "lead": "Queste sezioni sono annunciate come roadmap e non costituiscono servizi già operativi.",
+      "gstFc": {
+        "title": "MHSV® e GST FC",
+        "body": "Geneva Sport Transition FC (GST FC) è un progetto giuridicamente distinto, attualmente in fase di sviluppo. MHSV® e GST FC sono entità legalmente separate. A questo stadio non è stata confermata alcuna affiliazione ufficiale con organi di governo del calcio."
+      }
     },
     "contact": {
       "lead": "Una domanda, un progetto, una richiesta di valutazione? Scriveteci.",
