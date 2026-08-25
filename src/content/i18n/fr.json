@@ -728,5 +728,9 @@
       "consent": "Votre consentement est nécessaire pour vous inscrire."
     },
     "privacyNote": "Vos données servent uniquement à l’envoi de la newsletter. Un lien de désinscription figure dans chaque message."
+  },
+  "video": {
+    "coming": "Vidéo de présentation — bientôt disponible",
+    "ariaLabel": "Vidéo de présentation MHSV® — bientôt disponible"
   }
 }

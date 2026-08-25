@@ -424,5 +424,9 @@
       "consent": "Ihre Einwilligung ist für die Anmeldung erforderlich."
     },
     "privacyNote": "Ihre Daten werden ausschliesslich für den Versand des Newsletters verwendet. Jede Nachricht enthält einen Abmeldelink."
+  },
+  "video": {
+    "coming": "Präsentationsvideo — demnächst verfügbar",
+    "ariaLabel": "MHSV®-Präsentationsvideo — demnächst verfügbar"
   }
 }

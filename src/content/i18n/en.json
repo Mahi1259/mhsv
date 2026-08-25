@@ -706,5 +706,9 @@
       "consent": "Your consent is required to subscribe."
     },
     "privacyNote": "Your data is used only to send the newsletter. Every message contains an unsubscribe link."
+  },
+  "video": {
+    "coming": "Presentation video — coming soon",
+    "ariaLabel": "MHSV® presentation video — coming soon"
   }
 }

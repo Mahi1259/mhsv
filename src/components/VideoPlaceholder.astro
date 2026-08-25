@@ -1,0 +1,59 @@
+---
+/**
+ * Reserved 16:9 block for the presentation video, which does not exist yet.
+ *
+ * `role="img"` with a label rather than a bare decorative box: the reservation
+ * is information - a reader should be told a video is coming, not shown an
+ * empty rectangle. It is not a button and not a link, because there is nothing
+ * yet to play, and an inert control is worse than none.
+ */
+import { getContent, type Locale } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const c = getContent(locale);
+---
+
+<div class="video-placeholder" role="img" aria-label={c.video.ariaLabel}>
+  <div class="video-placeholder__inner">
+    <svg viewBox="0 0 24 24" width="44" height="44" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" stroke-width="1" />
+      <path d="M10 8.5v7l6-3.5z" fill="currentColor" />
+    </svg>
+    <p class="video-placeholder__label">{c.video.coming}</p>
+  </div>
+</div>
+
+<style>
+  .video-placeholder {
+    aspect-ratio: 16 / 9;
+    display: grid;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--gold) 20%, transparent);
+    border-radius: var(--radius);
+    background: var(--navy-raise);
+  }
+
+  .video-placeholder__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+    padding: 1rem;
+    /* Gold, not the muted slate: 6.97:1 on navy-raise, where the muted tone
+       would be the weakest text on the page. */
+    color: var(--gold);
+  }
+
+  .video-placeholder__label {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+</style>

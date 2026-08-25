@@ -15,6 +15,7 @@ import Base from '@/layouts/Base.astro';
 import { LOCALES, SECTION_ORDER, type Locale } from '@/config/site';
 
 import Hero from '@/components/sections/Hero.astro';
+import VideoPlaceholder from '@/components/VideoPlaceholder.astro';
 import About from '@/components/sections/About.astro';
 import Vision from '@/components/sections/Vision.astro';
 import Mission from '@/components/sections/Mission.astro';
@@ -72,6 +73,15 @@ const sections = SECTION_ORDER.filter((section) => section.id !== 'hero');
 <Base locale={locale}>
   <div class="page-flow">
     <Hero locale={locale} />
+
+    {/* Between the hero and "Who we are", where the brief asks for it: the
+        first thing after the opening claim, before the explanation. Held to
+        the page's own measure so its edges line up with every section. */}
+    <div class="band video-band">
+      <div class="shell">
+        <VideoPlaceholder locale={locale} />
+      </div>
+    </div>
     {
       sections.map((section) => {
         const Section = COMPONENTS[section.id as keyof typeof COMPONENTS];
