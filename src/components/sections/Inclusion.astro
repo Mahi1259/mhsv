@@ -1,6 +1,7 @@
 ---
 /** Projects, inclusion & deployment - quiet type. */
 import Band from '@/components/Band.astro';
+import SectionImage from '@/components/SectionImage.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import type { SectionType } from '@/config/site';
 
@@ -13,4 +14,6 @@ const s = getContent(locale).sections.inclusion;
   <div class="prose-body">
     {s.paragraphs.map((text) => <p>{text}</p>)}
   </div>
+
+  <SectionImage locale={locale} slot="inclusion" />
 </Band>

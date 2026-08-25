@@ -442,5 +442,19 @@
     "text": "Questo sito utilizza solo i cookie necessari al suo funzionamento.",
     "accept": "Accetta",
     "more": "Scopri di più"
+  },
+  "stock": {
+    "about": {
+      "alt": "Atleti durante l’allenamento"
+    },
+    "audience": {
+      "alt": "Giovani in un contesto di apprendimento"
+    },
+    "pathway": {
+      "alt": "Un tutor lavora individualmente con un giovane"
+    },
+    "inclusion": {
+      "alt": "Una persona in un contesto professionale"
+    }
   }
 }

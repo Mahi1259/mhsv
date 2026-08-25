@@ -8,6 +8,7 @@
  * "already drawn").
  */
 import Band from '@/components/Band.astro';
+import SectionImage from '@/components/SectionImage.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import type { SectionType } from '@/config/site';
 
@@ -40,6 +41,8 @@ const s = getContent(locale).sections.pathway;
     </ol>
   </div>
   <p class="prose-body pathway__note">{s.note}</p>
+
+  <SectionImage locale={locale} slot="pathway" />
 </Band>
 
 <script>

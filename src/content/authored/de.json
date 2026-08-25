@@ -442,5 +442,19 @@
     "text": "Diese Website verwendet nur die für ihren Betrieb notwendigen Cookies.",
     "accept": "Akzeptieren",
     "more": "Mehr erfahren"
+  },
+  "stock": {
+    "about": {
+      "alt": "Athletinnen und Athleten im Training"
+    },
+    "audience": {
+      "alt": "Junge Menschen in einer Lernsituation"
+    },
+    "pathway": {
+      "alt": "Eine Betreuungsperson arbeitet einzeln mit einem jungen Menschen"
+    },
+    "inclusion": {
+      "alt": "Eine Person in einem beruflichen Umfeld"
+    }
   }
 }

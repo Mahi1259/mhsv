@@ -724,5 +724,19 @@
     "text": "This site uses only the cookies necessary for it to work.",
     "accept": "Accept",
     "more": "Learn more"
+  },
+  "stock": {
+    "about": {
+      "alt": "Athletes in training"
+    },
+    "audience": {
+      "alt": "Young people in a learning setting"
+    },
+    "pathway": {
+      "alt": "A mentor working one-to-one with a young person"
+    },
+    "inclusion": {
+      "alt": "A person in a professional setting"
+    }
   }
 }

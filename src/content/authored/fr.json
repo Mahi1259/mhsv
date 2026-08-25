@@ -443,5 +443,19 @@
     "text": "Ce site utilise uniquement des cookies nécessaires à son fonctionnement.",
     "accept": "Accepter",
     "more": "En savoir plus"
+  },
+  "stock": {
+    "about": {
+      "alt": "Athlètes à l’entraînement"
+    },
+    "audience": {
+      "alt": "Jeunes en situation d’apprentissage"
+    },
+    "pathway": {
+      "alt": "Un encadrant accompagne un jeune en tête-à-tête"
+    },
+    "inclusion": {
+      "alt": "Personne en situation professionnelle"
+    }
   }
 }

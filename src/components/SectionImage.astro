@@ -1,0 +1,77 @@
+---
+/**
+ * A licensed photograph for a section, rendered only if the file is there.
+ *
+ * The four slots are declared in the markup and in IMAGE_BRIEF.md; the files
+ * are not in the repository yet. Rather than shipping broken images or a
+ * hard-coded import that fails the build, this looks the file up and renders
+ * nothing when it is absent - so the site is correct with no photographs and
+ * complete the moment they are dropped in.
+ *
+ * The credit line is required for Pexels and optional for Unsplash. It renders
+ * whenever `credit` is present in the content, so the licence is honoured by
+ * the page rather than by a promise in a document.
+ */
+import { Picture } from 'astro:assets';
+import { getContent, type Locale } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+  /** Matches the file stem in src/assets/stock/ and the key in content. */
+  slot: 'about' | 'audience' | 'pathway' | 'inclusion';
+  /** Above the fold loads eagerly; everything else waits. */
+  eager?: boolean;
+}
+
+const { locale, slot, eager = false } = Astro.props;
+const c = getContent(locale);
+
+const files = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/stock/*.{jpg,jpeg,png,webp,avif}',
+  { eager: true },
+);
+const entry = Object.entries(files).find(
+  ([path]) => path.split('/').pop()?.replace(/\.[^.]+$/, '') === slot,
+);
+const meta = c.stock[slot] as { alt: string; credit?: string };
+---
+
+{
+  entry && (
+    <figure class="section-image">
+      <Picture
+        src={entry[1].default}
+        alt={meta.alt}
+        formats={['webp']}
+        fallbackFormat="png"
+        widths={[640, 1000, 1600]}
+        sizes="(min-width: 62rem) 40rem, 92vw"
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+      {meta.credit && <figcaption class="section-image__credit">{meta.credit}</figcaption>}
+    </figure>
+  )
+}
+
+<style>
+  .section-image {
+    margin: 0;
+  }
+
+  .section-image :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--band-rule);
+    border-radius: var(--radius);
+  }
+
+  .section-image__credit {
+    margin-block-start: 0.5rem;
+    color: var(--band-muted);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+  }
+</style>
