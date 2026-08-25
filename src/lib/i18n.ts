@@ -6,7 +6,7 @@
  * locale is guaranteed to succeed in the others. Everything is imported
  * statically - this is a static build with no runtime content fetching.
  */
-import { LOCALES, DEFAULT_LOCALE, type Locale } from '@/config/site';
+import { LOCALES, DEFAULT_LOCALE, LEGAL_PAGES, type LegalPageId, type Locale } from '@/config/site';
 import fr from '@/content/i18n/fr.json';
 import en from '@/content/i18n/en.json';
 import de from '@/content/i18n/de.json';
@@ -28,6 +28,11 @@ export const getContent = (locale: Locale): Content => CONTENT[locale];
 export function localePath(path: string, locale: Locale): string {
   const clean = path.replace(/^\/+/, '');
   return `/${locale}/${clean}`;
+}
+
+/** The URL of a legal page in one language: ("cookies", "fr") -> "/fr/cookies/" */
+export function legalPath(page: LegalPageId, locale: Locale): string {
+  return `/${locale}/${LEGAL_PAGES[page][locale]}`;
 }
 
 /** All locales with their metadata, for the language switcher and hreflang tags. */

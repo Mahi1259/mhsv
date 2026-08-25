@@ -14,8 +14,8 @@
  * The association / legal-status block stays withheld unless
  * PUBLIC_SHOW_LEGAL_STATUS is true.
  */
-import { getContent, localePath, type Locale } from '@/lib/i18n';
-import { SHOW_LEGAL_STATUS } from '@/config/site';
+import { getContent, legalPath, type Locale } from '@/lib/i18n';
+import { LEGAL_PAGE_IDS, SHOW_LEGAL_STATUS } from '@/config/site';
 
 interface Props {
   locale: Locale;
@@ -23,7 +23,6 @@ interface Props {
 
 const { locale } = Astro.props;
 const c = getContent(locale);
-const home = localePath('', locale);
 
 const year = new Date().getFullYear();
 ---
@@ -34,12 +33,17 @@ const year = new Date().getFullYear();
 
     <div class="site-footer__col">
       <h2 class="mono-label site-footer__title">{c.footer.legalTitle}</h2>
+      {/* All four legal pages, always present. Each says its final wording is
+          with MHSV®'s counsel rather than the link disappearing and leaving a
+          reader with nowhere to look. */}
       <ul class="site-footer__links">
-        <li><a href={localePath('privacy/', locale)}>{c.footer.privacyLink}</a></li>
-        {/* Always present. While the statutes are unvalidated the page itself
-            says so - see src/pages/[lang]/legal.astro - rather than the link
-            disappearing and leaving the brief's second placeholder missing. */}
-        <li><a href={localePath('legal/', locale)}>{c.footer.legalLink}</a></li>
+        {
+          LEGAL_PAGE_IDS.map((page) => (
+            <li>
+              <a href={legalPath(page, locale)}>{c.legalPages.titles[page]}</a>
+            </li>
+          ))
+        }
       </ul>
     </div>
 

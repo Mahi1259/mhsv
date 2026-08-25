@@ -11,6 +11,7 @@ import { getContent, localeAlternates, localePath, type Locale } from '@/lib/i18
 import { SITE_URL, DEFAULT_LOCALE, IS_PRODUCTION } from '@/config/site';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
+import CookieBanner from '@/components/CookieBanner.astro';
 import preloadFonts from '@/config/preload-fonts.json';
 import '@/styles/global.css';
 
@@ -159,6 +160,7 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
       <slot />
     </main>
     <Footer locale={locale} />
+    <CookieBanner locale={locale} />
 
     <script>
       import '@/scripts/motion.ts';

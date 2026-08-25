@@ -7,7 +7,7 @@
  * double opt-in - nobody is on the list until they click the confirmation.
  */
 import FormShell from '@/components/FormShell.astro';
-import { getContent, localePath, type Locale } from '@/lib/i18n';
+import { getContent, legalPath, type Locale } from '@/lib/i18n';
 import { LOCALES } from '@/config/site';
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
 const { locale } = Astro.props;
 const c = getContent(locale);
 const n = c.newsletterForm;
-const privacyHref = localePath('privacy/', locale);
+const privacyHref = legalPath('dataProtection', locale);
 
 const strings = {
   errors: { ...c.form.errors, ...n.errors },

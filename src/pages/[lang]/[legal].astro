@@ -1,0 +1,42 @@
+---
+/**
+ * The four legal placeholder pages, one route for all of them.
+ *
+ * BLOCKER. Each carries a heading and one line saying the final wording is
+ * with MHSV®'s legal counsel. Nothing else: no legal status, no association
+ * wording, nothing that could read as advice before a lawyer has written it.
+ *
+ * The slug is per language - /fr/mentions-legales/ and /en/legal-notice/ are
+ * the same page - so getStaticPaths pairs each locale with its own slug from
+ * LEGAL_PAGES rather than repeating one path four times.
+ */
+import Page from '@/layouts/Page.astro';
+import { getContent } from '@/lib/i18n';
+import { LOCALES, LEGAL_PAGES, LEGAL_PAGE_IDS, type LegalPageId, type Locale } from '@/config/site';
+
+export function getStaticPaths() {
+  return LOCALES.flatMap((lang) =>
+    LEGAL_PAGE_IDS.map((page) => ({
+      params: { lang, legal: LEGAL_PAGES[page][lang].replace(/\/$/, '') },
+      props: { page },
+    })),
+  );
+}
+
+const locale = Astro.params.lang as Locale;
+const { page } = Astro.props as { page: LegalPageId };
+const c = getContent(locale);
+const title = c.legalPages.titles[page];
+---
+
+<Page locale={locale} path={LEGAL_PAGES[page][locale]} title={title} eyebrow={c.footer.legalTitle}>
+  <p class="legal-pending">{c.legalPages.pending}</p>
+</Page>
+
+<style>
+  .legal-pending {
+    margin: 0;
+    color: var(--band-muted);
+    max-width: 68ch;
+  }
+</style>

@@ -1,0 +1,95 @@
+---
+/**
+ * Cookie notice.
+ *
+ * There is nothing to consent TO yet: the site loads no analytics, no tracking
+ * and no third-party script, and the only thing it stores is this banner's own
+ * dismissal. So this is a notice with an acknowledgement, not a consent gate -
+ * presenting a choice that changes nothing would be theatre, and offering a
+ * "reject" that rejects nothing is worse.
+ *
+ * If tracking is ever added it must be loaded from inside the accept handler
+ * and nowhere else, and this must gain a genuine reject.
+ *
+ * Rendered hidden and revealed by script, so a reader without JavaScript - who
+ * cannot dismiss it - is never shown a banner they cannot get rid of.
+ */
+import { getContent, legalPath, type Locale } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const c = getContent(locale);
+---
+
+<aside class="cookie" data-cookie hidden aria-label={c.legalPages.titles.cookies}>
+  <p class="cookie__text">
+    {c.cookies.text}
+    <a class="link cookie__more" href={legalPath('cookies', locale)}>{c.cookies.more}</a>
+  </p>
+  <button class="btn btn--primary cookie__accept" type="button" data-cookie-accept>
+    {c.cookies.accept}
+  </button>
+</aside>
+
+<script is:inline>
+  (function () {
+    var KEY = 'mhsv-cookie-notice';
+    var el = document.querySelector('[data-cookie]');
+    if (!el) return;
+    var seen = false;
+    try {
+      seen = localStorage.getItem(KEY) === 'accepted';
+    } catch (e) {
+      /* private mode: show the notice, it just will not be remembered */
+    }
+    if (seen) return;
+    el.hidden = false;
+    el.querySelector('[data-cookie-accept]').addEventListener('click', function () {
+      el.hidden = true;
+      try {
+        localStorage.setItem(KEY, 'accepted');
+      } catch (e) {
+        /* nothing to do; the notice returns next visit */
+      }
+    });
+  })();
+</script>
+
+<style>
+  .cookie {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 80;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem 1.5rem;
+    padding: 1rem clamp(1rem, 0.5rem + 3vw, 3rem);
+    background: color-mix(in srgb, var(--navy-deep) 96%, transparent);
+    border-block-start: 1px solid var(--hairline-strong);
+    box-shadow: 0 -18px 40px rgb(0 0 0 / 0.4);
+  }
+
+  .cookie[hidden] {
+    display: none;
+  }
+
+  .cookie__text {
+    margin: 0;
+    color: var(--muted-on-dark);
+    font-size: 0.875rem;
+  }
+
+  .cookie__more {
+    margin-inline-start: 0.5rem;
+  }
+
+  .cookie__accept {
+    flex: 0 0 auto;
+  }
+</style>

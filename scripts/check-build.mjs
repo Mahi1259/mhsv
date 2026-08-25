@@ -13,7 +13,7 @@
  *   5. structural SEO/a11y basics: one <h1> per page, 21 sections on the home
  *      documents, complete hreflang sets
  */
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { resolve, dirname, relative, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -76,13 +76,26 @@ for (const file of files) {
 
 // --- 4: legal status must not leak while withheld ---------------------------
 if (!SHOW_LEGAL_STATUS) {
-  // Only the rendered page matters. Astro still emits the component's scoped
-  // stylesheet, which contains no wording and is never linked.
-  const legalPages = files.filter(
-    (f) => relative(DIST, f).includes('legal-notice') && extname(f) === '.html',
-  );
-  for (const page of legalPages) {
-    errors.push(`${relative(DIST, page)}: legal-notice page built while PUBLIC_SHOW_LEGAL_STATUS is off`);
+  /*
+   * The legal pages EXIST while the flag is off - they are placeholders now,
+   * and the footer links to all four in every language, so a missing one is a
+   * 404 rather than a withheld page. What must not appear is legal STATUS, and
+   * the wording sweep below covers every HTML file including these.
+   *
+   * This guard used to assert the opposite: that no legal-notice page was
+   * built at all. That was right when the page carried the editor block and
+   * the association wording; it is wrong now that it carries one sentence
+   * saying a lawyer has not written it yet.
+   */
+  for (const locale of LOCALES) {
+    const expected = locale === 'fr'
+      ? ['mentions-legales', 'protection-des-donnees', 'cookies', 'formulaires']
+      : ['legal-notice', 'data-protection', 'cookies', 'forms'];
+    for (const slug of expected) {
+      if (!existsSync(resolve(DIST, locale, slug, 'index.html'))) {
+        errors.push(`${locale}/${slug}/ is missing - the footer links to it in every locale`);
+      }
+    }
   }
 
   // The association wording from §01/§21, in all four languages.
@@ -104,7 +117,7 @@ if (!SHOW_LEGAL_STATUS) {
       }
     }
   }
-  notes.push('PUBLIC_SHOW_LEGAL_STATUS is off - legal footer, hero status line and /legal-notice/ withheld.');
+  notes.push('PUBLIC_SHOW_LEGAL_STATUS is off - legal footer and hero status line withheld; the four legal pages are placeholders.');
 }
 
 // --- 5: structure -----------------------------------------------------------

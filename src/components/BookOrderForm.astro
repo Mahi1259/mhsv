@@ -8,7 +8,7 @@
  */
 import FormShell from '@/components/FormShell.astro';
 import Bilingual from '@/components/Bilingual.astro';
-import { getContent, localePath, type Locale } from '@/lib/i18n';
+import { getContent, legalPath, type Locale } from '@/lib/i18n';
 
 interface Props {
   locale: Locale;
@@ -31,7 +31,7 @@ const f = c.form;
 const alt = altLocale ? getContent(altLocale) : null;
 const ao = alt?.bookOrder;
 const af = alt?.form;
-const privacyHref = localePath('privacy/', locale);
+const privacyHref = legalPath('dataProtection', locale);
 
 const strings = {
   errors: { ...f.errors, ...o.errors },

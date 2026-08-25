@@ -709,5 +709,19 @@
   "video": {
     "coming": "Video di presentazione — prossimamente",
     "ariaLabel": "Video di presentazione MHSV® — prossimamente"
+  },
+  "legalPages": {
+    "pending": "Testo definitivo in attesa di validazione giuridica da parte del consulente legale di MHSV®.",
+    "titles": {
+      "legalNotice": "Note legali",
+      "dataProtection": "Protezione dei dati",
+      "cookies": "Cookie",
+      "forms": "Moduli"
+    }
+  },
+  "cookies": {
+    "text": "Questo sito utilizza solo i cookie necessari al suo funzionamento.",
+    "accept": "Accetta",
+    "more": "Scopri di più"
   }
 }

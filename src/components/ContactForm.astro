@@ -1,7 +1,7 @@
 ---
 /** Contact form. Recipient comes from CONTACT_RECIPIENT - never hard-coded. */
 import FormShell from '@/components/FormShell.astro';
-import { getContent, localePath, type Locale } from '@/lib/i18n';
+import { getContent, legalPath, type Locale } from '@/lib/i18n';
 
 interface Props {
   locale: Locale;
@@ -10,7 +10,7 @@ interface Props {
 const { locale } = Astro.props;
 const c = getContent(locale);
 const f = c.form;
-const privacyHref = localePath('privacy/', locale);
+const privacyHref = legalPath('dataProtection', locale);
 
 // The consent label embeds a link. Split on the link label so the surrounding
 // wording stays translatable as one string.

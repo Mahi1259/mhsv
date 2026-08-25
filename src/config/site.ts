@@ -44,6 +44,29 @@ export const SHOW_LEGAL_STATUS = import.meta.env.PUBLIC_SHOW_LEGAL_STATUS === 't
 export const PRIVACY_IS_DRAFT = import.meta.env.PUBLIC_PRIVACY_IS_DRAFT !== 'false';
 
 /** Publication states available to the status badge. */
+/**
+ * The legal pages, and their slug in each language.
+ *
+ * The slug differs per locale on purpose - the client asked for
+ * /fr/mentions-legales/ and /en/legal-notice/, not one path with four
+ * prefixes. `legalPath()` in lib/i18n.ts resolves a page to its slug, and
+ * `localeAlternates` uses the same map so hreflang points at the right URL in
+ * every language rather than at a path that only exists in one.
+ *
+ * DE and IT are served from the English slugs. The brief specifies FR and EN
+ * copy only, but the site is published in four languages and a footer link
+ * that 404s in two of them is worse than a translated placeholder.
+ */
+export const LEGAL_PAGES = {
+  legalNotice: { fr: 'mentions-legales/', en: 'legal-notice/', de: 'legal-notice/', it: 'legal-notice/' },
+  dataProtection: { fr: 'protection-des-donnees/', en: 'data-protection/', de: 'data-protection/', it: 'data-protection/' },
+  cookies: { fr: 'cookies/', en: 'cookies/', de: 'cookies/', it: 'cookies/' },
+  forms: { fr: 'formulaires/', en: 'forms/', de: 'forms/', it: 'forms/' },
+} as const;
+
+export type LegalPageId = keyof typeof LEGAL_PAGES;
+export const LEGAL_PAGE_IDS = Object.keys(LEGAL_PAGES) as LegalPageId[];
+
 export const STATUS_KEYS = [
   'active',
   'inDevelopment',

@@ -710,5 +710,19 @@
   "video": {
     "coming": "Presentation video — coming soon",
     "ariaLabel": "MHSV® presentation video — coming soon"
+  },
+  "legalPages": {
+    "pending": "Final wording pending legal validation by MHSV®’s legal counsel.",
+    "titles": {
+      "legalNotice": "Legal notice",
+      "dataProtection": "Data protection",
+      "cookies": "Cookies",
+      "forms": "Forms"
+    }
+  },
+  "cookies": {
+    "text": "This site uses only the cookies necessary for it to work.",
+    "accept": "Accept",
+    "more": "Learn more"
   }
 }
