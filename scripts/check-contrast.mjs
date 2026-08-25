@@ -136,6 +136,13 @@ const CHECKS = [
   // Language switcher: current locale is navy on gold
   ['active language chip', C.navyDeep, C.gold, 4.5],
 
+  /*
+   * The video placeholder is a mirror: a specular band crosses it, so its
+   * label sits on a surface lighter than the panel colour. Checked at the
+   * band's peak - the lightest point the label can ever be on.
+   */
+  ['video label at the sheen peak', C.goldSoft, composite(C.white, 0.17, C.navyRaise), 4.5],
+
   // The shrunk masthead, over the lightest ground it ever floats across.
   ['nav link on bar over ground', C.white, SHRUNK_BAR_ON_GROUND, 4.5],
   ['language code on bar over ground', C.mutedOnDark, SHRUNK_BAR_ON_GROUND, 4.5],
@@ -147,6 +154,12 @@ const CHECKS = [
 
 /** Pairings that must NEVER be used - verified as failing, so the ban is real. */
 const BANNED = [
+  /*
+   * Plain gold on the video placeholder's sheen. It is fine on the unlit
+   * surface and fails where the band crosses it, which is exactly the kind of
+   * "looks right in the mockup" failure this file exists to catch.
+   */
+  ['plain gold at the video sheen peak', C.gold, composite(C.white, 0.17, C.navyRaise)],
   /*
    * The page is navy end to end and its type is white-on-dark. If a light
    * surface is ever reintroduced, this is what it costs: the entire type

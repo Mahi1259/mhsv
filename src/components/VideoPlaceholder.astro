@@ -28,25 +28,72 @@ const c = getContent(locale);
 </div>
 
 <style>
+  /*
+   * A mirror, not a flat panel.
+   *
+   * Three things make it read as polished glass rather than a coloured box,
+   * and it needs all three: light passes THROUGH it (backdrop blur, so the
+   * page's washes move behind it), light catches its top edge (a 1px inset
+   * highlight, the same detail the masthead pill uses), and light runs ACROSS
+   * it (a diagonal specular band). One alone reads as a gradient.
+   */
   .video-placeholder {
+    position: relative;
     aspect-ratio: 16 / 9;
     display: grid;
     place-items: center;
-    border: 1px solid color-mix(in srgb, var(--gold) 20%, transparent);
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--gold) 22%, transparent);
     border-radius: var(--radius);
-    background: var(--navy-raise);
+    background:
+      linear-gradient(
+        152deg,
+        rgb(255 255 255 / 0.08) 0%,
+        rgb(255 255 255 / 0.02) 30%,
+        rgb(255 255 255 / 0) 52%
+      ),
+      color-mix(in srgb, var(--navy-raise) 88%, transparent);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    box-shadow:
+      0 1px 0 rgb(255 255 255 / 0.1) inset,
+      0 -1px 0 rgb(0 0 0 / 0.25) inset,
+      0 26px 60px -34px rgb(0 0 0 / 0.65);
+  }
+
+  /*
+   * The specular band. Peak held at 12%: composited on navy-raise that is the
+   * lightest the surface ever gets behind the label, and the pairing is
+   * asserted in scripts/check-contrast.mjs so it cannot drift brighter
+   * without the build noticing.
+   */
+  .video-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: -30% -12%;
+    pointer-events: none;
+    background: linear-gradient(
+      115deg,
+      transparent 38%,
+      rgb(255 255 255 / 0.12) 49%,
+      transparent 61%
+    );
   }
 
   .video-placeholder__inner {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
     text-align: center;
     padding: 1rem;
-    /* Gold, not the muted slate: 6.97:1 on navy-raise, where the muted tone
-       would be the weakest text on the page. */
-    color: var(--gold);
+    /*
+     * gold-soft, not gold. Plain gold is 5.12:1 on the unlit surface but drops
+     * to 4.06:1 where the sheen crosses it - below AA. gold-soft holds 5.27:1
+     * at the same point.
+     */
+    color: var(--gold-soft);
   }
 
   .video-placeholder__label {
