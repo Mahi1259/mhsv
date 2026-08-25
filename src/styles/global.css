@@ -173,6 +173,18 @@
     -webkit-text-size-adjust: 100%;
   }
 
+  /*
+   * A floor for every anchor target, so nothing can land behind the fixed bar.
+   *
+   * The bands compute their own scroll-margin from their archetype's padding -
+   * see .band below - which is more precise and overrides this. This catches
+   * anything that is NOT a band: a heading, a form, an id added later by
+   * someone who does not know about the maths.
+   */
+  [id] {
+    scroll-margin-top: calc(var(--header-h) + var(--anchor-gap));
+  }
+
   body {
     /*
      * Gives back the space the masthead no longer occupies.
