@@ -35,13 +35,35 @@ export function legalPath(page: LegalPageId, locale: Locale): string {
   return `/${locale}/${LEGAL_PAGES[page][locale]}`;
 }
 
+/**
+ * Any locale's slug back to the page it belongs to.
+ *
+ * The legal and photo-credits pages have a DIFFERENT slug per language -
+ * /fr/mentions-legales/ and /en/legal-notice/ are one page. Without this the
+ * language switcher only swapped the prefix and left the slug alone, so
+ * switching to German from the Italian credits page asked for
+ * /de/crediti-foto/, which does not exist. Every one of those pages 404'd in
+ * three languages out of four.
+ */
+const SLUG_TO_PAGE = new Map<string, LegalPageId>(
+  Object.entries(LEGAL_PAGES).flatMap(([page, slugs]) =>
+    Object.values(slugs).map((slug) => [slug, page as LegalPageId] as const),
+  ),
+);
+
+/** The equivalent of a path in another language, slug included. */
+export function pathForLocale(currentPath: string, locale: Locale): string {
+  const page = SLUG_TO_PAGE.get(currentPath.replace(/^\/+/, ''));
+  return page ? legalPath(page, locale) : localePath(currentPath, locale);
+}
+
 /** All locales with their metadata, for the language switcher and hreflang tags. */
 export function localeAlternates(currentPath: string) {
   // currentPath is the path *within* a locale, e.g. "" or "privacy/".
   return LOCALES.map((locale) => ({
     locale,
     ...CONTENT[locale].meta,
-    path: localePath(currentPath, locale),
+    path: pathForLocale(currentPath, locale),
   }));
 }
 

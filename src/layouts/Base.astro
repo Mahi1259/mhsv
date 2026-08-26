@@ -7,7 +7,7 @@
  * language switcher - is derived from it, so a new page only has to pass its
  * own path once.
  */
-import { getContent, localeAlternates, localePath, type Locale } from '@/lib/i18n';
+import { getContent, localeAlternates, localePath, pathForLocale, type Locale } from '@/lib/i18n';
 import { SITE_URL, DEFAULT_LOCALE, IS_PRODUCTION } from '@/config/site';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
@@ -57,7 +57,7 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
     <link
       rel="alternate"
       hreflang="x-default"
-      href={new URL(localePath(path, DEFAULT_LOCALE), SITE_URL).href}
+      href={new URL(pathForLocale(path, DEFAULT_LOCALE), SITE_URL).href}
     />
 
     <meta property="og:type" content="website" />

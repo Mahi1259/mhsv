@@ -120,6 +120,41 @@ if (!SHOW_LEGAL_STATUS) {
   notes.push('PUBLIC_SHOW_LEGAL_STATUS is off - legal footer and hero status line withheld; the four legal pages are placeholders.');
 }
 
+/*
+ * --- 4b: every language link must land on a page that exists ---------------
+ *
+ * The legal and photo-credits pages carry a different slug per language, and
+ * the switcher used to swap only the prefix: from /it/crediti-foto/ it offered
+ * /de/crediti-foto/, which does not exist. Every one of those pages was broken
+ * in three languages out of four, and nothing here noticed, because the checks
+ * only ever looked at the home documents.
+ *
+ * Static, so it needs no server: resolve each href to the file it would be
+ * served from and require that file to be in the build.
+ */
+for (const file of files.filter((f) => extname(f) === '.html')) {
+  const html = readFileSync(file, 'utf8');
+  const from = relative(DIST, file);
+  const hrefs = new Set();
+  for (const m of html.matchAll(/<link[^>]+rel="alternate"[^>]+href="([^"]+)"/g)) hrefs.add(m[1]);
+  for (const m of html.matchAll(/<a[^>]+data-lang-link[^>]*href="([^"#]+)"/g)) hrefs.add(m[1]);
+
+  for (const href of hrefs) {
+    let path;
+    try {
+      path = href.startsWith('http') ? new URL(href).pathname : href;
+    } catch {
+      continue;
+    }
+    const clean = path.replace(/^\/+|\/+$/g, '');
+    if (!clean) continue;
+    const asFile = resolve(DIST, clean);
+    if (!existsSync(asFile) && !existsSync(resolve(asFile, 'index.html')) && !existsSync(`${asFile}.html`)) {
+      errors.push(`${from}: language link "${path}" has no page in the build`);
+    }
+  }
+}
+
 // --- 5: structure -----------------------------------------------------------
 for (const locale of LOCALES) {
   const home = resolve(DIST, locale, 'index.html');
