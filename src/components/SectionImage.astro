@@ -50,9 +50,15 @@ const meta = c.stock[image] as { alt: string; credit?: string };
         src={entry[1].default}
         alt={meta.alt}
         formats={['webp']}
-        fallbackFormat="png"
+        {/* jpg, not png. These are photographs: a PNG fallback of a 2000px
+            photo runs to tens of megabytes - one reached 56MB - because PNG is
+            lossless and built for flat colour, not for continuous tone. */}
+        fallbackFormat="jpg"
         widths={[640, 1000, 1600]}
-        sizes="(min-width: 62rem) 40rem, 92vw"
+        {/* Measured, not guessed: inside a band's content column these render
+            918px wide at a 1440px viewport, so a 40rem (640px) hint had the
+            browser fetching a source 0.7x the size it was drawing. */}
+        sizes="(min-width: 62rem) 58rem, 92vw"
         loading={eager ? 'eager' : 'lazy'}
         decoding="async"
       />
