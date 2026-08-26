@@ -1,4 +1,10 @@
-All images sourced from Unsplash. Free licence — commercial use permitted.
+# MHSV® Website — Image Inventory
+
+For MHSV®'s internal records. The same list is published on the site's Photo
+Credits page, in all four languages.
+
+All photographs are sourced from Unsplash and used under the Unsplash free
+licence, which permits commercial use and does not require attribution.
 
 1. Meghan Holmes — https://unsplash.com/photos/buWcS7G1_28
 2. Gabin Vallet — https://unsplash.com/photos/J154nEkpzlQ
@@ -11,51 +17,45 @@ All images sourced from Unsplash. Free licence — commercial use permitted.
 9. Christina @ wocintechchat.com — https://unsplash.com/photos/eF7HN40WbAQ
 10. Mina Rad — https://unsplash.com/photos/-P7kHROe-6A
 
----
+## Where each is used
 
-## Where each one is used
+| # | Photographer | Section |
+| --- | --- | --- |
+| 3 | Vitaly Gariev | Who we are |
+| 4 | Timur Shakerzianov | Our mission |
+| 5 | Braden Collum | Who we support |
+| 6 | Jeffrey F Lin | Methodology & MITIPS® |
+| 9 | Christina @ wocintechchat.com | Services |
+| 1 | Meghan Holmes | The MHSV® pathway |
+| 2 | Gabin Vallet | Sport programmes |
+| 10 | Mina Rad | Founding programmes & fees |
+| 7 | Parabol | Ecosystem |
+| 8 | Joel Mott | Projects, inclusion & deployment |
 
-| # | Photographer | Section | Status |
-| --- | --- | --- | --- |
-| 3 | Vitaly Gariev | Who we are | published |
-| 4 | Timur Shakerzianov | Our mission | published |
-| 1 | Meghan Holmes | Who we support | published |
-| 2 | Gabin Vallet | Sport programmes | published |
-| 9 | Christina @ wocintechchat.com | Services | published |
-| 10 | Mina Rad | Founding programmes & fees | published |
-| 7 | Parabol | Ecosystem | published |
-| 5 | Braden Collum | — | **held back** |
-| 6 | Jeffrey F Lin | — | **held back** |
-| 8 | Joel Mott | — | **held back** |
+Each carries alt text in FR, EN, DE and IT and loads lazily. No captions on the
+page: the credits are on the Photo Credits page, linked from the footer.
 
-Each published image carries alt text in FR, EN, DE and IT, loads lazily, and
-shows its credit beneath it.
+## Three that carry visible logos — MHSV® should decide
 
-## The three held back
+MHSV®'s image brief says *no team kits with visible club or brand logos*. Three
+of the ten carry them, legibly. They are published, because placing all ten was
+asked for twice, but the decision should be a conscious one:
 
-MHSV®'s brief says: *no team kits with visible club or brand logos.* These three
-carry them, legibly:
+- **5 — Braden Collum** (Who we support). Athletics vests reading `UT·TYLER` and
+  `McMURRY`; an ASICS mark on the lead runner.
+- **6 — Jeffrey F Lin** (Methodology). `GEORGETOWN` across the shirt, a Nike
+  swoosh on both players' shorts, a branded match ball.
+- **8 — Joel Mott** (Projects & inclusion). Nike swooshes on several hoodies and
+  a school softball club crest.
 
-- **5 — Braden Collum.** Athletics vests reading `UT·TYLER` and `McMURRY`, plus
-  an ASICS mark on the lead runner's singlet.
-- **6 — Jeffrey F Lin.** `GEORGETOWN` across the shirt, a Nike swoosh on both
-  players' shorts, and a branded match ball.
-- **8 — Joel Mott.** Nike swooshes on several hoodies and a school softball club
-  crest.
+Cropping does not rescue them — the marks are spread across each frame rather
+than sitting in one corner. Removing any of the three is one line; replacements
+would drop straight into the same slots.
 
-They are not cropped, because the marks are spread across each frame rather
-than sitting in one corner — removing them would leave nothing of the picture.
+## Resolution
 
-Three options, MHSV®'s call:
-
-1. Leave them out. Seven sections have a photograph; the page does not look bare.
-2. Approve them anyway, if MHSV® is content that a US university team name and a
-   sportswear brand appear on an institutional site. One line each to publish.
-3. Send replacements. Two sports images and one teamwork image would fill the
-   same three slots.
-
-## Licence
-
-Unsplash's licence permits commercial use and does not require attribution.
-The credit line is shown anyway — it costs nothing and it is the courtesy the
-licence asks for.
+Seven are 2000px wide. Three — Braden Collum, Jeffrey F Lin, Joel Mott — are
+1300–1400px, because the originals in `public/Unsplash/` were deleted before
+those three were copied into the build and only working copies survived. They
+render at 608px, so they are sharp at 2x today, but re-uploading those three
+would restore the full margin.

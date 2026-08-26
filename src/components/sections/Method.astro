@@ -11,6 +11,7 @@
  * and the detailed internal protocols are explicitly not for publication.
  */
 import Band from '@/components/Band.astro';
+import SectionImage from '@/components/SectionImage.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import type { SectionType } from '@/config/site';
 
@@ -63,6 +64,8 @@ const acronym = s.pillars.map((p) => p.letter).join('');
   </div>
 
   <p class="prose-body method__note">{s.note}</p>
+
+  <SectionImage locale={locale} image="method" align="start" />
 </Band>
 
 <script>

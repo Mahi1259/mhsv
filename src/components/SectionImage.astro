@@ -8,9 +8,9 @@
  * nothing when it is absent - so the site is correct with no photographs and
  * complete the moment they are dropped in.
  *
- * The credit line is required for Pexels and optional for Unsplash. It renders
- * whenever `credit` is present in the content, so the licence is honoured by
- * the page rather than by a promise in a document.
+ * No caption or credit here. Unsplash's licence does not require attribution,
+ * and the photographers are all listed on the Photo Credits page instead, which
+ * the footer links to.
  */
 import { Picture } from 'astro:assets';
 import { getContent, type Locale } from '@/lib/i18n';
@@ -25,7 +25,17 @@ interface Props {
    * parent's slot named about" - and since Band has only a default slot, the
    * component was dropped without rendering and without error.
    */
-  image: 'about' | 'mission' | 'audience' | 'programmes' | 'services' | 'fees' | 'ecosystem';
+  image:
+    | 'about'
+    | 'mission'
+    | 'audience'
+    | 'programmes'
+    | 'pathway'
+    | 'method'
+    | 'services'
+    | 'fees'
+    | 'ecosystem'
+    | 'inclusion';
   /**
    * Which edge the figure sits against. Alternated down the page so the
    * photographs read as an editorial rhythm rather than a column of banners.
@@ -43,7 +53,7 @@ const files = import.meta.glob<{ default: ImageMetadata }>(
 const entry = Object.entries(files).find(
   ([path]) => path.split('/').pop()?.replace(/\.[^.]+$/, '') === image,
 );
-const meta = c.stock[image] as { alt: string; credit?: string };
+const meta = c.stock[image] as { alt: string };
 ---
 
 {
@@ -69,7 +79,6 @@ const meta = c.stock[image] as { alt: string; credit?: string };
           decoding="async"
         />
       </div>
-      {meta.credit && <figcaption class="section-image__credit">{meta.credit}</figcaption>}
     </figure>
   )
 }
@@ -139,11 +148,4 @@ const meta = c.stock[image] as { alt: string; credit?: string };
     );
   }
 
-  .section-image__credit {
-    margin-block-start: 0.625rem;
-    color: var(--band-muted);
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.04em;
-  }
 </style>

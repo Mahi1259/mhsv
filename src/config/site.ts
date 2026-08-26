@@ -62,10 +62,29 @@ export const LEGAL_PAGES = {
   dataProtection: { fr: 'protection-des-donnees/', en: 'data-protection/', de: 'data-protection/', it: 'data-protection/' },
   cookies: { fr: 'cookies/', en: 'cookies/', de: 'cookies/', it: 'cookies/' },
   forms: { fr: 'formulaires/', en: 'forms/', de: 'forms/', it: 'forms/' },
+  photoCredits: {
+    fr: 'credits-photos/',
+    en: 'photo-credits/',
+    de: 'bildnachweise/',
+    it: 'crediti-foto/',
+  },
 } as const;
 
 export type LegalPageId = keyof typeof LEGAL_PAGES;
-export const LEGAL_PAGE_IDS = Object.keys(LEGAL_PAGES) as LegalPageId[];
+
+/**
+ * The four placeholder pages, and only those.
+ *
+ * `photoCredits` lives in LEGAL_PAGES so legalPath() can resolve its per-locale
+ * slug, but it is NOT a legal placeholder: it has its own route and its own
+ * title, and listing it here made the placeholder route try to render it.
+ */
+export const LEGAL_PAGE_IDS = [
+  'legalNotice',
+  'dataProtection',
+  'cookies',
+  'forms',
+] as const satisfies readonly LegalPageId[];
 
 export const STATUS_KEYS = [
   'active',

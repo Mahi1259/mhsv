@@ -726,32 +726,34 @@
   },
   "stock": {
     "about": {
-      "alt": "Eine Lehrperson spricht vor einer Gruppe im Unterrichtsraum",
-      "credit": "Photo by Vitaly Gariev on Unsplash"
+      "alt": "Eine Lehrperson spricht vor einer Gruppe im Unterrichtsraum"
     },
     "mission": {
-      "alt": "Studierende machen sich während einer Lektion Notizen",
-      "credit": "Photo by Timur Shakerzianov on Unsplash"
+      "alt": "Studierende machen sich während einer Lektion Notizen"
     },
     "audience": {
-      "alt": "Zwei Personen beim Training in einem Fitnessraum",
-      "credit": "Photo by Meghan Holmes on Unsplash"
+      "alt": "Athleten starten einen Sprint auf der Laufbahn"
     },
     "programmes": {
-      "alt": "Eine Gruppe trainiert im Freien",
-      "credit": "Photo by Gabin Vallet on Unsplash"
+      "alt": "Eine Gruppe trainiert im Freien"
     },
     "services": {
-      "alt": "Zwei Personen im Gespräch an einem Tisch",
-      "credit": "Photo by Christina @ wocintechchat.com on Unsplash"
+      "alt": "Zwei Personen im Gespräch an einem Tisch"
     },
     "fees": {
-      "alt": "Ein Einzelgespräch mit Unterlagen auf dem Tisch",
-      "credit": "Photo by Mina Rad on Unsplash"
+      "alt": "Ein Einzelgespräch mit Unterlagen auf dem Tisch"
     },
     "ecosystem": {
-      "alt": "Eine Gruppe legt die Hände in der Mitte zusammen, von oben",
-      "credit": "Photo by Parabol on Unsplash"
+      "alt": "Eine Gruppe legt die Hände in der Mitte zusammen, von oben"
+    },
+    "pathway": {
+      "alt": "Zwei Personen beim Training in einem Fitnessraum"
+    },
+    "method": {
+      "alt": "Zwei Spieler kämpfen während eines Fussballspiels um den Ball"
+    },
+    "inclusion": {
+      "alt": "Ein Team versammelt sich für ein Gruppenfoto"
     }
   },
   "railLabels": {
@@ -769,5 +771,51 @@
     "founder": "Gründer",
     "identity": "Identität",
     "roadmap": "Demnächst"
+  },
+  "photoCredits": {
+    "title": "Bildnachweise",
+    "intro": "Alle auf dieser Website verwendeten Fotografien stammen von Unsplash und werden unter der kostenlosen Unsplash-Lizenz verwendet, die eine kommerzielle Nutzung erlaubt.",
+    "items": [
+      {
+        "name": "Meghan Holmes",
+        "url": "https://unsplash.com/photos/buWcS7G1_28"
+      },
+      {
+        "name": "Gabin Vallet",
+        "url": "https://unsplash.com/photos/J154nEkpzlQ"
+      },
+      {
+        "name": "Vitaly Gariev",
+        "url": "https://unsplash.com/photos/MWdcDtDTq9E"
+      },
+      {
+        "name": "Timur Shakerzianov",
+        "url": "https://unsplash.com/photos/RHqKnRACsqs"
+      },
+      {
+        "name": "Braden Collum",
+        "url": "https://unsplash.com/photos/ttbCwN_mWic"
+      },
+      {
+        "name": "Jeffrey F Lin",
+        "url": "https://unsplash.com/photos/6k0VD3xNw6U"
+      },
+      {
+        "name": "Parabol",
+        "url": "https://unsplash.com/photos/qSv1gwYEfa8"
+      },
+      {
+        "name": "Joel Mott",
+        "url": "https://unsplash.com/photos/dQBkIZzyM-4"
+      },
+      {
+        "name": "Christina @ wocintechchat.com",
+        "url": "https://unsplash.com/photos/eF7HN40WbAQ"
+      },
+      {
+        "name": "Mina Rad",
+        "url": "https://unsplash.com/photos/-P7kHROe-6A"
+      }
+    ]
   }
 }

@@ -727,32 +727,34 @@
   },
   "stock": {
     "about": {
-      "alt": "A teacher addressing a group in a classroom",
-      "credit": "Photo by Vitaly Gariev on Unsplash"
+      "alt": "A teacher addressing a group in a classroom"
     },
     "mission": {
-      "alt": "Students taking notes during a class",
-      "credit": "Photo by Timur Shakerzianov on Unsplash"
+      "alt": "Students taking notes during a class"
     },
     "audience": {
-      "alt": "Two people training in a gym",
-      "credit": "Photo by Meghan Holmes on Unsplash"
+      "alt": "Athletes starting a sprint on a running track"
     },
     "programmes": {
-      "alt": "A group training outdoors",
-      "credit": "Photo by Gabin Vallet on Unsplash"
+      "alt": "A group training outdoors"
     },
     "services": {
-      "alt": "Two people in conversation across a table",
-      "credit": "Photo by Christina @ wocintechchat.com on Unsplash"
+      "alt": "Two people in conversation across a table"
     },
     "fees": {
-      "alt": "A one-to-one meeting with documents on the table",
-      "credit": "Photo by Mina Rad on Unsplash"
+      "alt": "A one-to-one meeting with documents on the table"
     },
     "ecosystem": {
-      "alt": "A group joining hands in the centre, seen from above",
-      "credit": "Photo by Parabol on Unsplash"
+      "alt": "A group joining hands in the centre, seen from above"
+    },
+    "pathway": {
+      "alt": "Two people training in a gym"
+    },
+    "method": {
+      "alt": "Two players competing for the ball during a football match"
+    },
+    "inclusion": {
+      "alt": "A team gathered for a group photograph"
     }
   },
   "railLabels": {
@@ -770,5 +772,51 @@
     "founder": "Founder",
     "identity": "Identity",
     "roadmap": "Coming soon"
+  },
+  "photoCredits": {
+    "title": "Photo Credits",
+    "intro": "All photographs used on this website are sourced from Unsplash and used under the Unsplash free licence, which permits commercial use.",
+    "items": [
+      {
+        "name": "Meghan Holmes",
+        "url": "https://unsplash.com/photos/buWcS7G1_28"
+      },
+      {
+        "name": "Gabin Vallet",
+        "url": "https://unsplash.com/photos/J154nEkpzlQ"
+      },
+      {
+        "name": "Vitaly Gariev",
+        "url": "https://unsplash.com/photos/MWdcDtDTq9E"
+      },
+      {
+        "name": "Timur Shakerzianov",
+        "url": "https://unsplash.com/photos/RHqKnRACsqs"
+      },
+      {
+        "name": "Braden Collum",
+        "url": "https://unsplash.com/photos/ttbCwN_mWic"
+      },
+      {
+        "name": "Jeffrey F Lin",
+        "url": "https://unsplash.com/photos/6k0VD3xNw6U"
+      },
+      {
+        "name": "Parabol",
+        "url": "https://unsplash.com/photos/qSv1gwYEfa8"
+      },
+      {
+        "name": "Joel Mott",
+        "url": "https://unsplash.com/photos/dQBkIZzyM-4"
+      },
+      {
+        "name": "Christina @ wocintechchat.com",
+        "url": "https://unsplash.com/photos/eF7HN40WbAQ"
+      },
+      {
+        "name": "Mina Rad",
+        "url": "https://unsplash.com/photos/-P7kHROe-6A"
+      }
+    ]
   }
 }

@@ -726,32 +726,34 @@
   },
   "stock": {
     "about": {
-      "alt": "Un docente si rivolge a un gruppo in aula",
-      "credit": "Photo by Vitaly Gariev on Unsplash"
+      "alt": "Un docente si rivolge a un gruppo in aula"
     },
     "mission": {
-      "alt": "Studenti prendono appunti durante una lezione",
-      "credit": "Photo by Timur Shakerzianov on Unsplash"
+      "alt": "Studenti prendono appunti durante una lezione"
     },
     "audience": {
-      "alt": "Due persone si allenano in palestra",
-      "credit": "Photo by Meghan Holmes on Unsplash"
+      "alt": "Atleti scattano su una pista di atletica"
     },
     "programmes": {
-      "alt": "Un gruppo si allena all’aperto",
-      "credit": "Photo by Gabin Vallet on Unsplash"
+      "alt": "Un gruppo si allena all’aperto"
     },
     "services": {
-      "alt": "Due persone in colloquio attorno a un tavolo",
-      "credit": "Photo by Christina @ wocintechchat.com on Unsplash"
+      "alt": "Due persone in colloquio attorno a un tavolo"
     },
     "fees": {
-      "alt": "Un colloquio individuale con documenti sul tavolo",
-      "credit": "Photo by Mina Rad on Unsplash"
+      "alt": "Un colloquio individuale con documenti sul tavolo"
     },
     "ecosystem": {
-      "alt": "Un gruppo unisce le mani al centro, visto dall’alto",
-      "credit": "Photo by Parabol on Unsplash"
+      "alt": "Un gruppo unisce le mani al centro, visto dall’alto"
+    },
+    "pathway": {
+      "alt": "Due persone si allenano in palestra"
+    },
+    "method": {
+      "alt": "Due giocatori si contendono il pallone durante una partita di calcio"
+    },
+    "inclusion": {
+      "alt": "Una squadra riunita per una foto di gruppo"
     }
   },
   "railLabels": {
@@ -769,5 +771,51 @@
     "founder": "Fondatore",
     "identity": "Identità",
     "roadmap": "Prossimamente"
+  },
+  "photoCredits": {
+    "title": "Crediti fotografici",
+    "intro": "Tutte le fotografie utilizzate su questo sito provengono da Unsplash e sono utilizzate secondo la licenza gratuita Unsplash, che consente l’uso commerciale.",
+    "items": [
+      {
+        "name": "Meghan Holmes",
+        "url": "https://unsplash.com/photos/buWcS7G1_28"
+      },
+      {
+        "name": "Gabin Vallet",
+        "url": "https://unsplash.com/photos/J154nEkpzlQ"
+      },
+      {
+        "name": "Vitaly Gariev",
+        "url": "https://unsplash.com/photos/MWdcDtDTq9E"
+      },
+      {
+        "name": "Timur Shakerzianov",
+        "url": "https://unsplash.com/photos/RHqKnRACsqs"
+      },
+      {
+        "name": "Braden Collum",
+        "url": "https://unsplash.com/photos/ttbCwN_mWic"
+      },
+      {
+        "name": "Jeffrey F Lin",
+        "url": "https://unsplash.com/photos/6k0VD3xNw6U"
+      },
+      {
+        "name": "Parabol",
+        "url": "https://unsplash.com/photos/qSv1gwYEfa8"
+      },
+      {
+        "name": "Joel Mott",
+        "url": "https://unsplash.com/photos/dQBkIZzyM-4"
+      },
+      {
+        "name": "Christina @ wocintechchat.com",
+        "url": "https://unsplash.com/photos/eF7HN40WbAQ"
+      },
+      {
+        "name": "Mina Rad",
+        "url": "https://unsplash.com/photos/-P7kHROe-6A"
+      }
+    ]
   }
 }

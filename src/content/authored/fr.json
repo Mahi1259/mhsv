@@ -446,32 +446,34 @@
   },
   "stock": {
     "about": {
-      "alt": "Un intervenant s’adresse à un groupe en salle de cours",
-      "credit": "Photo by Vitaly Gariev on Unsplash"
+      "alt": "Un intervenant s’adresse à un groupe en salle de cours"
     },
     "mission": {
-      "alt": "Des étudiants prennent des notes pendant un cours",
-      "credit": "Photo by Timur Shakerzianov on Unsplash"
+      "alt": "Des étudiants prennent des notes pendant un cours"
     },
     "audience": {
-      "alt": "Deux personnes à l’entraînement dans une salle de sport",
-      "credit": "Photo by Meghan Holmes on Unsplash"
+      "alt": "Des athlètes s’élancent sur une piste d’athlétisme"
     },
     "programmes": {
-      "alt": "Un groupe s’entraîne en extérieur",
-      "credit": "Photo by Gabin Vallet on Unsplash"
+      "alt": "Un groupe s’entraîne en extérieur"
     },
     "services": {
-      "alt": "Deux personnes en entretien autour d’une table",
-      "credit": "Photo by Christina @ wocintechchat.com on Unsplash"
+      "alt": "Deux personnes en entretien autour d’une table"
     },
     "fees": {
-      "alt": "Un entretien individuel avec des documents sur la table",
-      "credit": "Photo by Mina Rad on Unsplash"
+      "alt": "Un entretien individuel avec des documents sur la table"
     },
     "ecosystem": {
-      "alt": "Un groupe réunit ses mains au centre, vu de dessus",
-      "credit": "Photo by Parabol on Unsplash"
+      "alt": "Un groupe réunit ses mains au centre, vu de dessus"
+    },
+    "pathway": {
+      "alt": "Deux personnes à l’entraînement dans une salle de sport"
+    },
+    "method": {
+      "alt": "Deux joueurs disputent le ballon lors d’un match de football"
+    },
+    "inclusion": {
+      "alt": "Une équipe réunie pour une photo de groupe"
     }
   },
   "railLabels": {
@@ -489,5 +491,51 @@
     "founder": "Fondateur",
     "identity": "Identité",
     "roadmap": "À venir"
+  },
+  "photoCredits": {
+    "title": "Crédits photographiques",
+    "intro": "Toutes les photographies utilisées sur ce site proviennent d’Unsplash et sont utilisées sous la licence gratuite Unsplash, qui autorise un usage commercial.",
+    "items": [
+      {
+        "name": "Meghan Holmes",
+        "url": "https://unsplash.com/photos/buWcS7G1_28"
+      },
+      {
+        "name": "Gabin Vallet",
+        "url": "https://unsplash.com/photos/J154nEkpzlQ"
+      },
+      {
+        "name": "Vitaly Gariev",
+        "url": "https://unsplash.com/photos/MWdcDtDTq9E"
+      },
+      {
+        "name": "Timur Shakerzianov",
+        "url": "https://unsplash.com/photos/RHqKnRACsqs"
+      },
+      {
+        "name": "Braden Collum",
+        "url": "https://unsplash.com/photos/ttbCwN_mWic"
+      },
+      {
+        "name": "Jeffrey F Lin",
+        "url": "https://unsplash.com/photos/6k0VD3xNw6U"
+      },
+      {
+        "name": "Parabol",
+        "url": "https://unsplash.com/photos/qSv1gwYEfa8"
+      },
+      {
+        "name": "Joel Mott",
+        "url": "https://unsplash.com/photos/dQBkIZzyM-4"
+      },
+      {
+        "name": "Christina @ wocintechchat.com",
+        "url": "https://unsplash.com/photos/eF7HN40WbAQ"
+      },
+      {
+        "name": "Mina Rad",
+        "url": "https://unsplash.com/photos/-P7kHROe-6A"
+      }
+    ]
   }
 }
