@@ -5,6 +5,7 @@
  * Unnumbered: nine areas of intervention, mobilised as needed. Not a sequence.
  */
 import Band from '@/components/Band.astro';
+import SectionImage from '@/components/SectionImage.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import { capitalizeFirst } from '@/lib/text';
 import type { SectionType } from '@/config/site';
@@ -39,6 +40,8 @@ const items = s.items.map((item) => capitalizeFirst(item, locale));
       ))
     }
   </ul>
+
+  <SectionImage locale={locale} image="services" />
 </Band>
 
 <style>

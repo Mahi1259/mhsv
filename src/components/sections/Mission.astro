@@ -7,6 +7,7 @@
  * and implied a precedence the content pack never states.
  */
 import Band from '@/components/Band.astro';
+import SectionImage from '@/components/SectionImage.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import type { SectionType } from '@/config/site';
 
@@ -30,6 +31,8 @@ const s = getContent(locale).sections.mission;
       ))
     }
   </ul>
+
+  <SectionImage locale={locale} image="mission" />
 </Band>
 
 <style>

@@ -17,13 +17,20 @@ import { getContent, type Locale } from '@/lib/i18n';
 
 interface Props {
   locale: Locale;
-  /** Matches the file stem in src/assets/stock/ and the key in content. */
-  slot: 'about' | 'audience' | 'pathway' | 'inclusion';
+  /**
+   * Matches the file stem in src/assets/stock/ and the key in content.
+   *
+   * NOT called `slot`. `slot` is reserved in Astro for named-slot assignment,
+   * so `<SectionImage slot="about" />` was read as "put this child in the
+   * parent's slot named about" - and since Band has only a default slot, the
+   * component was dropped without rendering and without error.
+   */
+  image: 'about' | 'mission' | 'audience' | 'programmes' | 'services' | 'fees' | 'ecosystem';
   /** Above the fold loads eagerly; everything else waits. */
   eager?: boolean;
 }
 
-const { locale, slot, eager = false } = Astro.props;
+const { locale, image, eager = false } = Astro.props;
 const c = getContent(locale);
 
 const files = import.meta.glob<{ default: ImageMetadata }>(
@@ -31,9 +38,9 @@ const files = import.meta.glob<{ default: ImageMetadata }>(
   { eager: true },
 );
 const entry = Object.entries(files).find(
-  ([path]) => path.split('/').pop()?.replace(/\.[^.]+$/, '') === slot,
+  ([path]) => path.split('/').pop()?.replace(/\.[^.]+$/, '') === image,
 );
-const meta = c.stock[slot] as { alt: string; credit?: string };
+const meta = c.stock[image] as { alt: string; credit?: string };
 ---
 
 {

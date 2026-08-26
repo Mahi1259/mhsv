@@ -446,16 +446,32 @@
   },
   "stock": {
     "about": {
-      "alt": "Athletes in training"
+      "alt": "A teacher addressing a group in a classroom",
+      "credit": "Photo by Vitaly Gariev on Unsplash"
+    },
+    "mission": {
+      "alt": "Students taking notes during a class",
+      "credit": "Photo by Timur Shakerzianov on Unsplash"
     },
     "audience": {
-      "alt": "Young people in a learning setting"
+      "alt": "Two people training in a gym",
+      "credit": "Photo by Meghan Holmes on Unsplash"
     },
-    "pathway": {
-      "alt": "A mentor working one-to-one with a young person"
+    "programmes": {
+      "alt": "A group training outdoors",
+      "credit": "Photo by Gabin Vallet on Unsplash"
     },
-    "inclusion": {
-      "alt": "A person in a professional setting"
+    "services": {
+      "alt": "Two people in conversation across a table",
+      "credit": "Photo by Christina @ wocintechchat.com on Unsplash"
+    },
+    "fees": {
+      "alt": "A one-to-one meeting with documents on the table",
+      "credit": "Photo by Mina Rad on Unsplash"
+    },
+    "ecosystem": {
+      "alt": "A group joining hands in the centre, seen from above",
+      "credit": "Photo by Parabol on Unsplash"
     }
   },
   "railLabels": {
