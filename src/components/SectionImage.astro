@@ -26,11 +26,14 @@ interface Props {
    * component was dropped without rendering and without error.
    */
   image: 'about' | 'mission' | 'audience' | 'programmes' | 'services' | 'fees' | 'ecosystem';
-  /** Above the fold loads eagerly; everything else waits. */
-  eager?: boolean;
+  /**
+   * Which edge the figure sits against. Alternated down the page so the
+   * photographs read as an editorial rhythm rather than a column of banners.
+   */
+  align?: 'start' | 'end';
 }
 
-const { locale, image, eager = false } = Astro.props;
+const { locale, image, align = 'end' } = Astro.props;
 const c = getContent(locale);
 
 const files = import.meta.glob<{ default: ImageMetadata }>(
@@ -45,43 +48,99 @@ const meta = c.stock[image] as { alt: string; credit?: string };
 
 {
   entry && (
-    <figure class="section-image">
-      <Picture
-        src={entry[1].default}
-        alt={meta.alt}
-        formats={['webp']}
-        {/* jpg, not png. These are photographs: a PNG fallback of a 2000px
-            photo runs to tens of megabytes - one reached 56MB - because PNG is
-            lossless and built for flat colour, not for continuous tone. */}
-        fallbackFormat="jpg"
-        widths={[640, 1000, 1600]}
-        {/* Measured, not guessed: inside a band's content column these render
-            918px wide at a 1440px viewport, so a 40rem (640px) hint had the
-            browser fetching a source 0.7x the size it was drawing. */}
-        sizes="(min-width: 62rem) 58rem, 92vw"
-        loading={eager ? 'eager' : 'lazy'}
-        decoding="async"
-      />
+    <figure class:list={['section-image', `section-image--${align}`]}>
+      <div class="section-image__frame">
+        {/*
+          fallbackFormat is jpg, not png: these are photographs, and a PNG
+          fallback of a 2000px photo runs to tens of megabytes - one reached
+          56MB - because PNG is lossless and built for flat colour.
+
+          `sizes` is measured, not guessed: in this frame they render about
+          590px wide at a 1440px viewport.
+        */}
+        <Picture
+          src={entry[1].default}
+          alt={meta.alt}
+          formats={['webp']}
+          fallbackFormat="jpg"
+          widths={[640, 1000, 1600]}
+          sizes="(min-width: 62rem) 38rem, 92vw"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
       {meta.credit && <figcaption class="section-image__credit">{meta.credit}</figcaption>}
     </figure>
   )
 }
 
 <style>
+  /*
+   * A photograph, not a banner.
+   *
+   * These were the full width of the text column, at their own aspect ratios,
+   * hard against the paragraph above - 918px of saturated colour interrupting
+   * a navy page set in restrained type. Three things fix that: space, a
+   * consistent frame, and a tint that puts them in the palette instead of on
+   * top of it.
+   */
   .section-image {
-    margin: 0;
+    /* The gap that was missing entirely. */
+    margin: clamp(2.5rem, 2rem + 2vw, 4rem) 0 0;
+    max-width: 38rem;
   }
 
-  .section-image :global(img) {
+  /* Alternated at the call sites, so the eye is not led down one edge. */
+  .section-image--end {
+    margin-inline-start: auto;
+  }
+
+  .section-image--start {
+    margin-inline-end: auto;
+  }
+
+  /*
+   * One ratio for every photograph. They arrived between 3:2 and 16:9, which
+   * made each section a different height for no reason a reader could see.
+   */
+  .section-image__frame {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    border-radius: var(--radius);
+    border: 1px solid var(--card-edge);
+  }
+
+  .section-image__frame :global(img) {
     display: block;
     width: 100%;
-    height: auto;
-    border: 1px solid var(--band-rule);
-    border-radius: var(--radius);
+    height: 100%;
+    object-fit: cover;
+    /* Pulled back from full saturation so the photographs sit beside gold and
+       navy rather than competing with them. */
+    filter: saturate(0.78) contrast(1.04);
+  }
+
+  /*
+   * A navy wash, deepest at the foot, so the frame settles into the ground it
+   * sits on instead of ending in a hard bright edge. The caption reads on the
+   * ground below, not on the image, so nothing here affects its contrast.
+   */
+  .section-image__frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgb(7 20 38 / 0.1) 0%,
+      rgb(7 20 38 / 0.28) 55%,
+      rgb(7 20 38 / 0.62) 100%
+    );
   }
 
   .section-image__credit {
-    margin-block-start: 0.5rem;
+    margin-block-start: 0.625rem;
     color: var(--band-muted);
     font-family: var(--font-mono);
     font-size: 0.6875rem;
