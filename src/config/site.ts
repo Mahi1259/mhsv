@@ -86,6 +86,15 @@ export const LEGAL_PAGE_IDS = [
   'forms',
 ] as const satisfies readonly LegalPageId[];
 
+/**
+ * The languages the newsletter is actually sent in.
+ *
+ * The site is published in four; the newsletter is written in two. Offering a
+ * German or Italian option would put a subscriber on a list for an edition
+ * that does not exist.
+ */
+export const NEWSLETTER_LOCALES = ['fr', 'en'] as const satisfies readonly Locale[];
+
 export const STATUS_KEYS = [
   'active',
   'inDevelopment',

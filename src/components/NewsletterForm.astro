@@ -8,7 +8,7 @@
  */
 import FormShell from '@/components/FormShell.astro';
 import { getContent, legalPath, type Locale } from '@/lib/i18n';
-import { LOCALES } from '@/config/site';
+import { NEWSLETTER_LOCALES } from '@/config/site';
 
 interface Props {
   locale: Locale;
@@ -53,7 +53,7 @@ const strings = {
       <label for="nl-language">{n.language} <span class="form__req" aria-hidden="true">*</span></label>
       <select id="nl-language" name="language" required aria-describedby="nl-language-error">
         {
-          LOCALES.map((code) => (
+          NEWSLETTER_LOCALES.map((code) => (
             <option value={code} selected={code === locale}>
               {getContent(code).meta.name}
             </option>
