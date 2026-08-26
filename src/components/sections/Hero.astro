@@ -11,7 +11,19 @@
 import { Image } from 'astro:assets';
 import { getContent, type Locale } from '@/lib/i18n';
 import { SHOW_LEGAL_STATUS } from '@/config/site';
-import logo from '@/assets/logo/mhsv-logo.png';
+/*
+ * The lockup MHSV® supplied on 26 August, trimmed to its own content box.
+ *
+ * Client-supplied, NOT derived by scripts/prepare-assets.mjs - which is why it
+ * has its own filename: `assets:prepare` regenerates mhsv-logo.png from the
+ * content pack and would overwrite this one on the next run.
+ *
+ * The file arrived with an uneven transparent margin - 195px on the left
+ * against 174 on the right, 140 at the bottom against 9 at the top - so using
+ * it as-is would have rendered it off-centre and smaller than its box. Trimmed
+ * to 1254x1174 of actual artwork.
+ */
+import logo from '@/assets/logo/mhsv-lockup.png';
 
 interface Props {
   locale: Locale;

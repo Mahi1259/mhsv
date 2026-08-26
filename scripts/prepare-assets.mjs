@@ -387,6 +387,13 @@ async function contentBox(file) {
   return { left, top, width: right - left + 1, height: bottom - top + 1 };
 }
 
+/*
+ * NOTE: src/assets/logo/mhsv-lockup.png is NOT built here. MHSV® supplied it
+ * directly on 26 August and the hero uses it. It has its own name precisely so
+ * this script cannot overwrite it - mhsv-logo.png below is still derived from
+ * the content pack and still used by the identity section.
+ */
+
 async function buildBookCovers() {
   mkdirSync(resolve(ROOT, 'src/assets/book'), { recursive: true });
   for (const [loc, rel] of [
