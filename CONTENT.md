@@ -1,4 +1,4 @@
-# Content — where every string comes from
+# Content - where every string comes from
 
 Two sources feed `src/content/i18n/{fr,en,de,it}.json`, which is **generated**
 and must never be hand-edited:
@@ -13,11 +13,11 @@ Run `npm run content:extract` after changing either.
 
 ---
 
-## 1. From the client's pack (do not retype — edit the .docx)
+## 1. From the client's pack (do not retype - edit the .docx)
 
 The document holds four parallel language blocks, each with the same 21
 numbered sections. The extractor segments by language marker, then by
-`NN — TITLE`, then maps each section's blocks onto a fixed shape.
+`NN - TITLE`, then maps each section's blocks onto a fixed shape.
 
 | § | Section | What is extracted |
 | --- | --- | --- |
@@ -38,7 +38,7 @@ numbered sections. The extractor segments by language marker, then by
 | 15 | Digital | roadmap items, 2 paragraphs, status |
 | 16 | Team | 5 × name / role / email-or-pending |
 | 17 | Founder | name, role, bio, quote |
-| 18 | Founding book | *(nothing — see below)* |
+| 18 | Founding book | *(nothing - see below)* |
 | 19 | Identity | collection notice (verbatim), status |
 | 20 | Roadmap | 7 items, status |
 | 21 | Contact | tagline, contact line, legal footer |
@@ -52,16 +52,16 @@ The extractor relies on the pack's structure. If a future revision changes
 these, extraction fails loudly rather than silently producing wrong output:
 
 - exactly four language blocks, each opened by a flag emoji;
-- exactly 21 sections per language, headed `NN — TITLE`;
+- exactly 21 sections per language, headed `NN - TITLE`;
 - the same block order within each section across all four languages;
 - lists separated by `;`, `|` or `->`, matching the current document;
 - §12 introduces its discipline list with `:` in FR/DE/IT and with
-  `including` in EN — the one place the document is not uniform, handled by a
+  `including` in EN - the one place the document is not uniform, handled by a
   per-locale hint in `scripts/extract-content.mjs`.
 
 ---
 
-## 2. Authored by the developer — **needs client validation**
+## 2. Authored by the developer - **needs client validation**
 
 These are not in the pack. They were written for the prototype and should be
 reviewed, especially the FR/DE/IT wording. All live in
@@ -82,17 +82,17 @@ content.
 ### Contact form
 
 All field labels, the placeholder, the consent sentence, the submit and sending
-labels, success and error messages, and every per-field validation message —
+labels, success and error messages, and every per-field validation message -
 in all four languages.
 
-### §18 Founding book, §19 Identity — *most important to review*
+### §18 Founding book, §19 Identity - *most important to review*
 
 The pack's text for these sections is **instructions to the developer**
 ("Show the cover of…", "Provide an elegant space for…"), not publishable prose.
 Public copy was therefore written: the book's lead, description and no-download
 notice; the identity lead, logo caption and reserved-placement labels.
 
-The one sentence the pack marks as *"Public wording"* — the collection notice —
+The one sentence the pack marks as *"Public wording"* - the collection notice -
 is reproduced **verbatim** and is covered by a hard constraint.
 
 ### §02 alternative opening
@@ -119,7 +119,7 @@ The whole privacy policy (BLOCKERS #5) and the legal-notice page scaffolding.
 
 ### Swiss German note
 
-The German file uses Swiss Standard German throughout: **`ss`, never `ß`** —
+The German file uses Swiss Standard German throughout: **`ss`, never `ß`** -
 matching the pack, which writes "Fussball" and "ausserordentlich".
 
 ---
@@ -128,11 +128,11 @@ matching the pack, which writes "Fussball" and "ausserordentlich".
 
 `npm run content:check`:
 
-- every locale has exactly the same keys — a missing translation fails the build;
+- every locale has exactly the same keys - a missing translation fails the build;
 - parallel arrays are the same length across locales (six mission areas
   everywhere, nine services everywhere, and so on);
 - no empty strings, which usually mean a silent extraction failure;
-- retired wording — **"Beyond Football"** — appears nowhere;
+- retired wording - **"Beyond Football"** - appears nowhere;
 - no reference to a `REFERENCE_ONLY`, `INTERNAL_REFERENCE` or
   `REVIEW_REQUIRED` asset.
 

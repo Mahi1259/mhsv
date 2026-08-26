@@ -1,6 +1,6 @@
-# MHSV® — Phase 1 website
+# MHSV® - Phase 1 website
 
-Single-page, four-language showcase site for **MHSV® — International Centre for
+Single-page, four-language showcase site for **MHSV® - International Centre for
 Development and Transition** (Geneva, Switzerland).
 
 Built with **Astro** (static output), **Tailwind CSS v4** and **TypeScript**.
@@ -10,7 +10,7 @@ almost anywhere.
 | | |
 | --- | --- |
 | Languages | French (default), English, Swiss Standard German, Italian |
-| URLs | `/fr/`, `/en/`, `/de/`, `/it/` — `/` redirects to `/fr/` |
+| URLs | `/fr/`, `/en/`, `/de/`, `/it/` - `/` redirects to `/fr/` |
 | Sections | 21, on one page per language, in five archetypes |
 | Content source | `…Content_Pack_Phase1_Developer_Ready_V3.docx`, superseded where the 14 Aug 2026 brief differs |
 | Pages | one per locale, plus `/livre` (permanent QR destination), privacy, form results |
@@ -66,7 +66,7 @@ succeeds is a build that satisfies the constraints.
 
 The generated locale JSON and the derived assets are **committed**. The `.docx`
 and `ASSET_STATUS.csv` live outside the repository and are deliberately not
-pushed — the pack contains `INTERNAL_REFERENCE` material that must never reach a
+pushed - the pack contains `INTERNAL_REFERENCE` material that must never reach a
 public host.
 
 So regenerating is an explicit local step (`content:extract` / `assets:prepare`),
@@ -93,7 +93,7 @@ scripts/
 src/
   config/site.ts           locales, flags, section order + archetypes + grounds
   content/
-    i18n/*.json            GENERATED — do not edit by hand
+    i18n/*.json            GENERATED - do not edit by hand
     authored/*.json        hand-written UI strings (see CONTENT.md)
     _audit/                raw pack text, for client cross-checking
   lib/                     i18n access, text helpers
@@ -105,7 +105,7 @@ src/
     FormShell + ContactForm / BookOrderForm / NewsletterForm
   pages/
     index.astro            language gateway + redirect to /fr/
-    livre.astro            PERMANENT QR destination — bilingual, must not move
+    livre.astro            PERMANENT QR destination - bilingual, must not move
     [lang]/index.astro     the single page
     [lang]/privacy.astro
     [lang]/legal-notice.astro     (only built when the legal flag is on)
@@ -114,7 +114,7 @@ src/
     [lang]/newsletter-sent.astro  (no-JS newsletter result)
     robots.txt.ts
 
-qr/                        print assets — deliberately NOT under public/
+qr/                        print assets - deliberately NOT under public/
 
 api/contact.mjs            Vercel entry point for POST /api/contact
 functions/
@@ -126,7 +126,7 @@ functions/
 
 ## Editing content
 
-**Never edit `src/content/i18n/*.json` directly — it is overwritten on every
+**Never edit `src/content/i18n/*.json` directly - it is overwritten on every
 build.**
 
 - **Copy that comes from the client's content pack**: edit the `.docx`, then run
@@ -142,7 +142,7 @@ still need client validation.
 
 ### Semantic parity
 
-The four locales must express the same things — a client requirement.
+The four locales must express the same things - a client requirement.
 `npm run content:check` fails the build if any locale is missing a key another
 has, or if parallel lists differ in length (six mission areas in French but five
 in German, say). It also fails on retired wording such as "Beyond Football".
@@ -167,8 +167,8 @@ derive from `LOCALES`, so nothing else needs touching.
 ## Design system
 
 The ground is **navy**, not black. The approved logo's shield is `#001D49`;
-black sits badly beside it. Gold is an accent only — rules, active states,
-small marks — never a large fill.
+black sits badly beside it. Gold is an accent only - rules, active states,
+small marks - never a large fill.
 
 ```css
 --navy: #0C1D3A;  --navy-deep: #071426;  --navy-raise: #14284A;
@@ -182,7 +182,7 @@ set `--gold` as text on a light band.
 ### Section archetypes
 
 Every section takes one of five types, declared once in `SECTION_ORDER`. Each
-has its own measure and vertical rhythm — identical slab heights were what made
+has its own measure and vertical rhythm - identical slab heights were what made
 a 21-section page read as 21 slides.
 
 | Type | Used for | Character |
@@ -198,7 +198,7 @@ internal editorial index, not website copy. On wide screens a sticky margin
 label shows the short navigation name instead, which actually orients.
 
 **There are no dividers between sections.** Separation is space plus an
-occasional change of ground — about every third or fourth section, gradiented
+occasional change of ground - about every third or fourth section, gradiented
 over ~160px rather than hard-cut.
 
 ### Motion
@@ -209,7 +209,7 @@ interactive state.
 
 **`prefers-reduced-motion: reduce` disables all of it.** The reveal styles only
 apply under `html.js`, and that class is added by script *after* the preference
-check — so with reduced motion, or with JavaScript off, nothing is ever hidden
+check - so with reduced motion, or with JavaScript off, nothing is ever hidden
 and nothing animates. Verified: 0 elements with an active transition or
 animation.
 
@@ -217,7 +217,7 @@ animation.
 
 ## Adding a section
 
-Sections are declared once, in `SECTION_ORDER` in `src/config/site.ts` — id,
+Sections are declared once, in `SECTION_ORDER` in `src/config/site.ts` - id,
 anchor and band tone. Add an entry, create
 `src/components/sections/YourSection.astro` following any existing one, and
 render it in `src/pages/[lang]/index.astro`. The footer index and the anchor
@@ -234,7 +234,7 @@ Set in the environment; see `.env.example`.
 
 | Variable | Default | Effect |
 | --- | --- | --- |
-| `PUBLIC_SITE_URL` | auto-detected — see below | Canonical URLs, `hreflang`, Open Graph, sitemap, robots.txt |
+| `PUBLIC_SITE_URL` | auto-detected - see below | Canonical URLs, `hreflang`, Open Graph, sitemap, robots.txt |
 | `PUBLIC_SHOW_LEGAL_STATUS` | `false` | Reveals the hero legal line, the legal footer, the `/legal-notice/` page, and restores §02's original opening sentence |
 | `PUBLIC_PRIVACY_IS_DRAFT` | `true` | Shows the "pending legal validation" notice on the privacy page |
 
@@ -244,7 +244,7 @@ checks; flip one variable once the client decides.
 
 ### Changing the domain
 
-The domain lives in **one place**: `PUBLIC_SITE_URL`. Set it, redeploy, done —
+The domain lives in **one place**: `PUBLIC_SITE_URL`. Set it, redeploy, done -
 canonical links, `hreflang` alternates, Open Graph URLs, the sitemap and
 `robots.txt` all follow. Nothing is hard-coded, and neither `vercel.json` nor
 `netlify.toml` contains a domain.
@@ -255,7 +255,7 @@ When it is not set, `site-url.mjs` works out the origin:
 | --- | --- | --- |
 | `PUBLIC_SITE_URL` set | that value | yes |
 | Vercel production, not set | the project's production domain (follows the custom domain once attached) | yes |
-| Vercel preview / branch deploy | that deployment's own URL | **no** — `noindex` + `Disallow: /` |
+| Vercel preview / branch deploy | that deployment's own URL | **no** - `noindex` + `Disallow: /` |
 | Local build | `http://localhost:4321` | no |
 
 Preview deployments canonicalise to themselves and are blocked from indexing,
@@ -273,7 +273,7 @@ Every build prints the origin it used:
 See [`DEPLOY.md`](./DEPLOY.md) for Vercel, Netlify and Cloudflare, DNS, the
 contact-form mailbox, and the security headers.
 
-Short version — build command `npm run build`, output directory `dist`:
+Short version - build command `npm run build`, output directory `dist`:
 
 | Host | Config | Contact function |
 | --- | --- | --- |
@@ -289,10 +289,10 @@ All three share the validation and sending logic in
 ## Handover checklist
 
 - [x] Full source code
-- [x] Technical documentation — this file, `CONTENT.md`, `DEPLOY.md`, `BLOCKERS.md`
-- [x] Asset inventory — [`ASSET_INVENTORY.md`](./ASSET_INVENTORY.md), generated from `ASSET_STATUS.csv`
-- [ ] Git repository access — create the repo and add MHSV® as owner
-- [ ] Hosting / admin credentials — see `DEPLOY.md`
+- [x] Technical documentation - this file, `CONTENT.md`, `DEPLOY.md`, `BLOCKERS.md`
+- [x] Asset inventory - [`ASSET_INVENTORY.md`](./ASSET_INVENTORY.md), generated from `ASSET_STATUS.csv`
+- [ ] Git repository access - create the repo and add MHSV® as owner
+- [ ] Hosting / admin credentials - see `DEPLOY.md`
 - [ ] `infos@mhsv-international.org` created and set as `CONTACT_RECIPIENT`
 - [ ] Privacy policy replaced with the lawyer's text
 - [ ] Client sign-off on the strings listed in `CONTENT.md`

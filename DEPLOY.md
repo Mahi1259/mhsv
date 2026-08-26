@@ -5,7 +5,7 @@ on a server: no database, no CMS, no third-party scripts.
 
 ---
 
-## The build is self-contained — read this first
+## The build is self-contained - read this first
 
 `npm run build` **does not need the client's developer pack.** It validates the
 committed locale JSON, builds, and checks the output:
@@ -16,8 +16,8 @@ content:check  →  astro build  →  build:check
 
 The generated content (`src/content/i18n/*.json`) and the derived assets
 (`src/assets/`, `public/fonts/`, the icons) are **committed to the repository**,
-because the `.docx` and `ASSET_STATUS.csv` live outside it and are not — and
-should not be — pushed. The pack contains `INTERNAL_REFERENCE` material that
+because the `.docx` and `ASSET_STATUS.csv` live outside it and are not - and
+should not be - pushed. The pack contains `INTERNAL_REFERENCE` material that
 must never reach a public host.
 
 Regenerating from the pack is a deliberate local step:
@@ -29,14 +29,14 @@ npm run build:from-pack     # both, then build
 ```
 
 Then commit the regenerated files. If a CI build ever calls `content:extract`,
-it will fail with `ENOENT` on the `.docx` — that is the pack not being there,
+it will fail with `ENOENT` on the `.docx` - that is the pack not being there,
 not a broken script.
 
 ---
 
 ## Before the first deploy
 
-Two things must be settled — see `BLOCKERS.md`:
+Two things must be settled - see `BLOCKERS.md`:
 
 1. **Which domain serves the site** (#4). `mhsv.ch` and
    `mhsv-international.org` cannot both serve it; one must 301 to the other.
@@ -62,7 +62,7 @@ the security headers. The contact function is `api/contact.mjs`, exposed at
 | Node version | 20 or 22 |
 
 The function runs on the **Node** runtime, not Edge, so the SMTP transport keeps
-working — Edge cannot open a TCP socket. `api/contact.mjs` is a thin adapter
+working - Edge cannot open a TCP socket. `api/contact.mjs` is a thin adapter
 over the shared core in `functions/lib/contact-core.mjs`; it handles both the
 pre-parsed urlencoded body Vercel hands over for a no-JavaScript submit and the
 raw multipart stream from the JavaScript submit. `npm run test:api` covers both.
@@ -87,7 +87,7 @@ the project stays portable; Vercel ignores them.
 | Node version | 20 |
 
 The function is exposed at `/api/contact` by `export const config` in
-`functions/contact.mjs` — no redirect rule needed.
+`functions/contact.mjs` - no redirect rule needed.
 
 ### Environment variables
 
@@ -98,11 +98,11 @@ The same set applies to Vercel, Netlify and Cloudflare.
 | `PUBLIC_SITE_URL` | `https://www.mhsv.ch` | **Production only.** Must match the live origin exactly, including `www`. Leave it unset on Preview so previews canonicalise to themselves |
 | `PUBLIC_SHOW_LEGAL_STATUS` | `false` | Until BLOCKERS #1 is answered |
 | `PUBLIC_PRIVACY_IS_DRAFT` | `true` | Until the lawyer's text lands |
-| `CONTACT_RECIPIENT` | `infos@mhsv-international.org` | BLOCKERS #2 — create the mailbox first |
+| `CONTACT_RECIPIENT` | `infos@mhsv-international.org` | BLOCKERS #2 - create the mailbox first |
 | `CONTACT_SENDER` | `website@mhsv.ch` | Must be on an authenticated domain you own |
 | `CONTACT_TRANSPORT` | `log` → `resend` or `smtp` | See below |
-| `RESEND_API_KEY` | — | Only for `resend` |
-| `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASSWORD` | — | Only for `smtp` |
+| `RESEND_API_KEY` | - | Only for `resend` |
+| `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASSWORD` | - | Only for `smtp` |
 
 The `PUBLIC_` prefix is required for anything the browser sees; the contact
 variables have no prefix and stay server-side.
@@ -115,14 +115,14 @@ Build command and output directory are the same. The function needs a small
 adapter, because the core is host-independent:
 
 ```js
-// functions/api/contact.js  — Cloudflare Pages Functions
+// functions/api/contact.js  - Cloudflare Pages Functions
 import { handleContact } from '../lib/contact-core.mjs';
 
 export const onRequest = ({ request, env }) => handleContact(request, env);
 ```
 
 Set the same variables under **Settings → Environment variables**. Use
-`CONTACT_TRANSPORT=resend` — Workers have no raw TCP, so `smtp` (nodemailer)
+`CONTACT_TRANSPORT=resend` - Workers have no raw TCP, so `smtp` (nodemailer)
 will not run there. Headers and redirects come from `public/_redirects` and a
 `public/_headers` file mirroring the `netlify.toml` header block.
 
@@ -130,21 +130,21 @@ will not run there. Headers and redirects come from `public/_redirects` and a
 
 ## Contact form transports
 
-### `log` — before the mailbox exists
+### `log` - before the mailbox exists
 
 Runs the full pipeline and writes the submission to the function log instead of
 sending. Use this to verify the form end-to-end without losing anything.
 
-### `resend` — recommended
+### `resend` - recommended
 
 Zero dependencies; the core calls the HTTP API directly. Create the key, verify
 the sending domain (SPF + DKIM), set `RESEND_API_KEY`.
 
-### `smtp` — for a Swiss host
+### `smtp` - for a Swiss host
 
 Works with Infomaniak, Hostpoint and similar, which suits a Swiss non-profit
 keeping data in Switzerland. Uses `nodemailer`, imported lazily so it is only
-bundled when selected. Netlify only — see the Cloudflare note above.
+bundled when selected. Netlify only - see the Cloudflare note above.
 
 **`CONTACT_SENDER` must be on a domain you control and have authenticated.**
 Sending as the visitor's address will fail SPF/DKIM and land in spam. The
@@ -186,7 +186,7 @@ regenerate from it. Every build prints what it resolved:
 · building for https://www.mhsv.ch  (from PUBLIC_SITE_URL)
 ```
 
-Check that line in the deploy log — it is the fastest way to catch a
+Check that line in the deploy log - it is the fastest way to catch a
 misconfigured origin.
 
 If the domain shown in the page's §21 contact block also changes, that is
@@ -208,7 +208,7 @@ compete in search. HTTPS is automatic on both hosts; force the redirect.
 
 Previews resolve their origin to their own `*.vercel.app` URL and ship
 `noindex` plus `Disallow: /`, so they can never be indexed or send crawlers to
-production. Do **not** set `PUBLIC_SITE_URL` on the Preview environment — that
+production. Do **not** set `PUBLIC_SITE_URL` on the Preview environment - that
 would make previews claim to be production.
 
 ---
@@ -217,7 +217,7 @@ would make previews claim to be production.
 
 Configured in `netlify.toml`. The Content-Security-Policy is closed to `'self'`
 for scripts, styles, fonts, images and connections, because the site makes **no
-third-party requests at all** — fonts are self-hosted, there is no analytics and
+third-party requests at all** - fonts are self-hosted, there is no analytics and
 no CAPTCHA.
 
 `'unsafe-inline'` is present for styles (Astro inlines the stylesheet) and for
@@ -226,7 +226,7 @@ is possible later; it needs the CSP to be generated at build time.
 
 ---
 
-## After deploy — verify
+## After deploy - verify
 
 ```bash
 npm run build && npm run preview     # locally, one terminal
@@ -242,5 +242,5 @@ Then against the live site:
 - the contact form works with **and without** JavaScript;
 - Lighthouse ≥ 95 on all four categories (locally: 100 desktop, 97–99 mobile).
 
-Re-run Lighthouse against the deployed URL — local preview has no network
+Re-run Lighthouse against the deployed URL - local preview has no network
 latency and flatters the result.

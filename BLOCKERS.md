@@ -1,8 +1,8 @@
-# Blockers — decisions needed from MHSV®
+# Blockers - decisions needed from MHSV®
 
 Updated after the **14 August 2026 update brief**, which resolved several
 earlier items. The site is complete and deployable as it stands; everything
-below is handled defensively — where something is unresolved, the build
+below is handled defensively - where something is unresolved, the build
 withholds it rather than guessing.
 
 ---
@@ -19,12 +19,12 @@ withholds it rather than guessing.
 
 ---
 
-## 1. Legal footer contradiction — **still open, highest priority**
+## 1. Legal footer contradiction - **still open, highest priority**
 
-The content pack states "Swiss non-profit association — Geneva" (§01, §21) and
+The content pack states "Swiss non-profit association - Geneva" (§01, §21) and
 specifies a full legal footer. A later client instruction says not to display
 association or legal status until the lawyer has validated the statutes. The
-14 August brief does not resolve this — it says only "keep Legal Notice and
+14 August brief does not resolve this - it says only "keep Legal Notice and
 Privacy Policy placeholders; final legal wording remains subject to approval".
 
 **What the build does.** Ships with `PUBLIC_SHOW_LEGAL_STATUS=false`, which
@@ -41,7 +41,7 @@ or set it to `true`. No code change either way.
 
 ---
 
-## 2. Privacy policy does not exist — **legal requirement**
+## 2. Privacy policy does not exist - **legal requirement**
 
 Three forms now ask for consent and all three must link to a real policy. Under
 the Swiss FADP this is not optional.
@@ -49,7 +49,7 @@ the Swiss FADP this is not optional.
 **What the build does.** `/{locale}/privacy/` ships a developer-written draft
 describing what the site actually does: the exact fields each form collects,
 the purpose, the recipient, retention, the absence of tracking cookies and
-third-party analytics, and FADP rights. It carries a visible "draft — pending
+third-party analytics, and FADP rights. It carries a visible "draft - pending
 legal validation" notice in all four languages.
 
 **It is not legal advice and must not go live unreviewed.** The newsletter adds
@@ -63,7 +63,7 @@ a processor (the mailing provider) that the final text must name.
 ## 3. Newsletter provider account
 
 The subscription flow is built and tested but points at nothing yet. It runs
-with `NEWSLETTER_PROVIDER=log` — subscriptions are written to the function log
+with `NEWSLETTER_PROVIDER=log` - subscriptions are written to the function log
 rather than a list, so nothing is lost while the account is set up.
 
 Deliberately not a bespoke list: double opt-in, unsubscribe links and
@@ -88,7 +88,7 @@ payment at all.
 
 ---
 
-## 5. QR code — print approval
+## 5. QR code - print approval
 
 `npm run qr` produces the print assets in `qr/` (vector SVG plus 300 dpi PNGs
 at 25 mm and 30 mm). They encode exactly `https://www.mhsv.ch/livre`, verified
@@ -100,7 +100,7 @@ by decoding the generated files, not merely by trusting the encoder.
 2. Test a printed proof on several phones, systems and scanner apps.
 3. Approve the proof in writing.
 
-Per the brief, the QR is **not** integrated into the book covers here — MHSV®'s
+Per the brief, the QR is **not** integrated into the book covers here - MHSV®'s
 layout specialist places the supplied files.
 
 ---
@@ -118,7 +118,7 @@ which only means something if the accounts are theirs.
 The pack gives the six labels but no descriptions, and states that detailed
 internal protocols are not for publication. Each pillar carries a short generic
 line drawn from vocabulary already in the pack, under a visible "provisional
-descriptions — final wording to be supplied by MHSV®" note.
+descriptions - final wording to be supplied by MHSV®" note.
 
 **Decision needed.** Supply the six descriptions, or confirm the placeholders.
 They live at `sections.method.pillarNotes`.
@@ -161,7 +161,7 @@ Listed in full in `CONTENT.md`. The most important:
 | 3 | Newsletter provider | Yes, for that section | `NEWSLETTER_PROVIDER=log` |
 | 4 | Book price / payment | No | Order request, not a purchase |
 | 5 | QR print approval | Before print | Files generated and decode-verified |
-| 6 | Hosting ownership | Yes | — |
+| 6 | Hosting ownership | Yes | - |
 | 7 | Pillar descriptions | No | Placeholders + visible note |
 | 8 | French-only wordmark | No | Asset rule followed |
 | 9 | Authored copy | No | Listed in `CONTENT.md` |
