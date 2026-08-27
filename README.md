@@ -64,6 +64,14 @@ working SMTP or Resend credentials - submitting a form while trying things out
 must not deliver to a real inbox. To send for real:
 `MHSV_DEV_SEND=yes npm run dev`. `npm run dev:cf` runs the real Cloudflare
 function over `dist/` and does obey `.env`.
+
+It works with no `.env` at all - dev falls back to a placeholder recipient,
+since nothing is being delivered. `.env` is re-read on every request, so editing
+it needs no restart.
+
+**Changing `dev-api.mjs` does need a restart.** Astro restarts the dev server
+when `astro.config.mjs` changes but not when a module it imports changes, so the
+old middleware stays in memory and you keep seeing the previous behaviour.
 | `npm run assets:prepare` | Re-derive logo, favicons, book covers, fonts | **yes** |
 | `npm run build:from-pack` | Both of the above, then build | **yes** |
 
