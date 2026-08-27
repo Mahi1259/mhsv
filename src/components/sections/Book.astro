@@ -15,6 +15,11 @@ import { getContent, type Locale } from '@/lib/i18n';
 import { BOOK_PAGE_PATH, type SectionType } from '@/config/site';
 import coverFr from '@/assets/book/founding-book-fr.png';
 import coverEn from '@/assets/book/founding-book-en.png';
+/*
+ * Generated and payload-verified by scripts/generate-web-qr.mjs, which decodes
+ * the code before writing it. Same URL as the printed one on the back cover.
+ */
+import qrCode from '@/assets/qr/mhsv-livre-qr-web.svg?raw';
 
 interface Props {
   locale: Locale;
@@ -61,7 +66,20 @@ const covers = [
       <p class="book__kicker mono-label">{s.lead}</p>
       <p class="prose-body book__body">{s.body}</p>
       <p class="book__notice">{s.notice}</p>
-      <a class="btn btn--primary book__cta" href={BOOK_PAGE_PATH} data-magnetic>{s.ctaLabel}</a>
+      <div class="book__actions">
+        <a class="btn btn--primary book__cta" href={BOOK_PAGE_PATH} data-magnetic>{s.ctaLabel}</a>
+
+        {/* Desktop only, and hidden from assistive technology: a QR code is a
+            way to move a page from this screen to a phone, which is pointless
+            on the phone itself and unusable by a screen reader. The button
+            beside it goes to the same place, so nothing is lost by hiding it -
+            whereas announcing "QR code" to someone who cannot scan it is
+            noise. Title on the <svg> keeps it labelled if that ever changes. */}
+        <figure class="book__qr" aria-hidden="true">
+          <div class="book__qrCode" role="img" aria-label={s.qrAlt} set:html={qrCode} />
+          <figcaption class="book__qrCaption">{s.qrCaption}</figcaption>
+        </figure>
+      </div>
     </div>
   </div>
 </Band>
@@ -128,8 +146,58 @@ const covers = [
     line-height: 1.5;
   }
 
-  .book__cta {
+  .book__actions {
     margin-block-start: 1.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .book__cta {
+    margin-block-start: 0;
+  }
+
+  /*
+   * Hidden below the desktop breakpoint. `display: none` rather than a visual
+   * hide, so the markup costs a phone nothing.
+   */
+  .book__qr {
+    display: none;
+    margin: 0;
+    align-items: center;
+    gap: 0.875rem;
+  }
+
+  /* White, always. The code needs its light quiet zone to scan - tinting it to
+     match the band would make it decorative and unreadable. */
+  .book__qrCode {
+    flex: none;
+    width: 5.5rem;
+    height: 5.5rem;
+    padding: 0.375rem;
+    border-radius: calc(var(--radius) / 2);
+    background: #fff;
+    box-shadow: 0 8px 20px rgb(0 0 0 / 0.35);
+  }
+
+  .book__qrCode :global(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .book__qrCaption {
+    max-width: 22ch;
+    color: var(--band-muted);
+    font-size: 0.75rem;
+    line-height: 1.45;
+  }
+
+  @media (min-width: 52rem) {
+    .book__qr {
+      display: flex;
+    }
   }
 
   @media (min-width: 52rem) {

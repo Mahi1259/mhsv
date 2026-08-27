@@ -23,7 +23,8 @@
     "check:contrast": "node scripts/check-contrast.mjs",
     "check:motion": "node scripts/check-motion.mjs",
     "dev:cf": "wrangler pages dev dist --compatibility-flags nodejs_compat",
-    "test:cf": "node scripts/test-cf-api.mjs"
+    "test:cf": "node scripts/test-cf-api.mjs",
+    "qr:web": "node scripts/generate-web-qr.mjs"
   },
   "description": "MHSV® — International Centre for Development and Transition. Phase 1 showcase website (FR/EN/DE/IT).",
   "dependencies": {

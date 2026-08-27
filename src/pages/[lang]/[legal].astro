@@ -12,7 +12,14 @@
  */
 import Page from '@/layouts/Page.astro';
 import { getContent } from '@/lib/i18n';
-import { LOCALES, LEGAL_PAGES, LEGAL_PAGE_IDS, type LegalPageId, type Locale } from '@/config/site';
+import { LOCALES, LEGAL_PAGES, LEGAL_PAGE_IDS, type Locale } from '@/config/site';
+
+/*
+ * The four this route actually builds - NOT LegalPageId, which also covers
+ * photoCredits. That page has its own route and its own title, and typing the
+ * prop as the wider union asked for a title key that does not exist.
+ */
+type PlaceholderPageId = (typeof LEGAL_PAGE_IDS)[number];
 
 export function getStaticPaths() {
   return LOCALES.flatMap((lang) =>
@@ -24,7 +31,7 @@ export function getStaticPaths() {
 }
 
 const locale = Astro.params.lang as Locale;
-const { page } = Astro.props as { page: LegalPageId };
+const { page } = Astro.props as { page: PlaceholderPageId };
 const c = getContent(locale);
 const title = c.legalPages.titles[page];
 
