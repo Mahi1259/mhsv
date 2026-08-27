@@ -38,6 +38,10 @@ const s = getContent(locale).sections.team;
         <li class="team__card card">
           <h3 class="team__name">{member.name}</h3>
           <p class="team__role">{member.role}</p>
+          {/* The "Contact public" column from the 14 August brief. Read from
+              members[n].email - never hard-coded, so a committee correction is
+              a JSON edit in one place per language. */}
+          <a class="link team__email" href={`mailto:${member.email}`}>{member.email}</a>
         </li>
       ))
     }
@@ -64,6 +68,14 @@ const s = getContent(locale).sections.team;
     margin: 0;
     font-size: 1.0625rem;
     letter-spacing: -0.01em;
+  }
+
+  .team__email {
+    align-self: flex-start;
+    margin-block-start: 0.875rem;
+    padding-block: 0.1875rem;
+    font-size: 0.8125rem;
+    overflow-wrap: anywhere;
   }
 
   .team__role {
