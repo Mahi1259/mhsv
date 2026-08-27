@@ -57,6 +57,14 @@ const NOTICES = {
   cookies: c.cookiePolicy,
 } as const;
 const notice = page in NOTICES ? NOTICES[page as keyof typeof NOTICES] : null;
+
+/*
+ * Only the data protection notice has standing text above its sections, so
+ * `intro` is not on the other two. Narrowed here rather than padding the
+ * others with an empty array: an empty array in the content files is a signal
+ * that something failed to extract, and this is a genuine absence.
+ */
+const intro: string[] = notice && 'intro' in notice ? notice.intro : [];
 ---
 
 <Page locale={locale} path={LEGAL_PAGES[page][locale]} title={title} eyebrow={c.footer.legalTitle}>
@@ -70,9 +78,7 @@ const notice = page in NOTICES ? NOTICES[page as keyof typeof NOTICES] : null;
           <p class="notice__languages">{notice.officialLanguagesNote}</p>
         )}
 
-        {/* The legal notice starts straight at section 1; only the data
-            protection notice has standing text above its sections. */}
-        {notice.intro?.map((text) => (
+        {intro.map((text) => (
           <p class="notice__p">{text}</p>
         ))}
 

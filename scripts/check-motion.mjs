@@ -57,6 +57,25 @@ try {
     });
     check(stuck.length === 0, 'fast scroll leaves nothing invisible', stuck.slice(0, 3).join(', '));
 
+    /*
+     * Wait for the observer to finish marking everything before scrolling back,
+     * rather than assuming a fixed delay is enough.
+     *
+     * This used to sleep and hope. On a cold start - first load after a rebuild,
+     * server still warming - one element below the fold had not been observed
+     * yet, and the assertion below read that as "lost is-in" and failed a clean
+     * build. "Not marked yet" and "un-marked on the way back" are different
+     * things, and only the second one is a bug.
+     */
+    await page.waitForFunction(
+      () =>
+        Array.from(document.querySelectorAll('[data-reveal], [data-reveal-x], [data-stagger]'))
+          .every((el) => el.classList.contains('is-in')),
+      { timeout: 5000 },
+    ).catch(() => {
+      /* fall through - the assertion below reports which ones, and why */
+    });
+
     // Back to the top: nothing may replay.
     await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'auto' }));
     await new Promise((r) => setTimeout(r, 400));

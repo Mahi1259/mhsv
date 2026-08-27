@@ -39,11 +39,18 @@ const fail = (msg) => {
 // --- 1. the generated files decode to the expected URL ----------------------
 const QR_FILES = ['qr/mhsv-livre-qr-30mm.png', 'qr/mhsv-livre-qr-25mm.png', 'qr/mhsv-livre-qr.svg'];
 
-// The print files are gated until the domain is live and the client has
-// approved the page (see scripts/generate-qr.mjs). Their absence is the
-// expected state before then - the destination checks below still run, because
-// the URL has to be right long before anything is generated.
-const generated = existsSync(resolve(ROOT, 'qr'));
+/*
+ * The print files are gated until the domain is live and the client has
+ * approved the page (see scripts/generate-qr.mjs). Their absence is the
+ * expected state before then - the destination checks below still run, because
+ * the URL has to be right long before anything is generated.
+ *
+ * Tested per file, NOT by the existence of qr/. That directory also holds the
+ * business-card codes, which encode the site root rather than /livre; once
+ * those were generated, an existence check on the directory alone concluded the
+ * book files were there and failed on ENOENT for every one of them.
+ */
+const generated = QR_FILES.every((file) => existsSync(resolve(ROOT, file)));
 if (!generated) {
   console.log('  · QR print files not generated yet (gated until the domain is live');
   console.log('    and MHSV® has approved the page) - checking the destination only.');
