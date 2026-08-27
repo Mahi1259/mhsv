@@ -185,9 +185,26 @@ for (const locale of LOCALES) {
   const h1s = html.match(/<h1[\s>]/g) ?? [];
   if (h1s.length !== 1) errors.push(`${locale}/index.html: ${h1s.length} <h1> elements, expected exactly 1`);
 
+  /*
+   * 21 sections, plus Supporters & Ambassadors once it has anyone in it.
+   *
+   * That section ships with an empty profiles array and renders nothing at all,
+   * so the page is 21 today. Hard-coding 21 would have failed the build the
+   * first time MHSV® added a supporter - a content edit breaking the build is
+   * exactly the trap this file exists to avoid - so the expectation is derived
+   * from the content instead.
+   */
+  const supporters = JSON.parse(
+    readFileSync(resolve(ROOT, `src/content/i18n/${locale}.json`), 'utf8'),
+  ).sections?.supporters?.profiles ?? [];
+  const expectedSections = 21 + (supporters.length > 0 ? 1 : 0);
+
   const sections = html.match(/<section[^>]*aria-labelledby=/g) ?? [];
-  if (sections.length !== 21) {
-    errors.push(`${locale}/index.html: ${sections.length} labelled sections, expected 21`);
+  if (sections.length !== expectedSections) {
+    errors.push(
+      `${locale}/index.html: ${sections.length} labelled sections, expected ${expectedSections}` +
+        (supporters.length > 0 ? ' (20 + founder + supporters)' : ' (supporters is empty, so it renders nothing)'),
+    );
   }
 
   // The navigation list must exist exactly once. It used to be emitted twice -

@@ -383,6 +383,20 @@
       "emailPending": "MHSV®-Adresse folgt",
       "emailPendingHint": "Die berufliche Adresse wird nach schriftlicher Freigabe veröffentlicht."
     },
+    "supporters": {
+      "anchor": "supporters",
+      "title": "Förderer & Botschafter",
+      "status": {
+        "key": "inDevelopment",
+        "detail": "IN ENTWICKLUNG"
+      },
+      "roles": {
+        "patron": "Förderer",
+        "supporter": "Unterstützer",
+        "ambassador": "Botschafter"
+      },
+      "profiles": []
+    },
     "founder": {
       "num": "17",
       "anchor": "founder",
@@ -510,7 +524,8 @@
     "required": "Pflichtfeld",
     "optional": "optional",
     "logoAlt": "MHSV®-Logo",
-    "sectionLabel": "Abschnitt"
+    "sectionLabel": "Abschnitt",
+    "watchVideo": "Video ansehen"
   },
   "nav": {
     "items": [

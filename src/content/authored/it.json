@@ -26,7 +26,8 @@
     "required": "obbligatorio",
     "optional": "facoltativo",
     "logoAlt": "Logo MHSV®",
-    "sectionLabel": "Sezione"
+    "sectionLabel": "Sezione",
+    "watchVideo": "Guarda il video"
   },
   "nav": {
     "items": [
@@ -223,6 +224,20 @@
           "emailPending": false
         }
       ]
+    },
+    "supporters": {
+      "anchor": "supporters",
+      "title": "Sostenitori & Ambasciatori",
+      "status": {
+        "key": "inDevelopment",
+        "detail": "IN SVILUPPO"
+      },
+      "roles": {
+        "patron": "Mecenate",
+        "supporter": "Sostenitore",
+        "ambassador": "Ambasciatore"
+      },
+      "profiles": []
     },
     "book": {
       "lead": "IL LIBRO FONDATORE PREMIUM MHSV®, EDIZIONE FONDATRICE 2026",

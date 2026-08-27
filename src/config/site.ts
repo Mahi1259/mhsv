@@ -154,6 +154,12 @@ export const SECTION_ORDER = [
   { id: 'digital', anchor: 'digital', type: 'grid' },
 
   { id: 'team', anchor: 'team', type: 'grid' },
+  /*
+   * Ships dormant. sections.supporters.profiles is empty in all four languages
+   * and the component renders nothing at all until MHSV® adds someone, so this
+   * entry reserves the position rather than adding a section to the page.
+   */
+  { id: 'supporters', anchor: 'supporters', type: 'grid' },
 
   { id: 'founder', anchor: 'founder', type: 'statement' },
 

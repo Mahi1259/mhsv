@@ -384,6 +384,20 @@
       "emailPending": "MHSV® address to come",
       "emailPendingHint": "The professional address will be published after written approval."
     },
+    "supporters": {
+      "anchor": "supporters",
+      "title": "Supporters & Ambassadors",
+      "status": {
+        "key": "inDevelopment",
+        "detail": "IN DEVELOPMENT"
+      },
+      "roles": {
+        "patron": "Patron",
+        "supporter": "Supporter",
+        "ambassador": "Ambassador"
+      },
+      "profiles": []
+    },
     "founder": {
       "num": "17",
       "anchor": "founder",
@@ -511,7 +525,8 @@
     "required": "required",
     "optional": "optional",
     "logoAlt": "MHSV® logo",
-    "sectionLabel": "Section"
+    "sectionLabel": "Section",
+    "watchVideo": "Watch the video"
   },
   "nav": {
     "items": [

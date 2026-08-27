@@ -26,7 +26,8 @@
     "required": "required",
     "optional": "optional",
     "logoAlt": "MHSV® logo",
-    "sectionLabel": "Section"
+    "sectionLabel": "Section",
+    "watchVideo": "Watch the video"
   },
   "nav": {
     "items": [
@@ -224,6 +225,20 @@
           "emailPending": false
         }
       ]
+    },
+    "supporters": {
+      "anchor": "supporters",
+      "title": "Supporters & Ambassadors",
+      "status": {
+        "key": "inDevelopment",
+        "detail": "IN DEVELOPMENT"
+      },
+      "roles": {
+        "patron": "Patron",
+        "supporter": "Supporter",
+        "ambassador": "Ambassador"
+      },
+      "profiles": []
     },
     "book": {
       "lead": "THE MHSV® PREMIUM FOUNDING BOOK, FOUNDING EDITION 2026",

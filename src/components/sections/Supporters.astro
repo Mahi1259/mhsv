@@ -1,0 +1,163 @@
+---
+/**
+ * Supporters & Ambassadors - grid type.
+ *
+ * SHIPS EMPTY, ON PURPOSE. `sections.supporters.profiles` is `[]` in all four
+ * languages and the whole section - heading, status badge and all - renders
+ * nothing while it stays that way, the same way SectionImage renders nothing
+ * when its file is absent. No placeholder people, no example cards: an invented
+ * name on a page about who backs MHSV® is worse than an absent section.
+ *
+ * Adding the first profile is a content edit in four files. Nothing here needs
+ * touching - see src/content/README.md.
+ */
+import Band from '@/components/Band.astro';
+import { Image } from 'astro:assets';
+import { getContent, type Locale } from '@/lib/i18n';
+import type { SectionType } from '@/config/site';
+
+interface Props {
+  locale: Locale;
+  type: SectionType;
+}
+
+const { locale, type } = Astro.props;
+const c = getContent(locale);
+const s = c.sections.supporters;
+
+type Profile = {
+  name: string;
+  /** One of the three keys in `s.roles`. The label comes from there. */
+  role: 'patron' | 'supporter' | 'ambassador';
+  intro: string;
+  message: string;
+  /** File name in src/assets/supporters/, or null. */
+  photo?: string | null;
+  /** Full URL, or null. Rendered as a link, never as an embed - see below. */
+  video?: string | null;
+};
+
+const profiles = (s.profiles ?? []) as Profile[];
+
+/*
+ * Looked up rather than imported, so a missing or misspelled file leaves the
+ * card without a photo instead of failing the build - the same lookup
+ * SectionImage uses. Eager, because the glob has to resolve at build time.
+ */
+const photos = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/supporters/*.{jpg,jpeg,png,webp,avif}',
+  { eager: true },
+);
+const photoFor = (file?: string | null) =>
+  file ? Object.entries(photos).find(([path]) => path.endsWith(`/${file}`))?.[1].default : undefined;
+---
+
+{
+  profiles.length > 0 && (
+    <Band locale={locale} anchor={s.anchor} title={s.title} type={type} status={s.status}>
+      <ul class="supporters" data-stagger data-rows>
+        {profiles.map((profile) => {
+          const photo = photoFor(profile.photo);
+          return (
+            <li class="supporters__card card">
+              {photo && (
+                <Image
+                  class="supporters__photo"
+                  src={photo}
+                  alt={profile.name}
+                  widths={[160, 320]}
+                  sizes="160px"
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+              <h3 class="supporters__name">{profile.name}</h3>
+              <p class="supporters__role mono-label">{s.roles[profile.role]}</p>
+              <p class="supporters__intro">{profile.intro}</p>
+              {/* The message is theirs, so it is marked up as a quotation
+                  rather than as more body copy. */}
+              <blockquote class="supporters__message">
+                <p>{profile.message}</p>
+              </blockquote>
+              {profile.video && (
+                /*
+                 * A LINK, never an embedded player. An iframe from YouTube or
+                 * Vimeo sets third-party cookies on load, which would make the
+                 * cookies page - "no advertising, analytics or third-party
+                 * tracking cookies" - untrue, and would need a consent gate
+                 * that does not exist. Opening in a new tab keeps that on the
+                 * other site, where the visitor chooses to go.
+                 */
+                <a
+                  class="link supporters__video"
+                  href={profile.video}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {c.ui.watchVideo}
+                </a>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </Band>
+  )
+}
+
+<style>
+  .supporters {
+    display: grid;
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  @media (min-width: 48rem) {
+    .supporters {
+      grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    }
+  }
+
+  .supporters__photo {
+    display: block;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-block-end: 1rem;
+  }
+
+  .supporters__name {
+    margin: 0;
+    font-size: var(--text-h3);
+  }
+
+  .supporters__role {
+    margin: 0.25rem 0 0.875rem;
+    color: var(--band-accent);
+  }
+
+  .supporters__intro {
+    margin: 0 0 1rem;
+    color: var(--band-muted);
+  }
+
+  .supporters__message {
+    margin: 0;
+    padding-inline-start: 1rem;
+    border-inline-start: 2px solid var(--band-accent);
+    color: var(--band-fg);
+  }
+
+  .supporters__message p {
+    margin: 0;
+    font-style: italic;
+  }
+
+  .supporters__video {
+    display: inline-block;
+    margin-block-start: 1rem;
+  }
+</style>
