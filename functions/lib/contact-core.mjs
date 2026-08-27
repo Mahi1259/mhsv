@@ -173,7 +173,11 @@ export function validate(form) {
 /**
  * Plain-text body.
  *
- * Still sent with every message, now alongside an HTML part - see
+ * French, matching the HTML part - see the note in ./email-template.mjs for
+ * why the notifications are in one language rather than the visitor's. The two
+ * parts are the same message and must not say different things.
+ *
+ * Still sent with every message, alongside an HTML part - see
  * ./email-template.mjs. Multipart, not either/or: some readers prefer text,
  * some filters score text-less mail worse, and a mangled HTML part must never
  * mean an unreadable notification.
@@ -182,33 +186,33 @@ export function renderEmail(data) {
   const rows =
     data.kind === 'book-order'
       ? [
-          ['Request', 'Founding Book - order request (NOT a payment)'],
-          ['Edition', data.edition === 'fr' ? 'French' : 'English'],
-          ['Quantity', String(data.quantity)],
-          ['Name', `${data.firstName} ${data.lastName}`],
+          ['Demande', 'Livre Fondateur - demande de commande (PAS un paiement)'],
+          ['Édition', data.edition === 'fr' ? 'Française' : 'Anglaise'],
+          ['Quantité', String(data.quantity)],
+          ['Nom', `${data.firstName} ${data.lastName}`],
           ['Organisation', data.organisation],
-          ['Country', data.country],
-          ['Email', data.email],
-          ['Phone', data.phone || '-'],
+          ['Pays', data.country],
+          ['E-mail', data.email],
+          ['Téléphone', data.phone || '-'],
         ]
       : [
-          ['Name', `${data.firstName} ${data.lastName}`],
-          ['Email', data.email],
-          ['Phone', data.phone || '-'],
-          ['Profile', data.profile],
-          ['Subject', data.subject],
+          ['Nom', `${data.firstName} ${data.lastName}`],
+          ['E-mail', data.email],
+          ['Téléphone', data.phone || '-'],
+          ['Profil', data.profile],
+          ['Sujet', data.subject],
         ];
 
   return [
-    ...rows.map(([k, v]) => `${(k + ':').padEnd(15)}${v}`),
-    `${'Site language:'.padEnd(15)}${data.locale}`,
+    ...rows.map(([k, v]) => `${(k + ' :').padEnd(17)}${v}`),
+    `${'Langue du site :'.padEnd(17)}${data.locale}`,
     '',
     '---',
     '',
-    data.message || '(no message)',
+    data.message || '(aucun message)',
     '',
     '---',
-    'Sent from the MHSV® website.',
+    'Envoyé depuis le site MHSV®.',
   ].join('\n');
 }
 
@@ -332,10 +336,15 @@ async function deliver(message, env) {
 }
 
 async function sendEmail(data, env) {
-  const tag = data.kind === 'book-order' ? 'BOOK' : 'CONTACT';
+  const tag = data.kind === 'book-order' ? 'LIVRE' : 'CONTACT';
+  /*
+   * The locale in the contact subject is the version of the site the visitor
+   * used, so the mailbox can see at a glance which language to reply in. The
+   * subject itself is theirs, untranslated.
+   */
   const subject =
     data.kind === 'book-order'
-      ? `[MHSV® ${tag}] Order request - ${data.quantity}× ${data.edition.toUpperCase()}`
+      ? `[MHSV® ${tag}] Demande de commande - ${data.quantity}× ${data.edition.toUpperCase()}`
       : `[MHSV® ${tag} ${data.locale.toUpperCase()}] ${data.subject}`;
 
   await deliver(
@@ -395,25 +404,25 @@ async function subscribe(data, env) {
    * Brevo remains the better answer, and switching back is one env var.
    */
   if (provider === 'smtp' || provider === 'resend' || provider === 'email') {
-    const edition = data.language === 'fr' ? 'French' : 'English';
+    const edition = data.language === 'fr' ? 'française' : 'anglaise';
     await deliver(
       {
-        subject: `[MHSV® NEWSLETTER] ${data.email} - ${edition} edition`,
+        subject: `[MHSV® NEWSLETTER] ${data.email} - édition ${edition}`,
         text: [
-          `${'Request:'.padEnd(15)}Newsletter subscription (single opt-in)`,
-          `${'Name:'.padEnd(15)}${data.firstName || '-'}`,
-          `${'Email:'.padEnd(15)}${data.email}`,
-          `${'Edition:'.padEnd(15)}${edition}`,
-          `${'Site language:'.padEnd(15)}${data.locale}`,
+          `${'Demande :'.padEnd(17)}Inscription à la newsletter (opt-in simple)`,
+          `${'Nom :'.padEnd(17)}${data.firstName || '-'}`,
+          `${'E-mail :'.padEnd(17)}${data.email}`,
+          `${'Édition :'.padEnd(17)}${edition}`,
+          `${'Langue du site :'.padEnd(17)}${data.locale}`,
           '',
           '---',
           '',
-          'The subscriber ticked the consent box on the website but has NOT',
-          'confirmed by email. Add them to the list only if that basis is',
+          'L’abonné a coché la case de consentement sur le site mais n’a PAS',
+          'confirmé par e-mail. Ne l’ajoutez à la liste que si cette base est',
           'acceptable.',
           '',
           '---',
-          'Sent from the MHSV® website.',
+          'Envoyé depuis le site MHSV®.',
         ].join('\n'),
         html: renderEmailHtml(data, {
           siteUrl: env.PUBLIC_SITE_URL,

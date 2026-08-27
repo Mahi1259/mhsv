@@ -6,6 +6,17 @@
  * public-facing design, so it stays deliberately plain: one column, a header,
  * a table of what was submitted, the message, a footer.
  *
+ * IN FRENCH, and only French, whatever language the visitor used. There is one
+ * recipient mailbox, so there is one audience - MHSV® in Geneva - not four.
+ * Translating the labels to the visitor's locale would send that mailbox
+ * German- and Italian-labelled mail, which nobody there asked for and which
+ * would inherit the DE/IT text still awaiting native review. French is the
+ * organisation's own language and the one its legal notice says prevails.
+ *
+ * What the VISITOR wrote is never touched: their name, subject, profile and
+ * message arrive exactly as typed, and a "Langue du site" row records which
+ * version of the site they used.
+ *
  * Written for MAIL CLIENTS, not browsers. Tables for layout, inline styles
  * only, no flexbox, no grid, no <style> block - Outlook and Gmail strip or
  * ignore most of what a web page relies on. If this looks like 2005 HTML, that
@@ -68,30 +79,30 @@ function escMultiline(value) {
 function fieldsFor(data) {
   if (data.kind === 'newsletter') {
     return [
-      ['Request', 'Newsletter subscription'],
-      ['Name', data.firstName || '-'],
-      ['Email', data.email],
-      ['Edition', data.language === 'fr' ? 'French' : 'English'],
+      ['Demande', 'Inscription à la newsletter'],
+      ['Nom', data.firstName || '-'],
+      ['E-mail', data.email],
+      ['Édition', data.language === 'fr' ? 'Française' : 'Anglaise'],
     ];
   }
   if (data.kind === 'book-order') {
     return [
-      ['Request', 'Founding Book - order request (NOT a payment)'],
-      ['Edition', data.edition === 'fr' ? 'French' : 'English'],
-      ['Quantity', String(data.quantity)],
-      ['Name', `${data.firstName} ${data.lastName}`],
+      ['Demande', 'Livre Fondateur - demande de commande (PAS un paiement)'],
+      ['Édition', data.edition === 'fr' ? 'Française' : 'Anglaise'],
+      ['Quantité', String(data.quantity)],
+      ['Nom', `${data.firstName} ${data.lastName}`],
       ['Organisation', data.organisation],
-      ['Country', data.country],
-      ['Email', data.email],
-      ['Phone', data.phone || '-'],
+      ['Pays', data.country],
+      ['E-mail', data.email],
+      ['Téléphone', data.phone || '-'],
     ];
   }
   return [
-    ['Name', `${data.firstName} ${data.lastName}`],
-    ['Email', data.email],
-    ['Phone', data.phone || '-'],
-    ['Profile', data.profile],
-    ['Subject', data.subject],
+    ['Nom', `${data.firstName} ${data.lastName}`],
+    ['E-mail', data.email],
+    ['Téléphone', data.phone || '-'],
+    ['Profil', data.profile],
+    ['Sujet', data.subject],
   ];
 }
 
@@ -119,14 +130,14 @@ export function renderEmailHtml(data, options = {}) {
   const isOrder = data.kind === 'book-order';
   const isNewsletter = data.kind === 'newsletter';
   const heading = isOrder
-    ? 'Founding Book - order request'
+    ? 'Livre Fondateur - demande de commande'
     : isNewsletter
-      ? 'Newsletter subscription'
-      : 'Contact form submission';
+      ? 'Inscription à la newsletter'
+      : 'Demande via le formulaire de contact';
 
-  const rows = [...fieldsFor(data), ['Site language', String(data.locale || '').toUpperCase()]]
+  const rows = [...fieldsFor(data), ['Langue du site', String(data.locale || '').toUpperCase()]]
     .map(([label, value], i) => {
-      const email = label === 'Email' && value;
+      const email = label === 'E-mail' && value;
       const shown = email
         ? `<a href="mailto:${esc(value)}" style="color:${NAVY};">${esc(value)}</a>`
         : esc(value);
@@ -145,7 +156,9 @@ export function renderEmailHtml(data, options = {}) {
   const message = data.message
     ? escMultiline(data.message)
     : `<span style="color:${MUTED};">${
-        isNewsletter ? 'No message - this is a subscription request.' : '(no message)'
+        isNewsletter
+          ? 'Aucun message - il s’agit d’une demande d’inscription.'
+          : '(aucun message)'
       }</span>`;
 
   /*
@@ -157,7 +170,7 @@ export function renderEmailHtml(data, options = {}) {
     ? `
               <tr>
                 <td style="padding:12px 16px;background:#fdf7e6;border:1px solid ${GOLD};font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:${INK};">
-                  <strong>Single opt-in.</strong> The subscriber ticked the consent box on the website but has NOT confirmed by email. Add them to the list only if that basis is acceptable.
+                  <strong>Opt-in simple.</strong> L’abonné a coché la case de consentement sur le site mais n’a PAS confirmé par e-mail. Ne l’ajoutez à la liste que si cette base est acceptable.
                 </td>
               </tr>
               <tr><td style="height:20px;line-height:20px;font-size:0;">&nbsp;</td></tr>`
@@ -167,14 +180,14 @@ export function renderEmailHtml(data, options = {}) {
     ? `
               <tr>
                 <td style="padding:12px 16px;background:#fdf7e6;border:1px solid ${GOLD};font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:${INK};">
-                  <strong>Order request only.</strong> No payment has been taken and no price was shown. Confirm availability with the sender before treating this as an order.
+                  <strong>Demande de commande uniquement.</strong> Aucun paiement n’a été encaissé et aucun prix n’a été affiché. Confirmez la disponibilité avec l’expéditeur avant de traiter cette demande comme une commande.
                 </td>
               </tr>
               <tr><td style="height:20px;line-height:20px;font-size:0;">&nbsp;</td></tr>`
     : '';
 
   return `<!doctype html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -210,7 +223,7 @@ export function renderEmailHtml(data, options = {}) {
                   </td>
                   <td style="vertical-align:middle;font-family:Arial,Helvetica,sans-serif;">
                     <div style="font-size:17px;font-weight:bold;color:#ffffff;letter-spacing:0.02em;">MHSV&reg;</div>
-                    <div style="font-size:11px;color:${GOLD};letter-spacing:0.08em;text-transform:uppercase;padding-top:3px;">Website notification</div>
+                    <div style="font-size:11px;color:${GOLD};letter-spacing:0.08em;text-transform:uppercase;padding-top:3px;">Notification du site</div>
                   </td>
                 </tr>
               </table>
@@ -249,7 +262,7 @@ ${orderBanner}${newsletterBanner}
 
           <tr>
             <td style="padding:0 4px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:${MUTED};">
-              Sent from the MHSV&reg; website. Reply directly to this message to answer the sender.
+              Envoyé depuis le site MHSV&reg;. Répondez directement à ce message pour joindre l’expéditeur.
             </td>
           </tr>
 

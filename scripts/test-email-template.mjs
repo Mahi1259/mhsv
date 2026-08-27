@@ -30,28 +30,54 @@ const ORDER = {
 // --- both forms render their own fields -------------------------------------
 {
   const html = renderEmailHtml(CONTACT);
-  check(html.includes('Contact form submission'), 'contact: heading');
-  for (const label of ['Name', 'Email', 'Phone', 'Profile', 'Subject', 'Site language']) {
+  check(html.includes('Demande via le formulaire de contact'), 'contact: heading');
+  for (const label of ['Nom', 'E-mail', 'Téléphone', 'Profil', 'Sujet', 'Langue du site']) {
     check(html.includes(`<strong style="color:#1c2431;">${label}</strong>`), `contact: "${label}" row`);
   }
-  check(!html.includes('Quantity') && !html.includes('Edition'), 'contact: no order-only fields');
+  check(!html.includes('Quantité') && !html.includes('Édition'), 'contact: no order-only fields');
   check(html.includes('First line.<br />Second line.'), 'contact: line breaks kept');
 }
 {
   const html = renderEmailHtml(ORDER);
-  check(html.includes('Founding Book - order request'), 'order: heading');
-  for (const label of ['Request', 'Edition', 'Quantity', 'Organisation', 'Country']) {
+  check(html.includes('Livre Fondateur - demande de commande'), 'order: heading');
+  for (const label of ['Demande', 'Édition', 'Quantité', 'Organisation', 'Pays']) {
     check(html.includes(`<strong style="color:#1c2431;">${label}</strong>`), `order: "${label}" row`);
   }
-  check(!html.includes('>Profile<'), 'order: no contact-only fields');
-  check(html.includes('No payment has been taken'), 'order: states it is not a purchase');
-  check(html.includes('(no message)'), 'order: empty message is stated, not blank');
+  check(!html.includes('>Profil<'), 'order: no contact-only fields');
+  check(html.includes('Aucun paiement n’a été encaissé'), 'order: states it is not a purchase');
+  check(html.includes('(aucun message)'), 'order: empty message is stated, not blank');
   /*
    * Pricing is not approved, so no amount may appear. Checked as an amount -
    * a currency or a figure - not as the word "price", which the banner uses
    * precisely to say there is not one.
    */
   check(!/CHF|EUR|USD|[€$£]\s*\d|\d+[.,]\d{2}\b/.test(html), 'order: no amount or currency anywhere');
+
+  /*
+   * One language, whatever the visitor used - one recipient mailbox means one
+   * audience. Guards against a well-meaning change that localises the labels
+   * and starts sending Geneva Italian-labelled mail.
+   */
+  for (const locale of ['fr', 'en', 'de', 'it']) {
+    const h = renderEmailHtml({ ...ORDER, locale });
+    check(h.includes('Livre Fondateur - demande de commande'),
+      `chrome stays French for a ${locale.toUpperCase()} visitor`);
+    check(h.includes(`>${locale.toUpperCase()}<`) || h.includes(locale.toUpperCase()),
+      `the ${locale.toUpperCase()} visitor's site language is recorded`);
+  }
+}
+
+// --- the visitor's own words are never touched -------------------------------
+{
+  const german = renderEmailHtml({
+    ...CONTACT, locale: 'de', firstName: 'Anna', lastName: 'Müller',
+    profile: 'Sportverein', subject: 'Anfrage für Partnerschaft',
+    message: 'Guten Tag, wir möchten eine Zusammenarbeit besprechen.',
+  });
+  for (const written of ['Anna Müller', 'Sportverein', 'Anfrage für Partnerschaft', 'Guten Tag']) {
+    check(german.includes(written), `visitor's own text kept: "${written}"`);
+  }
+  check(german.includes('Demande via le formulaire de contact'), 'but the chrome is still French');
 }
 
 // --- escaping ---------------------------------------------------------------
