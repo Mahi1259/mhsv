@@ -716,7 +716,9 @@
       "language": "Bitte wählen Sie eine Sprache.",
       "consent": "Ihre Einwilligung ist für die Anmeldung erforderlich."
     },
-    "privacyNote": "Ihre Daten werden ausschliesslich für den Versand des Newsletters verwendet. Jede Nachricht enthält einen Abmeldelink."
+    "privacyNote": "Ihre Daten werden ausschliesslich für den Versand des Newsletters verwendet. Jede Nachricht enthält einen Abmeldelink.",
+    "successTitleSingle": "Anfrage erhalten",
+    "successBodySingle": "Vielen Dank. Ihre Abonnementanfrage wurde erfasst. MHSV® wird Ihnen an diese Adresse schreiben."
   },
   "video": {
     "coming": "Präsentationsvideo - demnächst verfügbar",

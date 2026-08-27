@@ -436,7 +436,9 @@
       "language": "Scegliete una lingua.",
       "consent": "Il vostro consenso è necessario per iscrivervi."
     },
-    "privacyNote": "I vostri dati sono utilizzati unicamente per l’invio della newsletter. Ogni messaggio contiene un link di disiscrizione."
+    "privacyNote": "I vostri dati sono utilizzati unicamente per l’invio della newsletter. Ogni messaggio contiene un link di disiscrizione.",
+    "successTitleSingle": "Richiesta ricevuta",
+    "successBodySingle": "Grazie. La sua richiesta di abbonamento è stata registrata. MHSV® le scriverà a questo indirizzo."
   },
   "video": {
     "coming": "Video di presentazione - prossimamente",

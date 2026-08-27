@@ -19,10 +19,23 @@ const c = getContent(locale);
 const n = c.newsletterForm;
 const privacyHref = legalPath('dataProtection', locale);
 
+/*
+ * The success message has to match what the server actually does.
+ *
+ * With Brevo the subscriber gets a confirmation email and must click it, so the
+ * message says so. With the smtp/resend provider the subscription is emailed to
+ * MHSV and the subscriber gets nothing - promising a confirmation email there
+ * would be telling them to wait for something that is never sent.
+ *
+ * Read from the same NEWSLETTER_PROVIDER the handler reads, at build time, so
+ * the two cannot disagree. Unset means "log", which sends nothing either.
+ */
+const doubleOptIn = (process.env.NEWSLETTER_PROVIDER || 'log').toLowerCase() === 'brevo';
+
 const strings = {
   errors: { ...c.form.errors, ...n.errors },
-  successTitle: n.successTitle,
-  successBody: n.successBody,
+  successTitle: doubleOptIn ? n.successTitle : n.successTitleSingle,
+  successBody: doubleOptIn ? n.successBody : n.successBodySingle,
   errorTitle: c.form.errorTitle,
   errorBody: c.form.errorBody,
 };

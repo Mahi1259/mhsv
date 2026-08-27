@@ -437,7 +437,9 @@
       "language": "Please choose a language.",
       "consent": "Your consent is required to subscribe."
     },
-    "privacyNote": "Your data is used only to send the newsletter. Every message contains an unsubscribe link."
+    "privacyNote": "Your data is used only to send the newsletter. Every message contains an unsubscribe link.",
+    "successTitleSingle": "Request received",
+    "successBodySingle": "Thank you. Your subscription request has been recorded. MHSV® will write to you at this address."
   },
   "video": {
     "coming": "Presentation video - coming soon",

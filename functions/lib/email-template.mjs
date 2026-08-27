@@ -54,6 +54,14 @@ function escMultiline(value) {
  * different things.
  */
 function fieldsFor(data) {
+  if (data.kind === 'newsletter') {
+    return [
+      ['Request', 'Newsletter subscription'],
+      ['Name', data.firstName || '-'],
+      ['Email', data.email],
+      ['Edition', data.language === 'fr' ? 'French' : 'English'],
+    ];
+  }
   if (data.kind === 'book-order') {
     return [
       ['Request', 'Founding Book - order request (NOT a payment)'],
@@ -83,7 +91,12 @@ function fieldsFor(data) {
 export function renderEmailHtml(data, options = {}) {
   const siteUrl = (options.siteUrl || 'https://www.mhsv.ch').replace(/\/+$/, '');
   const isOrder = data.kind === 'book-order';
-  const heading = isOrder ? 'Founding Book - order request' : 'Contact form submission';
+  const isNewsletter = data.kind === 'newsletter';
+  const heading = isOrder
+    ? 'Founding Book - order request'
+    : isNewsletter
+      ? 'Newsletter subscription'
+      : 'Contact form submission';
 
   const rows = [...fieldsFor(data), ['Site language', String(data.locale || '').toUpperCase()]]
     .map(([label, value], i) => {
@@ -105,13 +118,25 @@ export function renderEmailHtml(data, options = {}) {
 
   const message = data.message
     ? escMultiline(data.message)
-    : `<span style="color:${MUTED};">(no message)</span>`;
+    : `<span style="color:${MUTED};">${
+        isNewsletter ? 'No message - this is a subscription request.' : '(no message)'
+      }</span>`;
 
   /*
    * The order banner. The Founding Book flow is a REQUEST, never a purchase -
    * there is no price and no payment anywhere - and the person reading this
    * needs to know that before they reply as if money had changed hands.
    */
+  const newsletterBanner = isNewsletter
+    ? `
+              <tr>
+                <td style="padding:12px 16px;background:#fdf7e6;border:1px solid ${GOLD};font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:${INK};">
+                  <strong>Single opt-in.</strong> The subscriber ticked the consent box on the website but has NOT confirmed by email. Add them to the list only if that basis is acceptable.
+                </td>
+              </tr>
+              <tr><td style="height:20px;line-height:20px;font-size:0;">&nbsp;</td></tr>`
+    : '';
+
   const orderBanner = isOrder
     ? `
               <tr>
@@ -173,7 +198,7 @@ export function renderEmailHtml(data, options = {}) {
 
           <tr><td style="height:20px;line-height:20px;font-size:0;">&nbsp;</td></tr>
 
-${orderBanner}
+${orderBanner}${newsletterBanner}
           <!-- Submitted fields -->
           <tr>
             <td style="border:1px solid ${RULE};border-radius:4px;">

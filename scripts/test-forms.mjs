@@ -219,6 +219,34 @@ await check('the site language stays independent of the edition', async () => {
   assert(result.data.language === 'fr', 'language should record the edition');
 });
 
+await check('newsletter can notify by email when there is no Brevo account', async () => {
+  const sent = [];
+  const log = console.log;
+  // Serialise properly - the transport logs an object, and args.join(' ')
+  // turned it into "[object Object]", hiding the subject the assertions read.
+  console.log = (...args) =>
+    sent.push(args.map((a) => (typeof a === 'string' ? a : JSON.stringify(a))).join(' '));
+  try {
+    await handleContact(request(SUBSCRIBE), { ...ENV, NEWSLETTER_PROVIDER: 'smtp', CONTACT_TRANSPORT: 'log' });
+  } finally {
+    console.log = log;
+  }
+  const body = sent.join('\n');
+  assert(/\[newsletter\]/.test(body), 'should go out on the mail transport, not the Brevo path');
+  assert(/NEWSLETTER/.test(body), 'subject should mark it as a newsletter subscription');
+  assert(/single opt-in/i.test(body), 'must state the subscriber has not confirmed');
+  assert(!/not subscribed/.test(body), 'must not fall through to the log provider');
+});
+
+await check('the newsletter notification carries no invented consent', async () => {
+  const { renderEmailHtml } = await import('../functions/lib/email-template.mjs');
+  const html = renderEmailHtml({ ...SUBSCRIBE, kind: 'newsletter', locale: 'de', language: 'en' });
+  assert(/Newsletter subscription/.test(html), 'heading');
+  assert(/Single opt-in/.test(html), 'states the basis plainly');
+  assert(/NOT confirmed/.test(html), 'says the subscriber did not confirm');
+  assert(!/confirmation email is on its way/i.test(html), 'must not claim a confirmation was sent');
+});
+
 await check('unknown form kind falls back to contact', async () => {
   const result = validate(formOf({ ...SUBSCRIBE, form: 'wat' }));
   // Falls back to contact, which needs fields the newsletter does not send.

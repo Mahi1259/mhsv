@@ -211,32 +211,30 @@ export function renderEmail(data) {
   ].join('\n');
 }
 
-async function sendEmail(data, env) {
+/**
+ * Put one message on whatever transport is configured.
+ *
+ * Split out of sendEmail so the newsletter can reuse it. Before this the
+ * newsletter could only reach Brevo, so a site with working SMTP and no Brevo
+ * account had a subscribe form that silently did nothing.
+ *
+ * @param {{subject: string, text: string, html?: string, replyTo?: string, tag?: string}} message
+ */
+async function deliver(message, env) {
   const recipient = env.CONTACT_RECIPIENT;
   const sender = env.CONTACT_SENDER;
   const transport = (env.CONTACT_TRANSPORT || 'log').toLowerCase();
 
   if (!recipient) throw new Error('CONTACT_RECIPIENT is not configured');
 
-  const tag = data.kind === 'book-order' ? 'BOOK' : 'CONTACT';
-  const subject =
-    data.kind === 'book-order'
-      ? `[MHSV® ${tag}] Order request - ${data.quantity}× ${data.edition.toUpperCase()}`
-      : `[MHSV® ${tag} ${data.locale.toUpperCase()}] ${data.subject}`;
-  const text = renderEmail(data);
-  /*
-   * SITE_URL is only needed to resolve the crest in the header. If it is not
-   * set the template falls back to the production domain, and the mail is
-   * perfectly readable with no image at all.
-   */
-  const html = renderEmailHtml(data, { siteUrl: env.PUBLIC_SITE_URL });
+  const { subject, text, html, replyTo } = message;
 
   if (transport === 'log') {
-    console.log('[form] transport=log - not sent\n', {
+    console.log(`[${message.tag || 'form'}] transport=log - not sent\n`, {
       to: recipient,
       subject,
       text,
-      htmlBytes: html.length,
+      htmlBytes: html ? html.length : 0,
     });
     return;
   }
@@ -253,10 +251,10 @@ async function sendEmail(data, env) {
       body: JSON.stringify({
         from: sender,
         to: [recipient],
-        reply_to: data.email,
+        ...(replyTo ? { reply_to: replyTo } : {}),
         subject,
         text,
-        html,
+        ...(html ? { html } : {}),
       }),
     });
     if (!response.ok) {
@@ -278,15 +276,39 @@ async function sendEmail(data, env) {
     await mailer.sendMail({
       from: sender,
       to: recipient,
-      replyTo: data.email,
+      ...(replyTo ? { replyTo } : {}),
       subject,
       text,
-      html,
+      ...(html ? { html } : {}),
     });
     return;
   }
 
   throw new Error(`Unknown CONTACT_TRANSPORT "${transport}"`);
+}
+
+async function sendEmail(data, env) {
+  const tag = data.kind === 'book-order' ? 'BOOK' : 'CONTACT';
+  const subject =
+    data.kind === 'book-order'
+      ? `[MHSV® ${tag}] Order request - ${data.quantity}× ${data.edition.toUpperCase()}`
+      : `[MHSV® ${tag} ${data.locale.toUpperCase()}] ${data.subject}`;
+
+  await deliver(
+    {
+      subject,
+      text: renderEmail(data),
+      /*
+       * SITE_URL is only needed to resolve the crest in the header. If it is
+       * not set the template falls back to the production domain, and the mail
+       * is perfectly readable with no image at all.
+       */
+      html: renderEmailHtml(data, { siteUrl: env.PUBLIC_SITE_URL }),
+      replyTo: data.email,
+      tag: 'form',
+    },
+    env,
+  );
 }
 
 /**
@@ -307,6 +329,51 @@ async function subscribe(data, env) {
       firstName: data.firstName || '-',
       language: data.language,
     });
+    return;
+  }
+
+  /*
+   * SINGLE OPT-IN, over the same transport the contact form uses.
+   *
+   * For sites with working SMTP or Resend but no Brevo account. The
+   * subscription is emailed to CONTACT_RECIPIENT and nothing goes to the
+   * subscriber: there is no list to join and no confirmation link to send,
+   * because there is no store to hold a pending token.
+   *
+   * That makes it SINGLE opt-in - the consent box on the site is the only
+   * record - so the notification says so plainly, and the form's success
+   * message must not promise a confirmation email. FormShell picks its wording
+   * from this same setting.
+   *
+   * Brevo remains the better answer, and switching back is one env var.
+   */
+  if (provider === 'smtp' || provider === 'resend' || provider === 'email') {
+    const edition = data.language === 'fr' ? 'French' : 'English';
+    await deliver(
+      {
+        subject: `[MHSV® NEWSLETTER] ${data.email} - ${edition} edition`,
+        text: [
+          `${'Request:'.padEnd(15)}Newsletter subscription (single opt-in)`,
+          `${'Name:'.padEnd(15)}${data.firstName || '-'}`,
+          `${'Email:'.padEnd(15)}${data.email}`,
+          `${'Edition:'.padEnd(15)}${edition}`,
+          `${'Site language:'.padEnd(15)}${data.locale}`,
+          '',
+          '---',
+          '',
+          'The subscriber ticked the consent box on the website but has NOT',
+          'confirmed by email. Add them to the list only if that basis is',
+          'acceptable.',
+          '',
+          '---',
+          'Sent from the MHSV® website.',
+        ].join('\n'),
+        html: renderEmailHtml(data, { siteUrl: env.PUBLIC_SITE_URL }),
+        replyTo: data.email,
+        tag: 'newsletter',
+      },
+      env,
+    );
     return;
   }
 
