@@ -685,5 +685,103 @@
       }
     ],
     "officialLanguagesNote": "Diese Notice liegt ausschliesslich auf Französisch und Englisch vor. Nachstehend die englische Fassung; die französische Fassung ist massgebend."
+  },
+  "legalNotice": {
+    "banner": "Dieses Impressum steht noch unter Vorbehalt der endgültigen Validierung und der Vervollständigung der technischen Angaben vor der Aufschaltung der Website.",
+    "officialLanguagesNote": "Dieses Impressum liegt ausschliesslich auf Französisch und Englisch vor. Nachstehend die englische Fassung; bei Abweichungen ist die französische Fassung massgebend.",
+    "version": null,
+    "sections": [
+      {
+        "heading": "1. Website publisher",
+        "paragraphs": [
+          "The website www.mhsv.ch is published by MHSV Association, a non-profit association incorporated under Articles 60 et seq. of the Swiss Civil Code, with its registered office in Geneva, Switzerland.",
+          "Correspondence address: Chemin de Beau-Soleil 26, 1206 Geneva, Switzerland",
+          "Institutional email address: infos@mhsv.ch",
+          "Website: www.mhsv.ch",
+          "Editorial responsibility: MHSV Association, acting through its Committee. All communications concerning the website should be sent to infos@mhsv.ch."
+        ],
+        "items": []
+      },
+      {
+        "heading": "2. Hosting and technical infrastructure",
+        "paragraphs": [
+          "Domain name and email services: SwissCenter [LEGAL COMPANY NAME AND POSTAL ADDRESS TO BE CONFIRMED], Switzerland. SwissCenter currently manages the domain name and email services; any role it may have in website hosting must be confirmed.",
+          "Final website hosting provider: [LEGAL COMPANY NAME, POSTAL ADDRESS AND COUNTRY TO BE CONFIRMED BEFORE PUBLICATION].",
+          "Additional technical services: [FINAL ROLE OF VERCEL, CLOUDFLARE AND ANY OTHER PROVIDER TO BE CONFIRMED: DNS, CDN, PROXY, SECURITY, HOSTING, WORKERS, FORMS, LOGS OR BACKUPS]."
+        ],
+        "items": []
+      },
+      {
+        "heading": "3. Purpose of the website and scope of information",
+        "paragraphs": [
+          "The website presents MHSV Association, its mission, governance, programmes, publications, projects and activities. The information is provided for general purposes and may be amended, supplemented or removed without notice.",
+          "Unless expressly stated in writing by a person authorised to represent MHSV Association, the website content does not constitute a contractual offer or any guarantee of admission, selection, recruitment, sporting or professional placement, funding, partnership, affiliation or outcome.",
+          "Reference to a club, federation, institution, company or project does not mean that an official partnership, affiliation or endorsement exists unless the website expressly says so and the information remains current."
+        ],
+        "items": []
+      },
+      {
+        "heading": "4. Intellectual property",
+        "paragraphs": [
+          "The website structure and all texts, logos, distinctive signs, trademarks, names, graphics, photographs, videos, documents, publications, methods, programmes and other content appearing on it are protected by applicable intellectual-property rights. The MHSV® signs and MHSV visual identity remain the property of their respective owners.",
+          "Except where permitted by law or with the prior written agreement of MHSV Association or the relevant rights holder, any reproduction, adaptation, translation, extraction, modification, distribution, making available or exploitation, in whole or in part, is prohibited."
+        ],
+        "items": []
+      },
+      {
+        "heading": "5. Photographs, videos and credits",
+        "paragraphs": [
+          "Photographs, videos, illustrations and other third-party content remain subject to the rights and licences of their owners. A separate Credits page identifies, where appropriate, the authors, platforms or sources of the media used. Their presence on the website does not grant visitors any right to reuse them.",
+          "Anyone who believes that content infringes their rights may write to infos@mhsv.ch, identifying the content concerned and providing the information required to review the request."
+        ],
+        "items": []
+      },
+      {
+        "heading": "6. Availability, accuracy and liability",
+        "paragraphs": [
+          "MHSV Association endeavours to publish accurate, up-to-date information and to provide reasonably secure access to the website. It does not, however, guarantee completeness, freedom from error, continuous availability or the absence of technical disruption or harmful components.",
+          "To the extent permitted by mandatory law, MHSV Association is not liable for loss arising from interruption, unavailability, improper use of the website or reliance on general information that should have been verified with the Association or the appropriate professional.",
+          "Website information is not a substitute for medical, legal, tax, financial, psychological or other professional advice tailored to an individual situation."
+        ],
+        "items": []
+      },
+      {
+        "heading": "7. Third-party links and services",
+        "paragraphs": [
+          "The website may contain links to third-party websites, platforms or services. MHSV Association does not continuously control their content, availability, security or data-protection practices. Access to those resources is at the user's responsibility, subject to mandatory law."
+        ],
+        "items": []
+      },
+      {
+        "heading": "8. Forms, requests and communications",
+        "paragraphs": [
+          "Submitting a contact form or a request for information, participation, cooperation or reservation does not by itself create a contractual relationship, membership status, admission to a programme or commitment by MHSV Association. Only written confirmation issued by an authorised person may have such effect.",
+          "If the website later permits contracts to be concluded or payments to be made directly online, the applicable contractual terms, prices, technical steps and mandatory information will be presented before the transaction is concluded."
+        ],
+        "items": []
+      },
+      {
+        "heading": "9. Data protection and cookies",
+        "paragraphs": [
+          "The processing of personal data is described on the Data Protection page. The use of cookies and similar technologies is described on the Cookies page. Those pages form an integral part of the website's legal information.",
+          "Strictly necessary cookies may be used to operate and secure the website or remember choices. Any non-essential cookie or tracker requiring consent must be activated only after the user has made a valid choice. Settings must remain accessible or changeable through the permanent access provided on the website."
+        ],
+        "items": []
+      },
+      {
+        "heading": "10. Governing law and jurisdiction",
+        "paragraphs": [
+          "This Legal Notice is governed by Swiss law. Subject to any mandatory jurisdiction provided by law, including consumer-protection rules, the competent courts of the Canton of Geneva shall have exclusive jurisdiction."
+        ],
+        "items": []
+      },
+      {
+        "heading": "11. Version and languages",
+        "paragraphs": [
+          "This version takes effect when published on the website. In the event of any inconsistency between the French and English versions, the French version shall prevail, subject to mandatory law. Last updated: [INSERT ON PUBLICATION]."
+        ],
+        "items": []
+      }
+    ]
   }
 }

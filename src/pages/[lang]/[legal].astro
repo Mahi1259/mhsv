@@ -1,10 +1,11 @@
 ---
 /**
- * The four legal placeholder pages, one route for all of them.
+ * The four legal pages, one route for all of them.
  *
- * BLOCKER. Each carries a heading and one line saying the final wording is
- * with MHSV®'s legal counsel. Nothing else: no legal status, no association
- * wording, nothing that could read as advice before a lawyer has written it.
+ * Two now carry MHSV®'s approved text - the legal notice and the data
+ * protection notice - each under a banner saying it is still a technical
+ * validation version. Cookies and forms are still one line saying the wording
+ * is with counsel.
  *
  * The slug is per language - /fr/mentions-legales/ and /en/legal-notice/ are
  * the same page - so getStaticPaths pairs each locale with its own slug from
@@ -36,14 +37,23 @@ const c = getContent(locale);
 const title = c.legalPages.titles[page];
 
 /*
- * Data protection carries the full approved notice; the other three are still
+ * Two of the four carry their approved text; cookies and forms are still
  * placeholders waiting on counsel.
  *
- * The banner above it is REQUIRED and must not be removed without an explicit
- * instruction: the source document is headed "VALIDATION TECHNIQUE - NE PAS
- * PUBLIER", so the text is here for review, not as a published notice.
+ * Both supplied documents are "validation technique" versions, so both render
+ * under a banner saying so. Those banners are REQUIRED and must not be removed
+ * without an explicit instruction.
+ *
+ * Only sections 1-11 of the legal notice are here. The cover page, the "read
+ * before integration" instructions, the validation-scope note and the technical
+ * validation sheet are deliberately not in the content files at all - not
+ * hidden by a flag, absent - so there is nothing to publish by accident.
  */
-const notice = page === 'dataProtection' ? c.dataProtection : null;
+const NOTICES = {
+  dataProtection: c.dataProtection,
+  legalNotice: c.legalNotice,
+} as const;
+const notice = page in NOTICES ? NOTICES[page as keyof typeof NOTICES] : null;
 ---
 
 <Page locale={locale} path={LEGAL_PAGES[page][locale]} title={title} eyebrow={c.footer.legalTitle}>
@@ -56,7 +66,9 @@ const notice = page === 'dataProtection' ? c.dataProtection : null;
           <p class="notice__languages">{notice.officialLanguagesNote}</p>
         )}
 
-        {notice.intro.map((text) => (
+        {/* The legal notice starts straight at section 1; only the data
+            protection notice has standing text above its sections. */}
+        {notice.intro?.map((text) => (
           <p class="notice__p">{text}</p>
         ))}
 
@@ -76,7 +88,7 @@ const notice = page === 'dataProtection' ? c.dataProtection : null;
           </section>
         ))}
 
-        <p class="notice__version">{notice.version}</p>
+        {notice.version && <p class="notice__version">{notice.version}</p>}
       </div>
     ) : (
       <p class="legal-pending">{c.legalPages.pending}</p>

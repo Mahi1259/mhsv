@@ -686,5 +686,103 @@
       }
     ],
     "officialLanguagesNote": null
+  },
+  "legalNotice": {
+    "banner": "Ces mentions légales sont en attente de validation finale et de complètement des informations techniques avant la mise en ligne du site.",
+    "officialLanguagesNote": null,
+    "version": null,
+    "sections": [
+      {
+        "heading": "1. Éditeur du site",
+        "paragraphs": [
+          "Le site www.mhsv.ch est édité par MHSV Association, association à but non lucratif constituée conformément aux articles 60 et suivants du Code civil suisse, dont le siège statutaire est à Genève, Suisse.",
+          "Adresse de correspondance : Chemin de Beau-Soleil 26, 1206 Genève, Suisse",
+          "Adresse électronique institutionnelle : infos@mhsv.ch",
+          "Site internet : www.mhsv.ch",
+          "Responsabilité éditoriale : MHSV Association, agissant par son Comité. Toute communication relative au site doit être adressée à infos@mhsv.ch."
+        ],
+        "items": []
+      },
+      {
+        "heading": "2. Hébergement et infrastructure technique",
+        "paragraphs": [
+          "Nom de domaine et messagerie : SwissCenter [DÉNOMINATION SOCIALE ET ADRESSE POSTALE À CONFIRMER], Suisse. SwissCenter assure actuellement la gestion du nom de domaine et des services de messagerie ; son rôle éventuel dans l’hébergement du site doit être confirmé.",
+          "Hébergeur final du site : [DÉNOMINATION SOCIALE, ADRESSE POSTALE ET PAYS À CONFIRMER AVANT PUBLICATION].",
+          "Services techniques complémentaires : [RÔLE FINAL DE VERCEL, CLOUDFLARE ET DE TOUT AUTRE PRESTATAIRE À CONFIRMER : DNS, CDN, PROXY, SÉCURITÉ, HÉBERGEMENT, WORKERS, FORMULAIRES, JOURNAUX OU SAUVEGARDES]."
+        ],
+        "items": []
+      },
+      {
+        "heading": "3. Objet du site et portée des informations",
+        "paragraphs": [
+          "Le site présente MHSV Association, sa mission, sa gouvernance, ses programmes, ses publications, ses projets et ses activités. Les informations sont fournies à titre général et peuvent être modifiées, complétées ou retirées sans préavis.",
+          "Sauf indication écrite contraire émanant d’une personne habilitée à représenter MHSV Association, le contenu du site ne constitue ni une offre contractuelle, ni une garantie d’admission, de sélection, de recrutement, de placement sportif ou professionnel, de financement, de partenariat, d’affiliation ou de résultat.",
+          "La mention d’un club, d’une fédération, d’une institution, d’une entreprise ou d’un projet ne signifie pas qu’un partenariat, une affiliation ou une approbation officielle existe, sauf si le site le précise expressément et si cette information est à jour."
+        ],
+        "items": []
+      },
+      {
+        "heading": "4. Propriété intellectuelle",
+        "paragraphs": [
+          "La structure du site ainsi que les textes, logos, signes distinctifs, marques, noms, graphismes, photographies, vidéos, documents, publications, méthodes, programmes et autres contenus qui y figurent sont protégés par les droits de propriété intellectuelle applicables. Les signes MHSV® et l’identité visuelle MHSV demeurent la propriété de leurs titulaires respectifs.",
+          "Sauf autorisation légale ou accord écrit préalable de MHSV Association ou du titulaire concerné, toute reproduction, adaptation, traduction, extraction, modification, diffusion, mise à disposition ou exploitation, totale ou partielle, est interdite."
+        ],
+        "items": []
+      },
+      {
+        "heading": "5. Photographies, vidéos et crédits",
+        "paragraphs": [
+          "Les photographies, vidéos, illustrations et autres contenus appartenant à des tiers demeurent soumis aux droits et licences de leurs titulaires. Une page distincte « Crédits » identifie, lorsque cela est pertinent, les auteurs, plateformes ou sources des médias utilisés. Leur présence sur le site ne confère aucun droit de réutilisation aux visiteurs.",
+          "Toute personne estimant qu’un contenu porte atteinte à ses droits peut écrire à infos@mhsv.ch en précisant le contenu concerné et en fournissant les éléments permettant d’examiner sa demande."
+        ],
+        "items": []
+      },
+      {
+        "heading": "6. Disponibilité, exactitude et responsabilité",
+        "paragraphs": [
+          "MHSV Association s’efforce de publier des informations exactes et à jour et d’assurer un accès raisonnablement sécurisé au site. Elle ne garantit toutefois ni l’exhaustivité, ni l’absence d’erreur, ni la disponibilité continue du site, ni l’absence de perturbations techniques ou de composants nuisibles.",
+          "Dans les limites permises par le droit impératif, MHSV Association ne répond pas des dommages résultant d’une interruption, d’une indisponibilité, d’une utilisation inappropriée du site ou de la confiance accordée à une information générale qui aurait dû être vérifiée auprès de l’Association ou du professionnel compétent.",
+          "Les informations du site ne remplacent pas un conseil médical, juridique, fiscal, financier, psychologique ou autre avis professionnel adapté à une situation individuelle."
+        ],
+        "items": []
+      },
+      {
+        "heading": "7. Liens et services de tiers",
+        "paragraphs": [
+          "Le site peut contenir des liens vers des sites, plateformes ou services de tiers. MHSV Association n’exerce pas de contrôle permanent sur leur contenu, leur disponibilité, leur sécurité ou leurs pratiques en matière de protection des données. L’accès à ces ressources s’effectue sous la responsabilité de l’utilisateur, sous réserve du droit impératif."
+        ],
+        "items": []
+      },
+      {
+        "heading": "8. Formulaires, demandes et communications",
+        "paragraphs": [
+          "L’envoi d’un formulaire de contact, d’une demande d’information, de participation, de collaboration ou de réservation ne crée pas, à lui seul, une relation contractuelle, une qualité de membre, une admission à un programme ou un engagement de MHSV Association. Seule une confirmation écrite émise par une personne habilitée peut produire un tel effet.",
+          "Si le site permet ultérieurement de conclure directement un contrat ou d’effectuer un paiement, les conditions contractuelles, prix, étapes techniques et informations obligatoires applicables seront présentés avant la conclusion de l’opération."
+        ],
+        "items": []
+      },
+      {
+        "heading": "9. Protection des données et cookies",
+        "paragraphs": [
+          "Le traitement des données personnelles est décrit dans la page « Protection des données ». L’utilisation des cookies et technologies similaires est décrite dans la page « Cookies ». Ces pages font partie intégrante des informations juridiques du site.",
+          "Les cookies strictement nécessaires peuvent être utilisés pour assurer le fonctionnement, la sécurité ou la mémorisation de choix. Tout cookie ou traceur non nécessaire soumis au consentement ne doit être activé qu’après le choix valable de l’utilisateur. Les paramètres doivent pouvoir être consultés ou modifiés au moyen de l’accès permanent prévu sur le site."
+        ],
+        "items": []
+      },
+      {
+        "heading": "10. Droit applicable et for",
+        "paragraphs": [
+          "Les présentes mentions légales sont soumises au droit suisse. Sous réserve des fors impératifs prévus par la loi, notamment en matière de protection des consommateurs, les tribunaux compétents du canton de Genève sont seuls compétents."
+        ],
+        "items": []
+      },
+      {
+        "heading": "11. Version et langues",
+        "paragraphs": [
+          "La présente version entre en vigueur lors de sa publication sur le site. En cas de divergence entre les versions française et anglaise, la version française fait foi, sous réserve du droit impératif. Date de mise à jour : [À INSÉRER LORS DE LA PUBLICATION]."
+        ],
+        "items": []
+      }
+    ]
   }
 }
