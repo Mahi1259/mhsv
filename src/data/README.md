@@ -12,10 +12,10 @@ again if the last one is removed. Nothing in the code needs changing either way.
 Add one object to `sections.supporters.profiles` in each of:
 
 ```
-src/content/i18n/fr.json
-src/content/i18n/en.json
-src/content/i18n/de.json
-src/content/i18n/it.json
+src/data/i18n/fr.json
+src/data/i18n/en.json
+src/data/i18n/de.json
+src/data/i18n/it.json
 ```
 
 The same person must be in all four, or the build stops with a parity error.

@@ -14,7 +14,7 @@ committed locale JSON, builds, and checks the output:
 content:check  →  astro build  →  build:check
 ```
 
-The generated content (`src/content/i18n/*.json`) and the derived assets
+The generated content (`src/data/i18n/*.json`) and the derived assets
 (`src/assets/`, `public/fonts/`, the icons) are **committed to the repository**,
 because the `.docx` and `ASSET_STATUS.csv` live outside it and are not - and
 should not be - pushed. The pack contains `INTERNAL_REFERENCE` material that

@@ -63,11 +63,11 @@ function flatten(value, prefix = '', out = new Map()) {
 
 const data = {};
 for (const loc of LOCALES) {
-  const file = resolve(ROOT, `src/content/i18n/${loc}.json`);
+  const file = resolve(ROOT, `src/data/i18n/${loc}.json`);
   try {
     data[loc] = JSON.parse(readFileSync(file, 'utf8'));
   } catch (e) {
-    console.error(`✗ cannot read src/content/i18n/${loc}.json - run "npm run content:extract" first`);
+    console.error(`✗ cannot read src/data/i18n/${loc}.json - run "npm run content:extract" first`);
     process.exit(1);
   }
 }

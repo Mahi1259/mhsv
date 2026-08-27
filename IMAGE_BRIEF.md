@@ -8,7 +8,7 @@ them filled; each appears the moment its file is added.
 1. Choose a photograph per slot from **Unsplash** or **Pexels**, against the
    criteria below.
 2. Save it as `src/assets/stock/<slot>.jpg`, **2000px wide or more**.
-3. If it came from Pexels, add the credit to `src/content/authored/*.json`:
+3. If it came from Pexels, add the credit to `src/data/authored/*.json`:
    `"stock": { "<slot>": { "alt": "…", "credit": "Photo: NAME / Pexels" } }`
    in all four languages. Unsplash does not require it.
 4. `npm run build`. WebP with a PNG fallback at 640/1000/1600, lazy-loaded

@@ -7,10 +7,10 @@
  * statically - this is a static build with no runtime content fetching.
  */
 import { LOCALES, DEFAULT_LOCALE, LEGAL_PAGES, type LegalPageId, type Locale } from '@/config/site';
-import fr from '@/content/i18n/fr.json';
-import en from '@/content/i18n/en.json';
-import de from '@/content/i18n/de.json';
-import it from '@/content/i18n/it.json';
+import fr from '@/data/i18n/fr.json';
+import en from '@/data/i18n/en.json';
+import de from '@/data/i18n/de.json';
+import it from '@/data/i18n/it.json';
 
 /** Shape is defined by the FR file, which the parity check treats as the reference. */
 export type Content = typeof fr;

@@ -1,6 +1,6 @@
 /**
  * One-off content patch applying the client's 14 August 2026 update brief to
- * src/content/authored/{loc}.json.
+ * src/data/authored/{loc}.json.
  *
  *   node scripts/patch-authored.mjs
  *
@@ -453,7 +453,7 @@ function deepMerge(base, patch) {
 }
 
 for (const [loc, patch] of Object.entries(PATCH)) {
-  const file = resolve(ROOT, `src/content/authored/${loc}.json`);
+  const file = resolve(ROOT, `src/data/authored/${loc}.json`);
   const json = JSON.parse(readFileSync(file, 'utf8'));
 
   const merged = deepMerge(json, patch);
@@ -468,5 +468,5 @@ for (const [loc, patch] of Object.entries(PATCH)) {
 
   // The pack's §21 contact tagline and place stay; the addresses are superseded.
   writeFileSync(file, JSON.stringify(merged, null, 2) + '\n');
-  console.log(`  ✓ src/content/authored/${loc}.json  - governance (6), book, newsletter, contact`);
+  console.log(`  ✓ src/data/authored/${loc}.json  - governance (6), book, newsletter, contact`);
 }

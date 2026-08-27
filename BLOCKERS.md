@@ -56,7 +56,7 @@ legal validation" notice in all four languages.
 a processor (the mailing provider) that the final text must name.
 
 **Decision needed.** Lawyer's text → replace `privacy.sections` in
-`src/content/authored/*.json`, set `PUBLIC_PRIVACY_IS_DRAFT=false`.
+`src/data/authored/*.json`, set `PUBLIC_PRIVACY_IS_DRAFT=false`.
 
 ---
 

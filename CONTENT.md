@@ -1,12 +1,12 @@
 # Content - where every string comes from
 
-Two sources feed `src/content/i18n/{fr,en,de,it}.json`, which is **generated**
+Two sources feed `src/data/i18n/{fr,en,de,it}.json`, which is **generated**
 and must never be hand-edited:
 
 ```
 MHSV_Website_Content_Pack_…_V3.docx   ──┐
-                                         ├──►  src/content/i18n/{loc}.json
-src/content/authored/{loc}.json       ──┘        (authored wins on collision)
+                                         ├──►  src/data/i18n/{loc}.json
+src/data/authored/{loc}.json       ──┘        (authored wins on collision)
 ```
 
 Run `npm run content:extract` after changing either.
@@ -43,7 +43,7 @@ numbered sections. The extractor segments by language marker, then by
 | 20 | Roadmap | 7 items, status |
 | 21 | Contact | tagline, contact line, legal footer |
 
-`src/content/_audit/source-blocks.json` holds the raw pack text per section per
+`src/data/_audit/source-blocks.json` holds the raw pack text per section per
 language, so the client can check any rendered string against its source.
 
 ### Parsing assumptions
@@ -65,7 +65,7 @@ these, extraction fails loudly rather than silently producing wrong output:
 
 These are not in the pack. They were written for the prototype and should be
 reviewed, especially the FR/DE/IT wording. All live in
-`src/content/authored/{loc}.json`.
+`src/data/authored/{loc}.json`.
 
 ### Interface
 

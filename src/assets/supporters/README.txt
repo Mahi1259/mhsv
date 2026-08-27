@@ -5,4 +5,4 @@ only, e.g. "photo": "jane-doe.jpg". Any of .jpg .jpeg .png .webp .avif works.
 
 Leave "photo" as null and the card renders without one.
 
-See src/content/README.md for the whole procedure.
+See src/data/README.md for the whole procedure.

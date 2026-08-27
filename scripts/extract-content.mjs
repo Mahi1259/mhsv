@@ -1,5 +1,5 @@
 /**
- * Content pipeline: MHSV_Website_Content_Pack_..._V3.docx  ->  src/content/i18n/{loc}.json
+ * Content pipeline: MHSV_Website_Content_Pack_..._V3.docx  ->  src/data/i18n/{loc}.json
  *
  *   npm run content:extract
  *
@@ -9,7 +9,7 @@
  * marker -> segment by "NN - TITLE" -> map blocks to a semantic shape.
  *
  * Two things the .docx does NOT contain, which are merged in from
- * src/content/authored/{loc}.json:
+ * src/data/authored/{loc}.json:
  *   1. UI chrome (nav labels, form labels, validation messages, footer, legal
  *      page bodies) - the pack is website copy, not interface copy.
  *   2. Public copy for §18/§19, where the pack text is an instruction to the
@@ -381,7 +381,7 @@ const SECTIONS = [
     num: '18',
     anchor: 'book',
     // Both source blocks are instructions to the developer. Public copy for
-    // this section is authored - see src/content/authored/{loc}.json.
+    // this section is authored - see src/data/authored/{loc}.json.
     extract: () => ({}),
   },
   {
@@ -473,7 +473,7 @@ function build() {
         '',
         `✗ content pack not found: ${DOCX}`,
         '',
-        '  This script regenerates src/content/i18n/*.json from the client pack,',
+        '  This script regenerates src/data/i18n/*.json from the client pack,',
         '  which lives outside the repository and is not committed.',
         '',
         '  If you are deploying: you do not need this. The generated JSON is',
@@ -543,28 +543,28 @@ function build() {
   }
 
   // Overlay authored strings.
-  const outDir = resolve(ROOT, 'src/content/i18n');
+  const outDir = resolve(ROOT, 'src/data/i18n');
   mkdirSync(outDir, { recursive: true });
-  mkdirSync(resolve(ROOT, 'src/content/_audit'), { recursive: true });
+  mkdirSync(resolve(ROOT, 'src/data/_audit'), { recursive: true });
 
   for (const loc of LOCALES) {
     let authored = {};
     try {
-      authored = JSON.parse(readFileSync(resolve(ROOT, `src/content/authored/${loc}.json`), 'utf8'));
+      authored = JSON.parse(readFileSync(resolve(ROOT, `src/data/authored/${loc}.json`), 'utf8'));
     } catch {
       console.warn(`  ! no authored overlay for "${loc}" - UI strings will be missing`);
     }
     const merged = merge(applySupersessions(results[loc]), authored);
     writeFileSync(resolve(outDir, `${loc}.json`), JSON.stringify(merged, null, 2) + '\n');
     const n = Object.keys(merged.sections).length;
-    console.log(`  ✓ src/content/i18n/${loc}.json  (${n} sections)`);
+    console.log(`  ✓ src/data/i18n/${loc}.json  (${n} sections)`);
   }
 
   writeFileSync(
-    resolve(ROOT, 'src/content/_audit/source-blocks.json'),
+    resolve(ROOT, 'src/data/_audit/source-blocks.json'),
     JSON.stringify(audit, null, 2) + '\n',
   );
-  console.log('  ✓ src/content/_audit/source-blocks.json  (raw pack text, for client review)');
+  console.log('  ✓ src/data/_audit/source-blocks.json  (raw pack text, for client review)');
 }
 
 build();

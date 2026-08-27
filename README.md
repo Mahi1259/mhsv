@@ -55,7 +55,7 @@ MHSV_CONTENT_DOCX=/path/to/pack/…V3.docx npm run content:extract
 | `npm run audit` | Overflow + WCAG 2.1 AA audit, 4 locales × 4 viewports (needs `npm run preview` running) | no |
 | `npm run typecheck` | `astro check` | no |
 | `node scripts/shot.mjs de 320` | Screenshot a locale at a given width | no |
-| `npm run content:extract` | Re-read the .docx into `src/content/i18n/*.json` | **yes** |
+| `npm run content:extract` | Re-read the .docx into `src/data/i18n/*.json` | **yes** |
 | `npm run assets:prepare` | Re-derive logo, favicons, book covers, fonts | **yes** |
 | `npm run build:from-pack` | Both of the above, then build | **yes** |
 
@@ -78,7 +78,7 @@ and you commit the result. Deployment just runs `npm run build`.
 
 ```
 scripts/
-  extract-content.mjs      .docx  ->  src/content/i18n/{fr,en,de,it}.json
+  extract-content.mjs      .docx  ->  src/data/i18n/{fr,en,de,it}.json
   check-content.mjs        key parity + banned wording across locales
   prepare-assets.mjs       logo/icon/cover derivation, font subsetting
   check-build.mjs          post-build constraint gate
@@ -126,7 +126,7 @@ functions/
 
 ## Editing content
 
-**Never edit `src/content/i18n/*.json` directly - it is overwritten on every
+**Never edit `src/data/i18n/*.json` directly - it is overwritten on every
 build.**
 
 - **Copy that comes from the client's content pack**: edit the `.docx`, then run
@@ -134,7 +134,7 @@ build.**
   the four language blocks onto a fixed shape.
 - **UI strings, form labels, legal pages, and public copy the pack does not
   provide**: edit
-  `src/content/authored/{fr,en,de,it}.json`. These are merged over the extracted
+  `src/data/authored/{fr,en,de,it}.json`. These are merged over the extracted
   content and win where the keys collide.
 
 See [`CONTENT.md`](./CONTENT.md) for the split, and for the list of strings that
@@ -155,7 +155,7 @@ in German, say). It also fails on retired wording such as "Beyond Football".
    (`LANG_MARKERS`, `HINTS`).
 3. Add the locale to `LOCALES` in `src/config/site.ts` and to `i18n.locales` in
    `astro.config.mjs`.
-4. Copy an existing `src/content/authored/*.json`, translate it, and import the
+4. Copy an existing `src/data/authored/*.json`, translate it, and import the
    new JSON in `src/lib/i18n.ts`.
 5. Run `npm run content:extract && npm run content:check`.
 

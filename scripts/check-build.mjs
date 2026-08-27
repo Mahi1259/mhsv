@@ -195,7 +195,7 @@ for (const locale of LOCALES) {
    * from the content instead.
    */
   const supporters = JSON.parse(
-    readFileSync(resolve(ROOT, `src/content/i18n/${locale}.json`), 'utf8'),
+    readFileSync(resolve(ROOT, `src/data/i18n/${locale}.json`), 'utf8'),
   ).sections?.supporters?.profiles ?? [];
   const expectedSections = 21 + (supporters.length > 0 ? 1 : 0);
 
