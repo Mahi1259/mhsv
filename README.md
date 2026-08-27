@@ -62,8 +62,9 @@ the deployed function uses, so the contact and order forms work on the ordinary
 dev server. Mail is **logged to the terminal, not sent**, even when `.env` holds
 working SMTP or Resend credentials - submitting a form while trying things out
 must not deliver to a real inbox. To send for real:
-`MHSV_DEV_SEND=yes npm run dev`. `npm run dev:cf` runs the real Cloudflare
-function over `dist/` and does obey `.env`.
+`npm run dev:send`, or put `MHSV_DEV_SEND=yes` in `.env` to make it the default
+for your checkout. `npm run dev:cf` runs the real Cloudflare function over
+`dist/` and always obeys `.env`.
 
 It works with no `.env` at all - dev falls back to a placeholder recipient,
 since nothing is being delivered. `.env` is re-read on every request, so editing

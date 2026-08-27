@@ -37,10 +37,25 @@ const ENDPOINT = '/api/contact';
  * message to a real inbox. Dev therefore forces the `log` transport and prints
  * the mail to the terminal instead.
  *
- * To genuinely send from dev, opt in explicitly:
+ * To genuinely send from dev, opt in - either once, in .env:
  *
- *   MHSV_DEV_SEND=yes npm run dev
+ *   MHSV_DEV_SEND=yes
+ *
+ * or per run:
+ *
+ *   npm run dev:send          (or MHSV_DEV_SEND=yes npm run dev)
  */
+
+/**
+ * Read the opt-in from .env as well as the environment, and read it fresh each
+ * time so flipping it in .env takes effect on the next submit without a
+ * restart. It used to be read from process.env only, which meant it could not
+ * be set once and forgotten - it had to be remembered on every single run.
+ */
+function wantsToSend() {
+  const env = { ...loadEnv('development', ROOT, ''), ...process.env };
+  return env.MHSV_DEV_SEND === 'yes';
+}
 function devEnv() {
   /*
    * .env has to be read explicitly. Astro loads it into import.meta.env for the
@@ -55,7 +70,7 @@ function devEnv() {
    */
   const env = { ...loadEnv('development', ROOT, ''), ...process.env };
 
-  if (process.env.MHSV_DEV_SEND !== 'yes') {
+  if (env.MHSV_DEV_SEND !== 'yes') {
     env.CONTACT_TRANSPORT = 'log';
     env.NEWSLETTER_PROVIDER = 'log';
 
@@ -98,11 +113,10 @@ export default function devApi() {
     name: 'mhsv-dev-api',
     hooks: {
       'astro:server:setup': ({ server, logger }) => {
-        const sending = process.env.MHSV_DEV_SEND === 'yes';
         logger.info(
-          sending
+          wantsToSend()
             ? `${ENDPOINT} live - MHSV_DEV_SEND=yes, mail WILL be sent`
-            : `${ENDPOINT} live - mail is logged, not sent (MHSV_DEV_SEND=yes to send)`,
+            : `${ENDPOINT} live - mail is logged, not sent (npm run dev:send to send)`,
         );
 
         server.middlewares.use(async (req, res, next) => {
@@ -118,8 +132,10 @@ export default function devApi() {
              * the terminal shows "not sent" while the browser says "sent", and
              * the natural reading is that sending is broken.
              */
-            if (!sending && req.method === 'POST' && response.status < 400) {
-              logger.info('mail was NOT delivered (dev default). MHSV_DEV_SEND=yes npm run dev');
+            if (!wantsToSend() && req.method === 'POST' && response.status < 400) {
+              logger.info(
+                'mail was NOT delivered. Use `npm run dev:send`, or put MHSV_DEV_SEND=yes in .env',
+              );
             }
             res.statusCode = response.status;
             response.headers.forEach((value, key) => res.setHeader(key, value));

@@ -25,7 +25,8 @@
     "dev:cf": "wrangler pages dev dist --compatibility-flags nodejs_compat",
     "test:cf": "node scripts/test-cf-api.mjs",
     "qr:card": "node scripts/generate-card-qr.mjs",
-    "test:email": "node scripts/test-email-template.mjs"
+    "test:email": "node scripts/test-email-template.mjs",
+    "dev:send": "MHSV_DEV_SEND=yes astro dev"
   },
   "description": "MHSV® — International Centre for Development and Transition. Phase 1 showcase website (FR/EN/DE/IT).",
   "dependencies": {
