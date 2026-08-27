@@ -16,6 +16,7 @@
  */
 
 import { renderEmailHtml } from './email-template.mjs';
+import { CREST_BASE64, CREST_CID, CREST_FILENAME } from './crest-logo.mjs';
 
 export const LOCALES = ['fr', 'en', 'de', 'it'];
 
@@ -220,6 +221,14 @@ export function renderEmail(data) {
  *
  * @param {{subject: string, text: string, html?: string, replyTo?: string, tag?: string}} message
  */
+/** Transports that can carry an inline image. `log` obviously cannot. */
+const EMBEDS_LOGO = new Set(['smtp', 'resend']);
+
+/** True when mail from this env will carry the crest rather than link it. */
+function embedsLogo(env) {
+  return EMBEDS_LOGO.has((env.CONTACT_TRANSPORT || 'log').toLowerCase());
+}
+
 async function deliver(message, env) {
   const recipient = env.CONTACT_RECIPIENT;
   const sender = env.CONTACT_SENDER;
@@ -228,6 +237,14 @@ async function deliver(message, env) {
   if (!recipient) throw new Error('CONTACT_RECIPIENT is not configured');
 
   const { subject, text, html, replyTo } = message;
+
+  /*
+   * The crest rides along with the message as an inline attachment. A linked
+   * image cannot work: www.mhsv.ch is not serving yet, and clients block remote
+   * images by default even once it is. Both SMTP and Resend support this;
+   * `embedLogo` below must agree with whether we actually attach it.
+   */
+  const inlineCrest = html && EMBEDS_LOGO.has(transport);
 
   if (transport === 'log') {
     console.log(`[${message.tag || 'form'}] transport=log - not sent\n`, {
@@ -255,6 +272,19 @@ async function deliver(message, env) {
         subject,
         text,
         ...(html ? { html } : {}),
+        ...(inlineCrest
+          ? {
+              attachments: [
+                {
+                  filename: CREST_FILENAME,
+                  content: CREST_BASE64,
+                  content_id: CREST_CID,
+                  content_type: 'image/png',
+                  disposition: 'inline',
+                },
+              ],
+            }
+          : {}),
       }),
     });
     if (!response.ok) {
@@ -280,6 +310,20 @@ async function deliver(message, env) {
       subject,
       text,
       ...(html ? { html } : {}),
+      ...(inlineCrest
+        ? {
+            attachments: [
+              {
+                filename: CREST_FILENAME,
+                content: CREST_BASE64,
+                encoding: 'base64',
+                cid: CREST_CID,
+                contentType: 'image/png',
+                contentDisposition: 'inline',
+              },
+            ],
+          }
+        : {}),
     });
     return;
   }
@@ -303,7 +347,10 @@ async function sendEmail(data, env) {
        * not set the template falls back to the production domain, and the mail
        * is perfectly readable with no image at all.
        */
-      html: renderEmailHtml(data, { siteUrl: env.PUBLIC_SITE_URL }),
+      html: renderEmailHtml(data, {
+        siteUrl: env.PUBLIC_SITE_URL,
+        embedLogo: embedsLogo(env),
+      }),
       replyTo: data.email,
       tag: 'form',
     },
@@ -368,7 +415,10 @@ async function subscribe(data, env) {
           '---',
           'Sent from the MHSV® website.',
         ].join('\n'),
-        html: renderEmailHtml(data, { siteUrl: env.PUBLIC_SITE_URL }),
+        html: renderEmailHtml(data, {
+          siteUrl: env.PUBLIC_SITE_URL,
+          embedLogo: embedsLogo(env),
+        }),
         replyTo: data.email,
         tag: 'newsletter',
       },

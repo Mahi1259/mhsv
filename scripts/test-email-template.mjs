@@ -93,14 +93,44 @@ const ORDER = {
   check(/#0C1D3A/i.test(html) && /#D4AF37/i.test(html), 'brand: navy and gold both used');
 }
 
-// --- the logo -----------------------------------------------------------
+// --- the logo ---------------------------------------------------------------
 {
-  const html = renderEmailHtml(ORDER, { siteUrl: 'https://www.mhsv.ch/' });
-  check(html.includes('src="https://www.mhsv.ch/icon-192.png"'), 'logo: absolute URL, trailing slash trimmed');
-  check(html.includes('alt=""'), 'logo: decorative alt - the wordmark beside it is real text');
-  check(html.includes('>MHSV&reg;<'), 'logo: header still reads with images blocked');
-  const fallback = renderEmailHtml(ORDER);
-  check(fallback.includes('src="https://www.mhsv.ch/icon-192.png"'), 'logo: falls back to the production domain');
+  const embedded = renderEmailHtml(ORDER, { embedLogo: true });
+  check(embedded.includes('src="cid:mhsv-crest"'), 'logo: embedded as a cid: reference');
+  check(!/localhost/.test(embedded), 'logo: embedded form links nowhere');
+
+  const linked = renderEmailHtml(ORDER, { siteUrl: 'https://www.mhsv.ch/' });
+  check(linked.includes('src="https://www.mhsv.ch/icon-192.png"'), 'logo: absolute URL, trailing slash trimmed');
+
+  /*
+   * The bug this replaced: PUBLIC_SITE_URL is the running instance, which in
+   * dev is the developer's own machine. Mail went out pointing at
+   * http://localhost:8788/icon-192.png, which no mail client can ever load.
+   */
+  for (const local of ['http://localhost:8788', 'http://127.0.0.1:4321', 'http://0.0.0.0:3000']) {
+    const html = renderEmailHtml(ORDER, { siteUrl: local });
+    check(!html.includes(local), `logo: "${local}" never reaches the mail`);
+    check(html.includes('https://www.mhsv.ch/icon-192.png'), `logo: "${local}" falls back to production`);
+  }
+
+  check(renderEmailHtml(ORDER).includes('src="https://www.mhsv.ch/icon-192.png"'),
+    'logo: falls back to the production domain when no origin is given');
+  check(renderEmailHtml(ORDER, { embedLogo: true }).includes('alt=""'),
+    'logo: decorative alt - the wordmark beside it is real text');
+  check(renderEmailHtml(ORDER, { embedLogo: true }).includes('>MHSV&reg;<'),
+    'logo: header still reads if the image never renders');
+}
+
+// --- the embedded crest itself ----------------------------------------------
+{
+  const { CREST_BASE64, CREST_CID } = await import('../functions/lib/crest-logo.mjs');
+  const bytes = Buffer.from(CREST_BASE64, 'base64');
+  check(bytes.length > 2000, 'crest: decodes to a real image', `${bytes.length} bytes`);
+  // PNG magic number - proves it is an image and not a truncated string.
+  check(bytes.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])),
+    'crest: is a valid PNG');
+  check(renderEmailHtml(ORDER, { embedLogo: true }).includes(`cid:${CREST_CID}`),
+    'crest: the cid in the markup matches the one the transport attaches');
 }
 
 console.log('');

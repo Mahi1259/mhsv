@@ -17,6 +17,18 @@
  * notification.
  */
 
+import { CREST_CID } from './crest-logo.mjs';
+
+/**
+ * Where the crest comes from when it is NOT embedded.
+ *
+ * Always the production domain, never PUBLIC_SITE_URL. That variable is
+ * whatever the running instance is - http://localhost:8788 in dev - and mail is
+ * read in a client that has no idea what that is. Emails went out with a
+ * localhost image URL until this was fixed.
+ */
+const PRODUCTION_ORIGIN = 'https://www.mhsv.ch';
+
 const NAVY = '#0C1D3A';
 const GOLD = '#D4AF37';
 const INK = '#1c2431';
@@ -86,10 +98,24 @@ function fieldsFor(data) {
 /**
  * @param {object} data     validated submission
  * @param {object} [options]
- * @param {string} [options.siteUrl]  absolute base for the logo
+ * @param {boolean} [options.embedLogo]  reference the crest as a cid: attachment
+ * @param {string}  [options.siteUrl]    override the origin for the linked crest
  */
 export function renderEmailHtml(data, options = {}) {
-  const siteUrl = (options.siteUrl || 'https://www.mhsv.ch').replace(/\/+$/, '');
+  /*
+   * A localhost or 127.0.0.1 origin is never usable from a mail client, so it
+   * is discarded rather than passed through - dev would otherwise send mail
+   * pointing at the developer's own machine.
+   */
+  const given = String(options.siteUrl || '').replace(/\/+$/, '');
+  const siteUrl = given && !/localhost|127\.0\.0\.1|0\.0\.0\.0/.test(given) ? given : PRODUCTION_ORIGIN;
+
+  /*
+   * Embedded beats linked every time here. The crest travels with the message,
+   * so it shows even though www.mhsv.ch is not serving yet and even where
+   * remote images are blocked - which is the default in most clients.
+   */
+  const logoSrc = options.embedLogo ? `cid:${CREST_CID}` : `${siteUrl}/icon-192.png`;
   const isOrder = data.kind === 'book-order';
   const isNewsletter = data.kind === 'newsletter';
   const heading = isOrder
@@ -168,17 +194,18 @@ export function renderEmailHtml(data, options = {}) {
         <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;">
 
           <!--
-            Header. The crest is a REMOTE image and most clients block those
-            until the reader allows them - and it will not resolve at all until
-            www.mhsv.ch is live. So the wordmark beside it is real text, and the
-            bar reads correctly with no image at all.
+            Header. The crest is embedded as a cid: attachment where the
+            transport supports it, and linked otherwise - and a linked one will
+            not resolve until www.mhsv.ch is live, on top of being blocked by
+            default in most clients. Either way the wordmark beside it is real
+            text, so the bar reads correctly with no image at all.
           -->
           <tr>
             <td style="padding:20px 24px;background:${NAVY};border-radius:4px 4px 0 0;">
               <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td style="vertical-align:middle;padding-right:14px;">
-                    <img src="${siteUrl}/icon-192.png" width="44" height="44" alt=""
+                    <img src="${logoSrc}" width="44" height="44" alt=""
                          style="display:block;width:44px;height:44px;border:0;outline:none;text-decoration:none;" />
                   </td>
                   <td style="vertical-align:middle;font-family:Arial,Helvetica,sans-serif;">
