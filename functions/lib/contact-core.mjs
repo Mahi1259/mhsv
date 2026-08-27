@@ -16,6 +16,19 @@
  */
 
 export const LOCALES = ['fr', 'en', 'de', 'it'];
+
+/*
+ * The languages the newsletter is actually written in - NOT the four the site
+ * is published in. Must stay in step with NEWSLETTER_LOCALES in
+ * src/config/site.ts, which is what the form offers.
+ *
+ * The form only ever showed these two, but this handler validated `language`
+ * against all four, so a hand-made POST could subscribe someone to a German or
+ * Italian edition that does not exist. `locale` below is still the full four:
+ * a German speaker reading the German site and subscribing in French is
+ * perfectly normal, and that is what `locale` records.
+ */
+export const NEWSLETTER_LANGUAGES = ['fr', 'en'];
 const DEFAULT_LOCALE = 'fr';
 
 export const FORM_KINDS = ['contact', 'book-order', 'newsletter'];
@@ -149,7 +162,7 @@ export function validate(form) {
     firstName: get('firstName'),
     language,
   };
-  if (!LOCALES.includes(language)) fields.push('language');
+  if (!NEWSLETTER_LANGUAGES.includes(language)) fields.push('language');
   if (data.firstName.length > LIMITS.firstName) fields.push('firstName');
   return fields.length ? { ok: false, fields } : { ok: true, kind, data };
 }

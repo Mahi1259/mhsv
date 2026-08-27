@@ -30,12 +30,18 @@ const ORDER = {
   consent: 'on',
 };
 
+/*
+ * A German speaker, reading the German site, subscribing to the English
+ * edition - which is the real case the newsletter has to handle, because the
+ * newsletter is only written in French and English. `locale` is where she is;
+ * `language` is which edition she gets. They are deliberately different here.
+ */
 const SUBSCRIBE = {
   form: 'newsletter',
   locale: 'de',
   firstName: 'Anna',
   email: 'anna@example.ch',
-  language: 'de',
+  language: 'en',
   consent: 'on',
 };
 
@@ -187,6 +193,30 @@ await check('timing check applies to all three forms', async () => {
     ).json();
     assert(body.reason === 'tooFast', `kind ${fields.form} not rate-checked`);
   }
+});
+
+await check('newsletter accepts only the languages it is written in', async () => {
+  for (const language of ['fr', 'en']) {
+    const result = validate(formOf({ ...SUBSCRIBE, language }));
+    assert(result.ok, `${language} should be offered - the form lists it`);
+  }
+  /*
+   * The form never offered these, but the handler used to accept them, so a
+   * hand-made POST could subscribe someone to an edition that is not written.
+   */
+  for (const language of ['de', 'it']) {
+    const result = validate(formOf({ ...SUBSCRIBE, language }));
+    assert(!result.ok, `${language} must be refused - no such edition exists`);
+    assert(result.fields.includes('language'), `${language} should flag the language field`);
+  }
+});
+
+await check('the site language stays independent of the edition', async () => {
+  // Reading the Italian site, subscribing in French: valid, and common.
+  const result = validate(formOf({ ...SUBSCRIBE, locale: 'it', language: 'fr' }));
+  assert(result.ok, 'an Italian visitor must be able to take the French edition');
+  assert(result.data.locale === 'it', 'locale should record where they were');
+  assert(result.data.language === 'fr', 'language should record the edition');
 });
 
 await check('unknown form kind falls back to contact', async () => {
