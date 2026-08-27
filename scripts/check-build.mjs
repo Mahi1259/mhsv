@@ -405,6 +405,44 @@ for (const locale of LOCALES) {
   }
 }
 
+/*
+ * --- 6e: cookie notice, and the banners that must not go missing -----------
+ *
+ * Two of these are standing client instructions rather than nice-to-haves: the
+ * permanent cookie-settings control must exist on every page, and the banners
+ * on the two documents still under legal validation must not be removed. Both
+ * are the kind of thing a later refactor drops silently.
+ */
+{
+  const BANNERED = { legalNotice: ['mentions-legales', 'legal-notice'],
+                     dataProtection: ['protection-des-donnees', 'data-protection'] };
+
+  for (const locale of LOCALES) {
+    const home = resolve(DIST, locale, 'index.html');
+    if (!existsSync(home)) continue;
+    const html = readFileSync(home, 'utf8');
+
+    if (!/data-cookie-reopen/.test(html)) {
+      errors.push(`${locale}/index.html: no permanent cookie-settings control`);
+    }
+    if (!/\[data-cookie\]/.test(html)) {
+      errors.push(`${locale}/index.html: the cookie notice script is missing`);
+    }
+
+    for (const slugs of Object.values(BANNERED)) {
+      for (const slug of slugs) {
+        const page = resolve(DIST, locale, slug, 'index.html');
+        if (!existsSync(page)) continue;
+        if (!/<p class="notice__banner"/.test(readFileSync(page, 'utf8'))) {
+          errors.push(
+            `${locale}/${slug}/: the pending-validation banner is gone - it may not be removed without instruction`,
+          );
+        }
+      }
+    }
+  }
+}
+
 // --- 7: consent must never be pre-ticked ------------------------------------
 for (const file of textFiles.filter((f) => extname(f) === '.html')) {
   const html = readFileSync(file, 'utf8');

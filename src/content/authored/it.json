@@ -441,7 +441,8 @@
   "cookies": {
     "text": "Questo sito utilizza solo i cookie necessari al suo funzionamento.",
     "accept": "Accetta",
-    "more": "Scopri di più"
+    "more": "Scopri di più",
+    "settings": "Impostazioni dei cookie"
   },
   "stock": {
     "about": {
@@ -779,6 +780,20 @@
         "heading": "11. Version and languages",
         "paragraphs": [
           "This version takes effect when published on the website. In the event of any inconsistency between the French and English versions, the French version shall prevail, subject to mandatory law. Last updated: [INSERT ON PUBLICATION]."
+        ],
+        "items": []
+      }
+    ]
+  },
+  "cookiePolicy": {
+    "banner": null,
+    "officialLanguagesNote": "Questa pagina è disponibile solo in francese e in inglese. Di seguito la versione inglese; in caso di divergenza prevale la versione francese.",
+    "version": null,
+    "sections": [
+      {
+        "heading": null,
+        "paragraphs": [
+          "This website uses only strictly necessary cookies required for it to function securely and to remember your cookie preference. We do not use advertising, analytics or third-party tracking cookies. If this changes in future, we will update this page and ask for your consent where required."
         ],
         "items": []
       }

@@ -37,12 +37,14 @@ const c = getContent(locale);
 const title = c.legalPages.titles[page];
 
 /*
- * Two of the four carry their approved text; cookies and forms are still
- * placeholders waiting on counsel.
+ * Three of the four carry their approved text; only forms is still a
+ * placeholder waiting on counsel.
  *
- * Both supplied documents are "validation technique" versions, so both render
- * under a banner saying so. Those banners are REQUIRED and must not be removed
- * without an explicit instruction.
+ * The legal notice and the data protection notice are "validation technique"
+ * versions, so both render under a banner saying so. Those banners are REQUIRED
+ * and must not be removed without an explicit instruction. The cookies page is
+ * MHSV®'s own wording for the site rather than a document under review, so it
+ * has none.
  *
  * Only sections 1-11 of the legal notice are here. The cover page, the "read
  * before integration" instructions, the validation-scope note and the technical
@@ -52,6 +54,7 @@ const title = c.legalPages.titles[page];
 const NOTICES = {
   dataProtection: c.dataProtection,
   legalNotice: c.legalNotice,
+  cookies: c.cookiePolicy,
 } as const;
 const notice = page in NOTICES ? NOTICES[page as keyof typeof NOTICES] : null;
 ---
@@ -60,7 +63,8 @@ const notice = page in NOTICES ? NOTICES[page as keyof typeof NOTICES] : null;
   {
     notice ? (
       <div class="notice">
-        <p class="notice__banner" role="note">{notice.banner}</p>
+        {/* Only the two documents still awaiting validation carry one. */}
+        {notice.banner && <p class="notice__banner" role="note">{notice.banner}</p>}
 
         {notice.officialLanguagesNote && (
           <p class="notice__languages">{notice.officialLanguagesNote}</p>

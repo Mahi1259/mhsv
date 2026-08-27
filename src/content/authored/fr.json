@@ -442,7 +442,8 @@
   "cookies": {
     "text": "Ce site utilise uniquement des cookies nécessaires à son fonctionnement.",
     "accept": "Accepter",
-    "more": "En savoir plus"
+    "more": "En savoir plus",
+    "settings": "Paramètres des cookies"
   },
   "stock": {
     "about": {
@@ -780,6 +781,20 @@
         "heading": "11. Version et langues",
         "paragraphs": [
           "La présente version entre en vigueur lors de sa publication sur le site. En cas de divergence entre les versions française et anglaise, la version française fait foi, sous réserve du droit impératif. Date de mise à jour : [À INSÉRER LORS DE LA PUBLICATION]."
+        ],
+        "items": []
+      }
+    ]
+  },
+  "cookiePolicy": {
+    "banner": null,
+    "officialLanguagesNote": null,
+    "version": null,
+    "sections": [
+      {
+        "heading": null,
+        "paragraphs": [
+          "Ce site utilise uniquement des cookies strictement nécessaires à son bon fonctionnement, à sa sécurité et à la mémorisation de votre choix en matière de cookies. Nous n’utilisons aucun cookie publicitaire, analytique ou de suivi tiers. En cas de changement, cette page sera mise à jour et votre consentement sera demandé lorsque cela est requis."
         ],
         "items": []
       }

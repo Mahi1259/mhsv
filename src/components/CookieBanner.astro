@@ -39,6 +39,37 @@ const c = getContent(locale);
     var KEY = 'mhsv-cookie-notice';
     var el = document.querySelector('[data-cookie]');
     if (!el) return;
+
+    var accept = el.querySelector('[data-cookie-accept]');
+
+    function show() {
+      el.hidden = false;
+      /* Move focus to the notice when it is re-opened deliberately, so a
+         keyboard user is taken to the thing they just asked for. Not on first
+         load - stealing focus from someone who is already reading is rude. */
+      if (accept) accept.focus();
+    }
+
+    accept.addEventListener('click', function () {
+      el.hidden = true;
+      try {
+        localStorage.setItem(KEY, 'accepted');
+      } catch (e) {
+        /* nothing to do; the notice returns next visit */
+      }
+    });
+
+    /*
+     * The permanent "cookie settings" control in the footer. Revealed here
+     * rather than rendered visible, so it never appears for a reader without
+     * JavaScript, who could not use it.
+     */
+    var reopeners = document.querySelectorAll('[data-cookie-reopen]');
+    for (var i = 0; i < reopeners.length; i++) {
+      reopeners[i].hidden = false;
+      reopeners[i].addEventListener('click', show);
+    }
+
     var seen = false;
     try {
       seen = localStorage.getItem(KEY) === 'accepted';
@@ -47,14 +78,6 @@ const c = getContent(locale);
     }
     if (seen) return;
     el.hidden = false;
-    el.querySelector('[data-cookie-accept]').addEventListener('click', function () {
-      el.hidden = true;
-      try {
-        localStorage.setItem(KEY, 'accepted');
-      } catch (e) {
-        /* nothing to do; the notice returns next visit */
-      }
-    });
   })();
 </script>
 

@@ -45,6 +45,21 @@ const year = new Date().getFullYear();
           ))
         }
         <li><a href={legalPath('photoCredits', locale)}>{c.photoCredits.title}</a></li>
+        {/*
+          Re-opens the cookie notice so a choice can be reviewed or changed.
+          Required to be permanently available, so it sits with the legal links
+          rather than inside the banner.
+
+          A button, not a link: it acts on this page instead of going anywhere.
+          Rendered hidden and revealed by the banner's script, the same way the
+          banner is - without JavaScript it could not do anything, and a dead
+          control is worse than no control.
+        */}
+        <li>
+          <button class="site-footer__cookies" type="button" data-cookie-reopen hidden>
+            {c.cookies.settings}
+          </button>
+        </li>
       </ul>
     </div>
 
@@ -109,8 +124,24 @@ const year = new Date().getFullYear();
     transition: color 180ms var(--ease);
   }
 
-  .site-footer__links a:hover {
+  .site-footer__links a:hover,
+  .site-footer__cookies:hover {
     color: var(--gold-soft);
+  }
+
+  /* Matches the links beside it exactly - it belongs to that list, and only
+     differs in being a button. */
+  .site-footer__cookies {
+    display: inline-block;
+    padding: 0.1875rem 0;
+    border: 0;
+    background: none;
+    color: var(--white);
+    font: inherit;
+    font-size: 0.9375rem;
+    text-align: start;
+    cursor: pointer;
+    transition: color 180ms var(--ease);
   }
 
   .site-footer__legal {
