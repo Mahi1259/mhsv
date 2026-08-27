@@ -1,6 +1,6 @@
 # MHSV® Phase 1 - test pass
 
-Run on 27 August 2026, against a clean build. Nothing is deployed: the site
+Run on 27 August 2026, against a clean build. Re-run after the image withdrawal the same day. Nothing is deployed: the site
 has not been published, the domain is not connected, the repository has not
 been transferred, and the forms are still in test mode.
 
@@ -12,9 +12,9 @@ terminal and the browser checks in another.
 | # | Check | Command | Result |
 |---|---|---|---|
 | 1 | Types | `npm run typecheck` | **Pass** - 0 errors, 0 warnings |
-| 2 | Content parity, 4 languages | `npm run content:check` | **Pass** - 653 keys identical across FR/EN/DE/IT |
+| 2 | Content parity, 4 languages | `npm run content:check` | **Pass** - 645 keys identical across FR/EN/DE/IT |
 | 3 | Colour contrast (WCAG AA) | `npm run check:contrast` | **Pass** - 26 pairings, plus 2 banned pairings confirmed still banned |
-| 4 | Build constraints | `npm run build` | **Pass** - 180 files, 4 locales |
+| 4 | Build constraints | `npm run build` | **Pass** - 154 files, 4 locales |
 | 5 | Accessibility + layout | `npm run audit` | **Pass** - 9 pages × 4 viewports, no overflow, no WCAG 2.1 AA violations |
 | 6 | Motion and the shrinking bar | `npm run check:motion` | **Pass** - including reduced-motion |
 | 7 | Book QR destination | `npm run check:qr` | **Pass** - `/livre` resolves with and without a trailing slash |
@@ -39,6 +39,7 @@ accident:
 | The Book section QR decodes to `https://www.mhsv.ch/livre` | Enforced, in all 4 languages |
 | `/livre` offers no download and no checkout | Enforced |
 | Consent boxes are never pre-ticked | Enforced |
+| Every photograph on the site is credited, and no withdrawn one still is | Enforced, in all 4 languages |
 | Exactly 6 governance members, no retired name | Enforced |
 | The launch rate is stated once, not three times | Enforced |
 
@@ -64,5 +65,6 @@ the source document is headed "VALIDATION TECHNIQUE - NE PAS PUBLIER".
 | `infos@mhsv.ch` | Not confirmed working. Forms stay in test mode until it is. |
 | Personal address in the Contact section | `m.happi@mhsv.ch` is published there. Confirm that is intended. |
 | DE and IT text | Machine-assisted from the approved FR/EN. Needs a native reading before launch. |
-| Three photographs | Carry visible club and brand marks (UT Tyler / ASICS, Georgetown / Nike, Nike / softball crest). Confirm they are cleared, or replace them. |
+| Four photograph slots are empty | Four images were withdrawn on 27 August for carrying club and brand marks: Who we support, Sport programmes, Founding programmes & fees, and Projects & inclusion. There was no unbranded replacement available, so those sections have no photograph. New images are needed. See IMAGE_INVENTORY.md. |
+| Ecosystem photograph | Left in place, but two pairs of shoes carry the adidas trefoil. Incidental footwear rather than a kit or crest, and a few pixels across at render size. Confirm that reading, or it goes too. |
 | Newsletter default on DE and IT pages | The dropdown offers French and English; on the German and Italian pages it opens on French. English may be the better default there. |

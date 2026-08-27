@@ -308,6 +308,56 @@ for (const locale of LOCALES) {
   }
 }
 
+/*
+ * --- 6c: every photograph on the page is credited, and nothing else is ------
+ *
+ * Credits are per-photograph. When four images were withdrawn for carrying club
+ * and brand marks, the credits page would happily have gone on naming their
+ * photographers - crediting pictures that are not on the site, and implying the
+ * withdrawn ones are still in use.
+ *
+ * SectionImage renders nothing when its file is absent, by design, so the
+ * number of <figure class="section-image"> blocks on a home page is exactly the
+ * number of photographs in src/assets/stock/. Tie all three together.
+ */
+{
+  const STOCK = resolve(ROOT, 'src/assets/stock');
+  const photographs = existsSync(STOCK)
+    ? readdirSync(STOCK).filter((f) => /\.(jpe?g|png|webp|avif)$/i.test(f)).length
+    : 0;
+
+  for (const locale of LOCALES) {
+    const home = resolve(DIST, locale, 'index.html');
+    if (!existsSync(home)) continue;
+    const rendered = (readFileSync(home, 'utf8').match(/<figure class="section-image/g) ?? []).length;
+    if (rendered !== photographs) {
+      errors.push(
+        `${locale}/index.html: ${rendered} photographs rendered but ${photographs} files in src/assets/stock/`,
+      );
+    }
+
+    // Mirrors LEGAL_PAGES.photoCredits in src/config/site.ts, which this plain
+    // node script cannot import. The 4b link check would catch a rename.
+    const creditsSlug = {
+      fr: 'fr/credits-photos',
+      en: 'en/photo-credits',
+      de: 'de/bildnachweise',
+      it: 'it/crediti-foto',
+    }[locale];
+    const creditsPage = resolve(DIST, creditsSlug, 'index.html');
+    if (!existsSync(creditsPage)) {
+      errors.push(`${creditsSlug}/ is missing - the footer links to it`);
+      continue;
+    }
+    const credited = (readFileSync(creditsPage, 'utf8').match(/unsplash\.com\/photos\//g) ?? []).length;
+    if (credited !== photographs) {
+      errors.push(
+        `${creditsSlug}/: credits ${credited} photographers for ${photographs} photographs on the site`,
+      );
+    }
+  }
+}
+
 // --- 7: consent must never be pre-ticked ------------------------------------
 for (const file of textFiles.filter((f) => extname(f) === '.html')) {
   const html = readFileSync(file, 'utf8');
