@@ -56,6 +56,14 @@ MHSV_CONTENT_DOCX=/path/to/pack/…V3.docx npm run content:extract
 | `npm run typecheck` | `astro check` | no |
 | `node scripts/shot.mjs de 320` | Screenshot a locale at a given width | no |
 | `npm run content:extract` | Re-read the .docx into `src/data/i18n/*.json` | **yes** |
+
+**Forms in dev.** `npm run dev` serves `/api/contact` through the same handler
+the deployed function uses, so the contact and order forms work on the ordinary
+dev server. Mail is **logged to the terminal, not sent**, even when `.env` holds
+working SMTP or Resend credentials - submitting a form while trying things out
+must not deliver to a real inbox. To send for real:
+`MHSV_DEV_SEND=yes npm run dev`. `npm run dev:cf` runs the real Cloudflare
+function over `dist/` and does obey `.env`.
 | `npm run assets:prepare` | Re-derive logo, favicons, book covers, fonts | **yes** |
 | `npm run build:from-pack` | Both of the above, then build | **yes** |
 

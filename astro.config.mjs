@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { resolveSite } from './site-url.mjs';
+import devApi from './dev-api.mjs';
 
 /**
  * Canonical origin — see site-url.mjs. Resolved once here and pushed back into
@@ -43,6 +44,9 @@ export default defineConfig({
     },
   },
   integrations: [
+    // Dev only - gives `astro dev` the /api/contact the Pages Function
+    // provides in production. No effect on a build.
+    devApi(),
     sitemap({
       i18n: {
         defaultLocale: 'fr',
