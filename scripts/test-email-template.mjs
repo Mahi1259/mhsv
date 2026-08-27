@@ -31,7 +31,7 @@ const ORDER = {
 {
   const html = renderEmailHtml(CONTACT);
   check(html.includes('Demande via le formulaire de contact'), 'contact: heading');
-  for (const label of ['Nom', 'E-mail', 'Téléphone', 'Profil', 'Sujet', 'Langue du site']) {
+  for (const label of ['Nom', 'E-mail', 'Téléphone', 'Profil', 'Sujet']) {
     check(html.includes(`<strong style="color:#1c2431;">${label}</strong>`), `contact: "${label}" row`);
   }
   check(!html.includes('Quantité') && !html.includes('Édition'), 'contact: no order-only fields');
@@ -62,8 +62,7 @@ const ORDER = {
     const h = renderEmailHtml({ ...ORDER, locale });
     check(h.includes('Livre Fondateur - demande de commande'),
       `chrome stays French for a ${locale.toUpperCase()} visitor`);
-    check(h.includes(`>${locale.toUpperCase()}<`) || h.includes(locale.toUpperCase()),
-      `the ${locale.toUpperCase()} visitor's site language is recorded`);
+    check(!h.includes('Langue du site'), `no site-language row for a ${locale.toUpperCase()} visitor`);
   }
 }
 

@@ -14,8 +14,7 @@
  * organisation's own language and the one its legal notice says prevails.
  *
  * What the VISITOR wrote is never touched: their name, subject, profile and
- * message arrive exactly as typed, and a "Langue du site" row records which
- * version of the site they used.
+ * message arrive exactly as typed.
  *
  * Written for MAIL CLIENTS, not browsers. Tables for layout, inline styles
  * only, no flexbox, no grid, no <style> block - Outlook and Gmail strip or
@@ -135,7 +134,7 @@ export function renderEmailHtml(data, options = {}) {
       ? 'Inscription à la newsletter'
       : 'Demande via le formulaire de contact';
 
-  const rows = [...fieldsFor(data), ['Langue du site', String(data.locale || '').toUpperCase()]]
+  const rows = fieldsFor(data)
     .map(([label, value], i) => {
       const email = label === 'E-mail' && value;
       const shown = email

@@ -205,7 +205,6 @@ export function renderEmail(data) {
 
   return [
     ...rows.map(([k, v]) => `${(k + ' :').padEnd(17)}${v}`),
-    `${'Langue du site :'.padEnd(17)}${data.locale}`,
     '',
     '---',
     '',
@@ -413,7 +412,6 @@ async function subscribe(data, env) {
           `${'Nom :'.padEnd(17)}${data.firstName || '-'}`,
           `${'E-mail :'.padEnd(17)}${data.email}`,
           `${'Édition :'.padEnd(17)}${edition}`,
-          `${'Langue du site :'.padEnd(17)}${data.locale}`,
           '',
           '---',
           '',
