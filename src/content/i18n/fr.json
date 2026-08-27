@@ -840,5 +840,170 @@
         "url": "https://unsplash.com/photos/-P7kHROe-6A"
       }
     ]
+  },
+  "dataProtection": {
+    "banner": "Cette notice est en attente de validation juridique finale et sera confirmée avant la mise en ligne du site.",
+    "title": "Notice de protection des données",
+    "version": "Version de validation technique 1.0 - 20 août 2026",
+    "intro": [
+      "La présente Notice de protection des données (la « Notice ») décrit la manière dont MHSV Association (l’« Association ») collecte, utilise, conserve, communique et protège les données personnelles des utilisateurs de son site internet, de ses membres et de ses services, notamment les formations sportives prodiguées par l’Association (les « Services »).",
+      "L’Association traite les données personnelles conformément à la loi fédérale sur la protection des données (« LPD ») et, lorsque celui-ci est applicable, au Règlement Européen sur la protection des données (« RGPD »).",
+      "Les termes commençant par une majuscule qui ne sont pas définis dans la présente Notice ont la signification qui leur est attribuée dans les Conditions générales d’utilisation.",
+      "En cliquant sur le bouton « J’ai lu, compris et j’accepte la Notice de protection des données », vous reconnaissez avoir lu et compris la présente Notice et acceptez que vos données personnelles soient traitées conformément à celle-ci.",
+      "Vous reconnaissez que vos données personnelles seront traitées dans les conditions décrites dans la présente Notice et conformément au droit applicable.",
+      "Lorsque le traitement de certaines données personnelles, y compris de données personnelles sensibles, notamment sur votre santé, repose sur votre consentement, celui-ci vous sera demandé séparément conformément au droit applicable.",
+      "Si vous n’acceptez pas les modalités de traitement décrites dans la présente Notice, nous vous invitons à ne pas utiliser notre site internet ou nos Services."
+    ],
+    "sections": [
+      {
+        "heading": "1. Introduction",
+        "paragraphs": [],
+        "items": []
+      },
+      {
+        "heading": "2. Responsable du traitement",
+        "paragraphs": [
+          "Le responsable du traitement est :",
+          "MHSV Association",
+          "M. Martial Happi",
+          "Chemin de Beau-Soleil 26, 1206 Genève, Suisse",
+          "Si vous avez des questions concernant le traitement de vos données personnelles ou souhaitez exercer vos droits, vous pouvez nous contacter à l’adresse suivante : infos@mhsv.ch."
+        ],
+        "items": []
+      },
+      {
+        "heading": "3. Quelles données personnelles collectons-nous ?",
+        "paragraphs": [
+          "Selon les Services utilisés, nous pouvons être amenés à collecter les catégories de données personnelles suivantes :"
+        ],
+        "items": [
+          "les données d’identification, telles que votre nom, prénom, adresse électronique, numéro de téléphone et adresse postale ;",
+          "les données relatives à votre activité professionnelle, telles que le nom de votre entreprise, son numéro d’identification (UID), son numéro de TVA ou toute autre information nécessaire à votre identification ;",
+          "les données relatives à votre parcours et à votre activité sportive, notamment votre discipline, votre club ou organisation d’appartenance, votre niveau de pratique, votre historique sportif, vos résultats, vos performances, vos objectifs, vos programmes d’entraînement et les données relatives à votre progression ;",
+          "les données relatives à votre condition physique et à vos performances sportives, notamment les résultats de tests physiques, physiologiques ou fonctionnels, les mesures de performance, ainsi que les données issues, le cas échéant, d’équipements, de capteurs ou d’outils de suivi utilisés dans le cadre des programmes proposés par l’Association ;",
+          "des données personnelles sensibles relatives à votre santé, lorsque leur traitement est nécessaire ou utile à la fourniture des programmes et prestations concernés, notamment des informations relatives à votre état de santé physique ou psychique, vos antécédents médicaux, blessures, traitements, limitations ou contre-indications à la pratique sportive, ainsi que les résultats d’évaluations ou de tests réalisés dans le cadre de votre accompagnement ;",
+          "le cas échéant, des données relatives à votre bien-être, votre état psychologique ou émotionnel et à votre suivi psychosocial, lorsque ces informations sont nécessaires à la mise en œuvre d’un accompagnement individualisé ;",
+          "les données relatives à votre parcours académique, éducatif et professionnel, notamment vos formations, qualifications, compétences, expériences professionnelles et projets de carrière, lorsque celles-ci sont nécessaires à votre accompagnement, notamment dans le cadre d’un double projet, d’une transition vers le sport professionnel ou d’une reconversion.",
+          "les données techniques, telles que votre adresse IP, les journaux de connexion (« logs »), les informations relatives à votre navigateur, à votre appareil ou à votre utilisation des Services."
+        ]
+      },
+      {
+        "heading": null,
+        "paragraphs": [
+          "Lorsque nous traitons des données personnelles sensibles, en particulier des données relatives à la santé, nous mettons en œuvre des mesures techniques et organisationnelles appropriées afin d’assurer un niveau de protection adapté à la nature et à la sensibilité des données concernées. Ces données ne sont collectées et traitées que dans la mesure nécessaire aux finalités poursuivies et conformément à la législation applicable en matière de protection des données.",
+          "Nous vous invitons à ne communiquer que les données personnelles nécessaires à l’utilisation des Services et à vous assurer que toute donnée relative à un tiers nous est transmise de manière licite."
+        ],
+        "items": []
+      },
+      {
+        "heading": "4. Pourquoi traitons-nous vos données personnelles ?",
+        "paragraphs": [
+          "Nous traitons vos données personnelles uniquement lorsque cela est nécessaire et pour les finalités suivantes :"
+        ],
+        "items": [
+          "faciliter, lorsque cela est pertinent et conformément à la législation applicable, la mise en relation et la collaboration avec les différents acteurs de l’écosystème de l’Association, notamment les entraîneurs, formateurs, mentors, experts, professionnels de la santé, clubs, académies, fédérations, établissements d’enseignement et partenaires ;",
+          "gérer les relations avec les membres, bénéficiaires, partenaires, donateurs, prestataires et autres personnes ou organisations en relation avec l’Association ;",
+          "gérer les demandes d’information, inscriptions, communications et correspondances adressées à l’Association ;",
+          "assurer la gestion administrative, comptable, financière et opérationnelle de l’Association ;",
+          "assurer le bon fonctionnement, la sécurité et l’amélioration de nos Services, plateformes et outils numériques ;",
+          "respecter nos obligations légales et réglementaires, répondre aux demandes des autorités compétentes et, lorsque cela est nécessaire, constater, exercer ou défendre des droits en justice ;",
+          "sous réserve des exigences légales applicables, vous informer des activités, programmes, événements, projets et actualités de l’Association ;",
+          "fournir, organiser et gérer les services, programmes, formations, activités et événements proposés par l’Association ;",
+          "assurer votre inscription, votre participation et votre suivi dans le cadre des programmes de formation, d’accompagnement et de développement proposés par l’Association ;",
+          "concevoir, adapter et personnaliser les programmes de formation et d’accompagnement en fonction de votre profil, de vos besoins, de vos objectifs et de votre progression ;",
+          "assurer un accompagnement individualisé dans les différentes dimensions de votre parcours, notamment sportive, éducative, académique, professionnelle, personnelle et sociale ;",
+          "accompagner les sportifs dans leur développement, leur préparation au sport de haut niveau, leur transition vers le professionnalisme, la gestion d’un double projet sportif et académique ou professionnel, ainsi que leur reconversion."
+        ]
+      },
+      {
+        "heading": null,
+        "paragraphs": [
+          "Selon les circonstances, le traitement de vos données personnelles repose notamment sur :"
+        ],
+        "items": [
+          "l’exécution d’un contrat ou de mesures précontractuelles ;",
+          "le respect d’une obligation légale ou réglementaire ;",
+          "nos intérêts légitimes, notamment afin d’assurer la sécurité de nos Services, de prévenir les fraudes et d’améliorer nos prestations ;",
+          "votre consentement, lorsque celui-ci est requis."
+        ]
+      },
+      {
+        "heading": "5. Communication de vos données personnelles",
+        "paragraphs": [
+          "Nous ne vendons jamais vos données personnelles.",
+          "Nous pouvons toutefois communiquer certaines données personnelles lorsque cela est nécessaire :"
+        ],
+        "items": [
+          "à nos prestataires techniques, agissant pour notre compte, notamment pour l’hébergement, la maintenance, la sécurité informatique ou l’envoi de communications ;",
+          "aux autorités judiciaires, administratives ou réglementaires lorsque la loi l’exige ou lorsque cela est nécessaire à la protection de nos droits ;",
+          "à nos conseillers professionnels ou à toute autre personne lorsque cette communication est nécessaire à l’exécution des Services ou au respect de nos obligations légales."
+        ]
+      },
+      {
+        "heading": null,
+        "paragraphs": [
+          "Lorsque des données personnelles sont communiquées à des prestataires agissant pour notre compte, nous veillons à ce qu’ils présentent des garanties appropriées en matière de protection des données personnelles."
+        ],
+        "items": []
+      },
+      {
+        "heading": "6. Conservation et transferts des données",
+        "paragraphs": [
+          "Nous conservons vos données personnelles uniquement pendant la durée nécessaire à la réalisation des finalités décrites dans la présente Notice ou afin de respecter nos obligations légales, réglementaires ou contractuelles.",
+          "En particulier, les données sont conservées pendant toute la durée de votre relation avec l’Association. À l’expiration des durées de conservation applicables, les données personnelles sont supprimées, anonymisées ou archivées conformément au droit applicable.",
+          "Les données personnelles sont principalement hébergées en Suisse ou dans l’Espace économique européen.",
+          "Lorsque des données personnelles sont transférées vers un État ne bénéficiant pas d’un niveau de protection reconnu comme adéquat, l’Association met en œuvre les garanties appropriées prévues par le droit applicable, notamment les clauses contractuelles types approuvées par les autorités compétentes ou tout autre mécanisme reconnu."
+        ],
+        "items": []
+      },
+      {
+        "heading": "7. Sécurité des données",
+        "paragraphs": [
+          "L’Association met en œuvre des mesures techniques et organisationnelles appropriées afin de protéger les données personnelles contre tout accès non autorisé, perte, destruction, divulgation ou modification accidentelle ou illicite.",
+          "Ces mesures tiennent compte de l’état de la technique, de la nature des données traitées, des risques présentés par le traitement ainsi que des exigences légales applicables.",
+          "Bien que l’Association s’efforce d’assurer un niveau élevé de sécurité, aucun système informatique ou moyen de transmission électronique ne peut garantir une sécurité absolue."
+        ],
+        "items": []
+      },
+      {
+        "heading": "8. Vos droits",
+        "paragraphs": [
+          "Conformément au droit applicable, vous pouvez notamment demander :"
+        ],
+        "items": [
+          "l’accès à vos données personnelles ;",
+          "la rectification de données inexactes ou incomplètes ;",
+          "l’effacement de vos données, lorsque les conditions légales sont réunies ;",
+          "la limitation de certains traitements ;",
+          "le retrait de votre consentement lorsque le traitement repose sur celui-ci ;",
+          "vous opposer à certains traitements, dans les limites prévues par le droit applicable."
+        ]
+      },
+      {
+        "heading": null,
+        "paragraphs": [
+          "Pour exercer vos droits, vous pouvez nous contacter à l’adresse suivante : infos@mhsv.ch.",
+          "Vous disposez également du droit d’introduire une réclamation auprès de l’autorité de protection des données compétente."
+        ],
+        "items": []
+      },
+      {
+        "heading": "9. Cookies",
+        "paragraphs": [
+          "Notre site internet et nos Services utilisent des cookies et technologies similaires nécessaires à leur bon fonctionnement, notamment pour assurer la sécurité des connexions, maintenir votre session et mémoriser certaines de vos préférences.",
+          "Nous n’utilisons pas de cookies publicitaires. Si des cookies nécessitant votre consentement devaient être utilisés à l’avenir, nous vous en informerions conformément au droit applicable."
+        ],
+        "items": []
+      },
+      {
+        "heading": "10. Modifications de la Notice",
+        "paragraphs": [
+          "L’Association peut modifier la présente Notice à tout moment afin de tenir compte notamment des évolutions légales, réglementaires, techniques ou de ses Services.",
+          "La version la plus récente est publiée sur notre site internet et entre en vigueur dès sa mise en ligne."
+        ],
+        "items": []
+      }
+    ],
+    "officialLanguagesNote": null
   }
 }

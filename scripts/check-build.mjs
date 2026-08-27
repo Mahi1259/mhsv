@@ -106,7 +106,22 @@ if (!SHOW_LEGAL_STATUS) {
     /associazione svizzera senza scopo di lucro/i,
     /MHSV Association/,
   ];
+  /*
+   * The data protection notice is the ONE exemption, and a narrow one.
+   *
+   * MHSV® supplied that text for these two URLs and it names "MHSV Association"
+   * as the data controller - a notice cannot identify its controller any other
+   * way. It carries a banner saying it is pending final legal validation, which
+   * must not be removed.
+   *
+   * The ban stands everywhere else: the home documents, the footer, the hero
+   * status line. Exempting the whole build instead of these pages would have
+   * thrown away the guard that keeps association status off the site.
+   */
+  const DATA_PROTECTION = /\/(protection-des-donnees|data-protection)\//;
+
   for (const file of textFiles.filter((f) => extname(f) === '.html')) {
+    if (DATA_PROTECTION.test(relative(DIST, file))) continue;
     const content = readFileSync(file, 'utf8');
     for (const pattern of LEGAL_WORDING) {
       const match = pattern.exec(content);

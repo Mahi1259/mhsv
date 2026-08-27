@@ -817,5 +817,170 @@
         "url": "https://unsplash.com/photos/-P7kHROe-6A"
       }
     ]
+  },
+  "dataProtection": {
+    "banner": "Diese Notice steht noch unter juristischem Vorbehalt und wird vor der Aufschaltung der Website bestätigt.",
+    "title": "Data Protection Notice",
+    "version": "Technical validation version 1.0 - 20 August 2026",
+    "intro": [
+      "This Data Protection Notice (the \"Notice\") describes how MHSV Association (the \"Association\") collects, uses, retains, discloses and protects the personal data of users of its website, its members and its services, including the sports training provided by the Association (the \"Services\").",
+      "The Association processes personal data in accordance with the Swiss Federal Act on Data Protection (the \"FADP\") and, where applicable, the European General Data Protection Regulation (the \"GDPR\").",
+      "Capitalised terms that are not defined in this Notice have the meanings given to them in the Terms and Conditions of Use.",
+      "By clicking the \"I have read, understood and accept the Data Protection Notice\" button, you acknowledge that you have read and understood this Notice and agree that your personal data may be processed in accordance with it.",
+      "You acknowledge that your personal data will be processed under the conditions described in this Notice and in accordance with applicable law.",
+      "Where the processing of certain personal data, including sensitive personal data, particularly health data, is based on your consent, your consent will be requested separately in accordance with applicable law.",
+      "If you do not accept the processing arrangements described in this Notice, please do not use our website or Services."
+    ],
+    "sections": [
+      {
+        "heading": "1. Introduction",
+        "paragraphs": [],
+        "items": []
+      },
+      {
+        "heading": "2. Data controller",
+        "paragraphs": [
+          "The data controller is:",
+          "MHSV Association",
+          "Mr Martial Happi",
+          "Chemin de Beau-Soleil 26, 1206 Geneva, Switzerland",
+          "If you have any questions about the processing of your personal data or wish to exercise your rights, you may contact us at: infos@mhsv.ch."
+        ],
+        "items": []
+      },
+      {
+        "heading": "3. What personal data do we collect?",
+        "paragraphs": [
+          "Depending on the Services used, we may collect the following categories of personal data:"
+        ],
+        "items": [
+          "identification data, such as your surname, first name, email address, telephone number and postal address;",
+          "data relating to your professional activity, such as your company name, its business identification number (UID), VAT number or any other information required to identify you;",
+          "data relating to your sporting background and activities, including your discipline, club or organisation, level of participation, sporting history, results, performance, objectives, training programmes and progress data;",
+          "data relating to your physical condition and sporting performance, including the results of physical, physiological or functional tests, performance measurements and, where applicable, data from equipment, sensors or tracking tools used in connection with the programmes offered by the Association;",
+          "sensitive personal data relating to your health, where its processing is necessary or useful for the delivery of the relevant programmes and services, including information about your physical or mental health, medical history, injuries, treatments, limitations or contraindications to sporting activity, as well as the results of assessments or tests carried out as part of your support programme;",
+          "where applicable, data relating to your well-being, psychological or emotional state and psychosocial support, where this information is necessary to provide individualised support;",
+          "data relating to your academic, educational and professional background, including your training, qualifications, skills, professional experience and career plans, where required for your support, particularly in connection with a dual pathway, a transition to professional sport or a career change;",
+          "technical data, such as your IP address, connection logs and information relating to your browser, device or use of the Services."
+        ]
+      },
+      {
+        "heading": null,
+        "paragraphs": [
+          "When we process sensitive personal data, particularly health data, we implement appropriate technical and organisational measures to ensure a level of protection suited to the nature and sensitivity of the data concerned. Such data is collected and processed only to the extent necessary for the intended purposes and in accordance with applicable data-protection legislation.",
+          "Please provide only the personal data necessary to use the Services and ensure that any data relating to a third party is lawfully disclosed to us."
+        ],
+        "items": []
+      },
+      {
+        "heading": "4. Why do we process your personal data?",
+        "paragraphs": [
+          "We process your personal data only where necessary and for the following purposes:"
+        ],
+        "items": [
+          "where relevant and in accordance with applicable law, to facilitate introductions and cooperation with participants in the Association’s ecosystem, including coaches, trainers, mentors, experts, healthcare professionals, clubs, academies, federations, educational institutions and partners;",
+          "to manage relationships with members, beneficiaries, partners, donors, service providers and other persons or organisations connected with the Association;",
+          "to manage requests for information, registrations, communications and correspondence addressed to the Association;",
+          "to manage the Association’s administrative, accounting, financial and operational activities;",
+          "to ensure the proper operation, security and improvement of our Services, platforms and digital tools;",
+          "to comply with our legal and regulatory obligations, respond to requests from competent authorities and, where necessary, establish, exercise or defend legal claims;",
+          "subject to applicable legal requirements, to inform you about the Association’s activities, programmes, events, projects and news;",
+          "to provide, organise and manage the services, programmes, training courses, activities and events offered by the Association;",
+          "to manage your registration, participation and monitoring in connection with the training, support and development programmes offered by the Association;",
+          "to design, adapt and personalise training and support programmes according to your profile, needs, objectives and progress;",
+          "to provide individualised support across the different dimensions of your pathway, including sporting, educational, academic, professional, personal and social aspects;",
+          "to support athletes in their development, preparation for high-level sport, transition to professional sport, management of a dual sporting and academic or professional pathway, and career transition."
+        ]
+      },
+      {
+        "heading": null,
+        "paragraphs": [
+          "Depending on the circumstances, the processing of your personal data is based in particular on:"
+        ],
+        "items": [
+          "the performance of a contract or pre-contractual measures;",
+          "compliance with a legal or regulatory obligation;",
+          "our legitimate interests, including ensuring the security of our Services, preventing fraud and improving our services;",
+          "your consent, where required."
+        ]
+      },
+      {
+        "heading": "5. Disclosure of your personal data",
+        "paragraphs": [
+          "We never sell your personal data.",
+          "We may, however, disclose certain personal data where necessary:"
+        ],
+        "items": [
+          "to technical service providers acting on our behalf, including for hosting, maintenance, IT security or sending communications;",
+          "to judicial, administrative or regulatory authorities where required by law or necessary to protect our rights;",
+          "to our professional advisers or any other person where disclosure is necessary for the performance of the Services or compliance with our legal obligations."
+        ]
+      },
+      {
+        "heading": null,
+        "paragraphs": [
+          "Where personal data is disclosed to service providers acting on our behalf, we ensure that they provide appropriate safeguards for the protection of personal data."
+        ],
+        "items": []
+      },
+      {
+        "heading": "6. Data retention and transfers",
+        "paragraphs": [
+          "We retain your personal data only for as long as necessary to fulfil the purposes described in this Notice or to comply with our legal, regulatory or contractual obligations.",
+          "In particular, data is retained for the duration of your relationship with the Association. At the end of the applicable retention periods, personal data is deleted, anonymised or archived in accordance with applicable law.",
+          "Personal data is primarily hosted in Switzerland or the European Economic Area.",
+          "Where personal data is transferred to a country that is not recognised as providing an adequate level of protection, the Association implements appropriate safeguards under applicable law, including standard contractual clauses approved by the competent authorities or any other recognised mechanism."
+        ],
+        "items": []
+      },
+      {
+        "heading": "7. Data security",
+        "paragraphs": [
+          "The Association implements appropriate technical and organisational measures to protect personal data against unauthorised access, loss, destruction, disclosure or accidental or unlawful alteration.",
+          "These measures take account of the state of the art, the nature of the data processed, the risks posed by the processing and the applicable legal requirements.",
+          "Although the Association endeavours to maintain a high level of security, no IT system or electronic transmission method can guarantee absolute security."
+        ],
+        "items": []
+      },
+      {
+        "heading": "8. Your rights",
+        "paragraphs": [
+          "In accordance with applicable law, you may request in particular:"
+        ],
+        "items": [
+          "access to your personal data;",
+          "correction of inaccurate or incomplete data;",
+          "deletion of your data, where the legal requirements are met;",
+          "restriction of certain processing activities;",
+          "withdrawal of your consent where the processing is based on consent;",
+          "to object to certain processing activities, within the limits provided by applicable law."
+        ]
+      },
+      {
+        "heading": null,
+        "paragraphs": [
+          "To exercise your rights, you may contact us at: infos@mhsv.ch.",
+          "You also have the right to lodge a complaint with the competent data-protection authority."
+        ],
+        "items": []
+      },
+      {
+        "heading": "9. Cookies",
+        "paragraphs": [
+          "Our website and Services use cookies and similar technologies that are necessary for their proper operation, including to secure connections, maintain your session and remember certain preferences.",
+          "We do not use advertising cookies. If cookies requiring your consent are used in the future, we will inform you in accordance with applicable law."
+        ],
+        "items": []
+      },
+      {
+        "heading": "10. Changes to this Notice",
+        "paragraphs": [
+          "The Association may amend this Notice at any time, including to reflect legal, regulatory or technical developments or changes to its Services.",
+          "The most recent version is published on our website and takes effect when it is posted online."
+        ],
+        "items": []
+      }
+    ],
+    "officialLanguagesNote": "Diese Notice liegt ausschliesslich auf Französisch und Englisch vor. Nachstehend die englische Fassung; die französische Fassung ist massgebend."
   }
 }

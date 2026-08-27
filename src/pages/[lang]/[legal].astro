@@ -27,13 +27,111 @@ const locale = Astro.params.lang as Locale;
 const { page } = Astro.props as { page: LegalPageId };
 const c = getContent(locale);
 const title = c.legalPages.titles[page];
+
+/*
+ * Data protection carries the full approved notice; the other three are still
+ * placeholders waiting on counsel.
+ *
+ * The banner above it is REQUIRED and must not be removed without an explicit
+ * instruction: the source document is headed "VALIDATION TECHNIQUE - NE PAS
+ * PUBLIER", so the text is here for review, not as a published notice.
+ */
+const notice = page === 'dataProtection' ? c.dataProtection : null;
 ---
 
 <Page locale={locale} path={LEGAL_PAGES[page][locale]} title={title} eyebrow={c.footer.legalTitle}>
-  <p class="legal-pending">{c.legalPages.pending}</p>
+  {
+    notice ? (
+      <div class="notice">
+        <p class="notice__banner" role="note">{notice.banner}</p>
+
+        {notice.officialLanguagesNote && (
+          <p class="notice__languages">{notice.officialLanguagesNote}</p>
+        )}
+
+        {notice.intro.map((text) => (
+          <p class="notice__p">{text}</p>
+        ))}
+
+        {notice.sections.map((section) => (
+          <section class="notice__section">
+            {section.heading && <h2 class="notice__heading">{section.heading}</h2>}
+            {section.paragraphs.map((text) => (
+              <p class="notice__p">{text}</p>
+            ))}
+            {section.items.length > 0 && (
+              <ul class="notice__list">
+                {section.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            )}
+          </section>
+        ))}
+
+        <p class="notice__version">{notice.version}</p>
+      </div>
+    ) : (
+      <p class="legal-pending">{c.legalPages.pending}</p>
+    )
+  }
 </Page>
 
 <style>
+  .notice {
+    max-width: 74ch;
+  }
+
+  /* Deliberately loud. The source document is a technical-validation version
+     marked "do not publish", so a reader must not mistake this for the final
+     notice. */
+  .notice__banner {
+    margin: 0 0 2rem;
+    padding: 0.875rem 1.125rem;
+    border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+    border-radius: var(--radius);
+    background: color-mix(in srgb, var(--gold) 9%, transparent);
+    color: var(--gold-soft);
+    font-size: 0.9375rem;
+  }
+
+  .notice__languages {
+    margin: 0 0 2rem;
+    color: var(--band-muted);
+    font-size: 0.9375rem;
+  }
+
+  .notice__section {
+    margin-block-start: 2rem;
+  }
+
+  .notice__heading {
+    margin: 0 0 0.75rem;
+    font-size: var(--text-h3);
+  }
+
+  .notice__p {
+    margin: 0 0 0.875rem;
+    color: var(--band-muted);
+  }
+
+  .notice__list {
+    margin: 0 0 0.875rem;
+    padding-inline-start: 1.25rem;
+    display: grid;
+    gap: 0.5rem;
+    color: var(--band-muted);
+  }
+
+  .notice__version {
+    margin-block-start: 2.5rem;
+    padding-block-start: 1.25rem;
+    border-block-start: 1px solid var(--band-rule);
+    color: var(--band-muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
   .legal-pending {
     margin: 0;
     color: var(--band-muted);
