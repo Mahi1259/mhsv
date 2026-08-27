@@ -358,6 +358,52 @@ for (const locale of LOCALES) {
   }
 }
 
+/*
+ * --- 6d: private contact details stay off the site -------------------------
+ *
+ * Martial's 27 August instruction: general and contact pages carry
+ * infos@mhsv.ch and nothing else. His own address is allowed in exactly one
+ * place - his card in the Governance section - and his phone number nowhere at
+ * all. A mobile number was published in the Contact section of all four
+ * languages, as a tel: link, until that instruction.
+ *
+ * Checked against built HTML rather than the content files, because it is the
+ * rendered page that leaks.
+ */
+{
+  const PRIVATE_EMAIL = 'm.happi@mhsv.ch';
+
+  for (const file of textFiles.filter((f) => extname(f) === '.html')) {
+    const name = relative(DIST, file);
+    const html = readFileSync(file, 'utf8');
+
+    // No phone number, anywhere. `tel:` covers the link, the digits cover the
+    // text - the number was published as both.
+    const tel = /tel:\+?[\d\s.-]{6,}/.exec(html);
+    if (tel) errors.push(`${name}: publishes a phone link "${tel[0].trim()}"`);
+    const digits = /\+41[\s.-]?\d[\s.-]?\d{2}([\s.-]?\d{2}){3}/.exec(html);
+    if (digits) errors.push(`${name}: publishes a phone number "${digits[0]}"`);
+
+    if (!html.includes(PRIVATE_EMAIL)) continue;
+
+    /*
+     * Allowed only on the home documents, and only inside the governance card.
+     * Anywhere else - a legal page, /livre, the contact block - is a leak.
+     */
+    const onHome = /^[a-z]{2}\/index\.html$/.test(name);
+    const inGovernanceCard =
+      /class="[^"]*\bteam__email\b[^"]*"\s+href="mailto:m\.happi@mhsv\.ch"/.test(html);
+    const occurrences = (html.match(/m\.happi@mhsv\.ch/g) ?? []).length;
+
+    if (!onHome || !inGovernanceCard) {
+      errors.push(`${name}: the founder's private address appears outside the Governance card`);
+    } else if (occurrences > 2) {
+      // mailto: href + link text = 2. More than that means a second place.
+      errors.push(`${name}: the founder's private address appears ${occurrences}x, expected only the Governance card`);
+    }
+  }
+}
+
 // --- 7: consent must never be pre-ticked ------------------------------------
 for (const file of textFiles.filter((f) => extname(f) === '.html')) {
   const html = readFileSync(file, 'utf8');

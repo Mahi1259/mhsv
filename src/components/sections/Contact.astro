@@ -6,8 +6,14 @@
  * the footer's contact column as well, so the address, phone and email showed
  * up three times on one page.
  *
- * Addresses follow the 14 August brief: infos@mhsv.ch is the institutional
- * mailbox, m.happi@mhsv.ch the founder.
+ * Every address here is infos@mhsv.ch, the institutional mailbox. Per the
+ * 27 August instruction, no private address or phone number is published
+ * outside the Governance section - where the founder's own address is the one
+ * deliberate exception.
+ *
+ * There is no phone row. A mobile number was published here, as a tel: link,
+ * in all four languages; it was a private number and has been withdrawn.
+ * check-build.mjs now fails the build if a phone number reappears.
  */
 import Band from '@/components/Band.astro';
 import ContactForm from '@/components/ContactForm.astro';
@@ -27,7 +33,6 @@ const rows = [
   { label: s.websiteLabel, value: s.website, href: `https://${s.website.replace(/^https?:\/\//, '')}` },
   { label: s.emailLabel, value: s.email, href: `mailto:${s.email}` },
   { label: s.founderLabel, value: s.founderEmail, href: `mailto:${s.founderEmail}` },
-  { label: null, value: s.phone, href: `tel:${s.phone.replace(/\s+/g, '')}` },
 ];
 ---
 
