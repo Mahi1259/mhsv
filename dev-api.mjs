@@ -110,6 +110,17 @@ export default function devApi() {
 
           try {
             const response = await handleContact(await toRequest(req), devEnv());
+
+            /*
+             * Say it again, per request. The startup banner scrolls away, and
+             * the form itself shows its success message either way - because
+             * the handler DID succeed; only delivery was skipped. Without this
+             * the terminal shows "not sent" while the browser says "sent", and
+             * the natural reading is that sending is broken.
+             */
+            if (!sending && req.method === 'POST' && response.status < 400) {
+              logger.info('mail was NOT delivered (dev default). MHSV_DEV_SEND=yes npm run dev');
+            }
             res.statusCode = response.status;
             response.headers.forEach((value, key) => res.setHeader(key, value));
             res.end(Buffer.from(await response.arrayBuffer()));
