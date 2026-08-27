@@ -406,9 +406,7 @@
       "notice": "No download of the complete book is offered. Only the approved covers are published.",
       "coverAltFr": "MHSV® Founding Book cover, French edition",
       "coverAltEn": "MHSV® Founding Book cover, English edition",
-      "ctaLabel": "Order the book",
-      "qrCaption": "Discover the MHSV® Premium Founding Book and submit your order request.",
-      "qrAlt": "QR code linking to the MHSV® Founding Book page"
+      "ctaLabel": "Order the book"
     },
     "identity": {
       "num": "19",

@@ -405,9 +405,7 @@
       "notice": "Es wird kein Download des vollständigen Buches angeboten. Veröffentlicht werden ausschliesslich die freigegebenen Titelseiten.",
       "coverAltFr": "Titelseite des MHSV®-Gründungsbuchs, französische Ausgabe",
       "coverAltEn": "Titelseite des MHSV®-Gründungsbuchs, englische Ausgabe",
-      "ctaLabel": "Buch bestellen",
-      "qrCaption": "Entdecken Sie das MHSV® Premium Founding Book und senden Sie Ihre Bestellanfrage.",
-      "qrAlt": "QR-Code zur Seite des MHSV®-Gründungsbuchs"
+      "ctaLabel": "Buch bestellen"
     },
     "identity": {
       "num": "19",
