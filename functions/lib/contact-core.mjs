@@ -15,6 +15,8 @@
  * The recipient is never hard-coded: it comes from CONTACT_RECIPIENT.
  */
 
+import { renderEmailHtml } from './email-template.mjs';
+
 export const LOCALES = ['fr', 'en', 'de', 'it'];
 
 /*
@@ -167,7 +169,14 @@ export function validate(form) {
   return fields.length ? { ok: false, fields } : { ok: true, kind, data };
 }
 
-/** Plain-text body. No HTML mail - nothing here needs it. */
+/**
+ * Plain-text body.
+ *
+ * Still sent with every message, now alongside an HTML part - see
+ * ./email-template.mjs. Multipart, not either/or: some readers prefer text,
+ * some filters score text-less mail worse, and a mangled HTML part must never
+ * mean an unreadable notification.
+ */
 export function renderEmail(data) {
   const rows =
     data.kind === 'book-order'
@@ -215,9 +224,20 @@ async function sendEmail(data, env) {
       ? `[MHSV® ${tag}] Order request - ${data.quantity}× ${data.edition.toUpperCase()}`
       : `[MHSV® ${tag} ${data.locale.toUpperCase()}] ${data.subject}`;
   const text = renderEmail(data);
+  /*
+   * SITE_URL is only needed to resolve the crest in the header. If it is not
+   * set the template falls back to the production domain, and the mail is
+   * perfectly readable with no image at all.
+   */
+  const html = renderEmailHtml(data, { siteUrl: env.PUBLIC_SITE_URL });
 
   if (transport === 'log') {
-    console.log('[form] transport=log - not sent\n', { to: recipient, subject, text });
+    console.log('[form] transport=log - not sent\n', {
+      to: recipient,
+      subject,
+      text,
+      htmlBytes: html.length,
+    });
     return;
   }
 
@@ -230,7 +250,14 @@ async function sendEmail(data, env) {
         'Content-Type': 'application/json',
       },
       // reply_to is the visitor, so replying from the mailbox just works.
-      body: JSON.stringify({ from: sender, to: [recipient], reply_to: data.email, subject, text }),
+      body: JSON.stringify({
+        from: sender,
+        to: [recipient],
+        reply_to: data.email,
+        subject,
+        text,
+        html,
+      }),
     });
     if (!response.ok) {
       throw new Error(`Resend responded ${response.status}: ${await response.text()}`);
@@ -248,7 +275,14 @@ async function sendEmail(data, env) {
       secure: port === 465,
       auth: { user: env.SMTP_USER, pass: env.SMTP_PASSWORD },
     });
-    await mailer.sendMail({ from: sender, to: recipient, replyTo: data.email, subject, text });
+    await mailer.sendMail({
+      from: sender,
+      to: recipient,
+      replyTo: data.email,
+      subject,
+      text,
+      html,
+    });
     return;
   }
 

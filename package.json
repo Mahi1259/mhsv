@@ -16,7 +16,7 @@
     "test:contact": "node scripts/test-contact.mjs",
     "build:from-pack": "npm run content:extract && npm run assets:prepare && npm run build",
     "test:api": "node scripts/test-vercel-api.mjs",
-    "test": "npm run test:contact && npm run test:forms && npm run test:api",
+    "test": "npm run test:contact && npm run test:forms && npm run test:api && npm run test:email",
     "qr": "node scripts/generate-qr.mjs",
     "test:forms": "node scripts/test-forms.mjs",
     "check:qr": "node scripts/check-qr-target.mjs",
@@ -24,7 +24,8 @@
     "check:motion": "node scripts/check-motion.mjs",
     "dev:cf": "wrangler pages dev dist --compatibility-flags nodejs_compat",
     "test:cf": "node scripts/test-cf-api.mjs",
-    "qr:card": "node scripts/generate-card-qr.mjs"
+    "qr:card": "node scripts/generate-card-qr.mjs",
+    "test:email": "node scripts/test-email-template.mjs"
   },
   "description": "MHSV® — International Centre for Development and Transition. Phase 1 showcase website (FR/EN/DE/IT).",
   "dependencies": {
