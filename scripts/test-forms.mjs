@@ -247,6 +247,82 @@ await check('the newsletter notification carries no invented consent', async () 
   assert(!/confirmation email is on its way/i.test(html), 'must not claim a confirmation was sent');
 });
 
+await check('newsletter uses Brevo double opt-in, with the consent record', async () => {
+  const calls = [];
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url, init) => {
+    calls.push({ url: String(url), body: JSON.parse(init.body), headers: init.headers });
+    return new Response('{}', { status: 200 });
+  };
+  try {
+    await handleContact(request({ ...SUBSCRIBE, locale: 'de', language: 'en' }), {
+      ...ENV,
+      NEWSLETTER_PROVIDER: 'brevo',
+      BREVO_API_KEY: 'k',
+      BREVO_LIST_ID: '3',
+      BREVO_DOI_TEMPLATE_ID: '7',
+    });
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+
+  assert(calls.length === 1, `expected one Brevo call, got ${calls.length}`);
+  const { url, body } = calls[0];
+  // The DOI endpoint, not /contacts - the contact must not be added directly.
+  assert(/doubleOptinConfirmation$/.test(url), `wrong endpoint: ${url}`);
+  assert(!/\/contacts$/.test(url), 'must not write to the list directly');
+  assert(body.includeListIds[0] === 3, 'list id');
+  assert(body.templateId === 7, 'template id');
+
+  const a = body.attributes;
+  assert(a.CONSENT === 'yes', 'consent recorded');
+  assert(!Number.isNaN(Date.parse(a.CONSENT_AT)), `consent timestamp: ${a.CONSENT_AT}`);
+  assert(!Number.isNaN(Date.parse(a.SIGNUP_AT)), `signup date: ${a.SIGNUP_AT}`);
+  assert(a.LANGUE === 'EN', `selected language: ${a.LANGUE}`);
+  // Read the German site, chose the English edition - both must survive.
+  assert(a.SOURCE === 'website:newsletter:de', `source: ${a.SOURCE}`);
+  assert(/\/en\/$/.test(body.redirectionUrl), `confirm lands in the chosen language: ${body.redirectionUrl}`);
+});
+
+await check('the confirmation can be per-language when two templates exist', async () => {
+  const seen = [];
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url, init) => {
+    seen.push(JSON.parse(init.body).templateId);
+    return new Response('{}', { status: 200 });
+  };
+  const env = { ...ENV, NEWSLETTER_PROVIDER: 'brevo', BREVO_API_KEY: 'k', BREVO_LIST_ID: '3',
+    BREVO_DOI_TEMPLATE_ID: '7', BREVO_DOI_TEMPLATE_ID_FR: '11', BREVO_DOI_TEMPLATE_ID_EN: '12' };
+  try {
+    await handleContact(request({ ...SUBSCRIBE, language: 'fr' }), env);
+    await handleContact(request({ ...SUBSCRIBE, language: 'en' }), env);
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+  assert(seen[0] === 11, `fr should use its own template, got ${seen[0]}`);
+  assert(seen[1] === 12, `en should use its own template, got ${seen[1]}`);
+});
+
+await check('a Brevo failure is surfaced, never swallowed', async () => {
+  const realFetch = globalThis.fetch;
+  // The handler logs the failure on its way to a 502, which is right - the
+  // expected stack trace is muted here so it does not read as a broken test.
+  const realError = console.error;
+  globalThis.fetch = async () => new Response('nope', { status: 400 });
+  console.error = () => {};
+  let res;
+  try {
+    res = await handleContact(request(SUBSCRIBE), {
+      ...ENV, NEWSLETTER_PROVIDER: 'brevo', BREVO_API_KEY: 'k',
+      BREVO_LIST_ID: '3', BREVO_DOI_TEMPLATE_ID: '7',
+    });
+  } finally {
+    globalThis.fetch = realFetch;
+    console.error = realError;
+  }
+  assert(res.status >= 500, `a failed subscribe must not report success, got ${res.status}`);
+});
+
 await check('unknown form kind falls back to contact', async () => {
   const result = validate(formOf({ ...SUBSCRIBE, form: 'wat' }));
   // Falls back to contact, which needs fields the newsletter does not send.

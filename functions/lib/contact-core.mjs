@@ -458,21 +458,61 @@ async function subscribe(data, env) {
     return;
   }
 
+  /*
+   * DOUBLE OPT-IN, through Brevo's own mechanism.
+   *
+   * /contacts/doubleOptinConfirmation is the native DOI endpoint: Brevo sends
+   * the confirmation, holds the contact until the link is clicked, and only
+   * then adds it to the list. Nothing here writes to the list directly, and
+   * there is deliberately no home-grown confirmation flow - a custom one would
+   * need a token store, and getting consent records wrong is not a bug you can
+   * fix afterwards.
+   */
   if (provider === 'brevo') {
-    for (const key of ['BREVO_API_KEY', 'BREVO_LIST_ID', 'BREVO_DOI_TEMPLATE_ID']) {
+    for (const key of ['BREVO_API_KEY', 'BREVO_LIST_ID']) {
       if (!env[key]) throw new Error(`${key} is not configured`);
     }
+
+    /*
+     * The confirmation must arrive in the language the visitor chose.
+     *
+     * Two ways to do that, both supported: give Brevo one template per language
+     * (BREVO_DOI_TEMPLATE_ID_FR / _EN), or one template that branches on the
+     * LANGUE attribute sent below. The per-language ids win when present; the
+     * single id is the fallback and the brief's default.
+     */
+    const templateId =
+      env[`BREVO_DOI_TEMPLATE_ID_${data.language.toUpperCase()}`] || env.BREVO_DOI_TEMPLATE_ID;
+    if (!templateId) throw new Error('BREVO_DOI_TEMPLATE_ID is not configured');
+
+    const now = new Date().toISOString();
+
     const response = await fetch('https://api.brevo.com/v3/contacts/doubleOptinConfirmation', {
       method: 'POST',
       headers: { 'api-key': env.BREVO_API_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: data.email,
         includeListIds: [Number(env.BREVO_LIST_ID)],
-        templateId: Number(env.BREVO_DOI_TEMPLATE_ID),
-        redirectionUrl: env.BREVO_DOI_REDIRECT_URL || `https://www.mhsv.ch/${data.language}/`,
+        templateId: Number(templateId),
+        // Where Brevo sends them after they confirm - their own language.
+        redirectionUrl:
+          env.BREVO_DOI_REDIRECT_URL || `https://www.mhsv.ch/${data.language}/`,
+        /*
+         * The consent record. Brevo timestamps the CONFIRMATION itself, which
+         * is the legally interesting moment, but not the rest - so the fields
+         * that would otherwise be lost are stored with the contact:
+         * what they agreed to, when they asked, in which language, and from
+         * where. SOURCE names the form and the page's language, so a
+         * subscription from the German site reading the English edition is
+         * still traceable.
+         */
         attributes: {
           ...(data.firstName ? { PRENOM: data.firstName } : {}),
           LANGUE: data.language.toUpperCase(),
+          CONSENT: 'yes',
+          CONSENT_AT: now,
+          SIGNUP_AT: now,
+          SOURCE: `website:newsletter:${data.locale}`,
         },
       }),
     });
