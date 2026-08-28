@@ -1,15 +1,23 @@
 ---
 /**
- * Supporters & Ambassadors - grid type.
+ * They Support MHSV® - grid type.
  *
- * SHIPS EMPTY, ON PURPOSE. `sections.supporters.profiles` is `[]` in all four
- * languages and the whole section - heading, status badge and all - renders
- * nothing while it stays that way, the same way SectionImage renders nothing
- * when its file is absent. No placeholder people, no example cards: an invented
- * name on a page about who backs MHSV® is worse than an absent section.
+ * Three groups, one section: patrons and donors, partners and sponsors,
+ * ambassadors and supporters. They differ in what a profile carries - an
+ * organisation has a logo and a website, a person has a photo and a quote - so
+ * `category` decides which fields are rendered rather than three components
+ * repeating the same card.
  *
- * Adding the first profile is a content edit in four files. Nothing here needs
- * touching - see src/data/README.md.
+ * SHIPS EMPTY, and unlike the previous version it still RENDERS. That changed
+ * on the 28 August brief: while there are no profiles the section shows its
+ * introduction, an "in development" badge and a way to get in touch, because a
+ * reader looking for how to support MHSV® should find something rather than
+ * nothing. Empty groups are simply absent - an empty heading says less than no
+ * heading.
+ *
+ * No placeholder names, organisations, logos or quotes. Nothing is published
+ * without MHSV®'s approval per profile. Adding one is a content edit in four
+ * files - see src/data/README.md.
  */
 import Band from '@/components/Band.astro';
 import { Image } from 'astro:assets';
@@ -25,15 +33,21 @@ const { locale, type } = Astro.props;
 const c = getContent(locale);
 const s = c.sections.supporters;
 
+type Category = 'patron' | 'partner' | 'ambassador';
+
 type Profile = {
   name: string;
-  /** One of the three keys in `s.roles`. The label comes from there. */
-  role: 'patron' | 'supporter' | 'ambassador';
-  intro: string;
-  message: string;
-  /** File name in src/assets/supporters/, or null. */
+  category: Category;
+  /** Organisations and people both use this: a line under the name. */
+  role?: string | null;
+  intro?: string | null;
+  /** People only - their own words. */
+  message?: string | null;
+  /** File name in src/assets/supporters/. Photo for a person, logo for an org. */
   photo?: string | null;
-  /** Full URL, or null. Rendered as a link, never as an embed - see below. */
+  /** Organisations only. */
+  website?: string | null;
+  /** People only. A link, never an embed - see src/data/README.md. */
   video?: string | null;
 };
 
@@ -41,72 +55,101 @@ const profiles = (s.profiles ?? []) as Profile[];
 
 /*
  * Looked up rather than imported, so a missing or misspelled file leaves the
- * card without a photo instead of failing the build - the same lookup
- * SectionImage uses. Eager, because the glob has to resolve at build time.
+ * card without an image instead of failing the build.
  */
-const photos = import.meta.glob<{ default: ImageMetadata }>(
+const images = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/supporters/*.{jpg,jpeg,png,webp,avif}',
   { eager: true },
 );
-const photoFor = (file?: string | null) =>
-  file ? Object.entries(photos).find(([path]) => path.endsWith(`/${file}`))?.[1].default : undefined;
+const imageFor = (file?: string | null) =>
+  file ? Object.entries(images).find(([path]) => path.endsWith(`/${file}`))?.[1].default : undefined;
+
+const groups = s.categories
+  .map((category) => ({ ...category, entries: profiles.filter((p) => p.category === category.key) }))
+  .filter((group) => group.entries.length > 0);
 ---
 
-{
-  profiles.length > 0 && (
-    <Band locale={locale} anchor={s.anchor} title={s.title} type={type} status={s.status}>
-      <ul class="supporters" data-stagger data-rows>
-        {profiles.map((profile) => {
-          const photo = photoFor(profile.photo);
-          return (
-            <li class="supporters__card card">
-              {photo && (
-                <Image
-                  class="supporters__photo"
-                  src={photo}
-                  alt={profile.name}
-                  widths={[160, 320]}
-                  sizes="160px"
-                  loading="lazy"
-                  decoding="async"
-                />
-              )}
-              <h3 class="supporters__name">{profile.name}</h3>
-              <p class="supporters__role mono-label">{s.roles[profile.role]}</p>
-              <p class="supporters__intro">{profile.intro}</p>
-              {/* The message is theirs, so it is marked up as a quotation
-                  rather than as more body copy. */}
-              <blockquote class="supporters__message">
-                <p>{profile.message}</p>
-              </blockquote>
-              {profile.video && (
-                /*
-                 * A LINK, never an embedded player. An iframe from YouTube or
-                 * Vimeo sets third-party cookies on load, which would make the
-                 * cookies page - "no advertising, analytics or third-party
-                 * tracking cookies" - untrue, and would need a consent gate
-                 * that does not exist. Opening in a new tab keeps that on the
-                 * other site, where the visitor chooses to go.
-                 */
-                <a
-                  class="link supporters__video"
-                  href={profile.video}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {c.ui.watchVideo}
-                </a>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    </Band>
-  )
-}
+<Band locale={locale} anchor={s.anchor} title={s.title} type={type} status={s.status}>
+  <p class="prose-body supporters__intro">{s.intro}</p>
+
+  {
+    groups.map((group) => (
+      <section class="supporters__group">
+        <h3 class="supporters__heading">{group.heading}</h3>
+        <ul class="supporters__list" data-stagger data-rows>
+          {group.entries.map((profile) => {
+            const image = imageFor(profile.photo);
+            const isOrganisation = profile.category !== 'ambassador';
+            return (
+              <li class="supporters__card card">
+                {image && (
+                  <Image
+                    class:list={['supporters__image', isOrganisation && 'supporters__image--logo']}
+                    src={image}
+                    alt={profile.name}
+                    widths={[160, 320]}
+                    sizes="160px"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                <h4 class="supporters__name">{profile.name}</h4>
+                {profile.role && <p class="supporters__role mono-label">{profile.role}</p>}
+                {profile.intro && <p class="supporters__text">{profile.intro}</p>}
+                {/* Their own words, so a quotation rather than more body copy. */}
+                {profile.message && (
+                  <blockquote class="supporters__message">
+                    <p>{profile.message}</p>
+                  </blockquote>
+                )}
+                {profile.website && (
+                  <a class="link" href={profile.website} target="_blank" rel="noopener noreferrer">
+                    {profile.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+                  </a>
+                )}
+                {profile.video && (
+                  /* A LINK, never an embedded player: an iframe from YouTube or
+                     Vimeo sets third-party cookies on load, which would make the
+                     cookies page untrue and need a consent gate that does not
+                     exist. */
+                  <a
+                    class="link supporters__video"
+                    href={profile.video}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {c.ui.watchVideo}
+                  </a>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    ))
+  }
+
+  {/* The way in. Points at the contact form, which is where an offer of support
+      actually goes - not a mailto, so it is recorded like every other enquiry. */}
+  <a class="btn btn--primary supporters__cta" href="#contact" data-magnetic>{s.ctaLabel}</a>
+</Band>
 
 <style>
-  .supporters {
+  .supporters__intro {
+    max-width: 58ch;
+  }
+
+  .supporters__group {
+    margin-block-start: 2.5rem;
+  }
+
+  .supporters__heading {
+    margin: 0 0 1rem;
+    font-size: var(--text-h3);
+    color: var(--band-accent);
+  }
+
+  .supporters__list {
     display: grid;
     gap: 1rem;
     list-style: none;
@@ -115,12 +158,12 @@ const photoFor = (file?: string | null) =>
   }
 
   @media (min-width: 48rem) {
-    .supporters {
+    .supporters__list {
       grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
     }
   }
 
-  .supporters__photo {
+  .supporters__image {
     display: block;
     width: 5rem;
     height: 5rem;
@@ -129,9 +172,18 @@ const photoFor = (file?: string | null) =>
     margin-block-end: 1rem;
   }
 
+  /* An organisation's mark is not a portrait: shown whole, not cropped round. */
+  .supporters__image--logo {
+    width: auto;
+    max-width: 9rem;
+    height: 3rem;
+    border-radius: 0;
+    object-fit: contain;
+  }
+
   .supporters__name {
     margin: 0;
-    font-size: var(--text-h3);
+    font-size: 1.0625rem;
   }
 
   .supporters__role {
@@ -139,16 +191,15 @@ const photoFor = (file?: string | null) =>
     color: var(--band-accent);
   }
 
-  .supporters__intro {
+  .supporters__text {
     margin: 0 0 1rem;
     color: var(--band-muted);
   }
 
   .supporters__message {
-    margin: 0;
+    margin: 0 0 1rem;
     padding-inline-start: 1rem;
     border-inline-start: 2px solid var(--band-accent);
-    color: var(--band-fg);
   }
 
   .supporters__message p {
@@ -158,6 +209,9 @@ const photoFor = (file?: string | null) =>
 
   .supporters__video {
     display: inline-block;
-    margin-block-start: 1rem;
+  }
+
+  .supporters__cta {
+    margin-block-start: 2.5rem;
   }
 </style>

@@ -1,9 +1,24 @@
-# Adding a supporter or ambassador
+# Adding a supporter, partner or ambassador
 
-The **Supporters & Ambassadors** section is built and ships **empty**. While it
-has no profiles it renders nothing at all - no heading, no badge, no empty grid.
-It appears on the site the moment the first profile is added, and disappears
-again if the last one is removed. Nothing in the code needs changing either way.
+**They Support MHSV®** / **Ils soutiennent MHSV®** ships **empty**, and unlike
+the earlier version it still renders: the section shows its introduction, an
+"In development" badge and the "Become a Partner" button even with no profiles,
+so a reader looking for how to support MHSV® finds something.
+
+What is hidden while empty is the GROUPS. A category with no entries has no
+heading - an empty heading says less than no heading - so the three appear one
+at a time as they are filled. Nothing in the code needs changing either way.
+
+## The three categories
+
+| `category` | Heading (EN / FR) | For | Fields that apply |
+| --- | --- | --- | --- |
+| `patron` | Patrons and Donors / Mécènes et donateurs | Organisations or individuals giving real financial or material support | `name`, `role`, `intro`, `photo`, `website` |
+| `partner` | Partners and Sponsors / Partenaires et sponsors | Organisations | `name`, `intro`, `photo` (logo), `website` |
+| `ambassador` | Ambassadors and Supporters / Ambassadeurs et soutiens | Individuals, e.g. former players | `name`, `role`, `intro`, `message`, `photo`, `video` |
+
+`photo` is a portrait for an ambassador and a logo for an organisation - the
+page crops the first to a circle and shows the second whole.
 
 ## The three steps
 
@@ -25,10 +40,27 @@ translated.
 ```json
 {
   "name": "Full Name",
-  "role": "ambassador",
+  "category": "ambassador",
+  "role": "Former player, national team",
   "intro": "One or two sentences about who they are.",
   "message": "Their message of support, in their own words.",
   "photo": "full-name.jpg",
+  "website": null,
+  "video": null
+}
+```
+
+An organisation looks like this instead:
+
+```json
+{
+  "name": "Organisation Name",
+  "category": "partner",
+  "role": null,
+  "intro": "One sentence on what they do with MHSV®.",
+  "message": null,
+  "photo": "organisation-name.png",
+  "website": "https://example.org",
   "video": null
 }
 ```
@@ -45,23 +77,19 @@ Name it exactly as written in `photo`. `.jpg`, `.jpeg`, `.png`, `.webp` and
 | Field | Required | Notes |
 | --- | --- | --- |
 | `name` | yes | Shown as given. Same in all four files. |
-| `role` | yes | Exactly one of `patron`, `supporter`, `ambassador` - lowercase. |
+| `category` | yes | Exactly one of `patron`, `partner`, `ambassador` - lowercase. An unknown value means the profile appears in no group at all. |
+| `role` | no | A line under the name. Use `null` for none. |
 | `intro` | yes | Short introduction. Translated per language. |
 | `message` | yes | Their quotation. Shown as a pull quote. Translated per language. |
 | `photo` | no | File name only. Use `null` for none - the card renders fine without. |
 | `video` | no | Full URL, e.g. `"https://..."`. Use `null` for none. |
 
-### `role` is a key, not a label
+### `category` is a key, not a label
 
-Write the key; the site prints the right word per language:
-
-| key | FR | EN | DE | IT |
-| --- | --- | --- | --- | --- |
-| `patron` | Mécène | Patron | Förderer | Mecenate |
-| `supporter` | Soutien | Supporter | Unterstützer | Sostenitore |
-| `ambassador` | Ambassadeur | Ambassador | Botschafter | Ambasciatore |
-
-A key that is not one of those three prints nothing where the role should be.
+Write the key; the site prints the group heading in each language, from
+`sections.supporters.categories`. A key outside the three means the profile is
+filed under no group and never appears - it is not an error the build catches,
+so check the spelling.
 
 ### `video` is a link, not an embedded player
 

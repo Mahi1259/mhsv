@@ -386,16 +386,27 @@
     },
     "supporters": {
       "anchor": "supporters",
-      "title": "Soutiens & Ambassadeurs",
+      "title": "Ils soutiennent MHSV®",
+      "intro": "MHSV® se construit avec celles et ceux qui choisissent de le soutenir. Cette section présentera les mécènes, partenaires et ambassadeurs engagés auprès du projet. Elle est en cours de structuration : aucun profil n’est publié sans l’accord de la personne ou de l’organisation concernée.",
       "status": {
         "key": "inDevelopment",
-        "detail": "EN DÉVELOPPEMENT"
+        "detail": "EN COURS DE STRUCTURATION"
       },
-      "roles": {
-        "patron": "Mécène",
-        "supporter": "Soutien",
-        "ambassador": "Ambassadeur"
-      },
+      "ctaLabel": "Devenir partenaire ou soutenir MHSV®",
+      "categories": [
+        {
+          "key": "patron",
+          "heading": "Mécènes et donateurs"
+        },
+        {
+          "key": "partner",
+          "heading": "Partenaires et sponsors"
+        },
+        {
+          "key": "ambassador",
+          "heading": "Ambassadeurs et soutiens"
+        }
+      ],
       "profiles": []
     },
     "founder": {

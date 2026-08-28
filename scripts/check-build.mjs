@@ -186,24 +186,22 @@ for (const locale of LOCALES) {
   if (h1s.length !== 1) errors.push(`${locale}/index.html: ${h1s.length} <h1> elements, expected exactly 1`);
 
   /*
-   * 21 sections, plus Supporters & Ambassadors once it has anyone in it.
+   * 22 sections, always.
    *
-   * That section ships with an empty profiles array and renders nothing at all,
-   * so the page is 21 today. Hard-coding 21 would have failed the build the
-   * first time MHSV® added a supporter - a content edit breaking the build is
-   * exactly the trap this file exists to avoid - so the expectation is derived
-   * from the content instead.
+   * "They Support MHSV®" used to render nothing while its profiles array was
+   * empty, so this was derived - 21 or 22 depending on the content. The 28
+   * August brief changed that: the section now always renders, showing its
+   * introduction, its status badge and a way to get in touch even with no
+   * profiles, because a reader looking for how to support MHSV® should find
+   * something. So the count is fixed again, and adding a profile does not
+   * change it.
    */
-  const supporters = JSON.parse(
-    readFileSync(resolve(ROOT, `src/data/i18n/${locale}.json`), 'utf8'),
-  ).sections?.supporters?.profiles ?? [];
-  const expectedSections = 21 + (supporters.length > 0 ? 1 : 0);
+  const EXPECTED_SECTIONS = 22;
 
   const sections = html.match(/<section[^>]*aria-labelledby=/g) ?? [];
-  if (sections.length !== expectedSections) {
+  if (sections.length !== EXPECTED_SECTIONS) {
     errors.push(
-      `${locale}/index.html: ${sections.length} labelled sections, expected ${expectedSections}` +
-        (supporters.length > 0 ? ' (20 + founder + supporters)' : ' (supporters is empty, so it renders nothing)'),
+      `${locale}/index.html: ${sections.length} labelled sections, expected ${EXPECTED_SECTIONS}`,
     );
   }
 

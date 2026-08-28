@@ -228,16 +228,27 @@
     },
     "supporters": {
       "anchor": "supporters",
-      "title": "Supporters & Ambassadors",
+      "title": "They Support MHSV®",
+      "intro": "MHSV® is built with those who choose to support it. This section will present the patrons, partners and ambassadors committed to the project. It is being structured: no profile is published without the agreement of the person or organisation concerned.",
       "status": {
         "key": "inDevelopment",
         "detail": "IN DEVELOPMENT"
       },
-      "roles": {
-        "patron": "Patron",
-        "supporter": "Supporter",
-        "ambassador": "Ambassador"
-      },
+      "ctaLabel": "Become a Partner or Support MHSV®",
+      "categories": [
+        {
+          "key": "patron",
+          "heading": "Patrons and Donors"
+        },
+        {
+          "key": "partner",
+          "heading": "Partners and Sponsors"
+        },
+        {
+          "key": "ambassador",
+          "heading": "Ambassadors and Supporters"
+        }
+      ],
       "profiles": []
     },
     "book": {

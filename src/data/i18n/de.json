@@ -385,16 +385,27 @@
     },
     "supporters": {
       "anchor": "supporters",
-      "title": "Förderer & Botschafter",
+      "title": "Sie unterstützen MHSV®",
+      "intro": "MHSV® entsteht gemeinsam mit denjenigen, die das Projekt unterstützen. Dieser Bereich wird die Förderer, Partner und Botschafter vorstellen, die sich für das Projekt engagieren. Er befindet sich im Aufbau: Kein Profil wird ohne die Zustimmung der betreffenden Person oder Organisation veröffentlicht.",
       "status": {
         "key": "inDevelopment",
-        "detail": "IN ENTWICKLUNG"
+        "detail": "IM AUFBAU"
       },
-      "roles": {
-        "patron": "Förderer",
-        "supporter": "Unterstützer",
-        "ambassador": "Botschafter"
-      },
+      "ctaLabel": "Partner werden oder MHSV® unterstützen",
+      "categories": [
+        {
+          "key": "patron",
+          "heading": "Förderer und Spender"
+        },
+        {
+          "key": "partner",
+          "heading": "Partner und Sponsoren"
+        },
+        {
+          "key": "ambassador",
+          "heading": "Botschafter und Unterstützer"
+        }
+      ],
       "profiles": []
     },
     "founder": {
