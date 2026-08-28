@@ -129,6 +129,27 @@ and Cloudflare uploads nothing, because `dist/` is generated and gitignored.
 | Build output directory | `dist` |
 | Root directory | the repository root |
 | Node version | 20 or later (`NODE_VERSION=20` if the default is older) |
+| **Deploy command** | **leave EMPTY** - see below |
+
+**The deploy command must be empty.** With a deploy command of `npx wrangler
+deploy`, the build succeeds and then dies:
+
+```
+▲ It seems that you have run `wrangler deploy` on a Pages project,
+  `wrangler pages deploy` should be used instead.
+✘ Missing entry-point to Worker script or to assets directory
+```
+
+`wrangler deploy` is the Workers command and wants a `main` or an `[assets]`
+directory; this is a Pages project, which uploads `dist` by itself. If the field
+cannot be left blank, use `npx wrangler pages deploy dist`.
+
+**`PUBLIC_SITE_URL` must be set on production**, to `https://www.mhsv.ch`.
+Without it a Cloudflare build canonicalises every page to
+`http://localhost:4321` and ships the whole site `noindex` - nothing in the
+build log looks wrong. `npm run build` now refuses that in CI. Preview
+deployments should leave it unset: they canonicalise to their own
+`CF_PAGES_URL` and stay noindex, which is what a preview should do.
 
 `CONTACT_TRANSPORT` **must be `brevo` or `log` here, never `smtp`.** Workers
 cannot open raw TCP connections, so nodemailer cannot run - the code refuses it

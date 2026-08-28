@@ -419,6 +419,38 @@ for (const locale of LOCALES) {
   }
 }
 
+/*
+ * --- 6f: a deployed build may never canonicalise to localhost --------------
+ *
+ * The first Cloudflare deploy built with no PUBLIC_SITE_URL. site-url.mjs knew
+ * about Vercel's variables and not Cloudflare's, so it fell through to the
+ * local default and produced 41 pages whose canonical, hreflang, Open Graph
+ * URLs and sitemap entries all pointed at http://localhost:4321. Every check
+ * passed: nothing about that output looks wrong until it is live.
+ *
+ * Only fires in CI. A local build canonicalising to localhost is correct, and
+ * failing it would just make `npm run build` unusable on a laptop.
+ */
+{
+  const inCI = Boolean(
+    process.env.CF_PAGES || process.env.VERCEL || process.env.NETLIFY || process.env.CI,
+  );
+
+  if (inCI) {
+    const home = resolve(DIST, 'fr', 'index.html');
+    if (existsSync(home)) {
+      const canonical = /<link rel="canonical" href="([^"]+)"/.exec(readFileSync(home, 'utf8'))?.[1];
+      if (canonical && /localhost|127\.0\.0\.1/.test(canonical)) {
+        errors.push(
+          `canonical is "${canonical}" in a CI build - set PUBLIC_SITE_URL ` +
+            '(production: https://www.mhsv.ch). Every canonical, hreflang, og:url ' +
+            'and sitemap entry in this build points at localhost.',
+        );
+      }
+    }
+  }
+}
+
 // --- 7: consent must never be pre-ticked ------------------------------------
 for (const file of textFiles.filter((f) => extname(f) === '.html')) {
   const html = readFileSync(file, 'utf8');

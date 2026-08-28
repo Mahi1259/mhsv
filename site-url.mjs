@@ -55,6 +55,27 @@ export function resolveSite(env = process.env) {
     };
   }
 
+  /*
+   * 3b. Cloudflare Pages, same principle.
+   *
+   * This branch did not exist, and the first Cloudflare build fell straight
+   * through to the local default below: every canonical, hreflang, Open Graph
+   * URL and sitemap entry said http://localhost:4321, and the whole site went
+   * out noindex. A deployed site canonicalising to the developer's machine is
+   * worse than a wrong domain, because nothing about it looks broken.
+   *
+   * CF_PAGES_URL is the per-deployment address. It is right for a preview and
+   * wrong for production - which is why production must set PUBLIC_SITE_URL,
+   * and check-build.mjs refuses a CI build that has not.
+   */
+  if (env.CF_PAGES_URL) {
+    return {
+      url: trimSlash(withScheme(env.CF_PAGES_URL)),
+      source: 'CF_PAGES_URL (Cloudflare preview)',
+      isProduction: false,
+    };
+  }
+
   // 4. Local build.
   return { url: 'http://localhost:4321', source: 'local default', isProduction: false };
 }
