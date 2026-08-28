@@ -111,8 +111,33 @@ variables have no prefix and stay server-side.
 
 ## Cloudflare Pages
 
-Build command and output directory are the same. The function needs a small
-adapter, because the core is host-independent:
+### Project settings - set these first
+
+`wrangler.toml` supplies `pages_build_output_dir` and the compatibility flags,
+but **not the build command**. That one lives in the dashboard, and without it
+the deploy log says:
+
+```
+No build command specified. Skipping build step.
+```
+
+and Cloudflare uploads nothing, because `dist/` is generated and gitignored.
+
+| Setting | Value |
+| --- | --- |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Root directory | the repository root |
+| Node version | 20 or later (`NODE_VERSION=20` if the default is older) |
+
+`CONTACT_TRANSPORT` **must be `resend` or `log` here, never `smtp`.** Workers
+cannot open raw TCP connections, so nodemailer cannot run - the code refuses it
+with a clear error rather than failing obscurely, and the module is kept out of
+the bundle entirely. Run `npm run check:functions` before pushing to confirm
+the Worker still bundles; it runs Cloudflare's own bundler, which follows
+imports the test suite never evaluates.
+
+The function needs a small adapter, because the core is host-independent:
 
 ```js
 // functions/api/contact.js  - Cloudflare Pages Functions

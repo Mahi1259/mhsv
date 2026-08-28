@@ -297,8 +297,32 @@ async function deliver(message, env) {
   }
 
   if (transport === 'smtp') {
-    // Imported lazily so hosts using Resend never bundle nodemailer.
-    const { default: nodemailer } = await import('nodemailer');
+    /*
+     * The specifier is assembled at run time on purpose. Do not inline it.
+     *
+     * "Imported lazily" was not enough: esbuild follows a dynamic import with a
+     * literal specifier just like a static one, so building the Pages Functions
+     * pulled nodemailer into the Worker and failed -
+     *
+     *     ✘ [ERROR] Could not resolve "nodemailer"
+     *
+     * on Cloudflare, where it is not installed, and on Node builtins (stream,
+     * crypto, net) where it is. And bundling it would be wrong even if it
+     * worked: nodemailer speaks SMTP over raw TCP, which Workers cannot open.
+     * SMTP is for the Node hosts - Vercel, a server - and Cloudflare uses
+     * Resend.
+     *
+     * Splitting the name defeats the bundler's constant folding. The .catch()
+     * then turns what is left into a clear runtime error instead of a stack
+     * trace about a missing module.
+     */
+    const specifier = ['node', 'mailer'].join('');
+    const { default: nodemailer } = await import(specifier).catch(() => {
+      throw new Error(
+        'CONTACT_TRANSPORT="smtp" needs nodemailer, which is not available on this host. ' +
+          'Cloudflare Workers cannot open SMTP connections - use CONTACT_TRANSPORT="resend" there.',
+      );
+    });
     const port = Number(env.SMTP_PORT || 587);
     const mailer = nodemailer.createTransport({
       host: env.SMTP_HOST,
