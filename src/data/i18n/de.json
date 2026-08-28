@@ -419,7 +419,11 @@
       "notice": "Es wird kein Download des vollständigen Buches angeboten. Veröffentlicht werden ausschliesslich die freigegebenen Titelseiten.",
       "coverAltFr": "Titelseite des MHSV®-Gründungsbuchs, französische Ausgabe",
       "coverAltEn": "Titelseite des MHSV®-Gründungsbuchs, englische Ausgabe",
-      "ctaLabel": "Buch bestellen"
+      "ctaLabel": "Buch bestellen",
+      "qr": {
+        "coming": "QR-Code - in Vorbereitung",
+        "ariaLabel": "Reservierter Platz für den QR-Code des Gründungsbuchs"
+      }
     },
     "identity": {
       "num": "19",

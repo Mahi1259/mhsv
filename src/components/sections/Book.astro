@@ -11,6 +11,7 @@
  */
 import { Picture } from 'astro:assets';
 import Band from '@/components/Band.astro';
+import QrPlaceholder from '@/components/QrPlaceholder.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import { BOOK_PAGE_PATH, type SectionType } from '@/config/site';
 import coverFr from '@/assets/book/founding-book-fr.png';
@@ -76,14 +77,15 @@ const covers = [
       <p class="prose-body book__body">{s.body}</p>
       <p class="book__notice">{s.notice}</p>
       {/*
-        No QR code here. MHSV® confirmed on 27 August that the QR is for
-        business cards pointing at www.mhsv.ch, and was never asked for on the
-        site. The order request is the section's only action.
-
-        The generator and its print assets stay in the repository - see
-        scripts/generate-qr.mjs and scripts/generate-web-qr.mjs.
+        The order request is the only ACTION here. The QR beside it is a
+        reserved space, not a control: the 27 August round removed a QR that
+        pointed at the wrong target, and the 28 August one asks for the space to
+        be held until the real code can be made. Nothing is generated - see
+        QrPlaceholder.
       */}
       <a class="btn btn--primary book__cta" href={bookHref} data-magnetic>{s.ctaLabel}</a>
+
+      <QrPlaceholder locale={locale} class="book__qr" />
     </div>
   </div>
 </Band>
@@ -151,6 +153,10 @@ const covers = [
   }
 
   .book__cta {
+    margin-block-start: 1.75rem;
+  }
+
+  .book__qr {
     margin-block-start: 1.75rem;
   }
 

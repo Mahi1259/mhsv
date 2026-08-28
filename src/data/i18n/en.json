@@ -420,7 +420,11 @@
       "notice": "No download of the complete book is offered. Only the approved covers are published.",
       "coverAltFr": "MHSV® Founding Book cover, French edition",
       "coverAltEn": "MHSV® Founding Book cover, English edition",
-      "ctaLabel": "Order the book"
+      "ctaLabel": "Order the book",
+      "qr": {
+        "coming": "QR code - coming soon",
+        "ariaLabel": "Reserved space for the Founding Book QR code"
+      }
     },
     "identity": {
       "num": "19",

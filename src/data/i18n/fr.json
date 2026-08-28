@@ -420,7 +420,11 @@
       "notice": "Aucun téléchargement du livre complet n’est proposé. Seules les couvertures validées sont publiées.",
       "coverAltFr": "Couverture du Livre Fondateur MHSV®, édition française",
       "coverAltEn": "Couverture du Livre Fondateur MHSV®, édition anglaise",
-      "ctaLabel": "Commander le livre"
+      "ctaLabel": "Commander le livre",
+      "qr": {
+        "coming": "Code QR - à venir",
+        "ariaLabel": "Emplacement réservé au code QR du Livre Fondateur"
+      }
     },
     "identity": {
       "num": "19",

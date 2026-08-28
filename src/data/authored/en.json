@@ -247,7 +247,11 @@
       "coverAltFr": "MHSV® Founding Book cover, French edition",
       "coverAltEn": "MHSV® Founding Book cover, English edition",
       "ctaLabel": "Order the book",
-      "title": "THE PREMIUM FOUNDING BOOK"
+      "title": "THE PREMIUM FOUNDING BOOK",
+      "qr": {
+        "coming": "QR code - coming soon",
+        "ariaLabel": "Reserved space for the Founding Book QR code"
+      }
     },
     "identity": {
       "lead": "The MHSV® identity and future collection: athlete equipment, coaching, representation, accessories and lifestyle.",

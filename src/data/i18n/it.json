@@ -419,7 +419,11 @@
       "notice": "Non è offerto alcun download del libro completo. Sono pubblicate soltanto le copertine approvate.",
       "coverAltFr": "Copertina del Libro Fondatore MHSV®, edizione francese",
       "coverAltEn": "Copertina del Libro Fondatore MHSV®, edizione inglese",
-      "ctaLabel": "Ordina il libro"
+      "ctaLabel": "Ordina il libro",
+      "qr": {
+        "coming": "Codice QR - in arrivo",
+        "ariaLabel": "Spazio riservato al codice QR del Libro Fondatore"
+      }
     },
     "identity": {
       "num": "19",

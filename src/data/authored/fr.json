@@ -247,7 +247,11 @@
       "coverAltFr": "Couverture du Livre Fondateur MHSV®, édition française",
       "coverAltEn": "Couverture du Livre Fondateur MHSV®, édition anglaise",
       "ctaLabel": "Commander le livre",
-      "title": "LE LIVRE FONDATEUR PREMIUM"
+      "title": "LE LIVRE FONDATEUR PREMIUM",
+      "qr": {
+        "coming": "Code QR - à venir",
+        "ariaLabel": "Emplacement réservé au code QR du Livre Fondateur"
+      }
     },
     "identity": {
       "lead": "L’identité MHSV® et la future collection : équipement athlètes, coaching, représentation, accessoires et lifestyle.",

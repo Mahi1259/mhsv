@@ -246,7 +246,11 @@
       "coverAltFr": "Titelseite des MHSV®-Gründungsbuchs, französische Ausgabe",
       "coverAltEn": "Titelseite des MHSV®-Gründungsbuchs, englische Ausgabe",
       "ctaLabel": "Buch bestellen",
-      "title": "DAS PREMIUM-GRÜNDUNGSBUCH"
+      "title": "DAS PREMIUM-GRÜNDUNGSBUCH",
+      "qr": {
+        "coming": "QR-Code - in Vorbereitung",
+        "ariaLabel": "Reservierter Platz für den QR-Code des Gründungsbuchs"
+      }
     },
     "identity": {
       "lead": "Die MHSV®-Identität und die zukünftige Kollektion: Athletenausrüstung, Coaching, Repräsentation, Accessoires und Lifestyle.",
