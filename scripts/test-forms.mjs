@@ -323,6 +323,30 @@ await check('a Brevo failure is surfaced, never swallowed', async () => {
   assert(res.status >= 500, `a failed subscribe must not report success, got ${res.status}`);
 });
 
+await check('contact and order notifications go out over Brevo transactional', async () => {
+  const calls = [];
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url, init) => {
+    calls.push({ url: String(url), body: JSON.parse(init.body), key: init.headers['api-key'] });
+    return new Response('{}', { status: 200 });
+  };
+  const env = { ...ENV, CONTACT_TRANSPORT: 'brevo', BREVO_API_KEY: 'k' };
+  try {
+    await handleContact(request(ORDER), env);
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+  assert(calls.length === 1, `expected one Brevo call, got ${calls.length}`);
+  const { url, body, key } = calls[0];
+  // The TRANSACTIONAL endpoint, not the campaign or contact API.
+  assert(url === 'https://api.brevo.com/v3/smtp/email', `wrong endpoint: ${url}`);
+  assert(key === 'k', 'the same api-key header the newsletter uses');
+  assert(body.to[0].email === ENV.CONTACT_RECIPIENT, 'recipient');
+  assert(body.replyTo.email === ORDER.email, 'reply-to is the visitor');
+  assert(body.textContent && body.htmlContent, 'both parts are sent');
+  assert(Array.isArray(body.attachment) && body.attachment.length === 1, 'the crest travels with it');
+});
+
 await check('unknown form kind falls back to contact', async () => {
   const result = validate(formOf({ ...SUBSCRIBE, form: 'wat' }));
   // Falls back to contact, which needs fields the newsletter does not send.

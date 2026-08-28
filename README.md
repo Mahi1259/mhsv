@@ -60,7 +60,7 @@ MHSV_CONTENT_DOCX=/path/to/pack/…V3.docx npm run content:extract
 **Forms in dev.** `npm run dev` serves `/api/contact` through the same handler
 the deployed function uses, so the contact and order forms work on the ordinary
 dev server. Mail is **logged to the terminal, not sent**, even when `.env` holds
-working SMTP or Resend credentials - submitting a form while trying things out
+working Brevo or SMTP credentials - submitting a form while trying things out
 must not deliver to a real inbox. To send for real:
 `npm run dev:send`, or put `MHSV_DEV_SEND=yes` in `.env` to make it the default
 for your checkout. `npm run dev:cf` runs the real Cloudflare function over

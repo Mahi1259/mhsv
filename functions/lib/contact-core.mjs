@@ -225,7 +225,7 @@ export function renderEmail(data) {
  * @param {{subject: string, text: string, html?: string, replyTo?: string, tag?: string}} message
  */
 /** Transports that can carry an inline image. `log` obviously cannot. */
-const EMBEDS_LOGO = new Set(['smtp', 'resend']);
+const EMBEDS_LOGO = new Set(['smtp', 'brevo']);
 
 /** True when mail from this env will carry the crest rather than link it. */
 function embedsLogo(env) {
@@ -244,7 +244,7 @@ async function deliver(message, env) {
   /*
    * The crest rides along with the message as an inline attachment. A linked
    * image cannot work: www.mhsv.ch is not serving yet, and clients block remote
-   * images by default even once it is. Both SMTP and Resend support this;
+   * images by default even once it is. Both SMTP and Brevo support this;
    * `embedLogo` below must agree with whether we actually attach it.
    */
   const inlineCrest = html && EMBEDS_LOGO.has(transport);
@@ -259,39 +259,41 @@ async function deliver(message, env) {
     return;
   }
 
-  if (transport === 'resend') {
-    if (!env.RESEND_API_KEY) throw new Error('RESEND_API_KEY is not configured');
-    const response = await fetch('https://api.resend.com/emails', {
+  /*
+   * Brevo's TRANSACTIONAL endpoint - /smtp/email - not the campaign or contact
+   * API. Same account and same key as the newsletter; MHSV® chose Brevo as the
+   * single provider on 28 August, so the contact and order notifications go out
+   * the same way the double opt-in does.
+   */
+  if (transport === 'brevo') {
+    if (!env.BREVO_API_KEY) throw new Error('BREVO_API_KEY is not configured');
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${env.RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      // reply_to is the visitor, so replying from the mailbox just works.
+      headers: { 'api-key': env.BREVO_API_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: sender,
-        to: [recipient],
-        ...(replyTo ? { reply_to: replyTo } : {}),
+        sender: { email: sender },
+        to: [{ email: recipient }],
+        // The visitor, so replying from the mailbox reaches them directly.
+        ...(replyTo ? { replyTo: { email: replyTo } } : {}),
         subject,
-        text,
-        ...(html ? { html } : {}),
+        textContent: text,
+        ...(html ? { htmlContent: html } : {}),
+        /*
+         * Brevo takes inline images as base64 with a content id, so the crest
+         * travels with the message here too rather than being linked - the
+         * domain is not serving yet and clients block remote images anyway.
+         */
         ...(inlineCrest
           ? {
-              attachments: [
-                {
-                  filename: CREST_FILENAME,
-                  content: CREST_BASE64,
-                  content_id: CREST_CID,
-                  content_type: 'image/png',
-                  disposition: 'inline',
-                },
+              attachment: [
+                { content: CREST_BASE64, name: CREST_FILENAME },
               ],
             }
           : {}),
       }),
     });
     if (!response.ok) {
-      throw new Error(`Resend responded ${response.status}: ${await response.text()}`);
+      throw new Error(`Brevo responded ${response.status}: ${await response.text()}`);
     }
     return;
   }
@@ -310,7 +312,7 @@ async function deliver(message, env) {
      * crypto, net) where it is. And bundling it would be wrong even if it
      * worked: nodemailer speaks SMTP over raw TCP, which Workers cannot open.
      * SMTP is for the Node hosts - Vercel, a server - and Cloudflare uses
-     * Resend.
+     * Brevo.
      *
      * Splitting the name defeats the bundler's constant folding. The .catch()
      * then turns what is left into a clear runtime error instead of a stack
@@ -320,7 +322,7 @@ async function deliver(message, env) {
     const { default: nodemailer } = await import(specifier).catch(() => {
       throw new Error(
         'CONTACT_TRANSPORT="smtp" needs nodemailer, which is not available on this host. ' +
-          'Cloudflare Workers cannot open SMTP connections - use CONTACT_TRANSPORT="resend" there.',
+          'Cloudflare Workers cannot open SMTP connections - use CONTACT_TRANSPORT="brevo" there.',
       );
     });
     const port = Number(env.SMTP_PORT || 587);
@@ -414,7 +416,7 @@ async function subscribe(data, env) {
   /*
    * SINGLE OPT-IN, over the same transport the contact form uses.
    *
-   * For sites with working SMTP or Resend but no Brevo account. The
+   * For sites with a working mail transport but no Brevo LIST. The
    * subscription is emailed to CONTACT_RECIPIENT and nothing goes to the
    * subscriber: there is no list to join and no confirmation link to send,
    * because there is no store to hold a pending token.
@@ -426,7 +428,7 @@ async function subscribe(data, env) {
    *
    * Brevo remains the better answer, and switching back is one env var.
    */
-  if (provider === 'smtp' || provider === 'resend' || provider === 'email') {
+  if (provider === 'smtp' || provider === 'email') {
     const edition = data.language === 'fr' ? 'française' : 'anglaise';
     await deliver(
       {

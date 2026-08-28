@@ -100,8 +100,8 @@ The same set applies to Vercel, Netlify and Cloudflare.
 | `PUBLIC_PRIVACY_IS_DRAFT` | `true` | Until the lawyer's text lands |
 | `CONTACT_RECIPIENT` | `infos@mhsv-international.org` | BLOCKERS #2 - create the mailbox first |
 | `CONTACT_SENDER` | `website@mhsv.ch` | Must be on an authenticated domain you own |
-| `CONTACT_TRANSPORT` | `log` → `resend` or `smtp` | See below |
-| `RESEND_API_KEY` | - | Only for `resend` |
+| `CONTACT_TRANSPORT` | `log` → `brevo` or `smtp` | See below |
+| `BREVO_API_KEY` | - | Required for `brevo`; the same key serves the newsletter |
 | `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASSWORD` | - | Only for `smtp` |
 
 The `PUBLIC_` prefix is required for anything the browser sees; the contact
@@ -130,7 +130,7 @@ and Cloudflare uploads nothing, because `dist/` is generated and gitignored.
 | Root directory | the repository root |
 | Node version | 20 or later (`NODE_VERSION=20` if the default is older) |
 
-`CONTACT_TRANSPORT` **must be `resend` or `log` here, never `smtp`.** Workers
+`CONTACT_TRANSPORT` **must be `brevo` or `log` here, never `smtp`.** Workers
 cannot open raw TCP connections, so nodemailer cannot run - the code refuses it
 with a clear error rather than failing obscurely, and the module is kept out of
 the bundle entirely. Run `npm run check:functions` before pushing to confirm
@@ -147,7 +147,7 @@ export const onRequest = ({ request, env }) => handleContact(request, env);
 ```
 
 Set the same variables under **Settings → Environment variables**. Use
-`CONTACT_TRANSPORT=resend` - Workers have no raw TCP, so `smtp` (nodemailer)
+`CONTACT_TRANSPORT=brevo` - Workers have no raw TCP, so `smtp` (nodemailer)
 will not run there. Headers and redirects come from `public/_redirects` and a
 `public/_headers` file mirroring the `netlify.toml` header block.
 
@@ -160,10 +160,11 @@ will not run there. Headers and redirects come from `public/_redirects` and a
 Runs the full pipeline and writes the submission to the function log instead of
 sending. Use this to verify the form end-to-end without losing anything.
 
-### `resend` - recommended
+### `brevo` - the provider MHSV® selected
 
 Zero dependencies; the core calls the HTTP API directly. Create the key, verify
-the sending domain (SPF + DKIM), set `RESEND_API_KEY`.
+the sending domain (SPF + DKIM), set `BREVO_API_KEY`. The same key is used by
+the newsletter's double opt-in, so there is one account and one key to manage.
 
 ### `smtp` - for a Swiss host
 

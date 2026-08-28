@@ -9,10 +9,12 @@
 #
 #   wrangler pages secret put CONTACT_RECIPIENT
 #   wrangler pages secret put CONTACT_SENDER
-#   wrangler pages secret put CONTACT_TRANSPORT      # log | resend | smtp
-#   wrangler pages secret put RESEND_API_KEY         # if transport=resend
+#   wrangler pages secret put CONTACT_TRANSPORT      # log | brevo  (NOT smtp:
+#                                                    #   Workers have no raw TCP)
 #   wrangler pages secret put NEWSLETTER_PROVIDER    # log | brevo
-#   wrangler pages secret put BREVO_API_KEY          # if provider=brevo
+#   wrangler pages secret put BREVO_API_KEY          # one key, both of the above
+#   wrangler pages secret put BREVO_LIST_ID          # if provider=brevo
+#   wrangler pages secret put BREVO_DOI_TEMPLATE_ID  # if provider=brevo
 #
 # Local: `npm run dev:cf` after `npm run build`.
 
