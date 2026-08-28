@@ -299,13 +299,14 @@ try {
     await page.close();
   }
 
-  /* The shrunk bar does not offer the switcher at all.
+  /* The switcher survives the shrink, and stays usable.
    *
-   * Four codes inline while the bar is full width; once it contracts the
-   * switcher is gone and the bar simply states which language you are in.
-   * The property that matters is that nothing is left FOCUSABLE - a control
-   * off screen that a keyboard user can still tab into is the failure mode
-   * of hiding things this way. */
+   * This asserted the opposite until 28 August: that the contracted bar dropped
+   * the switcher and stated the language instead. That is exactly what the
+   * client hit - scrolling down any French page put EN out of reach, present in
+   * the DOM at 0x0. Both properties are checked, because they fail
+   * independently: the codes must be VISIBLE, and they must be reachable by
+   * keyboard. */
   {
     const page = await browser.newPage();
     const lang = () =>
@@ -315,8 +316,6 @@ try {
         const links = [...document.querySelectorAll('.lang a')];
         return {
           codes: links.filter(shown).length,
-          label: shown(document.querySelector('.lang__current')),
-          labelText: document.querySelector('.lang__current').textContent.trim(),
           width: Math.round(document.querySelector('.lang').getBoundingClientRect().width),
         };
       });
@@ -341,7 +340,7 @@ try {
     await page.setViewport({ width: 1440, height: 900 });
     await page.goto(`${BASE}/fr/`, { waitUntil: 'networkidle0' });
     const top = await lang();
-    check(top.codes === 4 && !top.label, 'all four codes are offered at full width', `${top.width}px`);
+    check(top.codes === 4, 'all four codes are offered at full width', `${top.width}px`);
     check((await focusableInLang()) === 4, 'and all four are reachable by keyboard there');
 
     await page.evaluate(() => {
@@ -351,20 +350,20 @@ try {
     await new Promise((r) => setTimeout(r, 800));
     const small = await lang();
     check(
-      small.codes === 0 && small.label,
-      'the shrunk bar states the language instead of offering a switch',
-      `${top.width}px → ${small.width}px, shows "${small.labelText}"`,
-    );
+        small.codes === 4,
+        'the shrunk bar still offers every language',
+        `${top.width}px → ${small.width}px, ${small.codes} visible`,
+      );
     check(
-      (await focusableInLang()) === 0,
-      'nothing in it is focusable once shrunk',
-      'no off-screen control to tab into',
-    );
+        (await focusableInLang()) === 4,
+        'and all four are still reachable by keyboard once shrunk',
+        'the client reported EN present but unclickable here',
+      );
 
     await page.evaluate(() => scrollTo(0, 0));
     await new Promise((r) => setTimeout(r, 800));
     const back = await lang();
-    check(back.codes === 4 && !back.label, 'and the switcher returns at the top');
+    check(back.codes === 4, 'and it is unchanged back at the top');
 
     // Mobile never shrinks, so the switcher is always there.
     await page.setViewport({ width: 390, height: 844, isMobile: true });
@@ -372,7 +371,7 @@ try {
     await page.evaluate(() => scrollTo(0, 1500));
     await new Promise((r) => setTimeout(r, 700));
     const mobile = await lang();
-    check(mobile.codes === 4 && !mobile.label, 'mobile: the switcher stays available throughout');
+    check(mobile.codes === 4, 'mobile: the switcher stays available throughout');
     await page.close();
   }
 
@@ -417,20 +416,24 @@ try {
       return { left: Math.round(r.left), right: Math.round(r.right) };
     });
 
-    // The bar shows the language label in gold in every locale, so finding
+    // The active language wears a filled gold chip in every locale, so finding
     // gold in its box says the bar is DRAWN - not which language is showing.
-    // Its BOX, not one pixel: the label is thin text now rather than a filled
-    // chip, and a single sample lands between the letterforms.
+    // The SWITCHER'S BOX, not the chip's. The chip is measured on the French
+    // page and the frames are of a switch to German, where the active chip is
+    // third rather than first - a box pinned to the French chip simply does not
+    // contain the German one, and every frame reads as "no bar". The container
+    // holds whichever chip is active, in any locale, and does not move.
     const label = await page.evaluate(() => {
-      const r = document.querySelector('.lang__current').getBoundingClientRect();
+      const r = document.querySelector('.lang').getBoundingClientRect();
       return {
         x: Math.floor(r.left), y: Math.floor(r.top),
         w: Math.ceil(r.width), h: Math.ceil(r.height),
       };
     });
 
-    // The shrunk bar offers no switcher, so this is how a mid-page switch now
-    // reaches the browser: the carried fragment, followed from the URL.
+    // Driven through the URL rather than a click: the point of the screencast
+    // is the frames the browser paints during the switch, and following the
+    // carried fragment directly is the same navigation without the pointer.
     frames.length = 0;
     await page.evaluate(() => {
       const href = document.querySelector('.lang a[hreflang="de"]').href;
