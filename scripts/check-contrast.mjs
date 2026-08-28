@@ -148,8 +148,13 @@ const CHECKS = [
   ['language code on bar over ground', C.mutedOnDark, SHRUNK_BAR_ON_GROUND, 4.5],
   ['nav link on bar over card', C.white, SHRUNK_BAR_ON_CARD, 4.5],
   ['language code on bar over card', C.mutedOnDark, SHRUNK_BAR_ON_CARD, 4.5],
-  // The shrunk bar drops the switcher and states the current language instead.
-  ['current language on bar over card', C.gold, SHRUNK_BAR_ON_CARD, 4.5],
+  /*
+   * The shrunk bar keeps the switcher rather than replacing it with a label -
+   * the label was removed on 28 August because hiding the switcher made EN
+   * unreachable from any scrolled French page. So the active chip has to hold
+   * up over the bar at its lightest, the same as the inactive codes above.
+   */
+  ['active language chip on the shrunk bar', C.navyDeep, C.gold, 4.5],
 ];
 
 /** Pairings that must NEVER be used - verified as failing, so the ban is real. */

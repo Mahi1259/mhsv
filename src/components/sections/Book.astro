@@ -24,6 +24,20 @@ interface Props {
 const { locale, type } = Astro.props;
 const s = getContent(locale).sections.book;
 
+/*
+ * /livre is bilingual and picks its language from ?lang - it is one permanent
+ * URL because the printed QR encodes it and cannot be changed.
+ *
+ * Linking to the bare path from the English site sent readers to the French
+ * version: English copy on the page they came from, then a French order form
+ * headed "Envoyer ma demande". The path itself is untouched, so the QR still
+ * lands exactly where it always did.
+ *
+ * DE and IT get the English side, matching how they are handled everywhere
+ * else - the book page has no German or Italian version.
+ */
+const bookHref = locale === 'fr' ? BOOK_PAGE_PATH : `${BOOK_PAGE_PATH}?lang=en`;
+
 const covers = [
   { src: coverFr, alt: s.coverAltFr, edition: 'FR' },
   { src: coverEn, alt: s.coverAltEn, edition: 'EN' },
@@ -69,7 +83,7 @@ const covers = [
         The generator and its print assets stay in the repository - see
         scripts/generate-qr.mjs and scripts/generate-web-qr.mjs.
       */}
-      <a class="btn btn--primary book__cta" href={BOOK_PAGE_PATH} data-magnetic>{s.ctaLabel}</a>
+      <a class="btn btn--primary book__cta" href={bookHref} data-magnetic>{s.ctaLabel}</a>
     </div>
   </div>
 </Band>

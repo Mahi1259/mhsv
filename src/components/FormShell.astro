@@ -31,6 +31,12 @@ interface Props {
   kind: 'contact' | 'book-order' | 'newsletter';
   id: string;
   submitLabel: string;
+  /**
+   * The submit label in `altLocale`. Without it the button stayed in the
+   * primary language while the rest of the page switched - /livre?lang=en gave
+   * an English form headed "Envoyer ma demande".
+   */
+  altSubmitLabel?: string;
   strings: {
     errors: Record<string, string>;
     successTitle: string;
@@ -47,7 +53,7 @@ interface Props {
   class?: string;
 }
 
-const { locale, altLocale, kind, id, submitLabel, strings, altStrings, class: className } =
+const { locale, altLocale, kind, id, submitLabel, altSubmitLabel, strings, altStrings, class: className } =
   Astro.props;
 const c = getContent(locale);
 const alt = altLocale ? getContent(altLocale) : null;
@@ -81,7 +87,7 @@ const alt = altLocale ? getContent(altLocale) : null;
       data-sending-label={c.form.submitting}
       data-sending-label-alt={alt?.form.submitting}
     >
-      {submitLabel}
+      {altSubmitLabel ? <Bilingual fr={submitLabel} en={altSubmitLabel} /> : submitLabel}
     </button>
     <p class="form__note">
       <span aria-hidden="true">*</span>

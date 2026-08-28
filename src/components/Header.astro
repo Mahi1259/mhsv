@@ -31,7 +31,6 @@ const c = getContent(locale);
 const home = localePath('', locale);
 const alternates = localeAlternates(path);
 /** Shown alone once the bar contracts and the other three collapse away. */
-const current = alternates.find((alt) => alt.locale === locale)!;
 
 const anchorFor = (id: string) => SECTION_ORDER.find((s) => s.id === id)?.anchor ?? id;
 // On sub-pages the in-page anchors have to point back at the home document.
@@ -100,16 +99,6 @@ const navHref = (item: { id: string; href?: string }) =>
         </ul>
       </nav>
 
-      {/*
-        What the shrunk bar shows instead: the current language, stated and
-        nothing more. Not a control - no link, no button, nothing to open.
-
-        aria-hidden because it says nothing new: the document's own `lang`
-        already tells assistive technology which language this is, and the
-        switcher itself is simply absent from the collapsed bar rather than
-        being represented by a label that does nothing.
-      */}
-      <span class="lang__current" aria-hidden="true">{current.nameShort}</span>
     </div>
   </div>
 </header>
@@ -378,12 +367,6 @@ const navHref = (item: { id: string; href?: string }) =>
     margin-inline-start: auto;
   }
 
-  /* Only ever one of the two is shown. Full width: the switcher. Contracted:
-     the current language, stated. */
-  .lang__current {
-    display: none;
-  }
-
   @media (min-width: 62rem) {
     .lang {
       margin-inline-start: 0;
@@ -556,35 +539,26 @@ const navHref = (item: { id: string; href?: string }) =>
     }
 
     /*
-     * The switcher is not offered by the contracted bar at all.
+     * The switcher STAYS LIVE in the contracted bar.
      *
-     * Four chips are a lot of a pill's width to spend on something a reader
-     * uses once, and the intent is that changing language is a decision made
-     * at the top of the page, not something to trip over mid-read. So the
-     * switcher is simply not there, and the bar states which language you are
-     * in. `display: none` and not merely hidden: nothing left focusable, so a
-     * keyboard user cannot land on a control that is not on screen.
+     * It was `display: none` here, on the 20 August instruction that the bar
+     * should state the current language rather than offer a control. What that
+     * did to a real reader: scrolling down any French page put EN out of reach
+     * - the link was in the DOM at 0x0, unclickable - which is exactly what the
+     * client reported. Reversed on the 28 August review; both languages must be
+     * reachable from every page at any scroll position.
      *
-     * The trade is real - from here, changing language means returning to the
-     * top of the page.
+     * It contracts instead of disappearing: smaller chips, tighter gap, so it
+     * still fits the pill.
      */
-    .site-header.is-shrunk .lang__switch {
-      display: none;
+    .site-header.is-shrunk .lang a {
+      min-width: 1.75rem;
+      min-height: 1.875rem;
+      font-size: 0.6875rem;
     }
 
-    /*
-     * Gold TEXT, not the filled gold chip the active language wears in the
-     * switcher: a filled chip reads as a control, and this one does nothing.
-     * 5.31:1 over the bar at its lightest - see scripts/check-contrast.mjs.
-     */
-    .site-header.is-shrunk .lang__current {
-      display: block;
-      padding-inline: 0.25rem;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      color: var(--gold);
+    .site-header.is-shrunk .lang ul {
+      gap: 0.0625rem;
     }
   }
 </style>
