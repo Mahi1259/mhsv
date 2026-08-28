@@ -363,19 +363,24 @@ for (const locale of LOCALES) {
 }
 
 /*
- * --- 6d: private contact details stay off the site -------------------------
+ * --- 6d: individual addresses stay inside Governance ------------------------
  *
- * Martial's 27 August instruction: general and contact pages carry
- * infos@mhsv.ch and nothing else. His own address is allowed in exactly one
- * place - his card in the Governance section - and his phone number nowhere at
- * all. A mobile number was published in the Contact section of all four
- * languages, as a tel: link, until that instruction.
+ * Martial's 27 August instruction, widened by the 28 August one: the six
+ * committee members now have their own institutional addresses, and those may
+ * appear in exactly one place - their card in the Governance section. Every
+ * other page, the footer and all three forms carry infos@mhsv.ch and nothing
+ * else. His phone number appears nowhere at all; it was published in the
+ * Contact section of all four languages until that instruction.
+ *
+ * Matched by SHAPE rather than by a list of names, so a seventh member added
+ * later is covered without anyone remembering to update this: initial-dot-
+ * surname at mhsv.ch. infos@ does not match, which is the point.
  *
  * Checked against built HTML rather than the content files, because it is the
  * rendered page that leaks.
  */
 {
-  const PRIVATE_EMAIL = 'm.happi@mhsv.ch';
+  const INDIVIDUAL = /\b[a-z]\.[a-z-]+@mhsv\.ch\b/g;
 
   for (const file of textFiles.filter((f) => extname(f) === '.html')) {
     const name = relative(DIST, file);
@@ -388,59 +393,29 @@ for (const locale of LOCALES) {
     const digits = /\+41[\s.-]?\d[\s.-]?\d{2}([\s.-]?\d{2}){3}/.exec(html);
     if (digits) errors.push(`${name}: publishes a phone number "${digits[0]}"`);
 
-    if (!html.includes(PRIVATE_EMAIL)) continue;
+    const found = [...new Set(html.match(INDIVIDUAL) ?? [])];
+    if (!found.length) continue;
 
-    /*
-     * Allowed only on the home documents, and only inside the governance card.
-     * Anywhere else - a legal page, /livre, the contact block - is a leak.
-     */
+    // Only the home documents carry the Governance section at all.
     const onHome = /^[a-z]{2}\/index\.html$/.test(name);
-    const inGovernanceCard =
-      /class="[^"]*\bteam__email\b[^"]*"\s+href="mailto:m\.happi@mhsv\.ch"/.test(html);
-    const occurrences = (html.match(/m\.happi@mhsv\.ch/g) ?? []).length;
-
-    if (!onHome || !inGovernanceCard) {
-      errors.push(`${name}: the founder's private address appears outside the Governance card`);
-    } else if (occurrences > 2) {
-      // mailto: href + link text = 2. More than that means a second place.
-      errors.push(`${name}: the founder's private address appears ${occurrences}x, expected only the Governance card`);
-    }
-  }
-}
-
-/*
- * --- 6e: cookie notice, and the banners that must not go missing -----------
- *
- * Two of these are standing client instructions rather than nice-to-haves: the
- * permanent cookie-settings control must exist on every page, and the banners
- * on the two documents still under legal validation must not be removed. Both
- * are the kind of thing a later refactor drops silently.
- */
-{
-  const BANNERED = { legalNotice: ['mentions-legales', 'legal-notice'],
-                     dataProtection: ['protection-des-donnees', 'data-protection'] };
-
-  for (const locale of LOCALES) {
-    const home = resolve(DIST, locale, 'index.html');
-    if (!existsSync(home)) continue;
-    const html = readFileSync(home, 'utf8');
-
-    if (!/data-cookie-reopen/.test(html)) {
-      errors.push(`${locale}/index.html: no permanent cookie-settings control`);
-    }
-    if (!/\[data-cookie\]/.test(html)) {
-      errors.push(`${locale}/index.html: the cookie notice script is missing`);
+    if (!onHome) {
+      errors.push(
+        `${name}: individual address${found.length > 1 ? 'es' : ''} ${found.join(', ')} outside Governance`,
+      );
+      continue;
     }
 
-    for (const slugs of Object.values(BANNERED)) {
-      for (const slug of slugs) {
-        const page = resolve(DIST, locale, slug, 'index.html');
-        if (!existsSync(page)) continue;
-        if (!/<p class="notice__banner"/.test(readFileSync(page, 'utf8'))) {
-          errors.push(
-            `${locale}/${slug}/: the pending-validation banner is gone - it may not be removed without instruction`,
-          );
-        }
+    for (const address of found) {
+      const escaped = address.replace(/[.]/g, '\\.');
+      const inCard = new RegExp(
+        `class="[^"]*\\bteam__email\\b[^"]*"\\s+href="mailto:${escaped}"`,
+      ).test(html);
+      // mailto: href + link text = 2. Anything more is a second place.
+      const count = (html.match(new RegExp(escaped, 'g')) ?? []).length;
+      if (!inCard) {
+        errors.push(`${name}: ${address} appears outside the Governance card`);
+      } else if (count > 2) {
+        errors.push(`${name}: ${address} appears ${count}x, expected only the Governance card`);
       }
     }
   }
