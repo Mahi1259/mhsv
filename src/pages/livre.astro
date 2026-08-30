@@ -49,7 +49,13 @@ const columns = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{fr.sections.book.title} | MHSV®</title>
+    {/*
+      Both titles ship; the head script below picks one. A <title> cannot be
+      swapped by the .l10n stylesheet the way every other fragment on this page
+      is - it is not rendered, so hiding one half does nothing - and it stayed
+      French on ?lang=en.
+    */}
+    <title data-en={`${en.sections.book.title} | MHSV®`}>{fr.sections.book.title} | MHSV®</title>
     <meta
       name="description"
       content={`${fr.sections.book.body.slice(0, 150)}…`}
@@ -90,11 +96,24 @@ const columns = [
       var lang = /(^|[?&])lang=en(&|$)/.test(location.search) ? 'en' : 'fr';
       document.documentElement.setAttribute('data-lang', lang);
       document.documentElement.lang = lang === 'en' ? 'en' : 'fr';
+
+      // The tab title, here rather than below: it is in the head and already
+      // parsed, and waiting would show the French one first.
+      if (lang === 'en') {
+        var title = document.querySelector('title');
+        if (title && title.getAttribute('data-en')) document.title = title.getAttribute('data-en');
+      }
     })();
   </script>
 
   <body>
-    <a class="skip-link" href="#book">Aller au contenu / Skip to content</a>
+    {/* Two halves, not one joined string: a joined "Aller au contenu / Skip to
+        content" cannot be filtered by the .l10n rules, so the first thing an
+        English reader could focus on led in French. */}
+    <a class="skip-link" href="#book">
+      <span class="l10n" lang="fr-CH">Aller au contenu</span>
+      <span class="l10n" lang="en">Skip to content</span>
+    </a>
 
     {/*
       The site's masthead, reduced to what this page needs: the mark, and the
@@ -107,7 +126,15 @@ const columns = [
     */}
     <header class="livre-header">
       <div class="livre-header__inner">
-        <a class="livre-brand notranslate" href={localePath('', 'fr')} translate="no">
+        {/* An href cannot be hidden, so the English one travels as data and the
+            script applies it. It pointed at the French homepage from the English
+            page. */}
+        <a
+          class="livre-brand notranslate"
+          href={localePath('', 'fr')}
+          data-href-en={localePath('', 'en')}
+          translate="no"
+        >
           <Image src={crest} alt="" width={32} height={36} loading="eager" densities={[1, 2]} />
           <span>MHSV®</span>
         </a>
@@ -213,6 +240,23 @@ const columns = [
         if (chip) chip.setAttribute('aria-current', 'true');
 
         if (lang === 'en') {
+          /*
+           * Everything the stylesheet cannot reach.
+           *
+           * `.l10n` hides one of two ELEMENTS, which covers the copy and the
+           * form labels but not an attribute and not the text inside an
+           * <option>. So the brand link went to the French homepage, the
+           * privacy link opened the French notice, and the edition dropdown
+           * read "Français / Anglais" - on the English page. Each carries its
+           * English value as data and it is applied here.
+           */
+          document.querySelectorAll('[data-href-en]').forEach(function (el) {
+            el.setAttribute('href', el.getAttribute('data-href-en'));
+          });
+          document.querySelectorAll('[data-text-en]').forEach(function (el) {
+            el.textContent = el.getAttribute('data-text-en');
+          });
+
           var alt = document.querySelector('[data-form-strings-alt]');
           var main = document.querySelector('[data-form-strings]');
           if (alt && main) main.textContent = alt.textContent;

@@ -32,6 +32,10 @@ const alt = altLocale ? getContent(altLocale) : null;
 const ao = alt?.bookOrder;
 const af = alt?.form;
 const privacyHref = legalPath('dataProtection', locale);
+/* The same page in the alternate language, for the bilingual /livre. An href
+   cannot be hidden by the .l10n rules, so it opened the French notice from the
+   English page. */
+const privacyHrefAlt = altLocale ? legalPath('dataProtection', altLocale) : null;
 
 const strings = {
   errors: { ...f.errors, ...o.errors },
@@ -69,8 +73,11 @@ const altStrings = alt && {
     <p class="form__field">
       <label for="edition"><Bilingual fr={o.edition} en={ao?.edition ?? o.edition} /> <span class="form__req" aria-hidden="true">*</span></label>
       <select id="edition" name="edition" required aria-describedby="edition-error">
-        <option value="fr">{o.editionFr}</option>
-        <option value="en">{o.editionEn}</option>
+        {/* Option text is text, not an element the stylesheet can hide, so the
+            English labels travel as data and the page script applies them. They
+            read "Français / Anglais" on the English page until now. */}
+        <option value="fr" data-text-en={ao?.editionFr ?? undefined}>{o.editionFr}</option>
+        <option value="en" data-text-en={ao?.editionEn ?? undefined}>{o.editionEn}</option>
       </select>
       <span class="form__error" id="edition-error" data-error-for="edition"></span>
     </p>
@@ -134,7 +141,9 @@ const altStrings = alt && {
     </p>
     <span class="form__error" id="o-consent-error" data-error-for="consent"></span>
     <p class="order__privacy">
-      <a class="link" href={privacyHref}><Bilingual fr={c.footer.privacyLink} en={alt?.footer.privacyLink ?? c.footer.privacyLink} /></a>
+      <a class="link" href={privacyHref} data-href-en={privacyHrefAlt ?? undefined}>
+        <Bilingual fr={c.footer.privacyLink} en={alt?.footer.privacyLink ?? c.footer.privacyLink} />
+      </a>
     </p>
   </div>
 </FormShell>

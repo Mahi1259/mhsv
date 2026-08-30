@@ -74,7 +74,9 @@ const alt = altLocale ? getContent(altLocale) : null;
 
   {/* Honeypot: off-screen rather than display:none, which some bots detect. */}
   <div class="form__trap" aria-hidden="true">
-    <label for={`${id}-website`}>{c.form.honeypotLabel}</label>
+    <label for={`${id}-website`}>
+      {alt ? <Bilingual fr={c.form.honeypotLabel} en={alt.form.honeypotLabel} /> : c.form.honeypotLabel}
+    </label>
     <input id={`${id}-website`} name="website_url" type="text" tabindex="-1" autocomplete="off" />
   </div>
 
