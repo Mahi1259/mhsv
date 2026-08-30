@@ -48,10 +48,32 @@ const c = getContent(locale);
     var accept = el.querySelector('[data-cookie-accept]');
 
     function show() {
+      /*
+       * The notice may already be open - on a first visit it is, and the footer
+       * control is most likely to be tried exactly then. Re-showing something
+       * already shown changes nothing on screen, so the control looked broken:
+       * clicked, no page load, no banner appearing. It was working; there was
+       * simply nothing to see.
+       *
+       * So when it is already open, say so visibly. The attribute drives a
+       * short highlight in the stylesheet, and is removed afterwards so it can
+       * fire again on the next click.
+       */
+      var alreadyOpen = !el.hidden;
       el.hidden = false;
-      /* Move focus to the notice when it is re-opened deliberately, so a
-         keyboard user is taken to the thing they just asked for. Not on first
-         load - stealing focus from someone who is already reading is rude. */
+
+      if (alreadyOpen) {
+        el.removeAttribute('data-attention');
+        // Force a reflow so re-adding the attribute restarts the animation
+        // rather than being coalesced into no change at all.
+        void el.offsetWidth;
+        el.setAttribute('data-attention', '');
+        setTimeout(function () { el.removeAttribute('data-attention'); }, 1200);
+      }
+
+      /* Focus the notice when it is asked for, so a keyboard user is taken to
+         the thing they just requested. Not on first load - stealing focus from
+         someone who is already reading is rude. */
       if (accept) accept.focus();
     }
 
@@ -105,6 +127,44 @@ const c = getContent(locale);
 
   .cookie[hidden] {
     display: none;
+  }
+
+  /*
+   * The answer to "I clicked Cookie settings and nothing happened".
+   *
+   * On a first visit the notice is already open, so re-opening it is a no-op
+   * and the footer control appeared dead. This is what it does instead: a brief
+   * gold edge, so the eye is sent to the thing that was asked for.
+   *
+   * Colour is not the only signal - focus moves to the button at the same time,
+   * which is what a keyboard or screen-reader user gets.
+   */
+  .cookie[data-attention] {
+    animation: cookie-attention 1.2s var(--ease, ease-out);
+  }
+
+  @keyframes cookie-attention {
+    0%,
+    100% {
+      border-block-start-color: var(--hairline-strong);
+      box-shadow: 0 -18px 40px rgb(0 0 0 / 0.4);
+    }
+    15%,
+    60% {
+      border-block-start-color: var(--gold);
+      box-shadow:
+        0 -18px 40px rgb(0 0 0 / 0.4),
+        0 0 0 1px color-mix(in srgb, var(--gold) 55%, transparent) inset;
+    }
+  }
+
+  /* No flash when motion is reduced - the focus move still happens, and that
+     is the part that actually conveys the response. */
+  @media (prefers-reduced-motion: reduce) {
+    .cookie[data-attention] {
+      animation: none;
+      border-block-start-color: var(--gold);
+    }
   }
 
   .cookie__text {
