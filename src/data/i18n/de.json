@@ -446,13 +446,40 @@
         "detail": "IM AUFBAU / SCHRITTWEISE UMSETZUNG"
       },
       "lead": "Die MHSV®-Identität und die zukünftige Kollektion: Athletenausrüstung, Coaching, Repräsentation, Accessoires und Lifestyle.",
-      "logoTitle": "Hauptlogo",
-      "logoNote": "Zum jetzigen Zeitpunkt wird ausschliesslich das freigegebene Hauptlogo veröffentlicht.",
-      "placeholdersTitle": "Reservierte Varianten",
-      "placeholderOfficial": "Offizielles Logo",
-      "placeholderInstitutional": "Institutionelles Logo",
-      "placeholderEquipment": "Ausrüstungslogo",
-      "placeholderNote": "Platz reserviert, Validierung ausstehend."
+      "logosTitle": "Visuelle Identitäten",
+      "logosNote": "Jede Marke hat ihren Einsatz: Das Wappen steht für MHSV®, die Focus-Marke kennzeichnet die Kollektion, das institutionelle Logo bleibt Dokumenten und offiziellen Anlässen vorbehalten.",
+      "logos": [
+        {
+          "key": "official",
+          "label": "Hauptlogo - Wappen",
+          "use": "Hauptidentität der Website."
+        },
+        {
+          "key": "institutional",
+          "label": "Institutionelles Logo",
+          "use": "Offizielle Dokumente, Präsentationen und institutionelle Kontexte. Niemals auf Kleidung."
+        },
+        {
+          "key": "focus",
+          "label": "Focus-Marke",
+          "use": "Marke der Kollektion. Weiss-Gold auf dunklem, Marine-Gold auf hellem Grund."
+        }
+      ],
+      "galleryTitle": "Kollektionstafeln",
+      "boards": [
+        {
+          "key": "performance",
+          "alt": "Tafel Performance: MHSV®-Trikots, Trainingsanzüge und Trainingsbekleidung, Wappen und Focus-Marke."
+        },
+        {
+          "key": "lifestyle",
+          "alt": "Tafel Lifestyle: MHSV®-T-Shirts, Polos, Sweatshirts und Jacken, Wappen und Focus-Marke."
+        },
+        {
+          "key": "accessoires",
+          "alt": "Tafel Accessoires: MHSV®-Taschen, Caps, Mütze, Trinkflasche, Handtuch und Socken."
+        }
+      ]
     },
     "roadmap": {
       "num": "20",

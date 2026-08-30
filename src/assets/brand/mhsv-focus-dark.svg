@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="600" viewBox="0 0 512 600" role="img" aria-labelledby="title desc">
+  <title id="title">Marque MHSV Focus — version fond foncé</title>
+  <desc id="desc">Marque circulaire Focus blanche et or avec le nom MHSV.</desc>
+  <g fill="none" stroke-width="54" stroke-linecap="butt">
+    <path d="M261.41 80.10 A155 155 0 0 1 410.91 229.59" stroke="#FFFFFF"/>
+    <path d="M410.91 240.41 A155 155 0 0 1 261.41 389.90" stroke="#D49520"/>
+    <path d="M250.59 389.90 A155 155 0 0 1 250.59 80.10" stroke="#FFFFFF"/>
+  </g>
+  <circle cx="256" cy="235" r="41" fill="#D49520"/>
+  <text x="256" y="508" text-anchor="middle" fill="#FFFFFF" font-family="Montserrat, Arial, sans-serif" font-size="92" font-weight="800" letter-spacing="10">MHSV</text>
+  <text x="455" y="455" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="30">®</text>
+</svg>

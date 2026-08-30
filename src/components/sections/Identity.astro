@@ -2,86 +2,281 @@
 /**
  * Identity, logos & collection - quiet type.
  *
- * Only MHSV_Primary_Logo_HD.png is published. The REFERENCE_ONLY variants are
- * neither imported nor referenced, and no collection imagery is shown: the
- * mock-ups are REVIEW_REQUIRED and the collection sheets carry third-party
- * logos. Only the wording the client requires verbatim appears.
+ * THE THREE MARKS ARE NOT INTERCHANGEABLE, and this section is where that is
+ * most likely to go wrong, so each is imported once and used once:
+ *
+ *   shield         the site's primary identity
+ *   institutional  official documents, presentations, institutional contexts.
+ *                  NEVER on collection clothing - the client's own usage note
+ *                  says so, and the collection boards below carry only the
+ *                  shield and the Focus mark
+ *   Focus          the collection brand mark, and nothing else. Never the site
+ *                  identity and never in the header
+ *
+ * The Focus mark ships in two versions and the wrong one is invisible rather
+ * than merely wrong: navy-and-gold for light grounds, white-and-gold for dark.
+ * This section is navy - #071426, measured, not assumed - so the DARK-ground
+ * version is the one imported here.
+ *
+ * The institutional logo has the opposite problem. It is navy artwork on a
+ * transparent ground, so on this section it would very nearly disappear; it
+ * gets a light tile of its own, which is also how it is meant to be seen.
  */
 import { Image } from 'astro:assets';
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import type { SectionType } from '@/config/site';
-import logo from '@/assets/logo/mhsv-logo.png';
 
-interface Props { locale: Locale; type: SectionType }
+import shield from '@/assets/brand/mhsv-primary-shield.png';
+import institutional from '@/assets/brand/mhsv-institutional.png';
+import focusDark from '@/assets/brand/mhsv-focus-dark.svg?raw';
+
+import performance from '@/assets/collection/performance.png';
+import lifestyle from '@/assets/collection/lifestyle.png';
+import accessoires from '@/assets/collection/accessoires.png';
+
+interface Props {
+  locale: Locale;
+  type: SectionType;
+}
+
 const { locale, type } = Astro.props;
 const s = getContent(locale).sections.identity;
-const placeholders = [s.placeholderOfficial, s.placeholderInstitutional, s.placeholderEquipment];
+
+const BOARDS: Record<string, ImageMetadata> = { performance, lifestyle, accessoires };
+
+/*
+ * `key` comes from JSON, so it is a plain string as far as types go - narrowing
+ * it in the callback is a claim the content cannot back up. Looked up instead,
+ * and a board whose key has no image is dropped rather than rendering an
+ * undefined src: a typo in the content should cost one board, not the page.
+ */
+const boards = s.boards
+  .map((b: { key: string; alt: string }) => ({ ...b, src: BOARDS[b.key] }))
+  .filter((b: { src?: ImageMetadata }) => Boolean(b.src));
 ---
 
 <Band locale={locale} anchor={s.anchor} title={s.title} type={type} lead={s.lead} status={s.status}>
-  <div class="identity">
-    <figure class="identity__primary" data-reveal-x>
-      <div class="identity__plate">
-        <Image src={logo} alt={s.logoTitle} widths={[200, 340]} sizes="(min-width: 52rem) 11rem, 45vw" loading="lazy" decoding="async" />
-      </div>
-      <figcaption>
-        <span class="mono-label identity__caption">{s.logoTitle}</span>
-        <span class="identity__note">{s.logoNote}</span>
-      </figcaption>
-    </figure>
+  <h3 class="mono-label identity__heading">{s.logosTitle}</h3>
+  <p class="identity__note">{s.logosNote}</p>
 
-    <div>
-      <h3 class="mono-label identity__reservedTitle">{s.placeholdersTitle}</h3>
-      <ul class="identity__slots">
-        {placeholders.map((label) => (
-          <li class="identity__slot">
-            <span class="identity__slotLabel">{label}</span>
-            <span class="identity__slotNote">{s.placeholderNote}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </div>
+  <ul class="identity__logos" data-stagger data-rows>
+    {
+      s.logos.map((logo: { key: string; label: string; use: string }) => (
+        <li class="identity__logo card">
+          <div class:list={['identity__plate', `identity__plate--${logo.key}`]}>
+            {logo.key === 'official' && (
+              <Image src={shield} alt={logo.label} widths={[220, 440]} sizes="14rem" loading="lazy" decoding="async" />
+            )}
+            {logo.key === 'institutional' && (
+              <Image src={institutional} alt={logo.label} widths={[220, 440]} sizes="14rem" loading="lazy" decoding="async" />
+            )}
+            {/* Inlined rather than an <img>: it is a two-colour vector and this
+                keeps it a request lighter and lets it inherit nothing. */}
+            {logo.key === 'focus' && <div class="identity__focus" role="img" aria-label={logo.label} set:html={focusDark} />}
+          </div>
+          <p class="identity__label mono-label">{logo.label}</p>
+          <p class="identity__use">{logo.use}</p>
+        </li>
+      ))
+    }
+  </ul>
 
+  <h3 class="mono-label identity__heading identity__heading--gallery">{s.galleryTitle}</h3>
+
+  <ul class="identity__gallery" data-stagger data-rows>
+    {
+      boards.map((board) => (
+        <li class="identity__board">
+          <Image
+            src={board.src}
+            alt={board.alt}
+            widths={[520, 900, 1400]}
+            sizes="(min-width: 62rem) 30rem, 92vw"
+            loading="lazy"
+            decoding="async"
+          />
+        </li>
+      ))
+    }
+  </ul>
+
+  {/* Required wording, verbatim. It is the whole basis on which these boards
+      may be shown at all: they are mock-ups, nothing here is for sale. */}
   <p class="identity__collection">{s.collectionNotice}</p>
 </Band>
 
 <style>
-  .identity { display: grid; gap: 2rem; align-items: start; }
-  .identity__primary { margin: 0; }
-  /* The same raised surface the cards use, not a white plate. It is the
-     identical asset the hero shows directly on navy - its background is
-     transparent, so the plate was never doing anything but putting a white
-     rectangle on the page. */
+  .identity__heading {
+    color: var(--band-muted);
+    margin: 0 0 0.75rem;
+  }
+
+  .identity__heading--gallery {
+    margin-block-start: 3rem;
+  }
+
+  .identity__note {
+    margin: 0 0 1.5rem;
+    max-width: 62ch;
+    color: var(--band-muted);
+  }
+
+  .identity__logos,
+  .identity__gallery {
+    display: grid;
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  @media (min-width: 48rem) {
+    .identity__logos,
+    .identity__gallery {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /*
+   * The gallery takes the full column, not the reading measure.
+   *
+   * This is a `quiet` band, which caps its main column at 46rem so prose stays
+   * readable. That is right for the text and wrong for these: at 46rem each
+   * board came out 235px wide, and they are dense boards of twenty-odd garments
+   * whose whole point is being looked at. Only the gallery escapes; the copy
+   * above it keeps its measure.
+   */
+  /*
+   * 84rem, not 64rem. The rail layout starts at 64rem but does not leave room
+   * for the breakout until the shell has stopped growing - asking for it at
+   * 1100px pushed the page into horizontal scroll. Below this the gallery keeps
+   * the reading measure, which is narrower than ideal and still correct.
+   */
+  @media (min-width: 84rem) {
+    .identity__gallery {
+      /*
+       * Measured from the PARENT, not the viewport. `100vw` includes the
+       * scrollbar, so the first version of this overflowed the page by a few
+       * pixels at 1440 - the audit catches that, and it is a horizontal scroll
+       * on a desktop for the sake of a gallery. Growing from 100% can only ever
+       * reach the space the band actually has.
+       */
+      width: min(calc(100% + 14rem), 68rem);
+    }
+  }
+
+  .identity__logo {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+  }
+
   .identity__plate {
-    display: grid; place-items: center; padding: 1.5rem;
-    background: var(--band-raised); border: 1px solid var(--band-rule); border-radius: var(--radius);
+    display: grid;
+    place-items: center;
+    min-height: 9rem;
+    padding: 1.25rem;
+    border-radius: var(--radius);
+    background: var(--band-raised);
+    border: 1px solid var(--band-rule);
   }
-  .identity__plate :global(img) { width: 100%; max-width: 11rem; height: auto; }
-  .identity__primary figcaption { display: grid; gap: 0.375rem; margin-block-start: 0.875rem; }
-  .identity__caption { color: var(--band-accent); }
-  .identity__note { color: var(--band-muted); font-size: 0.8125rem; line-height: 1.5; }
-  .identity__reservedTitle { color: var(--band-muted); margin: 0 0 1rem; }
-  .identity__slots { display: grid; gap: 0.75rem; list-style: none; margin: 0; padding: 0; }
-  .identity__slot {
-    display: grid; gap: 0.25rem; align-content: center; min-height: 5rem; padding: 1rem;
-    border: 1px dashed var(--band-rule); border-radius: var(--radius);
-    background: var(--band-raised); text-align: center;
+
+  /*
+   * The institutional logo is navy artwork on a transparent ground. On this
+   * section's navy it would be a dark shape on a dark field, so it gets the
+   * light tile it is designed for. This is the one plate that differs, and it
+   * differs for a reason rather than for variety.
+   */
+  .identity__plate--institutional {
+    background: #ffffff;
+    border-color: #ffffff;
   }
-  .identity__slotLabel {
-    font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--band-fg);
+
+  .identity__plate :global(img) {
+    width: 100%;
+    max-width: 12rem;
+    height: auto;
   }
-  .identity__slotNote { font-size: 0.75rem; color: var(--band-muted); }
+
+  .identity__focus :global(svg) {
+    display: block;
+    width: 100%;
+    max-width: 5.5rem;
+    height: auto;
+  }
+
+  .identity__label {
+    margin: 0;
+    color: var(--band-accent);
+  }
+
+  .identity__use {
+    margin: 0;
+    color: var(--band-muted);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  /*
+   * One height for all three, because they are not one shape: Performance and
+   * Accessories are landscape and Lifestyle is portrait. Left to their natural
+   * heights in a three-column grid, the portrait board ran to roughly twice the
+   * others and collided with the notice below.
+   *
+   * `contain`, never `cover`: these are mock-up boards and cropping one would
+   * cut garments out of the very thing being shown.
+   */
+  .identity__board {
+    position: relative;
+    display: grid;
+    place-items: center;
+    /* An aspect, not a fixed height. A fixed one squeezed the two landscape
+       boards into a thin strip inside a tall tile while the portrait one filled
+       its own; 4:3 sits between the two shapes so all three read at a similar
+       size. */
+    aspect-ratio: 4 / 3;
+    /*
+     * Both needed, or the aspect is only a suggestion: a grid item's min-height
+     * is `auto`, so the portrait board's intrinsic height pushed its tile to
+     * 677px while the other two sat at 343.
+     */
+    min-height: 0;
+    overflow: hidden;
+    padding: 0.5rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--band-rule);
+    background: var(--band-raised);
+  }
+
+  /*
+   * Absolutely positioned, which is the only version of this that worked.
+   *
+   * The tile takes its height from `aspect-ratio`, and neither `height: 100%`
+   * nor `max-height: 100%` on a centred grid child resolved against it - the
+   * portrait board rendered at its intrinsic 437px inside a 232px tile and
+   * `overflow: hidden` cut the bottom row of garments off. Twice. Absolute
+   * inset resolves against the padding box regardless, so `contain` finally has
+   * a box to fit inside: landscape by width, portrait by height, neither
+   * cropped.
+   */
+  .identity__board :global(img) {
+    position: absolute;
+    inset: 0.5rem;
+    display: block;
+    width: calc(100% - 1rem);
+    height: calc(100% - 1rem);
+    object-fit: contain;
+    border-radius: calc(var(--radius) / 2);
+  }
+
   .identity__collection {
-    margin-block-start: 2rem; padding: 1rem 1.25rem;
-    border: 1px solid var(--band-rule); border-inline-start: 3px solid var(--band-accent);
-    border-radius: var(--radius); background: var(--band-raised);
-    font-size: 0.9375rem; line-height: 1.55;
-  }
-  @media (min-width: 52rem) {
-    .identity { grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 2.5rem; }
-    .identity__slots { grid-template-columns: repeat(3, 1fr); }
+    margin-block-start: 1.5rem;
+    padding: 0.875rem 1rem;
+    border: 1px dashed var(--band-rule);
+    border-radius: var(--radius);
+    color: var(--band-muted);
+    font-size: 0.8125rem;
+    line-height: 1.5;
   }
 </style>

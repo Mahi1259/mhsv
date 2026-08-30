@@ -447,13 +447,40 @@
         "detail": "IN DEVELOPMENT / PROGRESSIVE DEPLOYMENT"
       },
       "lead": "The MHSV® identity and future collection: athlete equipment, coaching, representation, accessories and lifestyle.",
-      "logoTitle": "Primary logo",
-      "logoNote": "Only the approved primary logo is published at this stage.",
-      "placeholdersTitle": "Reserved variants",
-      "placeholderOfficial": "Official logo",
-      "placeholderInstitutional": "Institutional logo",
-      "placeholderEquipment": "Equipment logo",
-      "placeholderNote": "Placement reserved, pending validation."
+      "logosTitle": "Visual identities",
+      "logosNote": "Each mark has its use: the shield identifies MHSV®, the Focus mark signs the collection, and the institutional logo is reserved for documents and official contexts.",
+      "logos": [
+        {
+          "key": "official",
+          "label": "Primary logo - shield",
+          "use": "Primary website identity."
+        },
+        {
+          "key": "institutional",
+          "label": "Institutional logo",
+          "use": "Official documents, presentations and institutional contexts. Never on clothing."
+        },
+        {
+          "key": "focus",
+          "label": "Focus brand mark",
+          "use": "Collection brand. White-and-gold on dark backgrounds, navy-and-gold on light."
+        }
+      ],
+      "galleryTitle": "Collection boards",
+      "boards": [
+        {
+          "key": "performance",
+          "alt": "Performance board: MHSV® jerseys, tracksuits and training kit, shield and Focus mark."
+        },
+        {
+          "key": "lifestyle",
+          "alt": "Lifestyle board: MHSV® t-shirts, polos, sweatshirts and jackets, shield and Focus mark."
+        },
+        {
+          "key": "accessoires",
+          "alt": "Accessories board: MHSV® bags, caps, beanie, bottle, towel and socks."
+        }
+      ]
     },
     "roadmap": {
       "num": "20",

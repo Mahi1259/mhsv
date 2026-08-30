@@ -265,13 +265,40 @@
     },
     "identity": {
       "lead": "L'identità MHSV® e la futura collezione: equipaggiamento atleti, coaching, rappresentanza, accessori e lifestyle.",
-      "logoTitle": "Logo principale",
-      "logoNote": "In questa fase viene pubblicato unicamente il logo principale approvato.",
-      "placeholdersTitle": "Varianti riservate",
-      "placeholderOfficial": "Logo ufficiale",
-      "placeholderInstitutional": "Logo istituzionale",
-      "placeholderEquipment": "Logo equipaggiamento",
-      "placeholderNote": "Spazio riservato, in attesa di validazione."
+      "logosTitle": "Identità visive",
+      "logosNote": "Ogni marchio ha il suo impiego: lo stemma identifica MHSV®, il marchio Focus firma la collezione, il logo istituzionale è riservato ai documenti e ai contesti ufficiali.",
+      "logos": [
+        {
+          "key": "official",
+          "label": "Logo principale - stemma",
+          "use": "Identità principale del sito."
+        },
+        {
+          "key": "institutional",
+          "label": "Logo istituzionale",
+          "use": "Documenti ufficiali, presentazioni e contesti istituzionali. Mai sull’abbigliamento."
+        },
+        {
+          "key": "focus",
+          "label": "Marchio Focus",
+          "use": "Marchio della collezione. Bianco-oro su fondo scuro, blu-oro su fondo chiaro."
+        }
+      ],
+      "galleryTitle": "Tavole della collezione",
+      "boards": [
+        {
+          "key": "performance",
+          "alt": "Tavola Performance: maglie, tute e abbigliamento da allenamento MHSV®, stemma e marchio Focus."
+        },
+        {
+          "key": "lifestyle",
+          "alt": "Tavola Lifestyle: t-shirt, polo, felpe e giacche MHSV®, stemma e marchio Focus."
+        },
+        {
+          "key": "accessoires",
+          "alt": "Tavola Accessori: borse, cappellini, berretto, borraccia, asciugamano e calze MHSV®."
+        }
+      ]
     },
     "roadmap": {
       "lead": "Queste sezioni sono annunciate come roadmap e non costituiscono servizi già operativi.",

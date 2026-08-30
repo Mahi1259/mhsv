@@ -451,6 +451,53 @@ for (const locale of LOCALES) {
   }
 }
 
+/*
+ * --- 6g: the three marks are not interchangeable ---------------------------
+ *
+ * MHSV®'s own usage note is explicit, and each rule is easy to break by
+ * reaching for whichever logo import is nearest:
+ *
+ *   Focus mark      collection brand ONLY - never the site identity, never
+ *                   the header
+ *   institutional   documents, presentations, institutional contexts - and
+ *                   NEVER on collection clothing
+ *
+ * Checked in the SOURCE rather than the build, because that is where the rule
+ * is broken: an import in the wrong component. Hashed filenames in dist/ say
+ * nothing about intent.
+ */
+{
+  const SOURCE = resolve(ROOT, 'src');
+  const sourceFiles = walk(SOURCE).filter((f) => /\.(astro|ts|tsx)$/.test(f));
+
+  // Where each mark is allowed to be imported at all.
+  const RULES = [
+    { mark: 'mhsv-focus', allowed: ['components/sections/Identity.astro'],
+      why: 'the Focus mark is the collection brand, never the site identity' },
+    { mark: 'mhsv-institutional', allowed: ['components/sections/Identity.astro'],
+      why: 'the institutional logo is for documents and institutional contexts only' },
+  ];
+
+  for (const file of sourceFiles) {
+    const rel = relative(SOURCE, file);
+    const content = readFileSync(file, 'utf8');
+    for (const { mark, allowed, why } of RULES) {
+      if (!content.includes(mark)) continue;
+      if (!allowed.includes(rel)) {
+        errors.push(`src/${rel}: imports "${mark}" - ${why}`);
+      }
+    }
+  }
+
+  // The header is the one place named in the instruction, so name it back.
+  const header = readFileSync(resolve(SOURCE, 'components/Header.astro'), 'utf8');
+  for (const banned of ['mhsv-focus', 'mhsv-institutional']) {
+    if (header.includes(banned)) {
+      errors.push(`Header.astro references "${banned}" - the header carries the shield and nothing else`);
+    }
+  }
+}
+
 // --- 7: consent must never be pre-ticked ------------------------------------
 for (const file of textFiles.filter((f) => extname(f) === '.html')) {
   const html = readFileSync(file, 'utf8');

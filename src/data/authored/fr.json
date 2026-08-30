@@ -266,13 +266,40 @@
     },
     "identity": {
       "lead": "L’identité MHSV® et la future collection : équipement athlètes, coaching, représentation, accessoires et lifestyle.",
-      "logoTitle": "Logo principal",
-      "logoNote": "Seul le logo principal validé est publié à ce stade.",
-      "placeholdersTitle": "Variantes réservées",
-      "placeholderOfficial": "Logo officiel",
-      "placeholderInstitutional": "Logo institutionnel",
-      "placeholderEquipment": "Logo équipement",
-      "placeholderNote": "Emplacement réservé, en attente de validation."
+      "logosTitle": "Identités visuelles",
+      "logosNote": "Chaque marque a son usage : le blason identifie MHSV®, la marque Focus signe la collection, le logo institutionnel est réservé aux documents et aux contextes officiels.",
+      "logos": [
+        {
+          "key": "official",
+          "label": "Logo principal - blason",
+          "use": "Identité principale du site."
+        },
+        {
+          "key": "institutional",
+          "label": "Logo institutionnel",
+          "use": "Documents officiels, présentations et contextes institutionnels. Jamais sur les vêtements."
+        },
+        {
+          "key": "focus",
+          "label": "Marque Focus",
+          "use": "Marque de collection. Version blanc-or sur fond foncé, marine-or sur fond clair."
+        }
+      ],
+      "galleryTitle": "Planches de collection",
+      "boards": [
+        {
+          "key": "performance",
+          "alt": "Planche Performance : maillots, survêtements et tenues d’entraînement MHSV®, blason et marque Focus."
+        },
+        {
+          "key": "lifestyle",
+          "alt": "Planche Lifestyle : t-shirts, polos, sweats et vestes MHSV®, blason et marque Focus."
+        },
+        {
+          "key": "accessoires",
+          "alt": "Planche Accessoires : sacs, casquettes, bonnet, gourde, serviette et chaussettes MHSV®."
+        }
+      ]
     },
     "roadmap": {
       "lead": "Ces rubriques sont annoncées comme feuille de route et ne constituent pas des services déjà opérationnels.",

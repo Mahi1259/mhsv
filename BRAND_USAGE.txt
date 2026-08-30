@@ -1,0 +1,48 @@
+MHSV® — UTILISATION DES IDENTITÉS VISUELLES
+Version de transmission au développeur — 28 août 2026
+
+FRANÇAIS
+
+1. LOGO PRINCIPAL — BLASON
+Usage : identité principale du site et côté gauche du porteur sur les vêtements.
+Fichier : MHSV_Logo_Principal_Blason_Approuve.png
+
+2. MARQUE FOCUS — CERCLE AVEC POINT CENTRAL
+Usage : marque de collection ; côté droit du porteur sur les vêtements et côté droit des équipements.
+Utiliser la version marine-or sur fond clair et la version blanc-or sur fond foncé.
+Fichiers : SVG et PNG 2048 px.
+
+3. LOGO INSTITUTIONNEL — TROIS PERSONNAGES, ÉTOILE ET FLÈCHE
+Usage : événements, documents officiels, présentations et espaces institutionnels du site.
+Ne pas placer ce logo sur les vêtements de la collection.
+Les PNG 2400 px sont adaptés au site et aux présentations. Pour une impression de très grand format, demander le fichier vectoriel source original.
+
+4. RÈGLES
+Ne pas utiliser les anciennes variantes portant la mention « Beyond Football ».
+Ne pas déformer, recolorer ou reconstruire les logos.
+Ne pas ajouter de marque tierce, de sponsor ou de logo d’équipementier.
+Les planches de collection sont des maquettes de galerie. Pour la fabrication, appliquer les SVG officiels directement sur les produits.
+
+———
+
+ENGLISH
+
+1. PRIMARY LOGO — SHIELD
+Use: primary website identity and the wearer’s left side on clothing.
+File: MHSV_Logo_Principal_Blason_Approuve.png
+
+2. FOCUS BRAND MARK — CIRCLE WITH CENTRAL DOT
+Use: collection brand; the wearer’s right side on clothing and the right side of equipment.
+Use the navy-and-gold version on light backgrounds and the white-and-gold version on dark backgrounds.
+Files: SVG and 2048 px PNG.
+
+3. INSTITUTIONAL LOGO — THREE FIGURES, STAR AND ARROW
+Use: events, official documents, presentations and institutional sections of the website.
+Do not place this logo on collection clothing.
+The 2400 px PNG files are suitable for the website and presentations. For very large-format printing, request the original source vector file.
+
+4. RULES
+Do not use previous variants containing the wording “Beyond Football”.
+Do not distort, recolour or reconstruct the logos.
+Do not add third-party, sponsor or sportswear-manufacturer branding.
+The collection boards are gallery mock-ups. For manufacturing, apply the official SVG files directly to the products.
