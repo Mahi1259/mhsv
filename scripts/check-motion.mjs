@@ -67,14 +67,20 @@ try {
      * build. "Not marked yet" and "un-marked on the way back" are different
      * things, and only the second one is a bug.
      */
-    await page.waitForFunction(
-      () =>
-        Array.from(document.querySelectorAll('[data-reveal], [data-reveal-x], [data-stagger]'))
-          .every((el) => el.classList.contains('is-in')),
-      { timeout: 5000 },
-    ).catch(() => {
-      /* fall through - the assertion below reports which ones, and why */
-    });
+    let settled = true;
+    await page
+      .waitForFunction(
+        () =>
+          Array.from(document.querySelectorAll('[data-reveal], [data-reveal-x], [data-stagger]'))
+            .every((el) => el.classList.contains('is-in')),
+        // Generous: this runs on the first page load after a rebuild, which is
+        // the slowest one there is. 5s was not enough and the check failed
+        // twice on clean builds.
+        { timeout: 20000 },
+      )
+      .catch(() => {
+        settled = false;
+      });
 
     // Back to the top: nothing may replay.
     await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'auto' }));
@@ -83,6 +89,17 @@ try {
       () =>
         Array.from(document.querySelectorAll('[data-reveal], [data-reveal-x], [data-stagger]'))
           .filter((el) => !el.classList.contains('is-in')).length,
+    );
+    /*
+     * Reported separately on purpose. "Never marked" and "un-marked on the way
+     * back" are different failures and only the second is the bug this guards.
+     * Conflating them is what made this check fail on perfectly good builds.
+     */
+    check(
+      settled,
+      'everything is marked before scrolling back',
+      // `check` prints the detail on success too, so it is only set on failure.
+      settled ? '' : 'the observer never settled - the result below cannot be trusted',
     );
     check(replayed === 0, 'scrolling back up never re-animates', `${replayed} lost is-in`);
     await page.close();
