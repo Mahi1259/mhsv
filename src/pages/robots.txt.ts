@@ -14,15 +14,28 @@ import { SITE_URL } from '@/config/site';
  * won't be indexable.
  */
 export const GET: APIRoute = () => {
+  /*
+   * Disallow before Allow.
+   *
+   * RFC 9309 resolves by the most specific match and is order-independent, so
+   * for a compliant parser this makes no difference at all. It is written this
+   * way for the ones that are not: a first-match reader hitting `Allow: /`
+   * first would treat every rule after it as unreachable and happily crawl the
+   * form result pages.
+   *
+   * No Crawl-delay, deliberately. It is not part of the standard, Google and
+   * others ignore it, and a static site behind a CDN has no rate to protect.
+   */
   const body = [
     'User-agent: *',
-    'Allow: /',
     '',
     '# Form result pages exist for a flow, not for search.',
     'Disallow: /*/message-sent/',
     'Disallow: /*/message-error/',
     'Disallow: /*/order-sent/',
     'Disallow: /*/newsletter-sent/',
+    '',
+    'Allow: /',
     '',
     `Sitemap: ${new URL('/sitemap-index.xml', SITE_URL).href}`,
     '',
