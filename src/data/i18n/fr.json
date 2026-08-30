@@ -886,19 +886,18 @@
     "banner": "Cette notice est en attente de validation juridique finale et sera confirmée avant la mise en ligne du site.",
     "title": "Notice de protection des données",
     "version": "Version de validation technique 1.0 - 20 août 2026",
-    "intro": [
-      "La présente Notice de protection des données (la « Notice ») décrit la manière dont MHSV Association (l’« Association ») collecte, utilise, conserve, communique et protège les données personnelles des utilisateurs de son site internet, de ses membres et de ses services, notamment les formations sportives prodiguées par l’Association (les « Services »).",
-      "L’Association traite les données personnelles conformément à la loi fédérale sur la protection des données (« LPD ») et, lorsque celui-ci est applicable, au Règlement Européen sur la protection des données (« RGPD »).",
-      "Les termes commençant par une majuscule qui ne sont pas définis dans la présente Notice ont la signification qui leur est attribuée dans les Conditions générales d’utilisation.",
-      "En cliquant sur le bouton « J’ai lu, compris et j’accepte la Notice de protection des données », vous reconnaissez avoir lu et compris la présente Notice et acceptez que vos données personnelles soient traitées conformément à celle-ci.",
-      "Vous reconnaissez que vos données personnelles seront traitées dans les conditions décrites dans la présente Notice et conformément au droit applicable.",
-      "Lorsque le traitement de certaines données personnelles, y compris de données personnelles sensibles, notamment sur votre santé, repose sur votre consentement, celui-ci vous sera demandé séparément conformément au droit applicable.",
-      "Si vous n’acceptez pas les modalités de traitement décrites dans la présente Notice, nous vous invitons à ne pas utiliser notre site internet ou nos Services."
-    ],
     "sections": [
       {
         "heading": "1. Introduction",
-        "paragraphs": [],
+        "paragraphs": [
+          "La présente Notice de protection des données (la « Notice ») décrit la manière dont MHSV Association (l’« Association ») collecte, utilise, conserve, communique et protège les données personnelles des utilisateurs de son site internet, de ses membres et de ses services, notamment les formations sportives prodiguées par l’Association (les « Services »).",
+          "L’Association traite les données personnelles conformément à la loi fédérale sur la protection des données (« LPD ») et, lorsque celui-ci est applicable, au Règlement Européen sur la protection des données (« RGPD »).",
+          "Les termes commençant par une majuscule qui ne sont pas définis dans la présente Notice ont la signification qui leur est attribuée dans les Conditions générales d’utilisation.",
+          "En cliquant sur le bouton « J’ai lu, compris et j’accepte la Notice de protection des données », vous reconnaissez avoir lu et compris la présente Notice et acceptez que vos données personnelles soient traitées conformément à celle-ci.",
+          "Vous reconnaissez que vos données personnelles seront traitées dans les conditions décrites dans la présente Notice et conformément au droit applicable.",
+          "Lorsque le traitement de certaines données personnelles, y compris de données personnelles sensibles, notamment sur votre santé, repose sur votre consentement, celui-ci vous sera demandé séparément conformément au droit applicable.",
+          "Si vous n’acceptez pas les modalités de traitement décrites dans la présente Notice, nous vous invitons à ne pas utiliser notre site internet ou nos Services."
+        ],
         "items": []
       },
       {

@@ -147,5 +147,45 @@ if (errors.length) {
   process.exit(1);
 }
 
+/*
+ * A headed section must have a body.
+ *
+ * "1. Introduction" shipped on the data protection page for three days as a
+ * heading with nothing under it: its seven paragraphs had been transcribed into
+ * a separate `intro` field, which renders ABOVE the numbered headings, so the
+ * text was on the page but the section was empty. Nobody reading the page would
+ * call that correct, and the check that should have caught it said only
+ * "! empty array at dataProtection.sections[0].paragraphs" - a warning, among
+ * two dozen benign ones, which I read past every build.
+ *
+ * So it is an error now, and specific: a section with a heading and neither a
+ * paragraph nor a list item is a transcription that lost its text. Sections
+ * with a null heading are continuation blocks and are left alone.
+ */
+for (const loc of LOCALES) {
+  for (const [doc, value] of Object.entries(data[loc])) {
+    const sections = value?.sections;
+    if (!Array.isArray(sections)) continue;
+    sections.forEach((section, i) => {
+      if (!section?.heading) return;
+      const paragraphs = section.paragraphs?.length ?? 0;
+      const items = section.items?.length ?? 0;
+      if (paragraphs === 0 && items === 0) {
+        errors.push(
+          `[${loc}] ${doc}.sections[${i}] "${section.heading}" has a heading but no body - ` +
+            'the text was dropped or put somewhere else',
+        );
+      }
+    });
+  }
+}
+
+if (errors.length) {
+  console.error(`\n✗ content check failed (${errors.length} errors):\n`);
+  for (const e of errors) console.error(`  ✗ ${e}`);
+  console.error('');
+  process.exit(1);
+}
+
 const n = flat[REF].size;
 console.log(`  ✓ content parity OK - ${n} keys identical across ${LOCALES.join(', ')}`);

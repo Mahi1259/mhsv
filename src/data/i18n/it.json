@@ -863,19 +863,18 @@
     "banner": "Questa notice è in attesa della validazione giuridica finale e sarà confermata prima della pubblicazione del sito.",
     "title": "Data Protection Notice",
     "version": "Technical validation version 1.0 - 20 August 2026",
-    "intro": [
-      "This Data Protection Notice (the \"Notice\") describes how MHSV Association (the \"Association\") collects, uses, retains, discloses and protects the personal data of users of its website, its members and its services, including the sports training provided by the Association (the \"Services\").",
-      "The Association processes personal data in accordance with the Swiss Federal Act on Data Protection (the \"FADP\") and, where applicable, the European General Data Protection Regulation (the \"GDPR\").",
-      "Capitalised terms that are not defined in this Notice have the meanings given to them in the Terms and Conditions of Use.",
-      "By clicking the \"I have read, understood and accept the Data Protection Notice\" button, you acknowledge that you have read and understood this Notice and agree that your personal data may be processed in accordance with it.",
-      "You acknowledge that your personal data will be processed under the conditions described in this Notice and in accordance with applicable law.",
-      "Where the processing of certain personal data, including sensitive personal data, particularly health data, is based on your consent, your consent will be requested separately in accordance with applicable law.",
-      "If you do not accept the processing arrangements described in this Notice, please do not use our website or Services."
-    ],
     "sections": [
       {
         "heading": "1. Introduction",
-        "paragraphs": [],
+        "paragraphs": [
+          "This Data Protection Notice (the \"Notice\") describes how MHSV Association (the \"Association\") collects, uses, retains, discloses and protects the personal data of users of its website, its members and its services, including the sports training provided by the Association (the \"Services\").",
+          "The Association processes personal data in accordance with the Swiss Federal Act on Data Protection (the \"FADP\") and, where applicable, the European General Data Protection Regulation (the \"GDPR\").",
+          "Capitalised terms that are not defined in this Notice have the meanings given to them in the Terms and Conditions of Use.",
+          "By clicking the \"I have read, understood and accept the Data Protection Notice\" button, you acknowledge that you have read and understood this Notice and agree that your personal data may be processed in accordance with it.",
+          "You acknowledge that your personal data will be processed under the conditions described in this Notice and in accordance with applicable law.",
+          "Where the processing of certain personal data, including sensitive personal data, particularly health data, is based on your consent, your consent will be requested separately in accordance with applicable law.",
+          "If you do not accept the processing arrangements described in this Notice, please do not use our website or Services."
+        ],
         "items": []
       },
       {
