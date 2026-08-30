@@ -16,6 +16,27 @@
  * misconfigured production deploy look fine.
  */
 
+/*
+ * ===========================================================================
+ * REMOVE BEFORE PRODUCTION LAUNCH: prototype noindex
+ * ===========================================================================
+ *
+ * While the site is a prototype on Vercel, that deployment must never be
+ * indexed - the real launch is Cloudflare on www.mhsv.ch, and a prototype in
+ * search results would compete with it and show unfinished content and
+ * placeholder legal pages.
+ *
+ * So a Vercel build is never "production" here, whatever VERCEL_ENV says. That
+ * one fact drives everything downstream: the noindex, nofollow tag on every
+ * page, and the Disallow: / in robots.txt.
+ *
+ * AT LAUNCH: delete this constant and the branch that uses it. Nothing else
+ * needs changing - Cloudflare production is unaffected, because it is keyed on
+ * PUBLIC_SITE_URL and not on VERCEL.
+ * ===========================================================================
+ */
+const VERCEL_IS_PROTOTYPE = true;
+
 const trimSlash = (url) => url.replace(/\/+$/, '');
 
 const withScheme = (host) => (/^https?:\/\//.test(host) ? host : `https://${host}`);
@@ -27,10 +48,18 @@ const withScheme = (host) => (/^https?:\/\//.test(host) ? host : `https://${host
 export function resolveSite(env = process.env) {
   // 1. Explicit configuration always wins.
   if (env.PUBLIC_SITE_URL) {
+    // REMOVE BEFORE PRODUCTION LAUNCH: see VERCEL_IS_PROTOTYPE above.
+    const onVercel = Boolean(env.VERCEL || env.VERCEL_ENV);
+    const isProduction =
+      VERCEL_IS_PROTOTYPE && onVercel
+        ? false
+        : env.VERCEL_ENV
+          ? env.VERCEL_ENV === 'production'
+          : true;
     return {
       url: trimSlash(withScheme(env.PUBLIC_SITE_URL)),
-      source: 'PUBLIC_SITE_URL',
-      isProduction: env.VERCEL_ENV ? env.VERCEL_ENV === 'production' : true,
+      source: onVercel && VERCEL_IS_PROTOTYPE ? 'PUBLIC_SITE_URL (Vercel prototype, noindex)' : 'PUBLIC_SITE_URL',
+      isProduction,
     };
   }
 
@@ -40,7 +69,8 @@ export function resolveSite(env = process.env) {
     return {
       url: trimSlash(withScheme(env.VERCEL_PROJECT_PRODUCTION_URL)),
       source: 'VERCEL_PROJECT_PRODUCTION_URL',
-      isProduction: true,
+      // REMOVE BEFORE PRODUCTION LAUNCH: see VERCEL_IS_PROTOTYPE above.
+      isProduction: !VERCEL_IS_PROTOTYPE,
     };
   }
 

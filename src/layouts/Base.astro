@@ -44,7 +44,22 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
     <meta name="description" content={pageDescription} />
     {
       /* Preview and local builds are never indexable, whatever the page says. */
-      (noindex || !IS_PRODUCTION) && <meta name="robots" content="noindex, follow" />
+      /*
+       * Two different noindexes, deliberately different.
+       *
+       * A whole non-production deployment gets "noindex, nofollow" - REMOVE
+       * BEFORE PRODUCTION LAUNCH, see VERCEL_IS_PROTOTYPE in site-url.mjs.
+       * Nothing on a prototype should be crawled onward.
+       *
+       * A single page marked noindex on the real site keeps "follow": the form
+       * result pages are not for search, but the links on them are ordinary
+       * site links and there is no reason to cut them.
+       */
+      !IS_PRODUCTION ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        noindex && <meta name="robots" content="noindex, follow" />
+      )
     }
     <link rel="canonical" href={canonical} />
 

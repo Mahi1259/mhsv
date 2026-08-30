@@ -10,8 +10,24 @@ import { SITE_URL, IS_PRODUCTION } from '@/config/site';
  */
 export const GET: APIRoute = () => {
   if (!IS_PRODUCTION) {
+    /*
+     * REMOVE BEFORE PRODUCTION LAUNCH: prototype noindex - see
+     * VERCEL_IS_PROTOTYPE in site-url.mjs.
+     *
+     * Belt and braces with the meta tag, and worth knowing they are not
+     * equivalent: Disallow stops a crawler FETCHING the page, which also stops
+     * it reading the noindex. That is the right trade for a prototype nobody
+     * has indexed. If one of these URLs ever does appear in results, this line
+     * has to come off first so the noindex can be seen and acted on.
+     */
     return new Response(
-      ['# Non-production deployment - not for indexing.', 'User-agent: *', 'Disallow: /', ''].join('\n'),
+      [
+        '# Prototype deployment - not for indexing.',
+        '# REMOVE BEFORE PRODUCTION LAUNCH.',
+        'User-agent: *',
+        'Disallow: /',
+        '',
+      ].join('\n'),
       { headers: { 'Content-Type': 'text/plain; charset=utf-8' } },
     );
   }

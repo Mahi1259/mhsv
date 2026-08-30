@@ -60,7 +60,9 @@ const columns = [
       name="description"
       content={`${fr.sections.book.body.slice(0, 150)}…`}
     />
-    {!IS_PRODUCTION && <meta name="robots" content="noindex, follow" />}
+    {/* REMOVE BEFORE PRODUCTION LAUNCH: prototype noindex - see
+        VERCEL_IS_PROTOTYPE in site-url.mjs. */}
+    {!IS_PRODUCTION && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
 
     <meta property="og:type" content="website" />
