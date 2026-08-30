@@ -109,20 +109,47 @@ const c = getContent(locale);
 </script>
 
 <style>
+  /*
+   * A CARD, NOT A BAR.
+   *
+   * It used to be a full-bleed strip flexed with `justify-content: center`. On a
+   * phone the text filled the row, the button wrapped to a second line and then
+   * centred itself under left-aligned text, so the notice was tall, lopsided and
+   * read as a broken footer rather than an overlay - and at 96% opacity with no
+   * blur, the hero buttons underneath showed straight through it.
+   *
+   * Inset from the edges with a radius and a real shadow, it is unmistakably a
+   * layer above the page. The button is full width beneath the text, which is
+   * how a phone-sized action is expected to look, and the two only sit on one
+   * row once there is width for it.
+   */
   .cookie {
     position: fixed;
     inset-inline: 0;
     bottom: 0;
     z-index: 80;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem 1.5rem;
-    padding: 1rem clamp(1rem, 0.5rem + 3vw, 3rem);
-    background: color-mix(in srgb, var(--navy-deep) 96%, transparent);
-    border-block-start: 1px solid var(--hairline-strong);
-    box-shadow: 0 -18px 40px rgb(0 0 0 / 0.4);
+    /* inset-inline:0 + margin gives a card the width of the viewport less the
+       gutters, without having to know the viewport width. */
+    margin: 0.75rem;
+    /* env() is 0 without viewport-fit=cover, which this site does not set;
+       max() keeps the gutter and picks up the inset if that ever changes. */
+    margin-block-end: max(0.75rem, env(safe-area-inset-bottom, 0px));
+    display: grid;
+    gap: 0.875rem;
+    padding: 1.0625rem 1.125rem;
+    border: 1px solid var(--hairline-strong);
+    border-radius: 0.875rem;
+    background: color-mix(in srgb, var(--navy-deep) 88%, transparent);
+    backdrop-filter: blur(16px) saturate(140%);
+    box-shadow: 0 14px 36px rgb(0 0 0 / 0.5);
+  }
+
+  /* Without backdrop-filter the translucency is just bleed-through - the exact
+     problem being fixed - so those browsers get an opaque card instead. */
+  @supports not (backdrop-filter: blur(1px)) {
+    .cookie {
+      background: var(--navy-deep);
+    }
   }
 
   .cookie[hidden] {
@@ -146,15 +173,15 @@ const c = getContent(locale);
   @keyframes cookie-attention {
     0%,
     100% {
-      border-block-start-color: var(--hairline-strong);
-      box-shadow: 0 -18px 40px rgb(0 0 0 / 0.4);
+      border-color: var(--hairline-strong);
+      box-shadow: 0 14px 36px rgb(0 0 0 / 0.5);
     }
     15%,
     60% {
-      border-block-start-color: var(--gold);
+      border-color: var(--gold);
       box-shadow:
-        0 -18px 40px rgb(0 0 0 / 0.4),
-        0 0 0 1px color-mix(in srgb, var(--gold) 55%, transparent) inset;
+        0 14px 36px rgb(0 0 0 / 0.5),
+        0 0 0 1px color-mix(in srgb, var(--gold) 55%, transparent);
     }
   }
 
@@ -163,7 +190,7 @@ const c = getContent(locale);
   @media (prefers-reduced-motion: reduce) {
     .cookie[data-attention] {
       animation: none;
-      border-block-start-color: var(--gold);
+      border-color: var(--gold);
     }
   }
 
@@ -171,13 +198,40 @@ const c = getContent(locale);
     margin: 0;
     color: var(--muted-on-dark);
     font-size: 0.875rem;
+    line-height: 1.5;
+    text-wrap: pretty;
   }
 
   .cookie__more {
-    margin-inline-start: 0.5rem;
+    /* Enough to separate it from the sentence, not enough to look like the gap
+       left by a missing word. */
+    margin-inline-start: 0.25rem;
+    white-space: nowrap;
   }
 
   .cookie__accept {
-    flex: 0 0 auto;
+    /* Full width is the phone-sized shape for the one action on the card. */
+    width: 100%;
+  }
+
+  /*
+   * Only once there is room for both on one line. Below this the button sits
+   * under the text, which is the whole point of the mobile layout.
+   */
+  @media (min-width: 40rem) {
+    .cookie {
+      inset-inline: 1rem;
+      max-width: 58rem;
+      margin-inline: auto;
+      margin-block-end: max(1rem, env(safe-area-inset-bottom, 0px));
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1rem 1.375rem;
+    }
+
+    .cookie__accept {
+      width: auto;
+    }
   }
 </style>
