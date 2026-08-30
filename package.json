@@ -27,7 +27,8 @@
     "qr:card": "node scripts/generate-card-qr.mjs",
     "test:email": "node scripts/test-email-template.mjs",
     "dev:send": "MHSV_DEV_SEND=yes astro dev",
-    "check:functions": "node scripts/check-functions.mjs"
+    "check:functions": "node scripts/check-functions.mjs",
+    "qa": "node scripts/qa-responsive.mjs"
   },
   "description": "MHSV® — International Centre for Development and Transition. Phase 1 showcase website (FR/EN/DE/IT).",
   "dependencies": {
