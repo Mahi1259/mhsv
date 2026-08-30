@@ -539,6 +539,20 @@ for (const locale of LOCALES) {
   }
 }
 
+/*
+ * --- 6i: no dotfiles in the output -----------------------------------------
+ *
+ * public/ is copied verbatim, so a .DS_Store dropped there by Finder ships with
+ * the site. One did. Harmless in itself, but it is macOS metadata on a public
+ * server and it should not be there.
+ */
+for (const file of files) {
+  const name = relative(DIST, file);
+  if (name.split('/').some((part) => part.startsWith('.'))) {
+    errors.push(`${name}: dotfile in the build output`);
+  }
+}
+
 // --- 7: consent must never be pre-ticked ------------------------------------
 for (const file of textFiles.filter((f) => extname(f) === '.html')) {
   const html = readFileSync(file, 'utf8');

@@ -37,13 +37,7 @@ interface Props {
    * an English form headed "Envoyer ma demande".
    */
   altSubmitLabel?: string;
-  strings: {
-    errors: Record<string, string>;
-    successTitle: string;
-    successBody: string;
-    errorTitle: string;
-    errorBody: string;
-  };
+  strings: FormShellStrings;
   /**
    * The same strings in `altLocale`. Emitted as a second block; the page that
    * switches language swaps it in before scripts/forms.ts reads either, so a
@@ -103,10 +97,13 @@ const alt = altLocale ? getContent(altLocale) : null;
   </div>
 </form>
 
-<script type="application/json" data-form-strings={id} set:html={JSON.stringify(strings)} />
+{/* Data, not code - is:inline is explicit so Astro does not try to process it
+    and does not warn that it will anyway. */}
+<script is:inline type="application/json" data-form-strings={id} set:html={JSON.stringify(strings)} />
 {
   altStrings && (
     <script
+      is:inline
       type="application/json"
       data-form-strings-alt={id}
       set:html={JSON.stringify(altStrings)}

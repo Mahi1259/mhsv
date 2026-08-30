@@ -101,7 +101,6 @@ scripts/
   check-build.mjs          post-build constraint gate
   audit.mjs                responsive + accessibility audit
   generate-qr.mjs          print-ready QR for /livre, decode-verified
-  patch-authored.mjs       applies the 14 Aug brief to the authored content
   test-contact.mjs         contact-form tests
   test-forms.mjs           book-order + newsletter tests
   test-vercel-api.mjs      Vercel (req,res) adapter tests
