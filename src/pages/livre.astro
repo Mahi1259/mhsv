@@ -17,7 +17,6 @@
 import { Picture } from 'astro:assets';
 import BookOrderForm from '@/components/BookOrderForm.astro';
 import Bilingual from '@/components/Bilingual.astro';
-import QrPlaceholder from '@/components/QrPlaceholder.astro';
 import { Image } from 'astro:assets';
 import crest from '@/assets/logo/mhsv-crest.png';
 import { getContent, localePath } from '@/lib/i18n';
@@ -213,11 +212,6 @@ const columns = [
           </h2>
           {/* French first, English beside it - the form matches the page. The
               visitor still picks which EDITION of the book they want inside. */}
-          {/* Reserved, not generated: the printed code must encode
-            https://www.mhsv.ch/livre and can only be made once that domain is
-            live. This is the page it will point AT. */}
-        <QrPlaceholder locale="fr" altLocale="en" class="livre-qr" />
-
         <BookOrderForm locale="fr" altLocale="en" />
         </div>
       </section>

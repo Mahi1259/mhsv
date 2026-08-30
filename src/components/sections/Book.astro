@@ -11,7 +11,6 @@
  */
 import { Picture } from 'astro:assets';
 import Band from '@/components/Band.astro';
-import QrPlaceholder from '@/components/QrPlaceholder.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import { BOOK_PAGE_PATH, type SectionType } from '@/config/site';
 import coverFr from '@/assets/book/founding-book-fr.png';
@@ -77,15 +76,15 @@ const covers = [
       <p class="prose-body book__body">{s.body}</p>
       <p class="book__notice">{s.notice}</p>
       {/*
-        The order request is the only ACTION here. The QR beside it is a
-        reserved space, not a control: the 27 August round removed a QR that
-        pointed at the wrong target, and the 28 August one asks for the space to
-        be held until the real code can be made. Nothing is generated - see
-        QrPlaceholder.
+        The order request is the only thing in this section, by decision on
+        30 August. A QR was removed on the 27th for pointing at the wrong
+        target, replaced by a reserved space on the 28th, and that space is now
+        gone too - the client's brief makes the QR optional on the website.
+
+        The generator and the print assets stay: scripts/generate-qr.mjs for the
+        book, scripts/generate-card-qr.mjs for business cards.
       */}
       <a class="btn btn--primary book__cta" href={bookHref} data-magnetic>{s.ctaLabel}</a>
-
-      <QrPlaceholder locale={locale} class="book__qr" />
     </div>
   </div>
 </Band>
@@ -156,9 +155,6 @@ const covers = [
     margin-block-start: 1.75rem;
   }
 
-  .book__qr {
-    margin-block-start: 1.75rem;
-  }
 
   @media (min-width: 52rem) {
     .book {
