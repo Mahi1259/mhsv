@@ -1,0 +1,33 @@
+MHSV® — VIDÉO DE PRÉSENTATION WEB FR/EN
+
+Contenu
+– Version française : MP4 H.264/AAC et WebM VP9/Opus
+– Version anglaise : MP4 H.264/AAC et WebM VP9/Opus
+– Sous-titres FR/EN séparés au format SRT
+– Affiche de prévisualisation au format WebP
+
+Caractéristiques
+– Durée : 54 secondes
+– Résolution : 1920 × 1080 pixels
+– Cadence : 25 images/seconde
+– Audio : ambiance instrumentale originale
+– Visuels : créations originales sans marque tierce
+– Positionnement : multisport, éducation, développement humain et transition
+
+Intégration recommandée
+– Utiliser le MP4 comme source principale et le WebM comme source complémentaire.
+– Utiliser l’affiche WebP comme poster de chargement.
+– Les messages essentiels sont intégrés à l’image : la vidéo reste compréhensible sans le son.
+– Prévoir lecture manuelle ou lecture automatique sans son, avec commandes accessibles.
+
+Identité visuelle
+Cette version transitoire utilise une signature typographique MHSV® propre et immédiatement
+exploitable. Dès réception du fichier vectoriel officiel, le logo institutionnel approuvé pourra
+être superposé aux cartes d’ouverture et de fermeture sans modifier le montage.
+
+Conformité éditoriale
+– Aucun logo de tiers.
+– Aucune mention d’affiliation à l’ACGF ou à l’ASF.
+– Aucune référence à GST FC.
+– Signature officielle : « Beyond Sport — Beyond Human Potential ».
+– Site officiel : www.mhsv.ch.

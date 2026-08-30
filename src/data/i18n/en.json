@@ -764,8 +764,8 @@
     "successBodySingle": "Thank you. Your subscription request has been recorded. MHSV® will write to you at this address."
   },
   "video": {
-    "coming": "Presentation video - coming soon",
-    "ariaLabel": "MHSV® presentation video - coming soon"
+    "ariaLabel": "MHSV® presentation video (54 seconds, English subtitles)",
+    "subtitles": "English"
   },
   "legalPages": {
     "pending": "Final wording pending legal validation by MHSV®’s legal counsel.",

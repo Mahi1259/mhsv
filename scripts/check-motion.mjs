@@ -34,6 +34,22 @@ const browser = await puppeteer.launch({
 });
 
 try {
+  /*
+   * Warm the server first, and throw the result away.
+   *
+   * Every timing assertion below was measured on the FIRST load after a
+   * rebuild - a cold preview server, nothing cached, images still being
+   * decoded - and the reveal check failed on clean builds because of it. Twice
+   * I answered that by raising a timeout, which is guessing at how slow a cold
+   * start can be. This removes the variable instead: one throwaway load, then
+   * measure a warm one.
+   */
+  {
+    const warm = await browser.newPage();
+    await warm.goto(`${BASE}/fr/`, { waitUntil: 'networkidle0' });
+    await warm.close();
+  }
+
   // --- 1 & 2: fast scroll, then back up ------------------------------------
   {
     const page = await browser.newPage();

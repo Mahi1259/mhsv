@@ -498,6 +498,47 @@ for (const locale of LOCALES) {
   }
 }
 
+/*
+ * --- 6h: the presentation video ---------------------------------------------
+ *
+ * Three things that fail quietly rather than loudly:
+ *
+ *   .srt in a <track>   browsers accept WebVTT and nothing else. An .srt does
+ *                       not error - the video plays and the cues simply never
+ *                       appear, which nobody notices until someone needs them.
+ *   no poster           the frame is empty until playback starts.
+ *   preload             without preload="none" the browser reaches for a 3.4MB
+ *                       file on every page load whether or not anyone plays it.
+ */
+for (const locale of LOCALES) {
+  const home = resolve(DIST, locale, 'index.html');
+  if (!existsSync(home)) continue;
+  const html = readFileSync(home, 'utf8');
+
+  const video = /<video\b[^>]*>[\s\S]*?<\/video>/.exec(html)?.[0];
+  if (!video) {
+    errors.push(`${locale}/index.html: no <video> - the presentation video is missing`);
+    continue;
+  }
+
+  const track = /<track\b[^>]*src="([^"]+)"/.exec(video)?.[1];
+  if (!track) errors.push(`${locale}/index.html: the video has no subtitle track`);
+  else if (!track.endsWith('.vtt')) {
+    errors.push(`${locale}/index.html: subtitle track is "${track}" - <track> only reads WebVTT`);
+  }
+
+  if (!/poster="[^"]+"/.test(video)) {
+    errors.push(`${locale}/index.html: the video has no poster`);
+  }
+  if (!/preload="none"/.test(video)) {
+    errors.push(`${locale}/index.html: the video is missing preload="none" - it would fetch megabytes on load`);
+  }
+  // The client asked for manual playback, not autoplay.
+  if (/\bautoplay\b/.test(video)) {
+    errors.push(`${locale}/index.html: the video autoplays`);
+  }
+}
+
 // --- 7: consent must never be pre-ticked ------------------------------------
 for (const file of textFiles.filter((f) => extname(f) === '.html')) {
   const html = readFileSync(file, 'utf8');

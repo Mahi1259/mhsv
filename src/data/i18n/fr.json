@@ -786,8 +786,8 @@
     "successBodySingle": "Merci. Votre demande d’abonnement a bien été enregistrée. MHSV® vous écrira à cette adresse."
   },
   "video": {
-    "coming": "Vidéo de présentation - bientôt disponible",
-    "ariaLabel": "Vidéo de présentation MHSV® - bientôt disponible"
+    "ariaLabel": "Vidéo de présentation MHSV® (54 secondes, sous-titrée en français)",
+    "subtitles": "Français"
   },
   "legalPages": {
     "pending": "Texte définitif en attente de validation juridique par le conseil de MHSV®.",
