@@ -1,20 +1,3 @@
-/**
- * Print-ready QR code for the Founding Book.  `npm run qr`
- *
- * Encodes exactly https://www.mhsv.ch/livre - a permanent MHSV®-controlled
- * page, never a PDF path, storage link, temporary URL or third-party QR
- * service. Once printed this cannot be corrected, so the URL is asserted
- * against BOOK_PAGE_PATH and the encoded payload is read back and verified
- * before the files are written.
- *
- * Outputs to qr/ (not public/ - these are print assets, not web assets):
- *   mhsv-livre-qr.svg        vector, for the layout file
- *   mhsv-livre-qr-30mm.png   300 dpi at 30 mm
- *   mhsv-livre-qr-25mm.png   300 dpi at 25 mm
- *
- * Specification from the client brief: 25–30 mm square, quiet zone of at least
- * four modules, high contrast dark-navy on white, no distortion or overlay.
- */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -23,11 +6,9 @@ import QRCode from 'qrcode';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = resolve(ROOT, 'qr');
 
-/** Must match BOOK_PAGE_PATH in src/config/site.ts. */
 const BOOK_PAGE_PATH = '/livre';
 const TARGET = `https://www.mhsv.ch${BOOK_PAGE_PATH}`;
 
-// Refuse to encode anything that is not the approved permanent page.
 if (!/^https:\/\/www\.mhsv\.ch\/livre$/.test(TARGET)) {
   throw new Error(`Refusing to encode "${TARGET}" - not the approved permanent URL`);
 }
@@ -41,16 +22,6 @@ const QUIET_ZONE_MODULES = 4;
 const DPI = 300;
 const mmToPx = (mm) => Math.round((mm / 25.4) * DPI);
 
-/*
- * GATE - the client brief holds final QR generation until two things are true:
- *   1. https://www.mhsv.ch/livre is live over HTTPS, and
- *   2. MHSV® has approved the destination page in writing.
- *
- * A QR on a printed book cannot be corrected, so generating "just to see" and
- * having the file escape into a layout is a real risk. Confirm both, then:
- *
- *   MHSV_QR_APPROVED=yes npm run qr
- */
 if (process.env.MHSV_QR_APPROVED !== 'yes') {
   console.error('');
   console.error('  QR generation is gated.');
@@ -73,8 +44,6 @@ const options = {
   color: { dark: DARK, light: LIGHT },
 };
 
-// --- verify the payload round-trips before writing anything ----------------
-// Segment data is a byte array for byte-mode segments, a string otherwise.
 const decodeSegment = (data) =>
   typeof data === 'string' ? data : new TextDecoder().decode(Uint8Array.from(data));
 
@@ -83,11 +52,9 @@ if (encoded !== TARGET) {
   throw new Error(`QR payload mismatch: encoded "${encoded}", expected "${TARGET}"`);
 }
 
-// --- vector ----------------------------------------------------------------
 const svg = await QRCode.toString(TARGET, { ...options, type: 'svg' });
 writeFileSync(resolve(OUT, 'mhsv-livre-qr.svg'), svg);
 
-// --- raster, 300 dpi at final size ----------------------------------------
 const sizes = [30, 25];
 for (const mm of sizes) {
   const px = mmToPx(mm);

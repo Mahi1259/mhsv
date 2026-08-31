@@ -1,21 +1,4 @@
 ---
-/**
- * Fixed masthead: brand, primary navigation, language switcher.
- *
- * The navigation list is rendered EXACTLY ONCE (#main-nav). It was previously
- * emitted twice - a desktop bar plus a mobile panel with one hidden by CSS -
- * which duplicated every link in the DOM and made screen readers announce the
- * menu twice.
- *
- * The mobile disclosure is a <details> whose panel is its *sibling*, toggled
- * with `[open] ~ #main-nav`. That keeps one nav in the document, needs no
- * JavaScript, and still works if scripts fail.
- *
- * ON DESKTOP the shell contracts into a floating pill once the page is
- * scrolled - see the `.is-shrunk` block below. Three things move together
- * (width, background, elevation); any one of them alone reads as a bug.
- * scripts/effects.ts adds the class.
- */
 import { Image } from 'astro:assets';
 import { getContent, localeAlternates, localePath, type Locale } from '@/lib/i18n';
 import { SECTION_ORDER } from '@/config/site';
@@ -30,10 +13,8 @@ const { locale, path = '' } = Astro.props;
 const c = getContent(locale);
 const home = localePath('', locale);
 const alternates = localeAlternates(path);
-/** Shown alone once the bar contracts and the other three collapse away. */
 
 const anchorFor = (id: string) => SECTION_ORDER.find((s) => s.id === id)?.anchor ?? id;
-// On sub-pages the in-page anchors have to point back at the home document.
 const navHref = (item: { id: string; href?: string }) =>
   item.href ? localePath(item.href, locale) : `${path === '' ? '' : home}#${anchorFor(item.id)}`;
 ---
@@ -42,18 +23,14 @@ const navHref = (item: { id: string; href?: string }) =>
   <div class="site-header__shell">
     <a class="brand" href={home}>
       <Image src={crest} alt="" width={36} height={40} loading="eager" densities={[1, 2]} />
-      {/* Collapses to nothing when the bar shrinks. Hidden with max-width and
-          opacity rather than display, so it stays the link's accessible name. */}
       <span class="brand__name notranslate" translate="no">{c.brand.name}</span>
       <span class="visually-hidden">, {c.brand.institutional}</span>
     </a>
-
     <details class="menu">
       <summary aria-label={c.ui.openMenu}>
         <span class="menu__bars" aria-hidden="true"></span>
       </summary>
     </details>
-
     <nav id="main-nav" aria-label={c.ui.primaryNav}>
       <ul>
         {
@@ -65,23 +42,12 @@ const navHref = (item: { id: string; href?: string }) =>
         }
       </ul>
     </nav>
-
-    {/*
-      translate="no" matters here. Browser auto-translation reads the two-letter
-      codes as words and rewrites them - Chrome turns EN into "IN" and DE into
-      "OF" on the French page, which leaves the switcher unusable for exactly
-      the visitor who needs it. The brand name is protected for the same reason.
-    */}
     <div class="lang notranslate" translate="no">
-      {/* ONE list, never two. It is simply not shown once the bar contracts. */}
       <nav class="lang__switch" aria-label={c.ui.languageNav}>
         <ul>
           {
             alternates.map((alt) => (
               <li>
-                {/* data-base is the locale root; scripts/lang-anchor.ts appends
-                    the section currently on screen so switching language keeps
-                    your place instead of returning to the top. */}
                 <a
                   href={alt.path}
                   data-lang-link
@@ -98,27 +64,11 @@ const navHref = (item: { id: string; href?: string }) =>
           }
         </ul>
       </nav>
-
     </div>
   </div>
 </header>
-
 <style>
-  /*
-   * FIXED, not sticky, and never anything else.
-   *
-   * A sticky masthead stays in flow, so contracting it would shorten the
-   * document and shunt everything below up by the difference - a visible jump
-   * mid-scroll. Out of flow, the geometry can move for free. `body` carries
-   * `padding-block-start: var(--header-h)` to give back the space, so the page
-   * lays out exactly as it did when this was sticky.
-   *
-   * The position must be identical in both states: switching it would break
-   * scroll anchoring.
-   */
   .site-header {
-    /* Geometry on one curve, skin slightly quicker: two durations stop the
-       change landing as a single mechanical snap. */
     --nav-geo: 480ms var(--ease-out);
     --nav-skin: 380ms ease-out;
 
@@ -128,13 +78,6 @@ const navHref = (item: { id: string; href?: string }) =>
     z-index: 50;
   }
 
-  /*
-   * Mobile is the base case and it is deliberately inert: solid navy, no
-   * blur, and - because nothing here declares a transition - nothing to
-   * disable later. On a phone the bar sits directly over content with no
-   * margin either side, so translucency costs legibility, and backdrop-filter
-   * is the most expensive property on a mobile GPU.
-   */
   .site-header__shell {
     display: flex;
     align-items: center;
@@ -143,7 +86,6 @@ const navHref = (item: { id: string; href?: string }) =>
     max-width: 78rem;
     min-height: 4.25rem;
     margin-inline: auto;
-    /* Matches .shell, so the crest lines up with the page's text edge. */
     padding-inline: clamp(1.25rem, 0.5rem + 3.4vw, 4rem);
     background: color-mix(in srgb, var(--navy-deep) 94%, transparent);
     border-block-end: 1px solid var(--hairline);
@@ -155,12 +97,9 @@ const navHref = (item: { id: string; href?: string }) =>
     }
   }
 
-  /* --- brand ------------------------------------------------------------ */
   .brand {
     display: flex;
     align-items: center;
-    /* No gap: the wordmark carries its own leading margin, so when it
-       collapses on the shrunk desktop bar the space goes with it. */
     text-decoration: none;
     color: var(--white);
     flex: 0 0 auto;
@@ -187,15 +126,12 @@ const navHref = (item: { id: string; href?: string }) =>
     letter-spacing: -0.02em;
   }
 
-  /* At 320px the crest, four language codes and the menu button cannot all fit
-     alongside the wordmark. The crest alone still identifies the site. */
   @media (max-width: 22.5rem) {
     .brand__name {
       display: none;
     }
   }
 
-  /* --- the single navigation -------------------------------------------- */
   #main-nav ul {
     display: flex;
     list-style: none;
@@ -214,8 +150,6 @@ const navHref = (item: { id: string; href?: string }) =>
     color: var(--gold-soft);
   }
 
-  /* Mobile: the nav is a panel under the masthead, revealed by the disclosure
-     immediately before it. */
   @media (max-width: 61.999rem) {
     #main-nav {
       display: none;
@@ -245,15 +179,12 @@ const navHref = (item: { id: string; href?: string }) =>
     }
   }
 
-  /* Desktop: inline bar, disclosure hidden. */
   @media (min-width: 62rem) {
     #main-nav {
       flex: 1 1 auto;
       min-width: 0;
     }
 
-    /* Sized on the list, not on each link: one animated property instead of
-       eight when the bar contracts. */
     #main-nav ul {
       flex-wrap: wrap;
       justify-content: center;
@@ -266,7 +197,6 @@ const navHref = (item: { id: string; href?: string }) =>
       position: relative;
     }
 
-    /* Small, purposeful hover cue. */
     #main-nav a::after {
       content: '';
       position: absolute;
@@ -275,7 +205,6 @@ const navHref = (item: { id: string; href?: string }) =>
       height: 1px;
       background: var(--gold);
       transform: scaleX(0);
-      /* Wipes in from the left rather than growing out of the centre. */
       transform-origin: left;
       transition: transform var(--dur-fast) var(--ease-out);
     }
@@ -289,7 +218,6 @@ const navHref = (item: { id: string; href?: string }) =>
     }
   }
 
-  /* --- disclosure ------------------------------------------------------- */
   .menu {
     order: 3;
     margin-inline-start: auto;
@@ -318,7 +246,6 @@ const navHref = (item: { id: string; href?: string }) =>
     color: var(--gold-soft);
   }
 
-  /* Three bars drawn from one element, becoming a cross when open. */
   .menu__bars,
   .menu__bars::before,
   .menu__bars::after {
@@ -360,7 +287,6 @@ const navHref = (item: { id: string; href?: string }) =>
     transform: translateY(-6px) rotate(-45deg);
   }
 
-  /* --- language --------------------------------------------------------- */
   .lang {
     order: 2;
     flex: 0 0 auto;
@@ -413,30 +339,11 @@ const navHref = (item: { id: string; href?: string }) =>
     }
   }
 
-  /* ======================================================================
-     Shrink on scroll - desktop only
-
-     Past ~90px the shell contracts into a floating pill. THREE things move
-     together, and the combination is the whole effect: the width contracts,
-     the background materialises, and it lifts off the page. Any one of them
-     alone reads as a rendering bug.
-
-     Everything below lives inside the desktop query - the same 62rem
-     boundary at which the inline nav exists at all. Below it nothing here
-     applies, so the mobile bar has no transitions to disable and no
-     backdrop-filter to pay for.
-
-     Under `prefers-reduced-motion` the global rule collapses every duration
-     to 0.001ms, so the bar still shrinks - it is a functional space saving,
-     not decoration - it simply arrives instantly.
-     ====================================================================== */
   @media (min-width: 62rem) {
     .site-header {
       transition: padding var(--nav-geo);
     }
 
-    /* Expanded: no surface at all. The page runs to the top of the window and
-       the bar is only its contents. */
     .site-header__shell {
       border: 1px solid transparent;
       border-radius: 0;
@@ -455,16 +362,10 @@ const navHref = (item: { id: string; href?: string }) =>
         backdrop-filter var(--nav-skin);
     }
 
-    /* Only while the geometry is actually moving. Left on permanently,
-       will-change pins a compositing layer for the life of the page;
-       scripts/effects.ts drops the class once the transition has settled. */
     .site-header.is-animating .site-header__shell {
       will-change: max-width, padding, border-radius;
     }
 
-    /* Arriving part-way down a page - a language switch carries the section
-       across - the bar must simply BE shrunk, not contract while the reader
-       watches. The inline script in Base.astro lifts this after first paint. */
     :global(html.is-booting) .site-header,
     :global(html.is-booting) .site-header__shell,
     :global(html.is-booting) .brand__name,
@@ -473,9 +374,6 @@ const navHref = (item: { id: string; href?: string }) =>
       transition: none;
     }
 
-    /* The language block is absent from the shrunk bar rather than resized,
-       so it has nothing to animate and keeps the hover colours from its base
-       rule. */
     .brand__name,
     .brand :global(img),
     #main-nav ul {
@@ -488,33 +386,17 @@ const navHref = (item: { id: string; href?: string }) =>
         opacity var(--nav-skin);
     }
 
-    /* --- the pill ------------------------------------------------------- */
     .site-header.is-shrunk {
       padding: 0.85rem 1rem 0;
     }
 
     .site-header.is-shrunk .site-header__shell {
-      /* 78rem → 61rem, a 22% contraction. Sized when the four language codes
-         still rode in the pill: the French labels, the longest set, needed
-         all but ~60px of it. Now that the switcher is not offered here there
-         is roughly 100px more slack than the nav needs, so this could
-         contract further - a deliberate choice not to, since narrowing it is
-         a visual change nobody asked for. */
       max-width: 61rem;
       min-height: 3.25rem;
       padding-inline: 1.4rem;
-      /* A pill, not a rounded rectangle. This is what reads as floating
-         rather than docked. */
       border-radius: 999px;
-      /* 82% navy. The reference spec says 72%; measured against the bone
-         panels this bar passes over, 72% drops the language codes to 3.2:1.
-         82% keeps them above AA and is still inside the 60–85% band where
-         the glass reads as glass - see scripts/check-contrast.mjs. */
       background: color-mix(in srgb, var(--navy-deep) 82%, transparent);
       border-color: color-mix(in srgb, var(--gold) 18%, transparent);
-      /* saturate() is the detail that matters: without it the blurred
-         content behind goes grey and dead, and the bar reads as frosted
-         plastic rather than glass. */
       backdrop-filter: blur(18px) saturate(140%);
       -webkit-backdrop-filter: blur(18px) saturate(140%);
       box-shadow:
@@ -522,7 +404,6 @@ const navHref = (item: { id: string; href?: string }) =>
         0 1px 0 rgb(255 255 255 / 0.05) inset;
     }
 
-    /* --- contents tighten ----------------------------------------------- */
     .site-header.is-shrunk .brand__name {
       max-width: 0;
       margin-inline-start: 0;
@@ -538,19 +419,6 @@ const navHref = (item: { id: string; href?: string }) =>
       font-size: 0.86rem;
     }
 
-    /*
-     * The switcher STAYS LIVE in the contracted bar.
-     *
-     * It was `display: none` here, on the 20 August instruction that the bar
-     * should state the current language rather than offer a control. What that
-     * did to a real reader: scrolling down any French page put EN out of reach
-     * - the link was in the DOM at 0x0, unclickable - which is exactly what the
-     * client reported. Reversed on the 28 August review; both languages must be
-     * reachable from every page at any scroll position.
-     *
-     * It contracts instead of disappearing: smaller chips, tighter gap, so it
-     * still fits the pill.
-     */
     .site-header.is-shrunk .lang a {
       min-width: 1.75rem;
       min-height: 1.875rem;

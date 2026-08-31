@@ -1,14 +1,4 @@
 ---
-/**
- * The Premium Founding Book - feature type.
- *
- * Covers only. The full book PDFs are never copied into the build - there is
- * deliberately no download link here and no path that could become one, and
- * build:check fails if a PDF ever appears in the output.
- *
- * The primary action is the order request, which lives on the permanent
- * /livre page (the address encoded in the printed QR code).
- */
 import { Picture } from 'astro:assets';
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
@@ -24,18 +14,6 @@ interface Props {
 const { locale, type } = Astro.props;
 const s = getContent(locale).sections.book;
 
-/*
- * /livre is bilingual and picks its language from ?lang - it is one permanent
- * URL because the printed QR encodes it and cannot be changed.
- *
- * Linking to the bare path from the English site sent readers to the French
- * version: English copy on the page they came from, then a French order form
- * headed "Envoyer ma demande". The path itself is untouched, so the QR still
- * lands exactly where it always did.
- *
- * DE and IT get the English side, matching how they are handled everywhere
- * else - the book page has no German or Italian version.
- */
 const bookHref = locale === 'fr' ? BOOK_PAGE_PATH : `${BOOK_PAGE_PATH}?lang=en`;
 
 const covers = [
@@ -50,11 +28,6 @@ const covers = [
       {
         covers.map((cover) => (
           <li class="book__cover" style={`flex-grow: ${cover.src.width / cover.src.height}`}>
-            {/* Flex-grow set to the cover's own aspect ratio, so the two
-                widths come out in proportion to their shapes and the two
-                HEIGHTS come out equal. The supplied files no longer share a
-                ratio once their pale borders are trimmed - 0.697 and 0.752 -
-                and equal widths made one book look smaller than the other. */}
             <Picture
               src={cover.src}
               alt={cover.alt}
@@ -70,25 +43,14 @@ const covers = [
         ))
       }
     </ul>
-
     <div class="book__text">
       <p class="book__kicker mono-label">{s.lead}</p>
       <p class="prose-body book__body">{s.body}</p>
       <p class="book__notice">{s.notice}</p>
-      {/*
-        The order request is the only thing in this section, by decision on
-        30 August. A QR was removed on the 27th for pointing at the wrong
-        target, replaced by a reserved space on the 28th, and that space is now
-        gone too - the client's brief makes the QR optional on the website.
-
-        The generator and the print assets stay: scripts/generate-qr.mjs for the
-        book, scripts/generate-card-qr.mjs for business cards.
-      */}
       <a class="btn btn--primary book__cta" href={bookHref} data-magnetic>{s.ctaLabel}</a>
     </div>
   </div>
 </Band>
-
 <style>
   .book {
     display: grid;
@@ -106,7 +68,6 @@ const covers = [
 
   .book__cover {
     position: relative;
-    /* grow is set per cover, inline, from its aspect ratio. */
     flex: 0 1 0;
     max-width: 18rem;
     transition: transform 250ms var(--ease);
@@ -155,11 +116,8 @@ const covers = [
     margin-block-start: 1.75rem;
   }
 
-
   @media (min-width: 52rem) {
     .book {
-      /* The covers ARE the section here - they were sized like a thumbnail
-         beside the copy. */
       grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
       gap: 3.5rem;
     }

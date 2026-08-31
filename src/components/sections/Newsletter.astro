@@ -1,5 +1,4 @@
 ---
-/** Newsletter - feature type. Separate from the contact form by requirement. */
 import Band from '@/components/Band.astro';
 import NewsletterForm from '@/components/NewsletterForm.astro';
 import { getContent, type Locale } from '@/lib/i18n';
@@ -22,7 +21,6 @@ const s = getContent(locale).sections.newsletter;
     </div>
   </div>
 </Band>
-
 <style>
   .newsletter {
     display: grid;

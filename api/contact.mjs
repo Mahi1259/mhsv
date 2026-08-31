@@ -1,25 +1,5 @@
-/**
- * Vercel Function — POST /api/contact
- *
- * Vercel's Node runtime uses the (req, res) signature, while the shared core is
- * written against the Web Request/Response API. This adapter bridges the two,
- * so validation and sending live in exactly one place across Vercel, Netlify
- * and Cloudflare.
- *
- * Node runtime rather than Edge on purpose: Edge cannot open a TCP socket, so
- * the SMTP transport — the realistic option for a Swiss mail host — would not
- * run there.
- */
 import { handleContact } from '../functions/lib/contact-core.mjs';
 
-/**
- * Recover the request body.
- *
- * Vercel's Node runtime may have already consumed and parsed the stream: it
- * parses `application/x-www-form-urlencoded` (the no-JavaScript submit) into an
- * object, but leaves `multipart/form-data` (the fetch submit) alone. Handle
- * both, and fall back to reading the raw stream.
- */
 async function readBody(req) {
   const body = req.body;
 
@@ -27,7 +7,6 @@ async function readBody(req) {
     if (Buffer.isBuffer(body)) return { buffer: body, contentType: null };
     if (typeof body === 'string') return { buffer: Buffer.from(body), contentType: null };
     if (typeof body === 'object') {
-      // Already parsed into fields — re-encode so the core sees a normal body.
       const params = new URLSearchParams();
       for (const [key, value] of Object.entries(body)) {
         if (Array.isArray(value)) value.forEach((v) => params.append(key, String(v)));
@@ -45,7 +24,6 @@ async function readBody(req) {
   return { buffer: Buffer.concat(chunks), contentType: null };
 }
 
-/** Node lowercases header names but allows array values; Headers wants strings. */
 function toHeaders(nodeHeaders) {
   const headers = new Headers();
   for (const [key, value] of Object.entries(nodeHeaders)) {

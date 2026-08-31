@@ -1,19 +1,4 @@
 ---
-/**
- * Site footer.
- *
- * Deliberately short. It repeated all 20 section links and the full contact
- * block at one point, so the page ended with a second copy of its own
- * navigation and a third copy of the contact details. The section list has
- * since gone too: the masthead is fixed and carries every one of them, so
- * repeating five of them at the bottom was a third navigation, not a service.
- *
- * What is left is the pair of legal pages, which are the only things a reader
- * cannot reach from the masthead.
- *
- * The association / legal-status block stays withheld unless
- * PUBLIC_SHOW_LEGAL_STATUS is true.
- */
 import { getContent, legalPath, type Locale } from '@/lib/i18n';
 import { LEGAL_PAGE_IDS, SHOW_LEGAL_STATUS } from '@/config/site';
 
@@ -30,12 +15,8 @@ const year = new Date().getFullYear();
 <footer class="band site-footer">
   <div class="shell">
     <p class="site-footer__baseline">{c.brand.baseline}</p>
-
     <div class="site-footer__col">
       <h2 class="mono-label site-footer__title">{c.footer.legalTitle}</h2>
-      {/* All four legal pages, always present. Each says its final wording is
-          with MHSV®'s counsel rather than the link disappearing and leaving a
-          reader with nowhere to look. */}
       <ul class="site-footer__links">
         {
           LEGAL_PAGE_IDS.map((page) => (
@@ -45,16 +26,6 @@ const year = new Date().getFullYear();
           ))
         }
         <li><a href={legalPath('photoCredits', locale)}>{c.photoCredits.title}</a></li>
-        {/*
-          Re-opens the cookie notice so a choice can be reviewed or changed.
-          Required to be permanently available, so it sits with the legal links
-          rather than inside the banner.
-
-          A button, not a link: it acts on this page instead of going anywhere.
-          Rendered hidden and revealed by the banner's script, the same way the
-          banner is - without JavaScript it could not do anything, and a dead
-          control is worse than no control.
-        */}
         <li>
           <button class="site-footer__cookies" type="button" data-cookie-reopen hidden>
             {c.cookies.settings}
@@ -62,10 +33,7 @@ const year = new Date().getFullYear();
         </li>
       </ul>
     </div>
-
     {
-      /* Specified by the content pack, withheld by a later client instruction
-         pending validation of the statutes. */
       SHOW_LEGAL_STATUS && (
         <div class="site-footer__legal">
           {c.sections.contact.legalFooter.map((line) => (
@@ -81,7 +49,6 @@ const year = new Date().getFullYear();
     </div>
   </div>
 </footer>
-
 <style>
   .site-footer {
     padding-block: clamp(3rem, 2rem + 4vw, 4.5rem);
@@ -129,8 +96,6 @@ const year = new Date().getFullYear();
     color: var(--gold-soft);
   }
 
-  /* Matches the links beside it exactly - it belongs to that list, and only
-     differs in being a button. */
   .site-footer__cookies {
     display: inline-block;
     padding: 0.1875rem 0;
@@ -169,5 +134,4 @@ const year = new Date().getFullYear();
   .site-footer__base p {
     margin: 0;
   }
-
 </style>

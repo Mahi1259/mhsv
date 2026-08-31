@@ -1,11 +1,4 @@
 ---
-/**
- * Confirmation page for visitors without JavaScript.
- *
- * The contact function 303-redirects here after a successful send. With
- * JavaScript the submit is intercepted and the same wording is shown inline,
- * so this page is never reached.
- */
 import Page from '@/layouts/Page.astro';
 import { getContent, localePath } from '@/lib/i18n';
 import { LOCALES, type Locale } from '@/config/site';
@@ -22,7 +15,6 @@ const c = getContent(locale);
   <p class="result">{c.form.successBody}</p>
   <a class="btn btn--ghost" href={localePath('', locale)}>{c.nav.items[0].label}</a>
 </Page>
-
 <style>
   .result {
     margin: 0 0 2rem;

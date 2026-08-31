@@ -1,5 +1,4 @@
 ---
-/** Coordinated ecosystem - grid type. */
 import Band from '@/components/Band.astro';
 import SectionImage from '@/components/SectionImage.astro';
 import { getContent, type Locale } from '@/lib/i18n';
@@ -18,10 +17,8 @@ const disciplines = s.disciplines.map((item) => capitalizeFirst(item, locale));
     {disciplines.map((item) => <li class="chip">{item}</li>)}
   </ul>
   <p class="prose-body ecosystem__note">{s.note}</p>
-
   <SectionImage locale={locale} image="ecosystem" align="start" />
 </Band>
-
 <style>
   .ecosystem__title { color: var(--band-muted); margin: 0 0 1rem; }
   .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; margin: 0; padding: 0; }

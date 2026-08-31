@@ -1,16 +1,4 @@
 ---
-/**
- * The Phase 1 single page - one static document per locale.
- *
- * The page is a single continuous navy ground (`.page-flow`). Sections that call
- * for light relief are grouped into a few inset panels that float on it,
- * rather than being full-bleed light slabs: a stack of edge-to-edge colour
- * blocks is the slide-deck pattern, and no amount of tuning the numbering or
- * the dividers fixes that.
- *
- * Consecutive light sections collapse into ONE panel - nine separate panels
- * would just be nine rounded slides.
- */
 import Base from '@/layouts/Base.astro';
 import { LOCALES, SECTION_ORDER, type Locale } from '@/config/site';
 
@@ -68,17 +56,12 @@ const COMPONENTS = {
   contact: Contact,
 } as const;
 
-/** The hero renders itself; everything after it is a band in document order. */
 const sections = SECTION_ORDER.filter((section) => section.id !== 'hero');
 ---
 
 <Base locale={locale}>
   <div class="page-flow">
     <Hero locale={locale} />
-
-    {/* Between the hero and "Who we are", where the brief asks for it: the
-        first thing after the opening claim, before the explanation. Held to
-        the page's own measure so its edges line up with every section. */}
     <div class="band video-band">
       <div class="shell">
         <VideoPlayer locale={locale} />

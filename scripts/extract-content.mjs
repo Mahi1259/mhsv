@@ -1,23 +1,3 @@
-/**
- * Content pipeline: MHSV_Website_Content_Pack_..._V3.docx  ->  src/data/i18n/{loc}.json
- *
- *   npm run content:extract
- *
- * The .docx is the client's source of truth. Nothing in this repo retypes it.
- * The document holds four parallel language blocks (FR / EN / DE / IT), each
- * with the same 21 numbered sections, so extraction is: segment by language
- * marker -> segment by "NN - TITLE" -> map blocks to a semantic shape.
- *
- * Two things the .docx does NOT contain, which are merged in from
- * src/data/authored/{loc}.json:
- *   1. UI chrome (nav labels, form labels, validation messages, footer, legal
- *      page bodies) - the pack is website copy, not interface copy.
- *   2. Public copy for §18/§19, where the pack text is an instruction to the
- *      developer ("Show the cover of…") rather than publishable prose.
- * Everything authored is flagged for client validation - see CONTENT.md.
- *
- * Run `npm run content:check` after this to enforce key parity across locales.
- */
 import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -30,14 +10,8 @@ const DOCX =
 
 const LOCALES = ['fr', 'en', 'de', 'it'];
 const LANG_MARKERS = { fr: '🇫🇷', en: '🇬🇧', de: '🇩🇪', it: '🇮🇹' };
-/** First appendix heading after the Italian block - bounds the last locale. */
 const APPENDIX_MARKER = /^[D-G]\s*[—–-]\s/;
 
-// ---------------------------------------------------------------------------
-// Locale-specific parsing hints. Kept tiny and in one place on purpose: every
-// entry here is a place where the source document is not uniform across
-// languages.
-// ---------------------------------------------------------------------------
 const HINTS = {
   fr: { ecosystemLead: ':', conjunction: ' et ' },
   en: { ecosystemLead: ' including ', conjunction: ' and ' },
@@ -45,15 +19,11 @@ const HINTS = {
   it: { ecosystemLead: ':', conjunction: ' e ' },
 };
 
-// ---------------------------------------------------------------------------
-// text helpers
-// ---------------------------------------------------------------------------
 const DASH = /\s[-–—]\s/;
 
 const clean = (s) => String(s ?? '').replace(/\s+/g, ' ').trim();
 const dropTrailingDot = (s) => clean(s).replace(/[.。]\s*$/, '');
 
-/** Everything after the first colon - strips "Roadmap:", "CTA :", "Footer légal :" … */
 function afterColon(s, fallback = s) {
   const i = String(s).indexOf(':');
   return i === -1 ? clean(fallback) : clean(String(s).slice(i + 1));
@@ -63,11 +33,6 @@ function stripQuotes(s) {
   return clean(s).replace(/^[«"“„'']\s*/, '').replace(/\s*[»"“”'']$/, '');
 }
 
-/**
- * Split "a; b; c." or "a, b, c." into trimmed items. The trailing full stop is
- * dropped by default because these become list items; pass keepDot for lists
- * whose final entry is a full sentence (the legal footer).
- */
 function splitList(s, sep = ';', keepDot = false) {
   return (keepDot ? clean(s) : dropTrailingDot(s))
     .split(sep)
@@ -75,10 +40,8 @@ function splitList(s, sep = ';', keepDot = false) {
     .filter(Boolean);
 }
 
-/** Split "A -> B -> C." into steps. */
 const splitArrow = (s) => dropTrailingDot(s).split(/\s*->\s*/).map(clean).filter(Boolean);
 
-/** Split "Title - body" on the first standalone dash. */
 function splitDash(s, parts = 2) {
   const out = [];
   let rest = clean(s);
@@ -92,10 +55,6 @@ function splitDash(s, parts = 2) {
   return out;
 }
 
-/**
- * Split a comma list whose final item is joined by a conjunction:
- * "a, b, c and d" -> [a, b, c, d]
- */
 function splitCommaList(s, conjunction) {
   const items = splitList(s, ',');
   const last = items[items.length - 1];
@@ -109,9 +68,6 @@ function splitCommaList(s, conjunction) {
   return items.filter(Boolean);
 }
 
-// ---------------------------------------------------------------------------
-// document segmentation
-// ---------------------------------------------------------------------------
 const SECTION_RE = /^(\d{2})\s*[—–-]\s*(.+)$/;
 
 function segmentByLocale(blocks) {
@@ -131,7 +87,6 @@ function segmentByLocale(blocks) {
   ordered.forEach((loc, n) => {
     const from = starts[loc];
     let to = n + 1 < ordered.length ? starts[ordered[n + 1]] : blocks.length;
-    // The final locale runs into the developer appendix; cut it there.
     for (let i = from; i < to; i++) {
       const b = blocks[i];
       if (b.type === 'p' && APPENDIX_MARKER.test(b.text)) {
@@ -161,7 +116,6 @@ function segmentBySection(blocks) {
   return sections;
 }
 
-/** The FR-only publication-status legend table in the document preamble. */
 function readStatusLegend(blocks) {
   for (const b of blocks) {
     if (b.type === 'tbl' && b.rows.length === 5 && /ACTIF/i.test(b.rows[0]?.[0] ?? '')) {
@@ -171,13 +125,9 @@ function readStatusLegend(blocks) {
   return null;
 }
 
-// ---------------------------------------------------------------------------
-// section extractors - one per numbered section of the content pack
-// ---------------------------------------------------------------------------
 const p = (s, i) => clean(s.blocks[i]?.text ?? '');
 const tbl = (s, i) => s.blocks.filter((b) => b.type === 'tbl')[i]?.rows ?? [];
 
-/** "PROGRAMME FONDATEUR FOOTBALL" + [[key, value], …] */
 function readProgrammeTable(rows) {
   if (!rows.length) return null;
   const title = clean(rows[0][0]);
@@ -188,13 +138,9 @@ function readProgrammeTable(rows) {
   return { title, entries };
 }
 
-/** "STATUS: IN DEVELOPMENT / PROGRESSIVE DEPLOYMENT" -> canonical key + raw text. */
 function readStatus(raw) {
   const text = afterColon(raw, '');
   if (!text) return null;
-  // Every status line in V3 is the "in development" state. The other four
-  // states exist in the badge component and legend so future content can use
-  // them without a code change.
   return { key: 'inDevelopment', detail: clean(text) };
 }
 
@@ -347,7 +293,6 @@ const SECTIONS = [
     num: '16',
     anchor: 'team',
     extract: (s) => ({
-      // blocks 0, 6, 7 are developer instructions, not public copy.
       members: s.blocks.slice(1, 6).map((b) => {
         const [name, role, rest] = splitDash(b.text, 3);
         const email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean(rest)) ? clean(rest) : null;
@@ -355,7 +300,6 @@ const SECTIONS = [
           name: clean(name),
           role: clean(role),
           email,
-          // Client has not created these mailboxes yet - BLOCKER #3.
           emailPending: email === null,
         };
       }),
@@ -380,8 +324,6 @@ const SECTIONS = [
     id: 'book',
     num: '18',
     anchor: 'book',
-    // Both source blocks are instructions to the developer. Public copy for
-    // this section is authored - see src/data/authored/{loc}.json.
     extract: () => ({}),
   },
   {
@@ -389,8 +331,6 @@ const SECTIONS = [
     num: '19',
     anchor: 'identity',
     extract: (s) => ({
-      // Block 1 is explicitly marked "Public wording:" in the pack and is the
-      // one sentence the client requires verbatim (hard constraint #7).
       collectionNotice: stripQuotes(afterColon(p(s, 1))),
       status: readStatus(p(s, 3)),
     }),
@@ -420,26 +360,12 @@ const SECTIONS = [
         phone,
         email,
         website,
-        // Rendered only when PUBLIC_SHOW_LEGAL_STATUS=true - BLOCKER #1.
         legalFooter: splitList(afterColon(p(s, 4)), '|', true),
       };
     },
   },
 ];
 
-// ---------------------------------------------------------------------------
-// merge + emit
-// ---------------------------------------------------------------------------
-
-/**
- * Corrections applied to every extracted string.
- *
- * The client's 14 August update brief supersedes the 10 August content pack:
- * mhsv.ch was acquired and mhsv-international.org is retired everywhere -
- * visible copy, links, mailto attributes, metadata. Rewriting here rather than
- * per-field means a stale address cannot survive anywhere in the pack, and
- * `npm run content:check` fails the build if one ever reappears.
- */
 const SUPERSEDED = [
   { from: /@mhsv-international\.org/g, to: '@mhsv.ch' },
   { from: /mhsv-international\.org/g, to: 'mhsv.ch' },
@@ -458,7 +384,6 @@ function applySupersessions(value) {
   return value;
 }
 
-/** Deep merge where the authored overlay wins over anything extracted. */
 function merge(base, overlay) {
   if (Array.isArray(overlay) || overlay === null || typeof overlay !== 'object') return overlay;
   const out = { ...(base && typeof base === 'object' && !Array.isArray(base) ? base : {}) };
@@ -517,8 +442,6 @@ function build() {
       );
     }
 
-    // Brand identity is stated in §01 - lift it so components don't reach
-    // into the hero for it.
     const hero = out.sections.hero;
     out.brand = {
       name: hero.brand,
@@ -531,18 +454,14 @@ function build() {
     audit.locales[loc] = auditSections;
   }
 
-  // FR badge labels come from the pack's own legend table; the other three
-  // locales are authored (only the "in development" state appears in V3).
   if (legend) {
     audit.statusLegendFR = legend;
     const keys = ['active', 'inDevelopment', 'pilot', 'partnership', 'future'];
-    // Underscore-prefixed: informational only, excluded from the parity check.
     results.fr._statusFromPack = Object.fromEntries(
       legend.map((row, i) => [keys[i], { label: row.label, description: row.description }]),
     );
   }
 
-  // Overlay authored strings.
   const outDir = resolve(ROOT, 'src/data/i18n');
   mkdirSync(outDir, { recursive: true });
   mkdirSync(resolve(ROOT, 'src/data/_audit'), { recursive: true });
@@ -554,6 +473,7 @@ function build() {
     } catch {
       console.warn(`  ! no authored overlay for "${loc}" - UI strings will be missing`);
     }
+// Arrays in the authored overlay replace the extracted array wholesale.
     const merged = merge(applySupersessions(results[loc]), authored);
     writeFileSync(resolve(outDir, `${loc}.json`), JSON.stringify(merged, null, 2) + '\n');
     const n = Object.keys(merged.sections).length;

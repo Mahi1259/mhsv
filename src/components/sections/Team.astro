@@ -1,16 +1,4 @@
 ---
-/**
- * Organisation & governance - grid type.
- *
- * Shows exactly the six people approved in the 14 August brief, with no
- * photographs. Every address except the founder's is infos@mhsv.ch: individual
- * professional addresses exist but must not be published before further
- * written approval.
- *
- * Cards stay modular so photos, biographies and further members can be added
- * later without touching this component - they are driven entirely by the
- * content JSON.
- */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import type { SectionType } from '@/config/site';
@@ -38,16 +26,12 @@ const s = getContent(locale).sections.team;
         <li class="team__card card">
           <h3 class="team__name">{member.name}</h3>
           <p class="team__role">{member.role}</p>
-          {/* The "Contact public" column from the 14 August brief. Read from
-              members[n].email - never hard-coded, so a committee correction is
-              a JSON edit in one place per language. */}
           <a class="link team__email" href={`mailto:${member.email}`}>{member.email}</a>
         </li>
       ))
     }
   </ul>
 </Band>
-
 <style>
   .team {
     display: grid;

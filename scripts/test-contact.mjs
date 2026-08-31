@@ -1,10 +1,3 @@
-/**
- * Exercises the contact handler without a host. `npm run test:contact`
- *
- * Calls handleContact() with the same Request the browser would send, so
- * validation, spam handling and both response modes (JSON and the no-JS 303)
- * are covered before anything is deployed.
- */
 import { handleContact } from '../functions/lib/contact-core.mjs';
 
 const ENV = {
@@ -54,7 +47,6 @@ const assert = (condition, message) => {
   if (!condition) throw new Error(message);
 };
 
-// Silence the transport's own logging so the test output stays readable.
 const realLog = console.log;
 const quiet = (fn) => async (...args) => {
   console.log = () => {};
@@ -111,7 +103,6 @@ await check('over-long message is rejected', async () => {
 await check('honeypot submission is silently discarded', async () => {
   const res = await call(request({ ...valid, website_url: 'http://spam.example' }));
   const body = await res.json();
-  // Looks identical to success so a bot learns nothing; nothing is sent.
   assert(res.status === 200 && body.ok === true, JSON.stringify(body));
 });
 
@@ -131,7 +122,6 @@ await check('header injection via newlines is neutralised', async () => {
   const req = request({ ...valid, subject: 'Hi\r\nBcc: attacker@example.com' });
   const res = await call(req);
   assert((await res.json()).ok === true, 'should still send');
-  // Re-validate directly to inspect the sanitised value.
   const { validate } = await import('../functions/lib/contact-core.mjs');
   const form = new FormData();
   for (const [k, v] of Object.entries({ ...valid, subject: 'Hi\r\nBcc: attacker@example.com' })) {

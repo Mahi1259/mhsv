@@ -1,12 +1,3 @@
-/**
- * Screenshot helper for visual review.
- *
- *   node scripts/shot.mjs <locale> <width> [out.png] [--full]
- *
- * Uses Puppeteer rather than `chrome --screenshot --window-size`, which clamps
- * the window below roughly 500px and then crops a wider layout instead of
- * reflowing it - that produces convincing but wrong "overflow" at 320px.
- */
 import puppeteer from 'puppeteer-core';
 
 const [locale = 'fr', width = '390', out = `/tmp/mhsv-${locale}-${width}.png`] = process.argv.slice(2);

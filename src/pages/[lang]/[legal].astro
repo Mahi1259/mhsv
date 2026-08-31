@@ -1,25 +1,8 @@
 ---
-/**
- * The four legal pages, one route for all of them.
- *
- * Two now carry MHSV®'s approved text - the legal notice and the data
- * protection notice - each under a banner saying it is still a technical
- * validation version. Cookies and forms are still one line saying the wording
- * is with counsel.
- *
- * The slug is per language - /fr/mentions-legales/ and /en/legal-notice/ are
- * the same page - so getStaticPaths pairs each locale with its own slug from
- * LEGAL_PAGES rather than repeating one path four times.
- */
 import Page from '@/layouts/Page.astro';
 import { getContent } from '@/lib/i18n';
 import { LOCALES, LEGAL_PAGES, LEGAL_PAGE_IDS, type Locale } from '@/config/site';
 
-/*
- * The four this route actually builds - NOT LegalPageId, which also covers
- * photoCredits. That page has its own route and its own title, and typing the
- * prop as the wider union asked for a title key that does not exist.
- */
 type PlaceholderPageId = (typeof LEGAL_PAGE_IDS)[number];
 
 export function getStaticPaths() {
@@ -36,21 +19,7 @@ const { page } = Astro.props as { page: PlaceholderPageId };
 const c = getContent(locale);
 const title = c.legalPages.titles[page];
 
-/*
- * Three of the four carry their approved text; only forms is still a
- * placeholder waiting on counsel.
- *
- * The legal notice and the data protection notice are "validation technique"
- * versions, so both render under a banner saying so. Those banners are REQUIRED
- * and must not be removed without an explicit instruction. The cookies page is
- * MHSV®'s own wording for the site rather than a document under review, so it
- * has none.
- *
- * Only sections 1-11 of the legal notice are here. The cover page, the "read
- * before integration" instructions, the validation-scope note and the technical
- * validation sheet are deliberately not in the content files at all - not
- * hidden by a flag, absent - so there is nothing to publish by accident.
- */
+// Three of the four carry approved text; forms is still waiting on counsel.
 const NOTICES = {
   dataProtection: c.dataProtection,
   legalNotice: c.legalNotice,
@@ -64,7 +33,7 @@ const notice = page in NOTICES ? NOTICES[page as keyof typeof NOTICES] : null;
   {
     notice ? (
       <div class="notice">
-        {/* Only the two documents still awaiting validation carry one. */}
+        {/* Required until the client validates these documents - do not remove. */}
         {notice.banner && <p class="notice__banner" role="note">{notice.banner}</p>}
 
         {notice.officialLanguagesNote && (
@@ -94,15 +63,11 @@ const notice = page in NOTICES ? NOTICES[page as keyof typeof NOTICES] : null;
     )
   }
 </Page>
-
 <style>
   .notice {
     max-width: 74ch;
   }
 
-  /* Deliberately loud. The source document is a technical-validation version
-     marked "do not publish", so a reader must not mistake this for the final
-     notice. */
   .notice__banner {
     margin: 0 0 2rem;
     padding: 0.875rem 1.125rem;

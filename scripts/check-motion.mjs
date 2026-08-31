@@ -1,19 +1,3 @@
-/**
- * Motion behaviour checks.  `npm run check:motion` (needs the preview running)
- *
- * Works through the spec's own checklist, because these are the failures that
- * are invisible in a screenshot:
- *
- *   1. fast scroll leaves nothing half-animated or stuck invisible
- *   2. scrolling back up never replays a reveal
- *   3. reduced motion: everything visible, nothing moves, no delays
- *   4. content already on screen at load does not animate in front of you
- *   5. the cascade is capped (~400ms), not one item at a time forever
- *   6. hover is ~180ms and :active is quicker than :hover
- *   7. focus rings appear instantly
- *   8. the masthead shrinks on desktop, holds its state, and stays inert on
- *      mobile - including that the pill still fits every locale on one row
- */
 import puppeteer from 'puppeteer-core';
 import sharp from 'sharp';
 
@@ -34,29 +18,17 @@ const browser = await puppeteer.launch({
 });
 
 try {
-  /*
-   * Warm the server first, and throw the result away.
-   *
-   * Every timing assertion below was measured on the FIRST load after a
-   * rebuild - a cold preview server, nothing cached, images still being
-   * decoded - and the reveal check failed on clean builds because of it. Twice
-   * I answered that by raising a timeout, which is guessing at how slow a cold
-   * start can be. This removes the variable instead: one throwaway load, then
-   * measure a warm one.
-   */
   {
     const warm = await browser.newPage();
     await warm.goto(`${BASE}/fr/`, { waitUntil: 'networkidle0' });
     await warm.close();
   }
 
-  // --- 1 & 2: fast scroll, then back up ------------------------------------
   {
     const page = await browser.newPage();
     await page.setViewport({ width: 1280, height: 900 });
     await page.goto(`${BASE}/fr/`, { waitUntil: 'networkidle0' });
 
-    // Slam to the bottom, the way a flick-scroll behaves.
     await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'auto' }));
     await new Promise((r) => setTimeout(r, 1600));
 
@@ -73,32 +45,18 @@ try {
     });
     check(stuck.length === 0, 'fast scroll leaves nothing invisible', stuck.slice(0, 3).join(', '));
 
-    /*
-     * Wait for the observer to finish marking everything before scrolling back,
-     * rather than assuming a fixed delay is enough.
-     *
-     * This used to sleep and hope. On a cold start - first load after a rebuild,
-     * server still warming - one element below the fold had not been observed
-     * yet, and the assertion below read that as "lost is-in" and failed a clean
-     * build. "Not marked yet" and "un-marked on the way back" are different
-     * things, and only the second one is a bug.
-     */
     let settled = true;
     await page
       .waitForFunction(
         () =>
           Array.from(document.querySelectorAll('[data-reveal], [data-reveal-x], [data-stagger]'))
             .every((el) => el.classList.contains('is-in')),
-        // Generous: this runs on the first page load after a rebuild, which is
-        // the slowest one there is. 5s was not enough and the check failed
-        // twice on clean builds.
         { timeout: 20000 },
       )
       .catch(() => {
         settled = false;
       });
 
-    // Back to the top: nothing may replay.
     await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'auto' }));
     await new Promise((r) => setTimeout(r, 400));
     const replayed = await page.evaluate(
@@ -106,22 +64,15 @@ try {
         Array.from(document.querySelectorAll('[data-reveal], [data-reveal-x], [data-stagger]'))
           .filter((el) => !el.classList.contains('is-in')).length,
     );
-    /*
-     * Reported separately on purpose. "Never marked" and "un-marked on the way
-     * back" are different failures and only the second is the bug this guards.
-     * Conflating them is what made this check fail on perfectly good builds.
-     */
     check(
       settled,
       'everything is marked before scrolling back',
-      // `check` prints the detail on success too, so it is only set on failure.
       settled ? '' : 'the observer never settled - the result below cannot be trusted',
     );
     check(replayed === 0, 'scrolling back up never re-animates', `${replayed} lost is-in`);
     await page.close();
   }
 
-  // --- 3: reduced motion ----------------------------------------------------
   {
     const page = await browser.newPage();
     await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
@@ -157,7 +108,6 @@ try {
     await page.close();
   }
 
-  // --- 4: above-the-fold content must not animate in ------------------------
   {
     const page = await browser.newPage();
     await page.setViewport({ width: 1280, height: 900 });
@@ -174,7 +124,6 @@ try {
     await page.close();
   }
 
-  // --- 5, 6, 7: values -------------------------------------------------------
   {
     const page = await browser.newPage();
     await page.setViewport({ width: 1280, height: 900 });
@@ -217,13 +166,6 @@ try {
     await page.close();
   }
 
-  /* --- 8: the resizable masthead ------------------------------------------
-   *
-   * Screenshots cannot show any of this. The failures worth catching are a
-   * bar that flickers at the threshold, one that renders expanded and then
-   * snaps after the first wheel event, a pill too narrow for the longest
-   * locale, and a phone paying for a backdrop-filter it never sees.
-   */
   const bar = () => ({
     shrunk: document.querySelector('.site-header').classList.contains('is-shrunk'),
     animating: document.querySelector('.site-header').classList.contains('is-animating'),
@@ -237,7 +179,6 @@ try {
       alpha: Number((/rgba?\([^)]*?([\d.]+)\)/.exec(backgroundColor) ?? [, '1'])[1]),
       duration: parseFloat(transitionDuration),
     }))(getComputedStyle(document.querySelector('.site-header__shell'))),
-    /* One row, or the pill has burst and the links have wrapped. */
     rows: new Set(
       [...document.querySelectorAll('#main-nav li')].map((li) =>
         Math.round(li.getBoundingClientRect().top),
@@ -264,7 +205,6 @@ try {
     check(down.blurred && down.lifted, 'the background materialises and it lifts');
     check(!down.animating, 'will-change is dropped once the transition settles');
 
-    // Rest on the threshold and jiggle: hysteresis must make this impossible.
     let flips = 0;
     await page.evaluate(() => scrollTo(0, 56));
     await new Promise((r) => setTimeout(r, 300));
@@ -278,7 +218,6 @@ try {
     }
     check(flips === 0, 'resting on the threshold does not oscillate', `${flips} flips`);
 
-    // A refresh part-way down must render the right state, not snap into it.
     await page.evaluate(() => scrollTo(0, 2400));
     await page.reload({ waitUntil: 'domcontentloaded' });
     await new Promise((r) => setTimeout(r, 120));
@@ -287,8 +226,6 @@ try {
     await page.close();
   }
 
-  // The pill has to hold the longest locale on one row at the narrowest
-  // desktop, or the nav wraps and the pill bursts into a lozenge.
   {
     const page = await browser.newPage();
     for (const width of [1440, 1024]) {
@@ -311,7 +248,6 @@ try {
     await page.close();
   }
 
-  // Mobile: nothing about the bar may move, and it must not pay for glass.
   {
     const page = await browser.newPage();
     await page.setViewport({ width: 375, height: 720, isMobile: true, hasTouch: true });
@@ -332,14 +268,6 @@ try {
     await page.close();
   }
 
-  /* The switcher survives the shrink, and stays usable.
-   *
-   * This asserted the opposite until 28 August: that the contracted bar dropped
-   * the switcher and stated the language instead. That is exactly what the
-   * client hit - scrolling down any French page put EN out of reach, present in
-   * the DOM at 0x0. Both properties are checked, because they fail
-   * independently: the codes must be VISIBLE, and they must be reachable by
-   * keyboard. */
   {
     const page = await browser.newPage();
     const lang = () =>
@@ -353,7 +281,6 @@ try {
         };
       });
 
-    /** Tab through the whole bar and report anything focusable inside .lang. */
     const focusableInLang = async () => {
       await page.evaluate(() => document.querySelector('.brand').focus());
       let found = 0;
@@ -398,7 +325,6 @@ try {
     const back = await lang();
     check(back.codes === 4, 'and it is unchanged back at the top');
 
-    // Mobile never shrinks, so the switcher is always there.
     await page.setViewport({ width: 390, height: 844, isMobile: true });
     await page.goto(`${BASE}/de/`, { waitUntil: 'networkidle0' });
     await page.evaluate(() => scrollTo(0, 1500));
@@ -408,15 +334,6 @@ try {
     await page.close();
   }
 
-  /* A language switch from mid-page, watched frame by frame.
-   *
-   * This is the one journey a four-language site does constantly, and it has
-   * gone wrong twice: the page glided down to the section on arrival, and the
-   * bar expanded and contracted while the reader watched. Neither shows up in
-   * a screenshot or a settled DOM read - only in the painted frames. So this
-   * screencasts a real FR→DE switch, made the way a reader makes it (open the
-   * collapsed language menu, click a language), and asserts across EVERY
-   * painted frame that the bar never changes size and is never missing. */
   {
     const page = await browser.newPage();
     await page.setViewport({ width: 1440, height: 900 });
@@ -428,7 +345,6 @@ try {
       try {
         await cdp.send('Page.screencastFrameAck', { sessionId: f.sessionId });
       } catch {
-        /* the cast is already stopped */
       }
     });
 
@@ -440,22 +356,11 @@ try {
     });
     await new Promise((r) => setTimeout(r, 800));
 
-    // Where the pill's edges actually are, so the scan below can be confined
-    // to them. Windowed on purpose: the page shows THROUGH the translucent
-    // bar, and a card edge behind it out-measured the pill's own edge (46 vs
-    // 28) - the scan was reporting the page, not the bar.
     const pill = await page.evaluate(() => {
       const r = document.querySelector('.site-header__shell').getBoundingClientRect();
       return { left: Math.round(r.left), right: Math.round(r.right) };
     });
 
-    // The active language wears a filled gold chip in every locale, so finding
-    // gold in its box says the bar is DRAWN - not which language is showing.
-    // The SWITCHER'S BOX, not the chip's. The chip is measured on the French
-    // page and the frames are of a switch to German, where the active chip is
-    // third rather than first - a box pinned to the French chip simply does not
-    // contain the German one, and every frame reads as "no bar". The container
-    // holds whichever chip is active, in any locale, and does not move.
     const label = await page.evaluate(() => {
       const r = document.querySelector('.lang').getBoundingClientRect();
       return {
@@ -464,9 +369,6 @@ try {
       };
     });
 
-    // Driven through the URL rather than a click: the point of the screencast
-    // is the frames the browser paints during the switch, and following the
-    // carried fragment directly is the same navigation without the pointer.
     frames.length = 0;
     await page.evaluate(() => {
       const href = document.querySelector('.lang a[hreflang="de"]').href;
@@ -487,9 +389,6 @@ try {
         const i = (y * info.width + x) * info.channels;
         return [data[i], data[i + 1], data[i + 2]];
       };
-      // Strongest edge on a text-free row inside the bar, within ±25px of
-      // where the pill says it is. A pill that moved further than that leaves
-      // the window, and the reading changes - which is the failure we want.
       const edge = (centre) => {
         let best = 0;
         let found = 0;
@@ -502,8 +401,6 @@ try {
             found = x;
           }
         }
-        // No real edge in the window means the pill is not where it claims to
-        // be; report it rather than letting a flat reading pass.
         return best < 8 ? 'none' : found;
       };
       lefts.push(edge(pill.left));
@@ -518,39 +415,15 @@ try {
       }
       if (gold === 0) barless += 1;
 
-      // WHERE the text sits on the nav row, as a bit pattern - the French and
-      // German label sets lay out differently, so this identifies which page
-      // a frame belongs to. A count alone is not enough: the two sets light
-      // the same NUMBER of samples.
       let row = '';
       for (let x = 340; x < 1060; x += 2) row += at(x, 39)[0] > 120 ? '1' : '0';
       inkPerFrame.add(row);
     }
 
-    /*
-     * NOTHING HALF-DRAWN: every frame shows one page or the other, never a
-     * blend of the two.
-     *
-     * Whether the outgoing page gets painted at all before the swap depends on
-     * how much work the page is doing, and it varies - this has captured
-     * anywhere from zero to a handful of French frames. So the count of
-     * distinct nav rows is 1 or 2, and both are correct. What must never
-     * appear is a THIRD: the page cross-fading would put frames at
-     * intermediate states, which is exactly the double exposure a page
-     * transition produced and the reason there is no longer one.
-     *
-     * Measured on the nav row because the French and German label sets are
-     * laid out differently - the two clusters here sit 148 samples of 360
-     * apart, so this is not picking up noise behind the translucent bar.
-     */
     const settled = await page.evaluate(() => {
       const r = document.querySelector('.site-header__shell').getBoundingClientRect();
       return { left: Math.round(r.left), right: Math.round(r.right) };
     });
-    /* Tolerance of 2px, not exact equality: antialiasing on the pill's 1px
-       border moves the strongest step by a pixel between frames, and demanding
-       an identical reading made this fail at random. A real resize is tens of
-       pixels, so 2 still catches it. */
     const spread = (xs) => {
       const ns = xs.filter((x) => x !== 'none');
       return ns.length === xs.length ? Math.max(...ns) - Math.min(...ns) : Infinity;
@@ -577,15 +450,6 @@ try {
     await page.close();
   }
 
-  /* Arriving on a deep fragment - which is exactly what the language switcher
-   * produces, since it carries the reader's section across - must be STILL.
-   *
-   * Two regressions live here. `scroll-behavior: smooth` also applies to the
-   * fragment scroll the browser performs on load, so the translated page
-   * opened at the top and glided down: the page appearing to move on
-   * translate. And if the bar is not already shrunk in the first painted
-   * frame, the cross-document view transition snapshots it expanded, then
-   * animates it - which is what put two mastheads on screen at once. */
   {
     const page = await browser.newPage();
     await page.setViewport({ width: 1440, height: 900 });
@@ -609,7 +473,6 @@ try {
       `${arrival.filter((a) => a.shrunk).length}/${arrival.length} samples`,
     );
 
-    // ...and smooth scrolling is handed back, or in-page nav clicks would jump.
     await new Promise((r) => setTimeout(r, 600));
     const after = await page.evaluate(() => ({
       behaviour: getComputedStyle(document.documentElement).scrollBehavior,
@@ -623,14 +486,6 @@ try {
     await page.close();
   }
 
-  /* The page's depth washes are painted EXACTLY ONCE.
-   *
-   * They come from an unscoped `::before` on the page container, so the class
-   * name leaks into any component that happens to reuse it. The container was
-   * `.flow`; the pathway section has its own `.flow` block, and the page-wide
-   * washes were being drawn inside it - a translucent rectangle sitting across
-   * the steps. Renamed to `.page-flow`, but the way to keep it fixed is to
-   * count what actually paints them. */
   {
     const page = await browser.newPage();
     await page.setViewport({ width: 1440, height: 900 });
@@ -640,9 +495,6 @@ try {
         const found = [];
         for (const el of document.querySelectorAll('*')) {
           const bg = getComputedStyle(el, '::before').backgroundImage;
-          // Identified by being a STACK of navy radials. The hero paints a
-          // single navy lift of its own, which is legitimate and must not be
-          // confused with the page-wide set.
           const navy = bg && bg.includes('20, 40, 74');
           const stacked = navy && (bg.match(/radial-gradient\(/g) || []).length >= 3;
           if (stacked) found.push(el.className || el.tagName);
@@ -658,31 +510,17 @@ try {
     await page.close();
   }
 
-  /* The ground has to run continuously UNDER the bar.
-   *
-   * The bar is fixed and translucent, so `body` reserves --header-h for it.
-   * When that strip is painted by something other than the page's own ground,
-   * the page opens with a hard-edged rectangle straight across the top -
-   * which is exactly what happened once the masthead stopped being sticky.
-   * Sampling a column clear of the pill catches it; nothing else does. */
   {
     const page = await browser.newPage();
     await page.setViewport({ width: 1440, height: 900 });
     for (const path of ['/fr/', '/en/', '/en/data-protection/', '/livre']) {
       const response = await page.goto(`${BASE}${path}`, { waitUntil: 'networkidle0' });
-      /*
-       * A 404 is flat, so it reports "no seam" and passes while testing
-       * nothing - this check lost a page to a rename once already. Only a real
-       * error counts: 304 is the preview server answering "not modified" on a
-       * repeat visit, which is a hit, not a miss.
-       */
       if (response && response.status() >= 400) {
         check(false, `${path}: page exists`, `HTTP ${response.status()}`);
         continue;
       }
       const shot = await page.screenshot({ clip: { x: 0, y: 0, width: 200, height: 160 } });
       const png = Buffer.from(shot);
-      // Decode nothing: compare through the browser instead, on a canvas.
       const seam = await page.evaluate(async (bytes) => {
         const bitmap = await createImageBitmap(new Blob([new Uint8Array(bytes)]));
         const c = new OffscreenCanvas(bitmap.width, bitmap.height);
@@ -691,7 +529,6 @@ try {
         const { data } = ctx.getImageData(60, 0, 1, bitmap.height);
         let worst = 0;
         let at = 0;
-        // Only the band around the reserved strip; real content starts lower.
         for (let y = 30; y < 130; y++) {
           const i = y * 4;
           const d = Math.max(
@@ -706,14 +543,11 @@ try {
         }
         return { worst, at };
       }, [...png]);
-      // Grain and gradient account for a few levels; a seam is 20+.
       check(seam.worst <= 8, `${path}: no seam where the bar reserves its space`, `Δ${seam.worst} at y=${seam.at}`);
     }
     await page.close();
   }
 
-  // Reduced motion still shrinks - it is a space saving, not decoration -
-  // but arrives instantly.
   {
     const page = await browser.newPage();
     await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);

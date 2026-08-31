@@ -1,11 +1,3 @@
-/**
- * Tests for the two forms added by the 14 August brief: the Founding Book
- * order request and the newsletter subscription.
- *
- * The order flow especially: it must stay a REQUEST. There is no price, no
- * payment and no checkout anywhere in the payload, because pricing is not
- * approved.
- */
 import { handleContact, validate } from '../functions/lib/contact-core.mjs';
 
 const ENV = {
@@ -30,12 +22,6 @@ const ORDER = {
   consent: 'on',
 };
 
-/*
- * A German speaker, reading the German site, subscribing to the English
- * edition - which is the real case the newsletter has to handle, because the
- * newsletter is only written in French and English. `locale` is where she is;
- * `language` is which edition she gets. They are deliberately different here.
- */
 const SUBSCRIBE = {
   form: 'newsletter',
   locale: 'de',
@@ -90,7 +76,6 @@ async function check(name, run) {
   }
 }
 
-// --- book order ------------------------------------------------------------
 await check('order request accepted', async () => {
   const res = await handleContact(request(ORDER), ENV);
   assert(res.status === 200, `status ${res.status}`);
@@ -136,7 +121,6 @@ await check('order requires organisation, country and consent', async () => {
   }
 });
 
-// --- newsletter ------------------------------------------------------------
 await check('subscription accepted', async () => {
   const res = await handleContact(request(SUBSCRIBE), ENV);
   assert(res.status === 200, `status ${res.status}`);
@@ -177,7 +161,6 @@ await check('newsletter first name is optional', async () => {
   assert(body.ok === true, JSON.stringify(body));
 });
 
-// --- shared guards apply to every form -------------------------------------
 await check('honeypot applies to all three forms', async () => {
   for (const fields of [ORDER, SUBSCRIBE, { form: 'contact' }]) {
     const res = await handleContact(request({ ...fields, website_url: 'x' }), ENV);
@@ -200,10 +183,6 @@ await check('newsletter accepts only the languages it is written in', async () =
     const result = validate(formOf({ ...SUBSCRIBE, language }));
     assert(result.ok, `${language} should be offered - the form lists it`);
   }
-  /*
-   * The form never offered these, but the handler used to accept them, so a
-   * hand-made POST could subscribe someone to an edition that is not written.
-   */
   for (const language of ['de', 'it']) {
     const result = validate(formOf({ ...SUBSCRIBE, language }));
     assert(!result.ok, `${language} must be refused - no such edition exists`);
@@ -212,7 +191,6 @@ await check('newsletter accepts only the languages it is written in', async () =
 });
 
 await check('the site language stays independent of the edition', async () => {
-  // Reading the Italian site, subscribing in French: valid, and common.
   const result = validate(formOf({ ...SUBSCRIBE, locale: 'it', language: 'fr' }));
   assert(result.ok, 'an Italian visitor must be able to take the French edition');
   assert(result.data.locale === 'it', 'locale should record where they were');
@@ -222,8 +200,6 @@ await check('the site language stays independent of the edition', async () => {
 await check('newsletter can notify by email when there is no Brevo account', async () => {
   const sent = [];
   const log = console.log;
-  // Serialise properly - the transport logs an object, and args.join(' ')
-  // turned it into "[object Object]", hiding the subject the assertions read.
   console.log = (...args) =>
     sent.push(args.map((a) => (typeof a === 'string' ? a : JSON.stringify(a))).join(' '));
   try {
@@ -268,7 +244,6 @@ await check('newsletter uses Brevo double opt-in, with the consent record', asyn
 
   assert(calls.length === 1, `expected one Brevo call, got ${calls.length}`);
   const { url, body } = calls[0];
-  // The DOI endpoint, not /contacts - the contact must not be added directly.
   assert(/doubleOptinConfirmation$/.test(url), `wrong endpoint: ${url}`);
   assert(!/\/contacts$/.test(url), 'must not write to the list directly');
   assert(body.includeListIds[0] === 3, 'list id');
@@ -279,7 +254,6 @@ await check('newsletter uses Brevo double opt-in, with the consent record', asyn
   assert(!Number.isNaN(Date.parse(a.CONSENT_AT)), `consent timestamp: ${a.CONSENT_AT}`);
   assert(!Number.isNaN(Date.parse(a.SIGNUP_AT)), `signup date: ${a.SIGNUP_AT}`);
   assert(a.LANGUE === 'EN', `selected language: ${a.LANGUE}`);
-  // Read the German site, chose the English edition - both must survive.
   assert(a.SOURCE === 'website:newsletter:de', `source: ${a.SOURCE}`);
   assert(/\/en\/$/.test(body.redirectionUrl), `confirm lands in the chosen language: ${body.redirectionUrl}`);
 });
@@ -305,8 +279,6 @@ await check('the confirmation can be per-language when two templates exist', asy
 
 await check('a Brevo failure is surfaced, never swallowed', async () => {
   const realFetch = globalThis.fetch;
-  // The handler logs the failure on its way to a 502, which is right - the
-  // expected stack trace is muted here so it does not read as a broken test.
   const realError = console.error;
   globalThis.fetch = async () => new Response('nope', { status: 400 });
   console.error = () => {};
@@ -338,7 +310,6 @@ await check('contact and order notifications go out over Brevo transactional', a
   }
   assert(calls.length === 1, `expected one Brevo call, got ${calls.length}`);
   const { url, body, key } = calls[0];
-  // The TRANSACTIONAL endpoint, not the campaign or contact API.
   assert(url === 'https://api.brevo.com/v3/smtp/email', `wrong endpoint: ${url}`);
   assert(key === 'k', 'the same api-key header the newsletter uses');
   assert(body.to[0].email === ENV.CONTACT_RECIPIENT, 'recipient');
@@ -349,7 +320,6 @@ await check('contact and order notifications go out over Brevo transactional', a
 
 await check('unknown form kind falls back to contact', async () => {
   const result = validate(formOf({ ...SUBSCRIBE, form: 'wat' }));
-  // Falls back to contact, which needs fields the newsletter does not send.
   assert(!result.ok, 'should not validate as contact');
 });
 

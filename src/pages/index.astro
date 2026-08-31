@@ -1,16 +1,4 @@
 ---
-/**
- * Root entry point.
- *
- * `/` redirects to the default locale (`/fr/` - Geneva is the primary market).
- * The real redirect is a 301 issued by the host (see public/_redirects and
- * DEPLOY.md); this document is the fallback for hosts that only serve static
- * files, and it degrades to a plain language list when JavaScript and
- * meta-refresh are both unavailable.
- *
- * Marked noindex with a canonical to /fr/, so it never competes with the
- * localised pages in search results.
- */
 import { LOCALES, DEFAULT_LOCALE, SITE_URL } from '@/config/site';
 import { getContent } from '@/lib/i18n';
 

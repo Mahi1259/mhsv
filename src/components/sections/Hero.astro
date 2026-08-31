@@ -1,28 +1,7 @@
 ---
-/**
- * Hero - the only section with this weight.
- *
- * Carries the page's single <h1>. The tagline is three sentences in the
- * content pack ("Develop performance. Build the person. Prepare the future."),
- * so it is split and sequenced in ~300ms apart on load.
- *
- * The association / legal-status line is withheld behind SHOW_LEGAL_STATUS.
- */
 import { Image } from 'astro:assets';
 import { getContent, type Locale } from '@/lib/i18n';
 import { SHOW_LEGAL_STATUS } from '@/config/site';
-/*
- * The lockup MHSV® supplied on 26 August, trimmed to its own content box.
- *
- * Client-supplied, NOT derived by scripts/prepare-assets.mjs - which is why it
- * has its own filename: `assets:prepare` regenerates mhsv-logo.png from the
- * content pack and would overwrite this one on the next run.
- *
- * The file arrived with an uneven transparent margin - 195px on the left
- * against 174 on the right, 140 at the bottom against 9 at the top - so using
- * it as-is would have rendered it off-centre and smaller than its box. Trimmed
- * to 1254x1174 of actual artwork.
- */
 import logo from '@/assets/logo/mhsv-lockup.png';
 
 interface Props {
@@ -33,16 +12,11 @@ const { locale } = Astro.props;
 const c = getContent(locale);
 const hero = c.sections.hero;
 
-/** Split "A. B. C." into its sentences, keeping the full stops. */
 const taglineLines = hero.tagline
   .split(/(?<=\.)\s+/)
   .map((line) => line.trim())
   .filter(Boolean);
 
-/**
- * The pack gives four CTA labels in fixed order: discover / programmes /
- * request an assessment / become a partner.
- */
 const CTA_TARGETS = ['#about', '#programmes', '#contact', '#contact'];
 ---
 
@@ -53,11 +27,9 @@ const CTA_TARGETS = ['#about', '#programmes', '#contact', '#contact'];
         <span class="hero__brand">{hero.brand}</span>
         <span class="hero__institutional">{hero.institutional}</span>
       </h1>
-
       {SHOW_LEGAL_STATUS && <p class="hero__legal mono-label">{hero.legalStatus}</p>}
 
       <p class="hero__baseline">{hero.baseline}</p>
-
       <p class="hero__tagline">
         {
           taglineLines.map((line, i) => (
@@ -67,9 +39,7 @@ const CTA_TARGETS = ['#about', '#programmes', '#contact', '#contact'];
           ))
         }
       </p>
-
       <p class="lead hero__intro">{hero.intro}</p>
-
       <ul class="hero__ctas">
         {
           hero.ctas.map((label, i) => (
@@ -86,7 +56,6 @@ const CTA_TARGETS = ['#about', '#programmes', '#contact', '#contact'];
         }
       </ul>
     </div>
-
     <div class="hero__mark">
       <Image
         src={logo}
@@ -99,43 +68,18 @@ const CTA_TARGETS = ['#about', '#programmes', '#contact', '#contact'];
     </div>
   </div>
 </section>
-
 <style>
   .hero {
     overflow: hidden;
 
-    /*
-     * Run the hero's ground up behind the masthead.
-     *
-     * The bar is fixed and translucent, and `body` reserves --header-h for it.
-     * Left alone, that strip showed flat body navy while the hero's own wash
-     * (below, anchored `at 10% 0%`) started at the hero's top edge - so the
-     * page opened with a hard-edged rectangle straight across the top, right
-     * behind the navbar. Cancelling the reservation here and taking the same
-     * amount back as top padding puts the hero's box at y=0: the wash anchors
-     * at the true top of the page, the ground is continuous under the bar, and
-     * the hero's CONTENT does not move by a pixel.
-     */
     margin-block-start: calc(-1 * var(--header-h));
     --band-pad-top: calc(var(--band-pad) + var(--header-h));
 
-    /*
-     * Fill the screen. The hero's box now spans the masthead too, so this is
-     * the full viewport rather than the space below the bar - `100svh` alone
-     * used to make it taller than the room it actually had, and the calls to
-     * action fell past the fold on a laptop.
-     *
-     * Capped so a very tall window does not stretch it absurdly, and it is a
-     * min-height, so short windows let the content grow rather than clip it.
-     */
     min-height: min(100svh, calc(46rem + var(--header-h)));
     display: grid;
     align-items: center;
   }
 
-  /* A navy lift at the top, and nothing else. There was a gold wash behind the
-     mark too; at 14% it read as a yellow circle on the background rather than
-     as light. */
   .hero::before {
     content: '';
     position: absolute;
@@ -202,7 +146,6 @@ const CTA_TARGETS = ['#about', '#programmes', '#contact', '#contact'];
     color: var(--white);
   }
 
-  /* Sequenced in on load, ~300ms apart. */
   .hero__taglineLine {
     opacity: 0;
     transform: translateY(8px);
@@ -260,7 +203,6 @@ const CTA_TARGETS = ['#about', '#programmes', '#contact', '#contact'];
     }
   }
 
-  /* No entrance animation when motion is reduced - the lines are simply there. */
   @media (prefers-reduced-motion: reduce) {
     .hero__taglineLine {
       opacity: 1;

@@ -1,12 +1,4 @@
 ---
-/**
- * Document shell: head metadata, skip link, header, footer.
- *
- * `path` is the route *within* a locale ("" for the home page, "privacy/" for
- * the privacy page). Everything locale-aware - canonical, hreflang, the
- * language switcher - is derived from it, so a new page only has to pass its
- * own path once.
- */
 import { getContent, localeAlternates, localePath, pathForLocale, type Locale } from '@/lib/i18n';
 import { SITE_URL, DEFAULT_LOCALE, IS_PRODUCTION } from '@/config/site';
 import Header from '@/components/Header.astro';
@@ -20,7 +12,6 @@ interface Props {
   path?: string;
   title?: string;
   description?: string;
-  /** Set on pages that exist for a flow, not for search (form results). */
   noindex?: boolean;
 }
 
@@ -43,18 +34,6 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
     {
-      /* Preview and local builds are never indexable, whatever the page says. */
-      /*
-       * Two different noindexes, deliberately different.
-       *
-       * A whole non-production deployment gets "noindex, nofollow" - REMOVE
-       * BEFORE PRODUCTION LAUNCH, see VERCEL_IS_PROTOTYPE in site-url.mjs.
-       * Nothing on a prototype should be crawled onward.
-       *
-       * A single page marked noindex on the real site keeps "follow": the form
-       * result pages are not for search, but the links on them are ordinary
-       * site links and there is no reason to cut them.
-       */
       !IS_PRODUCTION ? (
         <meta name="robots" content="noindex, nofollow" />
       ) : (
@@ -62,8 +41,6 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
       )
     }
     <link rel="canonical" href={canonical} />
-
-    {/* Every language has a real URL, so search engines can index all four. */}
     {
       alternates.map((alt) => (
         <link rel="alternate" hreflang={alt.hreflang} href={new URL(alt.path, SITE_URL).href} />
@@ -74,7 +51,6 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
       hreflang="x-default"
       href={new URL(pathForLocale(path, DEFAULT_LOCALE), SITE_URL).href}
     />
-
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={c.brand.name} />
     <meta property="og:title" content={pageTitle} />
@@ -96,37 +72,19 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
     <meta name="twitter:description" content={pageDescription} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={c.seo.ogImageAlt} />
-
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#0C1D3A" />
-
     {
       preloadFonts.map((href) => (
         <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
       ))
     }
   </head>
-
   <body>
     <script is:inline>
-      /*
-       * THE FRAGMENT LANDING MUST BE INSTANT.
-       *
-       * `scroll-behavior: smooth` is set on :root for in-page navigation, but
-       * the browser applies it to the fragment scroll it performs on load too.
-       * Since the language switcher carries the reader's section across,
-       * arriving at /de/#team opened the German page at the top and glided
-       * down to the section - the page appearing to move on translate.
-       *
-       * Forced to `auto` for the landing and handed back on load, so clicking
-       * a section in the nav is still smooth. `is-booting` suppresses the
-       * masthead's transitions for the same window.
-       *
-       * Inline, and first thing in the body: a bundled module runs too late.
-       */
       (function () {
         var root = document.documentElement;
         root.classList.add('is-booting');
@@ -139,29 +97,9 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
         });
       })();
     </script>
-
     <a class="skip-link" href="#main">{c.ui.skipToContent}</a>
-
     <Header locale={locale} path={path} />
-
     <script is:inline>
-      /*
-       * THE BAR MUST ALREADY BE SHRUNK IN THE FIRST PAINTED FRAME.
-       *
-       * A fragment in the URL means the page is about to land deep in the
-       * document, where the bar is a pill - the language switcher produces
-       * exactly that. Deciding it in scripts/effects.ts is too late: that is a
-       * bundled module, so the browser is free to paint the full-width bar
-       * first and contract it afterwards, which is the bar seen expanding and
-       * shrinking during a translate.
-       *
-       * Placed immediately after the masthead so the element exists, and run
-       * during parsing so the class is set before any style is resolved for
-       * paint - no state change, therefore nothing to animate.
-       *
-       * `#main` is the skip link's target and sits at the top of the page, so
-       * it is not a deep landing.
-       */
       (function () {
         var hash = location.hash;
         if (hash.length < 2 || hash === '#main' || hash === '#top') return;
@@ -170,13 +108,11 @@ const ogImage = new URL('/og-image.png', SITE_URL).href;
         if (header) header.classList.add('is-shrunk');
       })();
     </script>
-
     <main id="main" tabindex="-1">
       <slot />
     </main>
     <Footer locale={locale} />
     <CookieBanner locale={locale} />
-
     <script>
       import '@/scripts/motion.ts';
       import '@/scripts/effects.ts';

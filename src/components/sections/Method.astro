@@ -1,15 +1,4 @@
 ---
-/**
- * Methodology & MITIPS® - feature type. The signature element.
- *
- * Six hexagons; selecting one expands its description. Built as a real
- * tablist: arrow keys move between pillars, Home/End jump to the ends, and the
- * panel is associated with its tab. With JavaScript off every description is
- * rendered in sequence instead, so nothing is lost.
- *
- * Pillar descriptions are provisional - the pack supplies only the six labels,
- * and the detailed internal protocols are explicitly not for publication.
- */
 import Band from '@/components/Band.astro';
 import SectionImage from '@/components/SectionImage.astro';
 import { getContent, type Locale } from '@/lib/i18n';
@@ -38,11 +27,8 @@ const acronym = s.pillars.map((p) => p.letter).join('');
     <div class="method__sticky" data-reveal-x>
       <p class="method__acronym" aria-hidden="true">{acronym}<span>®</span></p>
       <h3 class="method__subtitle">{s.pillarsTitle}</h3>
-      {/* Decorative echo of whichever pillar is in view - the pillar's own
-          heading is what assistive technology reads. */}
       <p class="method__active" data-active-pillar aria-hidden="true">{pillars[0].name}</p>
     </div>
-
     <ol class="pillars" data-pillars>
       {
         pillars.map((pillar) => (
@@ -62,20 +48,10 @@ const acronym = s.pillars.map((p) => p.letter).join('');
       }
     </ol>
   </div>
-
   <p class="prose-body method__note">{s.note}</p>
-
   <SectionImage locale={locale} image="method" align="start" />
 </Band>
-
 <script>
-  /**
-   * Crossfade the pinned label to whichever pillar is currently in view.
-   *
-   * Purely decorative: every pillar and its description is in the document and
-   * readable with this script absent, so nothing depends on it. The label is
-   * aria-hidden, which is why swapping its text is not an accessibility event.
-   */
   const root = document.querySelector<HTMLElement>('[data-pillars]');
   const label = document.querySelector<HTMLElement>('[data-active-pillar]');
 
@@ -93,7 +69,6 @@ const acronym = s.pillars.map((p) => p.letter).join('');
 
     const io = new IntersectionObserver(
       (entries) => {
-        // The pillar nearest the top of the reading area wins.
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
@@ -105,7 +80,6 @@ const acronym = s.pillars.map((p) => p.letter).join('');
     pillars.forEach((el) => io.observe(el));
   }
 </script>
-
 <style>
   .method {
     display: grid;
@@ -134,7 +108,6 @@ const acronym = s.pillars.map((p) => p.letter).join('');
     font-size: var(--text-h3);
   }
 
-  /* The pinned echo of the pillar currently being read. */
   .method__active {
     margin: 0 0 1.5rem;
     padding-block-start: 1rem;
@@ -160,7 +133,6 @@ const acronym = s.pillars.map((p) => p.letter).join('');
     max-width: 30ch;
   }
 
-  /* --- pillars ---------------------------------------------------------- */
   .pillars {
     display: grid;
     gap: 1.25rem;
@@ -225,10 +197,6 @@ const acronym = s.pillars.map((p) => p.letter).join('');
     margin-block-start: 2.5rem;
   }
 
-  /*
-   * Two columns with a pinned left rail. Only above 900px - a sticky column in
-   * a narrow viewport eats the screen, so below that it is ordinary flow.
-   */
   @media (min-width: 56.25rem) {
     .method {
       grid-template-columns: 40% minmax(0, 1fr);

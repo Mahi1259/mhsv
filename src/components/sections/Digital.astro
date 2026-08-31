@@ -1,6 +1,4 @@
 ---
-/** Digital & responsible innovation - grid type.
-    Phase 1 is a showcase site: this announces the roadmap only. */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import { capitalizeFirst } from '@/lib/text';
@@ -25,7 +23,6 @@ const roadmapItems = s.roadmapItems.map((item) => capitalizeFirst(item, locale))
     </div>
   </div>
 </Band>
-
 <style>
   .digital { display: grid; gap: 2.5rem; align-items: start; }
   .digital__title { color: var(--band-accent); margin: 0 0 1rem; }

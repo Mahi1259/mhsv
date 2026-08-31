@@ -1,5 +1,4 @@
 ---
-/** The founder - statement type. No photo in this phase. */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import type { SectionType } from '@/config/site';
@@ -18,7 +17,6 @@ const s = getContent(locale).sections.founder;
     <p class="prose-body">{s.bio}</p>
   </div>
 </Band>
-
 <style>
   .founder__quote {
     margin: 0 0 2.5rem;

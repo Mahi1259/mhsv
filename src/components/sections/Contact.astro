@@ -1,20 +1,4 @@
 ---
-/**
- * Contact - feature type.
- *
- * The ONLY place the contact details appear. They were previously repeated in
- * the footer's contact column as well, so the address, phone and email showed
- * up three times on one page.
- *
- * Every address here is infos@mhsv.ch, the institutional mailbox. Per the
- * 27 August instruction, no private address or phone number is published
- * outside the Governance section - where the founder's own address is the one
- * deliberate exception.
- *
- * There is no phone row. A mobile number was published here, as a tel: link,
- * in all four languages; it was a private number and has been withdrawn.
- * check-build.mjs now fails the build if a phone number reappears.
- */
 import Band from '@/components/Band.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import { getContent, type Locale } from '@/lib/i18n';
@@ -38,7 +22,6 @@ const rows = [
 
 <Band locale={locale} anchor={s.anchor} title={s.title} type={type}>
   <p class="contact__tagline">{s.tagline}</p>
-
   <div class="contact">
     <div class="contact__details">
       <h3 class="mono-label contact__title">{s.detailsTitle}</h3>
@@ -57,14 +40,12 @@ const rows = [
         }
       </address>
     </div>
-
     <div class="contact__form">
       <h3 class="mono-label contact__title">{s.formTitle}</h3>
       <ContactForm locale={locale} />
     </div>
   </div>
 </Band>
-
 <style>
   .contact__tagline {
     margin: 0 0 clamp(2rem, 1.4rem + 2.4vw, 3rem);

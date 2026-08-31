@@ -1,11 +1,4 @@
 ---
-/**
- * Our mission - grid type.
- *
- * Unnumbered on purpose. These six areas are a set, not a sequence: numbering
- * them added a second layer of "slide deck" on top of the section numbers,
- * and implied a precedence the content pack never states.
- */
 import Band from '@/components/Band.astro';
 import SectionImage from '@/components/SectionImage.astro';
 import { getContent, type Locale } from '@/lib/i18n';
@@ -31,10 +24,8 @@ const s = getContent(locale).sections.mission;
       ))
     }
   </ul>
-
   <SectionImage locale={locale} image="mission" align="end" />
 </Band>
-
 <style>
   .mission {
     display: grid;

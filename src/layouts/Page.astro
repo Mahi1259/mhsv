@@ -1,8 +1,4 @@
 ---
-/**
- * Layout for the short standalone pages (privacy, legal notice, form results).
- * Narrow measure, same masthead and footer as the main document.
- */
 import Base from '@/layouts/Base.astro';
 import type { Locale } from '@/lib/i18n';
 
@@ -29,7 +25,6 @@ const { locale, path, title, description, eyebrow, noindex = false } = Astro.pro
     </div>
   </article>
 </Base>
-
 <style>
   .page {
     padding-block: clamp(3rem, 2rem + 5vw, 6rem);

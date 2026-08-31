@@ -1,17 +1,4 @@
 ---
-/**
- * Founding programmes & fees - feature type.
- *
- * MERGE: the content pack keeps these as two sections (§10 Founding
- * programmes, §13 Fees & access). Rendered separately, the CHF 15,000 launch
- * rate was stated three times on one page - once in each programme table and
- * again in the fees section. They are one section now, and the rate is stated
- * exactly once.
- *
- * The fee rows are filtered out of the two programme tables by detecting the
- * currency in the value, which works across all four locales without a
- * per-language label list.
- */
 import Band from '@/components/Band.astro';
 import SectionImage from '@/components/SectionImage.astro';
 import { getContent, type Locale } from '@/lib/i18n';
@@ -32,7 +19,6 @@ const tables = s.tables.map((table) => ({
   entries: table.entries.filter((entry) => !/CHF/i.test(entry.value)),
 }));
 
-/** "CHF 15'000 / year / beneficiary - launch rate" -> amount + qualifier. */
 const match = /^(.*?)\s[-–—]\s(.*)$/.exec(fees.priceLine);
 const amount = match ? match[1] : fees.priceLine;
 const qualifier = match ? match[2] : null;
@@ -57,7 +43,6 @@ const qualifier = match ? match[2] : null;
         <p class="fee__included">{fees.included}</p>
       </div>
     </aside>
-
     <div class="offer__programmes" data-stagger>
       {
         tables.map((table) => (
@@ -76,14 +61,11 @@ const qualifier = match ? match[2] : null;
       }
     </div>
   </div>
-
   <div class="prose-body offer__notes">
     {fees.paragraphs.map((text) => <p>{text}</p>)}
   </div>
-
   <SectionImage locale={locale} image="fees" align="end" />
 </Band>
-
 <style>
   .offer {
     display: grid;
@@ -94,9 +76,6 @@ const qualifier = match ? match[2] : null;
   .offer__programmes {
     display: grid;
     gap: 1.25rem;
-    /* Cards size to their own content. Stretching them to a common height left
-       the shorter one with a large empty tail - the two programmes genuinely
-       have different numbers of rows. */
     align-items: start;
   }
 
@@ -146,11 +125,6 @@ const qualifier = match ? match[2] : null;
     line-height: 1.45;
   }
 
-  /*
-   * The launch rate - stated once on the page, as a wide strip rather than a
-   * tall third column. As a column it forced the two programme cards into
-   * ~390px each, which was too narrow to set a label beside its value.
-   */
   .fee {
     display: grid;
     gap: 0.875rem;
@@ -201,18 +175,12 @@ const qualifier = match ? match[2] : null;
       grid-template-columns: repeat(2, 1fr);
     }
 
-    /*
-     * Label beside value, not above it. Stacked, each row cost 77px and the
-     * card ran to 464px with most of its width empty; side by side the same
-     * content reads in roughly half the height.
-     */
     .programme__row {
       grid-template-columns: 7.5rem minmax(0, 1fr);
       gap: 0.875rem;
       align-items: baseline;
     }
 
-    /* Two columns of notes rather than one long measure. */
     .offer__notes {
       columns: 2;
       column-gap: 2.5rem;
@@ -229,7 +197,6 @@ const qualifier = match ? match[2] : null;
   }
 
   @media (min-width: 52rem) {
-    /* Headline left, terms right - one line rather than a stacked block. */
     .fee {
       grid-template-columns: minmax(0, auto) minmax(0, 1fr);
       gap: 2.5rem;

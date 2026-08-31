@@ -1,6 +1,4 @@
 ---
-/** Newsletter double-opt-in notice, for visitors without JavaScript.
-    Nobody is subscribed until they click the link in the confirmation email. */
 import Page from '@/layouts/Page.astro';
 import { getContent, localePath } from '@/lib/i18n';
 import { LOCALES, type Locale } from '@/config/site';
@@ -17,7 +15,6 @@ const c = getContent(locale);
   <p class="result">{c.newsletterForm.successBody}</p>
   <a class="btn btn--ghost" href={localePath('', locale)}>{c.nav.items[0].label}</a>
 </Page>
-
 <style>
   .result {
     margin: 0 0 2rem;

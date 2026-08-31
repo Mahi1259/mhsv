@@ -1,42 +1,5 @@
-/**
- * HTML body for the internal notification emails.
- *
- * Internal only - this goes to MHSV® staff when someone submits the contact
- * form or requests the Founding Book. It is not a newsletter and not a
- * public-facing design, so it stays deliberately plain: one column, a header,
- * a table of what was submitted, the message, a footer.
- *
- * IN FRENCH, and only French, whatever language the visitor used. There is one
- * recipient mailbox, so there is one audience - MHSV® in Geneva - not four.
- * Translating the labels to the visitor's locale would send that mailbox
- * German- and Italian-labelled mail, which nobody there asked for and which
- * would inherit the DE/IT text still awaiting native review. French is the
- * organisation's own language and the one its legal notice says prevails.
- *
- * What the VISITOR wrote is never touched: their name, subject, profile and
- * message arrive exactly as typed.
- *
- * Written for MAIL CLIENTS, not browsers. Tables for layout, inline styles
- * only, no flexbox, no grid, no <style> block - Outlook and Gmail strip or
- * ignore most of what a web page relies on. If this looks like 2005 HTML, that
- * is why.
- *
- * The plain-text version in contact-core.mjs is still sent alongside it. Both
- * go in every message: some readers prefer text, some filters score
- * text-less mail worse, and a broken HTML part should never mean an unreadable
- * notification.
- */
-
 import { CREST_CID } from './crest-logo.mjs';
 
-/**
- * Where the crest comes from when it is NOT embedded.
- *
- * Always the production domain, never PUBLIC_SITE_URL. That variable is
- * whatever the running instance is - http://localhost:8788 in dev - and mail is
- * read in a client that has no idea what that is. Emails went out with a
- * localhost image URL until this was fixed.
- */
 const PRODUCTION_ORIGIN = 'https://www.mhsv.ch';
 
 const NAVY = '#0C1D3A';
@@ -46,15 +9,6 @@ const MUTED = '#5b6675';
 const RULE = '#dfe3e9';
 const PAPER = '#f4f6f9';
 
-/**
- * Escape everything that came from the form.
- *
- * This is the important line in the file. Every value below is typed by a
- * stranger on a public form and then dropped into HTML that MHSV® staff open in
- * their mail client. Without this, a name like `<img src=x onerror=...>` is
- * markup by the time it reaches them. The plain-text version never had this
- * problem, which is exactly why it is easy to forget when adding an HTML one.
- */
 function esc(value) {
   return String(value ?? '')
     .replace(/&/g, '&amp;')
@@ -64,17 +18,10 @@ function esc(value) {
     .replace(/'/g, '&#39;');
 }
 
-/** Keep the visitor's line breaks without letting any other markup through. */
 function escMultiline(value) {
   return esc(value).replace(/\r?\n/g, '<br />');
 }
 
-/**
- * The fields for each form, in the order staff read them.
- *
- * Same shape as the plain-text renderer so the two cannot drift into showing
- * different things.
- */
 function fieldsFor(data) {
   if (data.kind === 'newsletter') {
     return [
@@ -105,26 +52,10 @@ function fieldsFor(data) {
   ];
 }
 
-/**
- * @param {object} data     validated submission
- * @param {object} [options]
- * @param {boolean} [options.embedLogo]  reference the crest as a cid: attachment
- * @param {string}  [options.siteUrl]    override the origin for the linked crest
- */
 export function renderEmailHtml(data, options = {}) {
-  /*
-   * A localhost or 127.0.0.1 origin is never usable from a mail client, so it
-   * is discarded rather than passed through - dev would otherwise send mail
-   * pointing at the developer's own machine.
-   */
   const given = String(options.siteUrl || '').replace(/\/+$/, '');
   const siteUrl = given && !/localhost|127\.0\.0\.1|0\.0\.0\.0/.test(given) ? given : PRODUCTION_ORIGIN;
 
-  /*
-   * Embedded beats linked every time here. The crest travels with the message,
-   * so it shows even though www.mhsv.ch is not serving yet and even where
-   * remote images are blocked - which is the default in most clients.
-   */
   const logoSrc = options.embedLogo ? `cid:${CREST_CID}` : `${siteUrl}/icon-192.png`;
   const isOrder = data.kind === 'book-order';
   const isNewsletter = data.kind === 'newsletter';
@@ -160,11 +91,6 @@ export function renderEmailHtml(data, options = {}) {
           : '(aucun message)'
       }</span>`;
 
-  /*
-   * The order banner. The Founding Book flow is a REQUEST, never a purchase -
-   * there is no price and no payment anywhere - and the person reading this
-   * needs to know that before they reply as if money had changed hands.
-   */
   const newsletterBanner = isNewsletter
     ? `
               <tr>
@@ -198,13 +124,10 @@ export function renderEmailHtml(data, options = {}) {
   <div style="display:none;max-height:0;overflow:hidden;opacity:0;">${esc(heading)} - ${esc(
     `${data.firstName} ${data.lastName}`,
   )}</div>
-
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${PAPER};">
     <tr>
       <td align="center" style="padding:24px 12px;">
-
         <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;">
-
           <!--
             Header. The crest is embedded as a cid: attachment where the
             transport supports it, and linked otherwise - and a linked one will
@@ -228,15 +151,12 @@ export function renderEmailHtml(data, options = {}) {
               </table>
             </td>
           </tr>
-
           <tr>
             <td style="padding:18px 24px;background:#ffffff;border-left:1px solid ${RULE};border-right:1px solid ${RULE};border-bottom:1px solid ${RULE};">
               <h1 style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:18px;line-height:1.3;color:${INK};font-weight:bold;">${esc(heading)}</h1>
             </td>
           </tr>
-
           <tr><td style="height:20px;line-height:20px;font-size:0;">&nbsp;</td></tr>
-
 ${orderBanner}${newsletterBanner}
           <!-- Submitted fields -->
           <tr>
@@ -246,9 +166,7 @@ ${orderBanner}${newsletterBanner}
               </table>
             </td>
           </tr>
-
           <tr><td style="height:20px;line-height:20px;font-size:0;">&nbsp;</td></tr>
-
           <!-- Message -->
           <tr>
             <td style="padding:16px 18px;background:#ffffff;border:1px solid ${RULE};border-left:3px solid ${GOLD};border-radius:4px;">
@@ -256,15 +174,12 @@ ${orderBanner}${newsletterBanner}
               <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:${INK};">${message}</div>
             </td>
           </tr>
-
           <tr><td style="height:20px;line-height:20px;font-size:0;">&nbsp;</td></tr>
-
           <tr>
             <td style="padding:0 4px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:${MUTED};">
               Envoyé depuis le site MHSV&reg;. Répondez directement à ce message pour joindre l’expéditeur.
             </td>
           </tr>
-
         </table>
       </td>
     </tr>

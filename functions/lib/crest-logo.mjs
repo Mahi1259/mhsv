@@ -1,14 +1,3 @@
-/**
- * The MHSV® crest, inlined as base64 for the notification emails.
- *
- * Bundled rather than read from disk because this runs in a Cloudflare Worker,
- * where there is no filesystem, and rather than linked because a remote image
- * cannot work: www.mhsv.ch is not serving yet, and mail clients block remote
- * images by default even once it is.
- *
- * 88px - the 44px header slot at 2x - trimmed of its transparent margin.
- * Regenerate with scripts/build-crest.mjs if the logo changes.
- */
 export const CREST_CID = 'mhsv-crest';
 export const CREST_FILENAME = 'mhsv-crest.png';
 export const CREST_BASE64 =

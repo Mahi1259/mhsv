@@ -1,12 +1,4 @@
 ---
-/**
- * The MHSV® pathway - feature type.
- *
- * Numbering is kept: these are six genuine steps and the order is the meaning.
- * The connecting line draws itself as the section scrolls into view (a CSS
- * scale transform driven by one class, so reduced-motion collapses it to
- * "already drawn").
- */
 import Band from '@/components/Band.astro';
 import SectionImage from '@/components/SectionImage.astro';
 import { getContent, type Locale } from '@/lib/i18n';
@@ -40,12 +32,9 @@ const s = getContent(locale).sections.pathway;
       }
     </ol>
   </div>
-
   <SectionImage locale={locale} image="pathway" align="end" />
 </Band>
-
 <script>
-  // Draw the line once, when the flow reaches the viewport.
   const flows = document.querySelectorAll<HTMLElement>('[data-flow]');
   if (flows.length) {
     const io = new IntersectionObserver(
@@ -61,7 +50,6 @@ const s = getContent(locale).sections.pathway;
     flows.forEach((el) => io.observe(el));
   }
 </script>
-
 <style>
   .flow {
     position: relative;
@@ -105,7 +93,6 @@ const s = getContent(locale).sections.pathway;
     hyphens: auto;
   }
 
-  /* Vertical rule on narrow screens. */
   .flow__line {
     position: absolute;
     left: 1.25rem;
@@ -138,7 +125,6 @@ const s = getContent(locale).sections.pathway;
       gap: 0.875rem;
     }
 
-    /* Horizontal rule threading the markers. */
     .flow__line {
       left: 0;
       right: 0;

@@ -1,13 +1,4 @@
 ---
-/**
- * Common scaffolding for the three forms: the POST target, the hidden locale
- * and form-kind fields, the honeypot, the timing stamp, the submit row and the
- * live result region.
- *
- * Spam protection is a honeypot plus a timing check, with no third-party
- * CAPTCHA - a CAPTCHA would send visitor data to a third party, which is
- * exactly what this site avoids everywhere else.
- */
 import Bilingual from '@/components/Bilingual.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 
@@ -21,28 +12,12 @@ type FormShellStrings = {
 
 interface Props {
   locale: Locale;
-  /**
-   * A second language to show alongside the first. Set on a page that is
-   * itself bilingual - /livre - so its form does not end up in one language
-   * while the copy around it is in two.
-   */
   altLocale?: Locale;
-  /** Matches FORM_KINDS in functions/lib/contact-core.mjs. */
   kind: 'contact' | 'book-order' | 'newsletter';
   id: string;
   submitLabel: string;
-  /**
-   * The submit label in `altLocale`. Without it the button stayed in the
-   * primary language while the rest of the page switched - /livre?lang=en gave
-   * an English form headed "Envoyer ma demande".
-   */
   altSubmitLabel?: string;
   strings: FormShellStrings;
-  /**
-   * The same strings in `altLocale`. Emitted as a second block; the page that
-   * switches language swaps it in before scripts/forms.ts reads either, so a
-   * validation message comes back in the language being shown.
-   */
   altStrings?: FormShellStrings;
   class?: string;
 }
@@ -63,19 +38,15 @@ const alt = altLocale ? getContent(altLocale) : null;
 >
   <input type="hidden" name="form" value={kind} />
   <input type="hidden" name="locale" value={locale} />
-  {/* Stamped client-side; absent without JS, where the honeypot alone applies. */}
   <input type="hidden" name="rendered_at" value="" />
-
-  {/* Honeypot: off-screen rather than display:none, which some bots detect. */}
+  {/* Off-screen rather than display:none, which some bots detect. */}
   <div class="form__trap" aria-hidden="true">
     <label for={`${id}-website`}>
       {alt ? <Bilingual fr={c.form.honeypotLabel} en={alt.form.honeypotLabel} /> : c.form.honeypotLabel}
     </label>
     <input id={`${id}-website`} name="website_url" type="text" tabindex="-1" autocomplete="off" />
   </div>
-
   <slot />
-
   <div class="form__actions">
     <button
       class="btn btn--primary"
@@ -90,15 +61,11 @@ const alt = altLocale ? getContent(altLocale) : null;
       {alt ? <Bilingual fr={c.ui.required} en={alt.ui.required} /> : c.ui.required}
     </p>
   </div>
-
   <div class="form__result" data-result role="status" aria-live="polite" hidden>
     <p class="form__resultTitle" data-result-title></p>
     <p class="form__resultBody" data-result-body></p>
   </div>
 </form>
-
-{/* Data, not code - is:inline is explicit so Astro does not try to process it
-    and does not warn that it will anyway. */}
 <script is:inline type="application/json" data-form-strings={id} set:html={JSON.stringify(strings)} />
 {
   altStrings && (
@@ -170,7 +137,6 @@ const alt = altLocale ? getContent(altLocale) : null;
     border-radius: var(--radius);
     color: var(--band-fg);
     font-family: var(--font-body);
-    /* 16px prevents iOS Safari zooming on focus. */
     font-size: 1rem;
     line-height: 1.5;
     transition: border-color 160ms var(--ease);

@@ -1,30 +1,9 @@
 ---
-/**
- * A licensed photograph for a section, rendered only if the file is there.
- *
- * The four slots are declared in the markup and in IMAGE_BRIEF.md; the files
- * are not in the repository yet. Rather than shipping broken images or a
- * hard-coded import that fails the build, this looks the file up and renders
- * nothing when it is absent - so the site is correct with no photographs and
- * complete the moment they are dropped in.
- *
- * No caption or credit here. Unsplash's licence does not require attribution,
- * and the photographers are all listed on the Photo Credits page instead, which
- * the footer links to.
- */
 import { Picture } from 'astro:assets';
 import { getContent, type Locale } from '@/lib/i18n';
 
 interface Props {
   locale: Locale;
-  /**
-   * Matches the file stem in src/assets/stock/ and the key in content.
-   *
-   * NOT called `slot`. `slot` is reserved in Astro for named-slot assignment,
-   * so `<SectionImage slot="about" />` was read as "put this child in the
-   * parent's slot named about" - and since Band has only a default slot, the
-   * component was dropped without rendering and without error.
-   */
   image:
     | 'about'
     | 'mission'
@@ -36,10 +15,6 @@ interface Props {
     | 'fees'
     | 'ecosystem'
     | 'inclusion';
-  /**
-   * Which edge the figure sits against. Alternated down the page so the
-   * photographs read as an editorial rhythm rather than a column of banners.
-   */
   align?: 'start' | 'end';
 }
 
@@ -60,14 +35,6 @@ const meta = c.stock[image] as { alt: string };
   entry && (
     <figure class:list={['section-image', `section-image--${align}`]}>
       <div class="section-image__frame">
-        {/*
-          fallbackFormat is jpg, not png: these are photographs, and a PNG
-          fallback of a 2000px photo runs to tens of megabytes - one reached
-          56MB - because PNG is lossless and built for flat colour.
-
-          `sizes` is measured, not guessed: in this frame they render about
-          590px wide at a 1440px viewport.
-        */}
         <Picture
           src={entry[1].default}
           alt={meta.alt}
@@ -84,22 +51,11 @@ const meta = c.stock[image] as { alt: string };
 }
 
 <style>
-  /*
-   * A photograph, not a banner.
-   *
-   * These were the full width of the text column, at their own aspect ratios,
-   * hard against the paragraph above - 918px of saturated colour interrupting
-   * a navy page set in restrained type. Three things fix that: space, a
-   * consistent frame, and a tint that puts them in the palette instead of on
-   * top of it.
-   */
   .section-image {
-    /* The gap that was missing entirely. */
     margin: clamp(2.5rem, 2rem + 2vw, 4rem) 0 0;
     max-width: 38rem;
   }
 
-  /* Alternated at the call sites, so the eye is not led down one edge. */
   .section-image--end {
     margin-inline-start: auto;
   }
@@ -108,10 +64,6 @@ const meta = c.stock[image] as { alt: string };
     margin-inline-end: auto;
   }
 
-  /*
-   * One ratio for every photograph. They arrived between 3:2 and 16:9, which
-   * made each section a different height for no reason a reader could see.
-   */
   .section-image__frame {
     position: relative;
     aspect-ratio: 3 / 2;
@@ -125,16 +77,9 @@ const meta = c.stock[image] as { alt: string };
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Pulled back from full saturation so the photographs sit beside gold and
-       navy rather than competing with them. */
     filter: saturate(0.78) contrast(1.04);
   }
 
-  /*
-   * A navy wash, deepest at the foot, so the frame settles into the ground it
-   * sits on instead of ending in a hard bright edge. The caption reads on the
-   * ground below, not on the image, so nothing here affects its contrast.
-   */
   .section-image__frame::after {
     content: '';
     position: absolute;
@@ -147,5 +92,4 @@ const meta = c.stock[image] as { alt: string };
       rgb(7 20 38 / 0.62) 100%
     );
   }
-
 </style>

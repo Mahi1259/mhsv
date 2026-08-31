@@ -1,15 +1,4 @@
 ---
-/**
- * Publication-status badge - compact.
- *
- * Six sections carry a status. Printing the label, the pack's full wording and
- * the definition on each of them repeated the same sentence six times down the
- * page. Now the badge shows the label only; the definition is the accessible
- * name (tooltip + screen-reader text), and the full set is explained once in
- * the legend under the roadmap.
- *
- * Colour is never the only signal - the state is always spelled out.
- */
 import { getContent, type Locale } from '@/lib/i18n';
 import type { StatusKey } from '@/config/site';
 
@@ -29,7 +18,6 @@ const item = c.status.items[status];
   <span>{item.label}</span>
   <span class="visually-hidden">: {item.description}</span>
 </p>
-
 <style>
   .status {
     display: inline-flex;

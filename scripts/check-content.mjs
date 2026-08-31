@@ -1,18 +1,3 @@
-/**
- * Build-time content gate.  `npm run content:check`
- *
- * Fails the build when:
- *   1. any locale is missing a key present in another (semantic parity is a
- *      client requirement - every language must say the same things);
- *   2. parallel arrays have different lengths (e.g. 6 mission areas in FR but
- *      5 in DE);
- *   3. a string value is empty - usually a silent extraction failure;
- *   4. banned wording appears (hard constraint: "Beyond Football" is retired,
- *      the baseline is "Beyond Sport – Beyond Human Potential");
- *   5. content references an asset the client has not cleared for publication.
- *
- * Keys beginning with "_" are notes/audit data and are exempt from parity.
- */
 import { readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -20,7 +5,6 @@ import { fileURLToPath } from 'node:url';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const LOCALES = ['fr', 'en', 'de', 'it'];
 
-/** Wording the client has explicitly retired or not cleared for publication. */
 const BANNED = [
   { pattern: /beyond\s+football/i, why: 'retired baseline (hard constraint #2)' },
   { pattern: /REFERENCE_ONLY/i, why: 'reference-only asset must not be published' },
@@ -28,16 +12,6 @@ const BANNED = [
   { pattern: /REVIEW_REQUIRED/i, why: 'asset not cleared for publication' },
 ];
 
-/**
- * Keys whose ARRAY LENGTH is allowed to differ between locales.
- *
- * `titleLines` is a heading pre-split into display lines for the masked
- * reveal. The split is deliberately per language - "WHO / WE ARE" is two lines
- * in English while "ÜBER UNS" is one in German - so demanding equal lengths
- * here would force a wrong line break into one of the languages. The key must
- * still exist everywhere, and every locale's lines must still join back to its
- * own heading (checked below); only the count is free to vary.
- */
 const LENGTH_MAY_VARY = [/\.titleLines$/];
 
 const errors = [];
@@ -45,7 +19,6 @@ const warnings = [];
 
 const isPlain = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
 
-/** Flatten to "a.b[0].c" -> value, skipping underscore-prefixed subtrees. */
 function flatten(value, prefix = '', out = new Map()) {
   if (Array.isArray(value)) {
     out.set(`${prefix}[]`, `length:${value.length}`);
@@ -72,7 +45,6 @@ for (const loc of LOCALES) {
   }
 }
 
-// --- 1 & 2: key + array-length parity, measured against the reference locale.
 const REF = 'fr';
 const flat = Object.fromEntries(LOCALES.map((l) => [l, flatten(data[l])]));
 
@@ -97,7 +69,6 @@ for (const loc of LOCALES) {
   }
 }
 
-// --- 3: empty values
 for (const loc of LOCALES) {
   const walk = (v, path) => {
     if (typeof v === 'string') {
@@ -115,7 +86,6 @@ for (const loc of LOCALES) {
   walk(data[loc], '');
 }
 
-// --- 3b: a split heading must join back to its own heading exactly ---------
 for (const loc of LOCALES) {
   const sections = data[loc].sections ?? {};
   for (const [id, section] of Object.entries(sections)) {
@@ -129,7 +99,6 @@ for (const loc of LOCALES) {
   }
 }
 
-// --- 4 & 5: banned wording / uncleared assets
 for (const loc of LOCALES) {
   const serialised = JSON.stringify(data[loc]);
   for (const { pattern, why } of BANNED) {
@@ -138,7 +107,6 @@ for (const loc of LOCALES) {
   }
 }
 
-// --- report
 for (const w of warnings) console.warn(`  ! ${w}`);
 if (errors.length) {
   console.error(`\n✗ content check failed (${errors.length} error${errors.length > 1 ? 's' : ''}):\n`);
@@ -147,21 +115,6 @@ if (errors.length) {
   process.exit(1);
 }
 
-/*
- * A headed section must have a body.
- *
- * "1. Introduction" shipped on the data protection page for three days as a
- * heading with nothing under it: its seven paragraphs had been transcribed into
- * a separate `intro` field, which renders ABOVE the numbered headings, so the
- * text was on the page but the section was empty. Nobody reading the page would
- * call that correct, and the check that should have caught it said only
- * "! empty array at dataProtection.sections[0].paragraphs" - a warning, among
- * two dozen benign ones, which I read past every build.
- *
- * So it is an error now, and specific: a section with a heading and neither a
- * paragraph nor a list item is a transcription that lost its text. Sections
- * with a null heading are continuation blocks and are left alone.
- */
 for (const loc of LOCALES) {
   for (const [doc, value] of Object.entries(data[loc])) {
     const sections = value?.sections;

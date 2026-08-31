@@ -1,11 +1,4 @@
 ---
-/**
- * Who we are - statement type.
- *
- * The pack's opening sentence names "MHSV Association" and states the legal
- * form, which the client instruction withholds pending the lawyer. While
- * SHOW_LEGAL_STATUS is off, a neutral authored sentence opens instead.
- */
 import Band from '@/components/Band.astro';
 import SectionImage from '@/components/SectionImage.astro';
 import { getContent, type Locale } from '@/lib/i18n';
@@ -26,10 +19,8 @@ const lead = SHOW_LEGAL_STATUS ? s.lead : s.leadNoLegalStatus;
   <div class="prose-body about__body">
     {s.paragraphs.map((text) => <p>{text}</p>)}
   </div>
-
   <SectionImage locale={locale} image="about" align="start" />
 </Band>
-
 <style>
   .statement-lead {
     margin: 0 0 2.25rem;

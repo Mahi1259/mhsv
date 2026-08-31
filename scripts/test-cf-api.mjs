@@ -1,14 +1,3 @@
-/**
- * Tests the Cloudflare Pages Function in functions/api/contact.js.
- *
- * Cloudflare hands the handler a Web Request and its own `env` bindings object
- * rather than process.env, so this calls it exactly that way: a real Request,
- * a plain object for env, and nothing read from the ambient environment. If
- * the handler ever reaches for process.env, these tests fail on Cloudflare's
- * behalf before a deploy does.
- *
- *   npm run test:cf
- */
 import { onRequestPost, onRequest } from '../functions/api/contact.js';
 
 const ENV = {
@@ -49,7 +38,6 @@ const CONTACT = {
   rendered_at: String(Date.now() - 8000),
 };
 
-/** The newsletter carries `language`, which is what it subscribes. */
 const NEWSLETTER = {
   form: 'newsletter',
   locale: 'fr',
@@ -60,7 +48,6 @@ const NEWSLETTER = {
   rendered_at: String(Date.now() - 8000),
 };
 
-// --- the three form kinds all reach the one endpoint ------------------------
 for (const [kind, extra] of [
   ['contact', {}],
   ['book-order', { organisation: 'FC Example', country: 'Suisse', edition: 'fr', quantity: '2' }],
@@ -72,7 +59,6 @@ for (const [kind, extra] of [
   check(res.status === 200 && body.ok === true, `${kind}: accepted`, `HTTP ${res.status}`);
 }
 
-// --- validation, honeypot, method, locale ----------------------------------
 {
   const res = await onRequestPost({ request: post({ ...CONTACT, email: 'not-an-email' }), env: ENV });
   const body = await res.json();
@@ -90,9 +76,6 @@ for (const [kind, extra] of [
   const res = await onRequest({ request: new Request('https://www.mhsv.ch/api/contact'), env: ENV });
   check(res.status === 405, 'GET is refused');
 }
-// The no-JavaScript path must land on the SUCCESS page in the visitor's own
-// language. Asserting only the /{locale}/ prefix passed while every one of
-// these was quietly redirecting to message-ERROR.
 for (const locale of ['fr', 'en', 'de', 'it']) {
   const res = await onRequestPost({ request: post({ ...CONTACT, locale }, { json: false }), env: ENV });
   const location = res.headers.get('location') ?? '';
@@ -103,7 +86,6 @@ for (const locale of ['fr', 'en', 'de', 'it']) {
   );
 }
 
-// --- the recipient is never hard-coded -------------------------------------
 {
   const res = await onRequestPost({ request: post(CONTACT), env: { ...ENV, CONTACT_RECIPIENT: '' } });
   const body = await res.json();

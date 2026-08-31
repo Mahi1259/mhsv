@@ -1,14 +1,6 @@
 @import 'tailwindcss';
 @import './fonts.css';
 
-/* ==========================================================================
-   MHSV® design tokens
-
-   The ground is navy, not black. The approved logo's shield is #001D49; black
-   sits badly beside it and reads as muddy, while navy lets the crest belong to
-   the page. Gold is an accent only - rules, active states, small marks - and
-   is never used as a large fill.
-   ========================================================================== */
 @theme {
   --color-navy: #0c1d3a;
   --color-navy-deep: #071426;
@@ -21,7 +13,6 @@
   --font-body: 'Source Sans 3', 'Helvetica Neue', Arial, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
 
-  /* Fluid type. Lower bounds are sized for 320px, where German is widest. */
   --text-eyebrow: 0.6875rem;
   --text-hero: clamp(2.5rem, 1.1rem + 6.6vw, 5.25rem);
   --text-statement: clamp(1.5rem, 1rem + 2.4vw, 2.75rem);
@@ -31,9 +22,6 @@
 
   --radius: 4px;
 
-  /* Motion.
-     --ease-out decelerates hard at the end, so movement arrives and settles
-     rather than drifting. ease-in-out is what makes reveals feel sluggish. */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease: var(--ease-out);
   --dur-fast: 180ms;
@@ -42,12 +30,8 @@
   --stagger: 70ms;
 }
 
-/* ==========================================================================
-   Base
-   ========================================================================== */
 @layer base {
   :root {
-    /* Semantic aliases so components never reach for a raw brand colour. */
     --navy: var(--color-navy);
     --navy-deep: var(--color-navy-deep);
     --navy-raise: var(--color-navy-raise);
@@ -59,7 +43,6 @@
     --hairline-soft: rgb(255 255 255 / 0.055);
     --hairline-strong: rgb(255 255 255 / 0.18);
 
-    /* Per-band, redefined by the tone classes. */
     --band-bg: var(--color-navy-deep);
     --band-fg: var(--color-white);
     --band-muted: var(--muted-on-dark);
@@ -69,24 +52,14 @@
     --card-edge: rgb(255 255 255 / 0.14);
     --focus-ring: var(--color-gold-soft);
 
-    /* Expanded masthead height, and the breathing room a heading should keep
-       below it after an anchor jump. Used by the scroll-margin maths on
-       .band, and by `body` to reserve the space the fixed bar no longer
-       occupies. Measured against the EXPANDED bar: the shrunk pill is ~3px
-       shorter, which only ever lands a heading marginally lower. */
     --header-h: 4.3rem;
     --anchor-gap: 1.5rem;
 
     color-scheme: dark;
     scroll-behavior: smooth;
-    /* Deliberately 0: each band positions itself with scroll-margin-top
-       instead, because a single scroll-padding cannot account for the
-       different top padding of the five section archetypes. */
     scroll-padding-top: 0;
   }
 
-  /* Reduced motion comes FIRST and wins: every transition, animation and
-     scroll behaviour collapses to instant. Accessibility requirement. */
   @media (prefers-reduced-motion: reduce) {
     :root {
       scroll-behavior: auto;
@@ -102,13 +75,6 @@
       scroll-behavior: auto !important;
     }
 
-    /*
-     * Nothing may be left hidden or displaced.
-     *
-     * Masked line reveals are the most common way a site accidentally hides
-     * all of its own text - the mask stays and the text never slides in. Every
-     * reveal mechanism is listed here explicitly for that reason.
-     */
     [data-reveal],
     [data-reveal-x],
     [data-stagger] > *,
@@ -122,43 +88,11 @@
       transform: none !important;
     }
 
-    /* Sticky panes become normal flow - a pinned column with no motion to
-       justify it just eats the viewport. */
     .method__sticky {
       position: static !important;
     }
-
   }
 
-  /*
-   * NO PAGE TRANSITION. Deliberate, and it should stay that way.
-   *
-   * This carried a cross-document view transition - first a curtain wipe,
-   * then a cross-fade - and it was wrong for this site's most common
-   * navigation, which is switching language from the middle of the document.
-   *
-   * A language switch does not land where it left. The switcher carries the
-   * reader's SECTION across, and the new page lands on that section's
-   * heading, so the outgoing and incoming documents sit at different scroll
-   * offsets - 540px apart in the case measured. Cross-fading them
-   * double-exposes the same content at two positions, which is not a
-   * transition, it is a glitch. No amount of tuning the animation fixes that,
-   * because the two frames genuinely disagree about where the page is.
-   *
-   * The masthead's own `view-transition-name` went with it. It only existed
-   * to hold the bar still through the page animation, and it brought its own
-   * failure - two bars painted at once whenever the snapshots disagreed.
-   *
-   * Restoring transitions means restoring the position problem. If they ever
-   * come back, they must be skipped for locale switches specifically.
-   */
-
-  /*
-   * Static grain over the whole viewport. Flat navy across a long page looks
-   * dead; 2.5% noise gives it a surface. Fixed, so it never slides against the
-   * content, and NEVER animated - animated noise is both distracting and a
-   * guaranteed repaint every frame.
-   */
   body::after {
     content: '';
     position: fixed;
@@ -173,42 +107,22 @@
     -webkit-text-size-adjust: 100%;
   }
 
-  /*
-   * A floor for every anchor target, so nothing can land behind the fixed bar.
-   *
-   * The bands compute their own scroll-margin from their archetype's padding -
-   * see .band below - which is more precise and overrides this. This catches
-   * anything that is NOT a band: a heading, a form, an id added later by
-   * someone who does not know about the maths.
-   */
   [id] {
     scroll-margin-top: calc(var(--header-h) + var(--anchor-gap));
   }
 
   body {
-    /*
-     * Gives back the space the masthead no longer occupies.
-     *
-     * The masthead is `position: fixed` so that contracting it on scroll
-     * cannot reflow the document - a sticky bar stays in flow, and shortening
-     * it mid-scroll shunts every section up by the difference. Out of flow it
-     * needs the room reserving here instead, and the page then lays out
-     * exactly as it did when the bar was sticky: --header-h, then content.
-     */
     padding-block-start: var(--header-h);
     background-color: var(--navy-deep);
     color: var(--white);
     font-family: var(--font-body);
     font-weight: 400;
-    /* ~1.05rem: a timid body size against a 5rem hero reads as dated. */
     font-size: 1.0625rem;
     line-height: 1.65;
-    /* German compounds are long; break rather than overflow. */
     overflow-wrap: break-word;
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Only Archivo 600–900 ship; never request a weight outside that range. */
   h1,
   h2,
   h3,
@@ -255,9 +169,6 @@
   }
 }
 
-/* ==========================================================================
-   Layout
-   ========================================================================== */
 @layer components {
   .shell {
     width: 100%;
@@ -274,28 +185,12 @@
     max-width: 62rem;
   }
 
-  /* ------------------------------------------------------------------------
-     Bands and grounds
-
-     No horizontal rules between sections - separation is space, and the
-     occasional change of ground.
-     ---------------------------------------------------------------------- */
   .page-flow > * {
     position: relative;
     z-index: 1;
   }
 
   .band {
-    /*
-     * The ground tone, on the band itself.
-     *
-     * These lived on a `.band--ground` class that a `surface` prop put there.
-     * Removing panels removed the prop, and with it the class - so every
-     * section silently fell back to the opaque default on :root, painted over
-     * the page's depth washes, and drew a hard horizontal edge wherever it met
-     * the hero, which sets its own class. There is one surface now, so the
-     * tokens belong here and cannot go missing again.
-     */
     --band-bg: transparent;
     --band-fg: var(--color-white);
     --band-muted: var(--muted-on-dark);
@@ -305,11 +200,7 @@
     --card-edge: rgb(255 255 255 / 0.14);
     --focus-ring: var(--color-gold-soft);
 
-    /* Vertical rhythm, per archetype below. Held in a variable because the
-       anchor maths needs to know it. */
     --band-pad: 4rem;
-    /* Split so a section can shorten one end without the anchor maths below
-       losing track of its top padding. */
     --band-pad-top: var(--band-pad);
     --band-pad-bottom: var(--band-pad);
 
@@ -318,75 +209,19 @@
     position: relative;
     padding-block: var(--band-pad-top) var(--band-pad-bottom);
 
-    /*
-     * Land an anchor jump on the heading, not on the section's top padding.
-     *
-     * Scrolling into view aligns the element's scroll-margin box with the
-     * viewport, so:
-     *     headingTop = scrollMarginTop + bandPadTop
-     * and we want headingTop = headerHeight + gap. Solving for the margin
-     * gives the expression below - negative for the roomier archetypes, which
-     * is exactly right: it scrolls past their padding.
-     *
-     * Without this, a section with 9rem of top padding left ~200px of empty
-     * screen under the masthead and pushed its own content out of view.
-     */
     scroll-margin-top: calc(var(--header-h) + var(--anchor-gap) - var(--band-pad-top));
   }
 
-  /* ------------------------------------------------------------------------
-     The continuous ground
-
-     The page is ONE navy ground from top to bottom. It used to be a stack of
-     full-bleed colour slabs - navy, hard edge, light, hard edge - which is the
-     slide-deck pattern itself, whatever you do about numbering and dividers.
-
-     The container is `.page-flow`, NOT `.flow`. The washes below are painted
-     by an unscoped ::before, so a generic name leaks into any component that
-     happens to use it - the pathway section has its own `.flow` block, and
-     the page's washes were being drawn inside it as a translucent rectangle
-     across the steps.
-
-     Nothing is laid ON the ground as a slab. Four sections used to be - light
-     panels first, then raised navy ones - and both read as a big rectangle
-     covering the page rather than as part of it. Sections are told apart by
-     layout and rhythm; only individual pieces of information get a card.
-     ---------------------------------------------------------------------- */
   .page-flow {
     position: relative;
-    /*
-     * A block formatting context, so the hero's negative top margin - which
-     * pulls its ground up behind the fixed masthead - cannot collapse through
-     * this container and drag the whole page up with it.
-     */
     display: flow-root;
-    /*
-     * Deliberately transparent: `body` already paints the navy ground, and an
-     * opaque background here would cover the depth washes below.
-     */
     background: transparent;
   }
 
-  /*
-   * Depth: three large, very soft NAVY washes placed by percentage of the
-   * WHOLE page, so they deliberately never line up with a section boundary.
-   * That is what stops a long dark page reading as flat. Navy only - a gold
-   * wash among them read as a yellow circle sitting on the background.
-   */
   .page-flow::before {
     content: '';
     position: absolute;
-    /*
-     * Reaches up over the strip `body` reserves for the fixed masthead.
-     *
-     * Without this the washes start where <main> does, so the reserved strip
-     * showed flat --navy-deep and the page opened with a hard horizontal edge
-     * straight across the top - a rectangle sitting behind the navbar. The
-     * ground has to run continuously under the bar, because the bar is
-     * translucent and the visitor sees straight through it.
-     */
     inset: calc(-1 * var(--header-h)) 0 0;
-    /* Behind the sections. */
     z-index: 0;
     pointer-events: none;
     background:
@@ -395,13 +230,6 @@
       radial-gradient(56rem 40rem at 6% 88%, rgb(20 40 74 / 0.45), transparent 62%);
   }
 
-  /* ------------------------------------------------------------------------
-     Section archetypes - each has its own vertical rhythm. Identical slab
-     heights were what made the page feel paginated.
-     ---------------------------------------------------------------------- */
-  /* The hero centres its content in the space below the masthead, so it needs
-     far less padding than the scrolling sections - 8rem here simply pushed the
-     title down and shunted the buttons off the bottom of the screen. */
   .band--hero {
     --band-pad: clamp(1.75rem, 1rem + 2.5vw, 3rem);
   }
@@ -418,8 +246,6 @@
     --band-pad: clamp(5rem, 2.8rem + 8vw, 9.5rem);
   }
 
-  /* The reserved video block. Tighter than a section, because it is one
-     element rather than a passage of content. */
   .video-band {
     --band-pad: clamp(1.5rem, 1rem + 2vw, 3rem);
   }
@@ -428,20 +254,10 @@
     --band-pad: clamp(3.5rem, 2.4rem + 4.5vw, 6rem);
   }
 
-  /*
-   * The book section ENDS on its call to action, so the feature archetype's
-   * full 9.5rem bottom padding - landing on top of the next section's own -
-   * left a large empty band between the button and what follows. Closing
-   * tighter is not a rhythm break: a section that finishes on an action has
-   * nothing left to breathe after.
-   */
   #book {
     --band-pad-bottom: clamp(2.5rem, 1.75rem + 2.5vw, 4rem);
   }
 
-  /* ------------------------------------------------------------------------
-     Typography
-     ---------------------------------------------------------------------- */
   .eyebrow {
     display: inline-flex;
     align-items: center;
@@ -470,7 +286,6 @@
     max-width: 18ch;
   }
 
-  /* Statement sections carry their heading at near-hero scale. */
   .statement-title {
     font-size: var(--text-statement);
     font-weight: 700;
@@ -504,15 +319,6 @@
     text-transform: uppercase;
   }
 
-  /* ------------------------------------------------------------------------
-     Surfaces
-
-     The card is the ONLY thing on the page that gets a surface of its own.
-     With the section panels gone it carries all of the "this is set apart"
-     work, so it is a touch more present than it was when it sat inside one:
-     a slightly stronger lift and a visible hairline, still small and still
-     reserved for a single piece of information rather than a whole section.
-     ---------------------------------------------------------------------- */
   .card {
     background: var(--band-raised);
     border: 1px solid var(--card-edge);
@@ -528,9 +334,6 @@
     transform: translateY(-2px);
   }
 
-  /* ------------------------------------------------------------------------
-     Buttons - 150–200ms on every state change.
-     ---------------------------------------------------------------------- */
   .btn {
     display: inline-flex;
     align-items: center;
@@ -559,7 +362,6 @@
     transform: translateY(-1px);
   }
 
-  /* A press must feel immediate - faster than the hover it interrupts. */
   .btn:active {
     transform: translateY(0);
     transition-duration: 80ms;
@@ -621,9 +423,6 @@
   }
 }
 
-/* ==========================================================================
-   Motion
-   ========================================================================== */
 @layer utilities {
   .visually-hidden {
     position: absolute;
@@ -637,16 +436,6 @@
     border: 0;
   }
 
-  /* ------------------------------------------------------------------------
-     Scroll reveal
-
-     Elements are only hidden once the script has confirmed it will observe
-     them (html.js), so with scripting off - or with reduced motion, where the
-     class is never added - nothing is ever invisible.
-
-     16px, not 40: a large distance reads as sliding, a small one as settling.
-     translate3d rather than translateY to keep it on the compositor.
-     ---------------------------------------------------------------------- */
   html.js [data-reveal],
   html.js [data-stagger] > * {
     opacity: 0;
@@ -661,13 +450,9 @@
   html.js [data-stagger].is-in > * {
     opacity: 1;
     transform: translate3d(0, 0, 0);
-    /* Release the compositing hint once it has settled. */
     will-change: auto;
   }
 
-  /* --- stagger -----------------------------------------------------------
-     70ms between items. Capped at six steps (~420ms) so a long list never
-     leaves its last item feeling forgotten. */
   html.js [data-stagger].is-in > *:nth-child(1) { transition-delay: 0ms; }
   html.js [data-stagger].is-in > *:nth-child(2) { transition-delay: calc(1 * var(--stagger)); }
   html.js [data-stagger].is-in > *:nth-child(3) { transition-delay: calc(2 * var(--stagger)); }
@@ -675,11 +460,6 @@
   html.js [data-stagger].is-in > *:nth-child(5) { transition-delay: calc(4 * var(--stagger)); }
   html.js [data-stagger].is-in > *:nth-child(n + 6) { transition-delay: calc(5 * var(--stagger)); }
 
-  /*
-   * Multi-column grids stagger by ROW, not by item - a 9-item grid staggered
-   * per item cascades for far too long and reads as items arriving one by one
-   * across a row, which looks mechanical.
-   */
   @media (min-width: 40rem) {
     html.js [data-stagger][data-rows].is-in > *:nth-child(-n + 2) {
       transition-delay: 0ms;
@@ -707,16 +487,10 @@
     }
   }
 
-  /* --- variation by section archetype ------------------------------------
-     Identical motion on every section is what makes a long page feel
-     mechanical. */
-
-  /* Statement: the heading rises alone, the body follows. Nothing else moves. */
   html.js .band--statement .band__body[data-reveal] {
     transition-delay: 120ms;
   }
 
-  /* Grid: cards settle from very slightly small as well as from below. */
   html.js .band--grid [data-stagger] > * {
     transform: translate3d(0, 14px, 0) scale(0.98);
   }
@@ -725,7 +499,6 @@
     transform: translate3d(0, 0, 0) scale(1);
   }
 
-  /* Feature: the visual arrives from the opposite side to the text. */
   html.js [data-reveal-x] {
     opacity: 0;
     transform: translate3d(-20px, 0, 0);
@@ -741,23 +514,13 @@
     will-change: auto;
   }
 
-  /*
-   * Quiet: opacity only, no movement at all. Sections where nothing shifts
-   * give the eye somewhere to rest and make the sections that do move feel
-   * deliberate rather than automatic.
-   */
   html.js .band--quiet [data-reveal],
   html.js .band--quiet [data-stagger] > * {
     transform: none;
   }
 }
 
-/* ==========================================================================
-   Ambient effects
-   ========================================================================== */
 @layer components {
-  /* Keeps the page's own stacking predictable: the depth washes on .page-flow sit
-     at z-index 0 beneath these, and the grain overlay above them. */
   .site-header,
   main,
   footer {
@@ -765,12 +528,6 @@
     z-index: 1;
   }
 
-  /* ------------------------------------------------------------------------
-     Masked line reveal
-
-     Each line sits in its own crop and slides up from behind it. Headings
-     only - masking body copy while someone is trying to read it is irritating.
-     ---------------------------------------------------------------------- */
   .reveal-lines .line {
     display: block;
     overflow: hidden;
@@ -778,8 +535,6 @@
 
   html.js .reveal-lines .line > span {
     display: block;
-    /* 110%, not 100%: at exactly 100% descenders (g, y, p) peek under the
-       mask before the animation starts. */
     transform: translateY(110%);
     transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
     will-change: transform;
@@ -796,13 +551,6 @@
   html.js .reveal-lines.is-in .line:nth-child(4) > span { transition-delay: 270ms; }
   html.js .reveal-lines.is-in .line:nth-child(n + 5) > span { transition-delay: 360ms; }
 
-  /* ------------------------------------------------------------------------
-     Hover rows - for the service and roadmap lists.
-
-     The fill and the label move at different speeds (460ms / 320ms). Matching
-     them makes the whole thing read as one flat state change; the offset is
-     what sells it.
-     ---------------------------------------------------------------------- */
   .row {
     position: relative;
     isolation: isolate;

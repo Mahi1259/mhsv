@@ -1,11 +1,3 @@
-/**
- * Tests the Vercel (req, res) adapter in api/contact.mjs.
- *
- * The tricky part is the body: Vercel's Node runtime pre-parses
- * `application/x-www-form-urlencoded` (the no-JavaScript submit) into an object
- * and consumes the stream, but leaves `multipart/form-data` (the fetch submit)
- * as a readable stream. Both paths are covered here.
- */
 import { Readable } from 'node:stream';
 import handler from '../api/contact.mjs';
 
@@ -25,7 +17,6 @@ const FIELDS = {
   rendered_at: String(Date.now() - 30_000),
 };
 
-/** Minimal ServerResponse stand-in. */
 function makeRes() {
   const res = {
     statusCode: 200,
@@ -42,7 +33,6 @@ function makeRes() {
   return res;
 }
 
-/** Stream-backed request - how Vercel delivers multipart. */
 function streamReq(body, contentType, accept) {
   const req = Readable.from([Buffer.from(body)]);
   req.method = 'POST';
@@ -56,7 +46,6 @@ function streamReq(body, contentType, accept) {
   return req;
 }
 
-/** Pre-parsed request - how Vercel delivers urlencoded. */
 function parsedReq(fields, accept) {
   const req = Readable.from([]);
   req.method = 'POST';

@@ -1,5 +1,4 @@
 ---
-/** Who we support - quiet type: narrow, understated, deliberately recessive. */
 import Band from '@/components/Band.astro';
 import SectionImage from '@/components/SectionImage.astro';
 import { getContent, type Locale } from '@/lib/i18n';
@@ -25,10 +24,8 @@ const s = getContent(locale).sections.audience;
   <ul class="audience">
     {s.items.map((item) => <li class="audience__item">{item}</li>)}
   </ul>
-
   <SectionImage locale={locale} image="audience" align="start" />
 </Band>
-
 <style>
   .audience {
     display: flex;

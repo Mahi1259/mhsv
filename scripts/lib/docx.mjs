@@ -1,11 +1,3 @@
-/**
- * Minimal WordprocessingML reader.
- *
- * We only need the linear block order of `word/document.xml` (paragraphs and
- * tables) - not styling. That is a small enough surface to read with an
- * ordered token scan, which avoids pulling a full DOCX library into the
- * handover repo.
- */
 import { readFileSync } from 'node:fs';
 import { unzipSync, strFromU8 } from 'fflate';
 
@@ -24,7 +16,6 @@ function decodeEntities(s) {
     .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16)));
 }
 
-/** Pull the visible text out of one `<w:p>` / `<w:tc>` fragment. */
 function textOf(xml) {
   let out = '';
   const re = /<w:t(?:\s[^>]*)?>([\s\S]*?)<\/w:t>|<w:tab\s*\/>|<w:br\s*\/>/g;
@@ -53,10 +44,6 @@ function parseTable(xml) {
   return rows;
 }
 
-/**
- * @param {string} path .docx file
- * @returns {Array<{type:'p',text:string}|{type:'tbl',rows:string[][]}>}
- */
 export function readDocxBlocks(path) {
   const zip = unzipSync(readFileSync(path));
   const entry = zip['word/document.xml'];
@@ -67,8 +54,6 @@ export function readDocxBlocks(path) {
   if (!body) throw new Error(`${path}: no <w:body>`);
 
   const blocks = [];
-  // Tables are matched first at each scan position so their inner <w:p>
-  // elements are consumed as part of the table, not emitted as loose text.
   const re = /<w:tbl(?:\s[^>]*)?>[\s\S]*?<\/w:tbl>|<w:p(?:\s[^>]*)?>[\s\S]*?<\/w:p>|<w:p\s*\/>/g;
   let m;
   while ((m = re.exec(body[1])) !== null) {

@@ -1,26 +1,4 @@
 ---
-/**
- * The MHSV® presentation video. Replaces the "coming soon" placeholder.
- *
- * TWO LANGUAGE VERSIONS, FOUR LOCALES. French pages get the French cut and
- * French subtitles; everyone else gets English, which is the same fallback the
- * book page, the newsletter and the two legal notices already use. German and
- * Italian visitors are told so in the accessible name rather than being handed
- * an unexplained English soundtrack.
- *
- * SUBTITLES ARE WebVTT, NOT THE SUPPLIED SRT. <track> accepts WebVTT only, and
- * an .srt fails silently - the video plays, the cues never appear, nothing is
- * logged. Converted by scripts/srt-to-vtt.mjs.
- *
- * `preload="none"` is doing real work: the sources are 3.4MB and 8MB, and
- * without it a browser fetches metadata - or on some, far more - from every
- * page load whether or not anyone presses play. With it the section costs the
- * 134kB poster and nothing else until a visitor asks for the video.
- *
- * No autoplay. The client's own note asks for manual playback or muted
- * autoplay with accessible controls; muted autoplay of a 54-second film nobody
- * asked for is the worse half of that choice.
- */
 import { getContent, type Locale } from '@/lib/i18n';
 
 interface Props {
@@ -30,7 +8,6 @@ interface Props {
 const { locale } = Astro.props;
 const c = getContent(locale);
 
-/** French keeps French. DE and IT follow EN, as everywhere else on this site. */
 const track = locale === 'fr' ? 'fr' : 'en';
 
 const VIDEO = `/video/mhsv-presentation-${track}`;
@@ -39,16 +16,6 @@ const POSTER = '/video/mhsv-presentation-poster.webp';
 ---
 
 <div class="video">
-  {/*
-    WebM before MP4 on purpose: the browser takes the first source it can play,
-    and the WebM is 3.4MB against the MP4's 8MB for the same 1920x1080 picture.
-    Anything too old for VP9 falls through to the MP4 and is none the wiser.
-
-    The client's own note suggests the opposite order. Theirs is the safer
-    default in the abstract; this way round halves the transfer for almost
-    every visitor and costs nothing for the rest, because the fallback is the
-    file they recommended.
-  */}
   <video
     class="video__el"
     controls
@@ -62,17 +29,11 @@ const POSTER = '/video/mhsv-presentation-poster.webp';
   >
     <source src={`${VIDEO}.webm`} type="video/webm" />
     <source src={`${VIDEO}.mp4`} type="video/mp4" />
+  {/* <track> accepts WebVTT only - an .srt here fails silently. */}
     <track kind="subtitles" src={SUBTITLES} srclang={track} label={c.video.subtitles} default />
   </video>
 </div>
-
 <style>
-  /*
-   * The frame the placeholder occupied, kept: same 16:9, same gold hairline,
-   * same radius, so nothing around it moves. What is gone is the glass -
-   * backdrop blur and a specular sheen behind an opaque video would be work
-   * done for nothing.
-   */
   .video {
     position: relative;
     aspect-ratio: 16 / 9;
@@ -86,8 +47,6 @@ const POSTER = '/video/mhsv-presentation-poster.webp';
     display: block;
     width: 100%;
     height: 100%;
-    /* `contain`, not `cover`: the film is 16:9 and so is the frame, but if a
-       future cut is not, letterboxing beats cropping the picture. */
     object-fit: contain;
     background: var(--navy-deep);
   }

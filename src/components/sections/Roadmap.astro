@@ -1,13 +1,4 @@
 ---
-/**
- * Coming soon / roadmap - grid type.
- *
- * Presented as a roadmap, never as operating services.
- *
- * This section also carries the status legend, explained ONCE for the whole
- * page. The badges on the six forward-looking sections used to repeat the full
- * definition each time, which put the same sentence six times down the page.
- */
 import Band from '@/components/Band.astro';
 import StatusBadge from '@/components/StatusBadge.astro';
 import { getContent, type Locale } from '@/lib/i18n';
@@ -44,23 +35,11 @@ const items = s.items.map((item) => capitalizeFirst(item, locale));
       ))
     }
   </ul>
-
-  {/*
-    A separation notice, not an announcement.
-
-    GST FC is a legally distinct project and is NOT a confirmed partnership, so
-    it sits inside the roadmap rather than anywhere a reader would take for an
-    operating service, and it carries the same "in development" badge as
-    everything else here. It names no governing body: no ACGF, no ASF. The
-    German and Italian are faithful translations of the English and add nothing
-    the English does not say.
-  */}
   <aside class="gst" aria-labelledby="gst-title">
     <StatusBadge locale={locale} status="inDevelopment" class="gst__badge" />
     <h3 class="gst__title" id="gst-title">{s.gstFc.title}</h3>
     <p class="gst__body">{s.gstFc.body}</p>
   </aside>
-
   <aside class="legend">
     <h3 class="mono-label legend__title">{c.status.legendTitle}</h3>
     <p class="legend__intro">{c.status.legendIntro}</p>
@@ -79,7 +58,6 @@ const items = s.items.map((item) => capitalizeFirst(item, locale));
     </dl>
   </aside>
 </Band>
-
 <style>
   .gst {
     display: grid;
@@ -132,7 +110,6 @@ const items = s.items.map((item) => capitalizeFirst(item, locale));
     border-radius: 50%;
   }
 
-  /* --- legend ----------------------------------------------------------- */
   .legend {
     margin-block-start: clamp(2.5rem, 2rem + 2vw, 3.5rem);
     padding-block-start: 1.75rem;

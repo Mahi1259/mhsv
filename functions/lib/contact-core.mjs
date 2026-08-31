@@ -1,36 +1,8 @@
-/**
- * Form handling for all three MHSV® forms, independent of any host.
- *
- *   contact      general enquiries        -> email to CONTACT_RECIPIENT
- *   book-order   Founding Book request    -> email to CONTACT_RECIPIENT
- *   newsletter   subscription             -> mailing provider, double opt-in
- *
- * The Vercel function in api/contact.mjs and the Netlify one in
- * functions/contact.mjs are thin adapters over this. Keeping the logic here
- * means switching host does not mean rewriting validation.
- *
- * Validation always runs here regardless of what the browser did - client-side
- * checks are a convenience, not a control.
- *
- * The recipient is never hard-coded: it comes from CONTACT_RECIPIENT.
- */
-
 import { renderEmailHtml } from './email-template.mjs';
 import { CREST_BASE64, CREST_CID, CREST_FILENAME } from './crest-logo.mjs';
 
 export const LOCALES = ['fr', 'en', 'de', 'it'];
 
-/*
- * The languages the newsletter is actually written in - NOT the four the site
- * is published in. Must stay in step with NEWSLETTER_LOCALES in
- * src/config/site.ts, which is what the form offers.
- *
- * The form only ever showed these two, but this handler validated `language`
- * against all four, so a hand-made POST could subscribe someone to a German or
- * Italian edition that does not exist. `locale` below is still the full four:
- * a German speaker reading the German site and subscribing in French is
- * perfectly normal, and that is what `locale` records.
- */
 export const NEWSLETTER_LANGUAGES = ['fr', 'en'];
 const DEFAULT_LOCALE = 'fr';
 
@@ -48,14 +20,12 @@ const LIMITS = {
   country: 80,
 };
 
-/** Minimum seconds a genuine visitor needs to fill a form. */
 const MIN_FILL_SECONDS = 3;
 const MAX_QUANTITY = 500;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_RE = /^[+()\d\s./-]{6,40}$/;
 
-/** Strip CR/LF so a field can never inject extra mail headers. */
 const singleLine = (value) => String(value ?? '').replace(/[\r\n]+/g, ' ').trim();
 
 export function normaliseLocale(value) {
@@ -68,14 +38,6 @@ function normaliseKind(value) {
   return FORM_KINDS.includes(kind) ? kind : 'contact';
 }
 
-/**
- * Shared gate: honeypot and timing.
- *
- * The timing field is stamped by JavaScript on page load, so it is absent for
- * visitors without JavaScript - those fall back to the honeypot alone rather
- * than being locked out. A stale stamp (a page left open) is fine; only
- * implausibly fast submissions are rejected.
- */
 function screenForBots(form) {
   if (singleLine(form.get('website_url'))) return 'spam';
 
@@ -87,9 +49,6 @@ function screenForBots(form) {
   return null;
 }
 
-/**
- * @returns {{ok: true, kind: string, data: object} | {ok: false, fields?: string[], reason?: string}}
- */
 export function validate(form) {
   const bot = screenForBots(form);
   if (bot) return { ok: false, reason: bot };
@@ -107,7 +66,6 @@ export function validate(form) {
   };
 
   if (!EMAIL_RE.test(email) || email.length > LIMITS.email) fields.push('email');
-  // Consent is required on every form and is never pre-ticked in the markup.
   const consent = Boolean(form.get('consent'));
   if (!consent) fields.push('consent');
 
@@ -155,7 +113,6 @@ export function validate(form) {
     return fields.length ? { ok: false, fields } : { ok: true, kind, data };
   }
 
-  // newsletter - deliberately minimal: we store only what is needed to send it.
   const language = get('language');
   const data = {
     kind,
@@ -170,18 +127,6 @@ export function validate(form) {
   return fields.length ? { ok: false, fields } : { ok: true, kind, data };
 }
 
-/**
- * Plain-text body.
- *
- * French, matching the HTML part - see the note in ./email-template.mjs for
- * why the notifications are in one language rather than the visitor's. The two
- * parts are the same message and must not say different things.
- *
- * Still sent with every message, alongside an HTML part - see
- * ./email-template.mjs. Multipart, not either/or: some readers prefer text,
- * some filters score text-less mail worse, and a mangled HTML part must never
- * mean an unreadable notification.
- */
 export function renderEmail(data) {
   const rows =
     data.kind === 'book-order'
@@ -215,19 +160,8 @@ export function renderEmail(data) {
   ].join('\n');
 }
 
-/**
- * Put one message on whatever transport is configured.
- *
- * Split out of sendEmail so the newsletter can reuse it. Before this the
- * newsletter could only reach Brevo, so a site with working SMTP and no Brevo
- * account had a subscribe form that silently did nothing.
- *
- * @param {{subject: string, text: string, html?: string, replyTo?: string, tag?: string}} message
- */
-/** Transports that can carry an inline image. `log` obviously cannot. */
 const EMBEDS_LOGO = new Set(['smtp', 'brevo']);
 
-/** True when mail from this env will carry the crest rather than link it. */
 function embedsLogo(env) {
   return EMBEDS_LOGO.has((env.CONTACT_TRANSPORT || 'log').toLowerCase());
 }
@@ -241,12 +175,6 @@ async function deliver(message, env) {
 
   const { subject, text, html, replyTo } = message;
 
-  /*
-   * The crest rides along with the message as an inline attachment. A linked
-   * image cannot work: www.mhsv.ch is not serving yet, and clients block remote
-   * images by default even once it is. Both SMTP and Brevo support this;
-   * `embedLogo` below must agree with whether we actually attach it.
-   */
   const inlineCrest = html && EMBEDS_LOGO.has(transport);
 
   if (transport === 'log') {
@@ -259,12 +187,6 @@ async function deliver(message, env) {
     return;
   }
 
-  /*
-   * Brevo's TRANSACTIONAL endpoint - /smtp/email - not the campaign or contact
-   * API. Same account and same key as the newsletter; MHSV® chose Brevo as the
-   * single provider on 28 August, so the contact and order notifications go out
-   * the same way the double opt-in does.
-   */
   if (transport === 'brevo') {
     if (!env.BREVO_API_KEY) throw new Error('BREVO_API_KEY is not configured');
     const response = await fetch('https://api.brevo.com/v3/smtp/email', {
@@ -273,16 +195,10 @@ async function deliver(message, env) {
       body: JSON.stringify({
         sender: { email: sender },
         to: [{ email: recipient }],
-        // The visitor, so replying from the mailbox reaches them directly.
         ...(replyTo ? { replyTo: { email: replyTo } } : {}),
         subject,
         textContent: text,
         ...(html ? { htmlContent: html } : {}),
-        /*
-         * Brevo takes inline images as base64 with a content id, so the crest
-         * travels with the message here too rather than being linked - the
-         * domain is not serving yet and clients block remote images anyway.
-         */
         ...(inlineCrest
           ? {
               attachment: [
@@ -299,25 +215,8 @@ async function deliver(message, env) {
   }
 
   if (transport === 'smtp') {
-    /*
-     * The specifier is assembled at run time on purpose. Do not inline it.
-     *
-     * "Imported lazily" was not enough: esbuild follows a dynamic import with a
-     * literal specifier just like a static one, so building the Pages Functions
-     * pulled nodemailer into the Worker and failed -
-     *
-     *     ✘ [ERROR] Could not resolve "nodemailer"
-     *
-     * on Cloudflare, where it is not installed, and on Node builtins (stream,
-     * crypto, net) where it is. And bundling it would be wrong even if it
-     * worked: nodemailer speaks SMTP over raw TCP, which Workers cannot open.
-     * SMTP is for the Node hosts - Vercel, a server - and Cloudflare uses
-     * Brevo.
-     *
-     * Splitting the name defeats the bundler's constant folding. The .catch()
-     * then turns what is left into a clear runtime error instead of a stack
-     * trace about a missing module.
-     */
+// Split so esbuild cannot see a literal specifier and pull nodemailer into the
+// Cloudflare bundle. Workers have no raw TCP, so smtp cannot run there anyway.
     const specifier = ['node', 'mailer'].join('');
     const { default: nodemailer } = await import(specifier).catch(() => {
       throw new Error(
@@ -362,11 +261,6 @@ async function deliver(message, env) {
 
 async function sendEmail(data, env) {
   const tag = data.kind === 'book-order' ? 'LIVRE' : 'CONTACT';
-  /*
-   * The locale in the contact subject is the version of the site the visitor
-   * used, so the mailbox can see at a glance which language to reply in. The
-   * subject itself is theirs, untranslated.
-   */
   const subject =
     data.kind === 'book-order'
       ? `[MHSV® ${tag}] Demande de commande - ${data.quantity}× ${data.edition.toUpperCase()}`
@@ -376,11 +270,6 @@ async function sendEmail(data, env) {
     {
       subject,
       text: renderEmail(data),
-      /*
-       * SITE_URL is only needed to resolve the crest in the header. If it is
-       * not set the template falls back to the production domain, and the mail
-       * is perfectly readable with no image at all.
-       */
       html: renderEmailHtml(data, {
         siteUrl: env.PUBLIC_SITE_URL,
         embedLogo: embedsLogo(env),
@@ -392,15 +281,6 @@ async function sendEmail(data, env) {
   );
 }
 
-/**
- * Newsletter subscription.
- *
- * Handed to a mailing provider rather than stored here: double opt-in,
- * unsubscribe links and suppression lists are exactly what a provider is for,
- * and a bespoke list would put subscriber data in the repository's blast
- * radius. Brevo's double-opt-in endpoint sends the confirmation itself, so
- * nobody is subscribed until they click it.
- */
 async function subscribe(data, env) {
   const provider = (env.NEWSLETTER_PROVIDER || 'log').toLowerCase();
 
@@ -413,21 +293,6 @@ async function subscribe(data, env) {
     return;
   }
 
-  /*
-   * SINGLE OPT-IN, over the same transport the contact form uses.
-   *
-   * For sites with a working mail transport but no Brevo LIST. The
-   * subscription is emailed to CONTACT_RECIPIENT and nothing goes to the
-   * subscriber: there is no list to join and no confirmation link to send,
-   * because there is no store to hold a pending token.
-   *
-   * That makes it SINGLE opt-in - the consent box on the site is the only
-   * record - so the notification says so plainly, and the form's success
-   * message must not promise a confirmation email. FormShell picks its wording
-   * from this same setting.
-   *
-   * Brevo remains the better answer, and switching back is one env var.
-   */
   if (provider === 'smtp' || provider === 'email') {
     const edition = data.language === 'fr' ? 'française' : 'anglaise';
     await deliver(
@@ -460,29 +325,11 @@ async function subscribe(data, env) {
     return;
   }
 
-  /*
-   * DOUBLE OPT-IN, through Brevo's own mechanism.
-   *
-   * /contacts/doubleOptinConfirmation is the native DOI endpoint: Brevo sends
-   * the confirmation, holds the contact until the link is clicked, and only
-   * then adds it to the list. Nothing here writes to the list directly, and
-   * there is deliberately no home-grown confirmation flow - a custom one would
-   * need a token store, and getting consent records wrong is not a bug you can
-   * fix afterwards.
-   */
   if (provider === 'brevo') {
     for (const key of ['BREVO_API_KEY', 'BREVO_LIST_ID']) {
       if (!env[key]) throw new Error(`${key} is not configured`);
     }
 
-    /*
-     * The confirmation must arrive in the language the visitor chose.
-     *
-     * Two ways to do that, both supported: give Brevo one template per language
-     * (BREVO_DOI_TEMPLATE_ID_FR / _EN), or one template that branches on the
-     * LANGUE attribute sent below. The per-language ids win when present; the
-     * single id is the fallback and the brief's default.
-     */
     const templateId =
       env[`BREVO_DOI_TEMPLATE_ID_${data.language.toUpperCase()}`] || env.BREVO_DOI_TEMPLATE_ID;
     if (!templateId) throw new Error('BREVO_DOI_TEMPLATE_ID is not configured');
@@ -496,18 +343,8 @@ async function subscribe(data, env) {
         email: data.email,
         includeListIds: [Number(env.BREVO_LIST_ID)],
         templateId: Number(templateId),
-        // Where Brevo sends them after they confirm - their own language.
         redirectionUrl:
           env.BREVO_DOI_REDIRECT_URL || `https://www.mhsv.ch/${data.language}/`,
-        /*
-         * The consent record. Brevo timestamps the CONFIRMATION itself, which
-         * is the legally interesting moment, but not the rest - so the fields
-         * that would otherwise be lost are stored with the contact:
-         * what they agreed to, when they asked, in which language, and from
-         * where. SOURCE names the form and the page's language, so a
-         * subscription from the German site reading the English edition is
-         * still traceable.
-         */
         attributes: {
           ...(data.firstName ? { PRENOM: data.firstName } : {}),
           LANGUE: data.language.toUpperCase(),
@@ -532,19 +369,12 @@ export async function send(result, env) {
   return sendEmail(result.data, env);
 }
 
-/** Static page a no-JavaScript submit lands on. */
 const RESULT_PAGE = {
   contact: 'message-sent',
   'book-order': 'order-sent',
   newsletter: 'newsletter-sent',
 };
 
-/**
- * Handle a POST.
- *
- * Returns JSON when the client asked for it (the enhanced path), otherwise a
- * 303 to a static result page so every form still works without JavaScript.
- */
 export async function handleContact(request, env) {
   if (request.method !== 'POST') {
     return new Response('Method not allowed', { status: 405, headers: { Allow: 'POST' } });
@@ -564,8 +394,6 @@ export async function handleContact(request, env) {
   const result = validate(form);
 
   if (!result.ok) {
-    // A caught spam attempt gets the same shape a human sees, so a bot learns
-    // nothing from probing. Nothing is sent.
     if (result.reason === 'spam') {
       console.warn('[form] honeypot triggered - discarded');
       return respond(wantsJson, locale, kind, { ok: true }, 200);

@@ -1,6 +1,4 @@
 ---
-/** Book order-request confirmation, for visitors without JavaScript.
-    With JS the same wording is shown inline and this is never reached. */
 import Page from '@/layouts/Page.astro';
 import { getContent } from '@/lib/i18n';
 import { LOCALES, BOOK_PAGE_PATH, type Locale } from '@/config/site';
@@ -17,7 +15,6 @@ const c = getContent(locale);
   <p class="result">{c.bookOrder.successBody}</p>
   <a class="btn btn--ghost" href={BOOK_PAGE_PATH}>{c.sections.book.title}</a>
 </Page>
-
 <style>
   .result {
     margin: 0 0 2rem;

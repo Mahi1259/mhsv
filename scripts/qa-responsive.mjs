@@ -1,14 +1,3 @@
-/**
- * Responsive sweep.  `npm run qa` (needs `npm run preview` running)
- *
- * Every page, every locale, every breakpoint in the QA brief. The audit script
- * covers a handful of pages for accessibility; this one is about layout, and it
- * checks the things a screenshot review would catch by eye - overflow, clipping,
- * overlap, tap targets - at widths nobody opens by hand.
- *
- * Findings are printed as a table and the process exits non-zero if any blocker
- * is found.
- */
 import puppeteer from 'puppeteer-core';
 
 const CHROME =
@@ -18,7 +7,6 @@ const BASE = (process.env.QA_BASE_URL || 'http://localhost:4321').replace(/\/+$/
 const WIDTHS = [320, 360, 390, 414, 768, 820, 1024, 1112, 1280, 1366, 1440, 1920];
 const LOCALES = ['fr', 'en', 'de', 'it'];
 
-/** Per-locale slugs, mirroring LEGAL_PAGES in src/config/site.ts. */
 const SLUGS = {
   fr: ['mentions-legales', 'protection-des-donnees', 'cookies', 'formulaires', 'credits-photos'],
   en: ['legal-notice', 'data-protection', 'cookies', 'forms', 'photo-credits'],
@@ -38,7 +26,6 @@ const findings = [];
 const add = (page, width, issue, severity = 'blocker') =>
   findings.push({ page, width, issue, severity });
 
-/** Runs in the page. Returns everything measurable in one round trip. */
 function inspect() {
   const doc = document.documentElement;
   const vw = doc.clientWidth;
@@ -50,7 +37,6 @@ function inspect() {
     return r.width > 0 && r.height > 0;
   };
 
-  // 1. horizontal overflow, and what is causing it
   const overflow = doc.scrollWidth > doc.clientWidth + 1;
   const spilling = [];
   if (overflow) {
@@ -68,12 +54,10 @@ function inspect() {
     }
   }
 
-  // 2. tap targets - interactive things too small to hit on a touch screen
   const small = [];
   for (const el of document.querySelectorAll('a[href], button, input, select, textarea, [role="button"]')) {
     if (!visible(el)) continue;
     const r = el.getBoundingClientRect();
-    // Inline links inside a paragraph are exempt: they are text, not controls.
     const inProse = el.closest('p, li.notice__list li, .notice__p, .prose-body');
     if (inProse && el.tagName === 'A') continue;
     if (r.width < 24 || r.height < 24) {
@@ -82,13 +66,9 @@ function inspect() {
     }
   }
 
-  // 3. text clipped by its own container
   const clipped = [];
   for (const el of document.querySelectorAll('h1, h2, h3, h4, p, a, span, li, button, label')) {
     if (!visible(el)) continue;
-    // Screen-reader-only text is clipped to 1px on purpose - that IS the
-    // pattern, and reporting it buried the real findings under 492 copies of
-    // itself on the first run.
     if (el.closest('.visually-hidden, .sr-only')) continue;
     const s = getComputedStyle(el);
     if (s.overflow === 'visible' || el.children.length) continue;
@@ -98,7 +78,6 @@ function inspect() {
     }
   }
 
-  // 4. the language switcher: all four, visible and hit-testable
   const langs = [...document.querySelectorAll('.lang a')].filter(visible);
   const langHits = langs.filter((a) => {
     const r = a.getBoundingClientRect();
@@ -106,10 +85,8 @@ function inspect() {
     return t && (t === a || a.contains(t));
   }).length;
 
-  // 5. the masthead: shrinks on desktop only
   const header = document.querySelector('.site-header');
 
-  // 6. governance cards - how many per row, and is the last row an orphan
   const teamCards = [...document.querySelectorAll('.team__card')].filter(visible);
   const rowTops = [...new Set(teamCards.map((c) => Math.round(c.getBoundingClientRect().top)))];
   const perRow = rowTops.length ? teamCards.length / rowTops.length : 0;
@@ -117,7 +94,6 @@ function inspect() {
     ? teamCards.filter((c) => Math.round(c.getBoundingClientRect().top) === rowTops[rowTops.length - 1]).length
     : 0;
 
-  // 7. collection boards - contained, not cropped
   const boardsCropped = [...document.querySelectorAll('.identity__board')].filter((tile) => {
     const img = tile.querySelector('img');
     if (!img) return false;
@@ -125,7 +101,6 @@ function inspect() {
     return i.height > t.height + 1 || i.width > t.width + 1;
   }).length;
 
-  // 8. the cookie notice must not cover its own button or the footer controls
   const notice = document.querySelector('[data-cookie]');
   let noticeCovers = null;
   if (notice && !notice.hidden) {
@@ -135,7 +110,6 @@ function inspect() {
     noticeCovers = !(t && (t === accept || accept.contains(t)));
   }
 
-  // 9. forms - fields and submit reachable
   const formIssues = [];
   for (const form of document.querySelectorAll('form[data-form]')) {
     for (const field of form.querySelectorAll('input:not([type=hidden]), select, textarea')) {
@@ -148,7 +122,6 @@ function inspect() {
     if (submit && !visible(submit)) formIssues.push(`${form.dataset.form}: submit not visible`);
   }
 
-  // 10. video frame
   const video = document.querySelector('video');
   let videoIssue = null;
   if (video) {
@@ -176,7 +149,6 @@ for (const { url, name } of pages) {
   for (const width of WIDTHS) {
     await page.setViewport({ width, height: 900, isMobile: width < 768 });
     await page.goto(BASE + url, { waitUntil: 'networkidle0' });
-    // Dismiss the notice so it does not mask the page, except where we test it.
     await page.evaluate(() => {
       document.documentElement.style.scrollBehavior = 'auto';
     });

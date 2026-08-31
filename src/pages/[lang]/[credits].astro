@@ -1,15 +1,4 @@
 ---
-/**
- * Photo credits - /en/photo-credits/, /fr/credits-photos/, and so on.
- *
- * Unsplash's licence does not require attribution, so this is courtesy rather
- * than obligation. It lives on one page instead of a caption under every
- * photograph: ten credit lines scattered through the document pulled the eye
- * away from the content each time, and the licence is satisfied either way.
- *
- * The slug differs per language, like the legal pages, so getStaticPaths pairs
- * each locale with its own from LEGAL_PAGES.
- */
 import Page from '@/layouts/Page.astro';
 import { getContent } from '@/lib/i18n';
 import { LOCALES, LEGAL_PAGES, type Locale } from '@/config/site';
@@ -32,7 +21,6 @@ const p = c.photoCredits;
   eyebrow={c.footer.legalTitle}
 >
   <p class="credits__intro">{p.intro}</p>
-
   <ol class="credits">
     {
       p.items.map((item) => (
@@ -45,7 +33,6 @@ const p = c.photoCredits;
     }
   </ol>
 </Page>
-
 <style>
   .credits__intro {
     margin: 0 0 2rem;

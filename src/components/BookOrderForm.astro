@@ -1,26 +1,10 @@
 ---
-/**
- * Founding Book order REQUEST.
- *
- * Deliberately not a checkout: no price, no payment, no cart. Price and
- * shipping are not approved, so the flow ends with MHSV® contacting the
- * requester to confirm availability, price, delivery and payment.
- */
 import FormShell from '@/components/FormShell.astro';
 import Bilingual from '@/components/Bilingual.astro';
 import { getContent, legalPath, type Locale } from '@/lib/i18n';
 
 interface Props {
   locale: Locale;
-  /**
-   * Second language. /livre is bilingual - it shows the French and English
-   * copy side by side - so this form is too, rather than leaving an English
-   * reader to fill in French fields. Every visible string becomes "fr / en",
-   * the same convention the page already uses for its headings.
-   *
-   * One form, not two: a second copy would duplicate every id and name, and
-   * this is the only conversion path on the page the printed QR points at.
-   */
   altLocale?: Locale;
 }
 
@@ -32,9 +16,6 @@ const alt = altLocale ? getContent(altLocale) : null;
 const ao = alt?.bookOrder;
 const af = alt?.form;
 const privacyHref = legalPath('dataProtection', locale);
-/* The same page in the alternate language, for the bilingual /livre. An href
-   cannot be hidden by the .l10n rules, so it opened the French notice from the
-   English page. */
 const privacyHrefAlt = altLocale ? legalPath('dataProtection', altLocale) : null;
 
 const strings = {
@@ -45,7 +26,6 @@ const strings = {
   errorBody: f.errorBody,
 };
 
-/** The same set in the second language, for the page's language switch. */
 const altStrings = alt && {
   errors: { ...af!.errors, ...ao!.errors },
   successTitle: ao!.successTitle,
@@ -68,69 +48,56 @@ const altStrings = alt && {
   <p class="order__intro">
     {ao ? <Bilingual fr={o.intro} en={ao.intro} /> : o.intro}
   </p>
-
   <div class="form__grid">
     <p class="form__field">
       <label for="edition"><Bilingual fr={o.edition} en={ao?.edition ?? o.edition} /> <span class="form__req" aria-hidden="true">*</span></label>
       <select id="edition" name="edition" required aria-describedby="edition-error">
-        {/* Option text is text, not an element the stylesheet can hide, so the
-            English labels travel as data and the page script applies them. They
-            read "Français / Anglais" on the English page until now. */}
         <option value="fr" data-text-en={ao?.editionFr ?? undefined}>{o.editionFr}</option>
         <option value="en" data-text-en={ao?.editionEn ?? undefined}>{o.editionEn}</option>
       </select>
       <span class="form__error" id="edition-error" data-error-for="edition"></span>
     </p>
-
     <p class="form__field">
       <label for="quantity"><Bilingual fr={o.quantity} en={ao?.quantity ?? o.quantity} /> <span class="form__req" aria-hidden="true">*</span></label>
       <input id="quantity" name="quantity" type="number" required min="1" max="500" value="1" inputmode="numeric" aria-describedby="quantity-error" />
       <span class="form__error" id="quantity-error" data-error-for="quantity"></span>
     </p>
-
     <p class="form__field">
       <label for="o-firstName"><Bilingual fr={f.firstName} en={af?.firstName ?? f.firstName} /> <span class="form__req" aria-hidden="true">*</span></label>
       <input id="o-firstName" name="firstName" type="text" required autocomplete="given-name" maxlength="80" aria-describedby="o-firstName-error" />
       <span class="form__error" id="o-firstName-error" data-error-for="firstName"></span>
     </p>
-
     <p class="form__field">
       <label for="o-lastName"><Bilingual fr={f.lastName} en={af?.lastName ?? f.lastName} /> <span class="form__req" aria-hidden="true">*</span></label>
       <input id="o-lastName" name="lastName" type="text" required autocomplete="family-name" maxlength="80" aria-describedby="o-lastName-error" />
       <span class="form__error" id="o-lastName-error" data-error-for="lastName"></span>
     </p>
-
     <p class="form__field">
       <label for="organisation"><Bilingual fr={o.organisation} en={ao?.organisation ?? o.organisation} /> <span class="form__req" aria-hidden="true">*</span></label>
       <input id="organisation" name="organisation" type="text" required autocomplete="organization" maxlength="160" aria-describedby="organisation-error" />
       <span class="form__error" id="organisation-error" data-error-for="organisation"></span>
     </p>
-
     <p class="form__field">
       <label for="country"><Bilingual fr={o.country} en={ao?.country ?? o.country} /> <span class="form__req" aria-hidden="true">*</span></label>
       <input id="country" name="country" type="text" required autocomplete="country-name" maxlength="80" aria-describedby="country-error" />
       <span class="form__error" id="country-error" data-error-for="country"></span>
     </p>
-
     <p class="form__field">
       <label for="o-email"><Bilingual fr={f.email} en={af?.email ?? f.email} /> <span class="form__req" aria-hidden="true">*</span></label>
       <input id="o-email" name="email" type="email" required autocomplete="email" maxlength="254" aria-describedby="o-email-error" />
       <span class="form__error" id="o-email-error" data-error-for="email"></span>
     </p>
-
     <p class="form__field">
       <label for="o-phone"><Bilingual fr={f.phone} en={af?.phone ?? f.phone} /> <span class="form__optional">(<Bilingual fr={c.ui.optional} en={alt?.ui.optional ?? c.ui.optional} />)</span></label>
       <input id="o-phone" name="phone" type="tel" autocomplete="tel" maxlength="40" aria-describedby="o-phone-error" />
       <span class="form__error" id="o-phone-error" data-error-for="phone"></span>
     </p>
-
     <p class="form__field form__field--wide">
       <label for="o-message"><Bilingual fr={f.message} en={af?.message ?? f.message} /> <span class="form__optional">(<Bilingual fr={c.ui.optional} en={alt?.ui.optional ?? c.ui.optional} />)</span></label>
       <textarea id="o-message" name="message" rows="4" maxlength="5000" aria-describedby="o-message-error"></textarea>
       <span class="form__error" id="o-message-error" data-error-for="message"></span>
     </p>
   </div>
-
   <div>
     <p class="form__consent">
       <input id="o-consent" name="consent" type="checkbox" required aria-describedby="o-consent-error" />
@@ -147,7 +114,6 @@ const altStrings = alt && {
     </p>
   </div>
 </FormShell>
-
 <style>
   .order__intro {
     display: grid;

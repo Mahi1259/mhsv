@@ -1,11 +1,3 @@
-/**
- * Tests for the HTML notification email.  `npm run test:email`
- *
- * The escaping tests are the point of this file. Every value in that template
- * is typed by a stranger on a public form and lands in HTML that MHSV® staff
- * open in a mail client. The plain-text body never had that exposure, so it is
- * an easy thing to lose in a later edit.
- */
 import { renderEmailHtml } from '../functions/lib/email-template.mjs';
 
 const failures = [];
@@ -27,7 +19,6 @@ const ORDER = {
   email: 'jean@example.ch', phone: '', message: '',
 };
 
-// --- both forms render their own fields -------------------------------------
 {
   const html = renderEmailHtml(CONTACT);
   check(html.includes('Demande via le formulaire de contact'), 'contact: heading');
@@ -46,18 +37,8 @@ const ORDER = {
   check(!html.includes('>Profil<'), 'order: no contact-only fields');
   check(html.includes('Aucun paiement n’a été encaissé'), 'order: states it is not a purchase');
   check(html.includes('(aucun message)'), 'order: empty message is stated, not blank');
-  /*
-   * Pricing is not approved, so no amount may appear. Checked as an amount -
-   * a currency or a figure - not as the word "price", which the banner uses
-   * precisely to say there is not one.
-   */
   check(!/CHF|EUR|USD|[€$£]\s*\d|\d+[.,]\d{2}\b/.test(html), 'order: no amount or currency anywhere');
 
-  /*
-   * One language, whatever the visitor used - one recipient mailbox means one
-   * audience. Guards against a well-meaning change that localises the labels
-   * and starts sending Geneva Italian-labelled mail.
-   */
   for (const locale of ['fr', 'en', 'de', 'it']) {
     const h = renderEmailHtml({ ...ORDER, locale });
     check(h.includes('Livre Fondateur - demande de commande'),
@@ -66,7 +47,6 @@ const ORDER = {
   }
 }
 
-// --- the visitor's own words are never touched -------------------------------
 {
   const german = renderEmailHtml({
     ...CONTACT, locale: 'de', firstName: 'Anna', lastName: 'Müller',
@@ -79,7 +59,6 @@ const ORDER = {
   check(german.includes('Demande via le formulaire de contact'), 'but the chrome is still French');
 }
 
-// --- escaping ---------------------------------------------------------------
 {
   const attack = {
     ...CONTACT,
@@ -91,23 +70,15 @@ const ORDER = {
   };
   const html = renderEmailHtml(attack);
   check(!html.includes('<script>'), 'escaping: no raw <script> survives');
-  /*
-   * `onerror=` still appears - as text, inside an escaped `&lt;img ...&gt;`.
-   * That is the correct outcome, so asserting its absence would be asserting
-   * the wrong thing. What matters is that it never lands inside a real tag: the
-   * only <img in the message is the logo in the header.
-   */
   const imgTags = html.match(/<img\b[^>]*>/g) || [];
   check(imgTags.length === 1, 'escaping: submitted markup produced no extra <img>', `${imgTags.length} found`);
   check(!/<[^>]*\son\w+\s*=/.test(html), 'escaping: no event handler inside any real tag');
   check(html.includes('&lt;script&gt;alert(1)&lt;/script&gt;'), 'escaping: name is shown as text');
   check(html.includes('Tom &amp; Jerry'), 'escaping: ampersand escaped');
   check(html.includes('&lt;b&gt;x&lt;/b&gt;'), 'escaping: markup in the message is shown as text');
-  // The mailto: href is built from the address, so it must be escaped too.
   check(!/href="mailto:[^"]*"><script/.test(html), 'escaping: mailto href cannot be broken out of');
 }
 
-// --- structure the mail clients need ----------------------------------------
 {
   const html = renderEmailHtml(ORDER);
   check(!/<table[^>]*>\s*<table/.test(html), 'structure: no table nested straight inside a table');
@@ -118,7 +89,6 @@ const ORDER = {
   check(/#0C1D3A/i.test(html) && /#D4AF37/i.test(html), 'brand: navy and gold both used');
 }
 
-// --- the logo ---------------------------------------------------------------
 {
   const embedded = renderEmailHtml(ORDER, { embedLogo: true });
   check(embedded.includes('src="cid:mhsv-crest"'), 'logo: embedded as a cid: reference');
@@ -127,11 +97,6 @@ const ORDER = {
   const linked = renderEmailHtml(ORDER, { siteUrl: 'https://www.mhsv.ch/' });
   check(linked.includes('src="https://www.mhsv.ch/icon-192.png"'), 'logo: absolute URL, trailing slash trimmed');
 
-  /*
-   * The bug this replaced: PUBLIC_SITE_URL is the running instance, which in
-   * dev is the developer's own machine. Mail went out pointing at
-   * http://localhost:8788/icon-192.png, which no mail client can ever load.
-   */
   for (const local of ['http://localhost:8788', 'http://127.0.0.1:4321', 'http://0.0.0.0:3000']) {
     const html = renderEmailHtml(ORDER, { siteUrl: local });
     check(!html.includes(local), `logo: "${local}" never reaches the mail`);
@@ -146,12 +111,10 @@ const ORDER = {
     'logo: header still reads if the image never renders');
 }
 
-// --- the embedded crest itself ----------------------------------------------
 {
   const { CREST_BASE64, CREST_CID } = await import('../functions/lib/crest-logo.mjs');
   const bytes = Buffer.from(CREST_BASE64, 'base64');
   check(bytes.length > 2000, 'crest: decodes to a real image', `${bytes.length} bytes`);
-  // PNG magic number - proves it is an image and not a truncated string.
   check(bytes.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])),
     'crest: is a valid PNG');
   check(renderEmailHtml(ORDER, { embedLogo: true }).includes(`cid:${CREST_CID}`),

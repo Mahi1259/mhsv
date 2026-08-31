@@ -1,19 +1,4 @@
 ---
-/**
- * /livre - the permanent destination of the printed QR code.
- *
- * THIS URL MUST NOT CHANGE. It is encoded in the QR on the back cover of both
- * editions; once printed, it cannot be corrected. If the page ever moves,
- * keep /livre and redirect server-side from here.
- *
- * Deliberately NOT locale-prefixed: the QR is the same in the French and
- * English editions because this page is bilingual. It shows FR and EN side by
- * side rather than picking one.
- *
- * Contains only what the client approved: the two covers, the institutional
- * copy, and the order-request form. There is no download of the complete book
- * and no path that could become one.
- */
 import { Picture } from 'astro:assets';
 import BookOrderForm from '@/components/BookOrderForm.astro';
 import Bilingual from '@/components/Bilingual.astro';
@@ -48,22 +33,13 @@ const columns = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {/*
-      Both titles ship; the head script below picks one. A <title> cannot be
-      swapped by the .l10n stylesheet the way every other fragment on this page
-      is - it is not rendered, so hiding one half does nothing - and it stayed
-      French on ?lang=en.
-    */}
     <title data-en={`${en.sections.book.title} | MHSV®`}>{fr.sections.book.title} | MHSV®</title>
     <meta
       name="description"
       content={`${fr.sections.book.body.slice(0, 150)}…`}
     />
-    {/* REMOVE BEFORE PRODUCTION LAUNCH: prototype noindex - see
-        VERCEL_IS_PROTOTYPE in site-url.mjs. */}
     {!IS_PRODUCTION && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
-
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="MHSV®" />
     <meta property="og:title" content={`${fr.sections.book.title} | MHSV®`} />
@@ -71,7 +47,6 @@ const columns = [
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
-
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -82,54 +57,28 @@ const columns = [
       ))
     }
   </head>
-
   <script is:inline>
-    /*
-     * Page language, decided before the first paint.
-     *
-     * The document carries both languages; `?lang=en` selects English and
-     * anything else - including no query at all - leaves French, which is the
-     * default and the state the printed QR lands on. The stylesheet does the
-     * hiding, so this only has to set the attribute, and it has to do it here
-     * rather than at the end of the body or both languages flash first.
-     */
     (function () {
+      /* .l10n swaps two elements and hides one. <title>, href and <option> text
+         cannot work that way, so those carry data-en / data-href-en /
+         data-text-en and are swapped here instead. */
       var lang = /(^|[?&])lang=en(&|$)/.test(location.search) ? 'en' : 'fr';
       document.documentElement.setAttribute('data-lang', lang);
       document.documentElement.lang = lang === 'en' ? 'en' : 'fr';
 
-      // The tab title, here rather than below: it is in the head and already
-      // parsed, and waiting would show the French one first.
       if (lang === 'en') {
         var title = document.querySelector('title');
         if (title && title.getAttribute('data-en')) document.title = title.getAttribute('data-en');
       }
     })();
   </script>
-
   <body>
-    {/* Two halves, not one joined string: a joined "Aller au contenu / Skip to
-        content" cannot be filtered by the .l10n rules, so the first thing an
-        English reader could focus on led in French. */}
     <a class="skip-link" href="#book">
       <span class="l10n" lang="fr-CH">Aller au contenu</span>
       <span class="l10n" lang="en">Skip to content</span>
     </a>
-
-    {/*
-      The site's masthead, reduced to what this page needs: the mark, and the
-      two languages this page is published in. No section links - there are no
-      sections here - and no DE or IT, because the book is not.
-
-      Real links carrying `?lang=`, so a choice is shareable and survives a
-      reload. translate="no" for the same reason as the main masthead: Chrome
-      auto-translation rewrites the codes, turning EN into IN.
-    */}
     <header class="livre-header">
       <div class="livre-header__inner">
-        {/* An href cannot be hidden, so the English one travels as data and the
-            script applies it. It pointed at the French homepage from the English
-            page. */}
         <a
           class="livre-brand notranslate"
           href={localePath('', 'fr')}
@@ -139,7 +88,6 @@ const columns = [
           <Image src={crest} alt="" width={32} height={36} loading="eager" densities={[1, 2]} />
           <span>MHSV®</span>
         </a>
-
         <nav class="livre-lang notranslate" aria-label="Langue / Language" translate="no">
           <a href="?lang=fr" hreflang="fr" data-lang-chip="fr">
             <span class="visually-hidden">Français</span>
@@ -152,7 +100,6 @@ const columns = [
         </nav>
       </div>
     </header>
-
     <main id="book">
       <section class="band livre">
         <div class="shell livre__inner">
@@ -161,11 +108,6 @@ const columns = [
               {
                 covers.map((cover) => (
                   <li style={`flex-grow: ${cover.src.width / cover.src.height}`}>
-                    {/* Flex-grow set to the cover's own aspect ratio, so the two
-                        widths come out in proportion to their shapes and the two
-                        HEIGHTS come out equal. The supplied files no longer share a
-                        ratio once their pale borders are trimmed - 0.697 and 0.752 -
-                        and equal widths made one book look smaller than the other. */}
                     <Picture
                       src={cover.src}
                       alt={cover.alt}
@@ -187,7 +129,6 @@ const columns = [
               }
             </ul>
           </div>
-
           <div class="livre__text">
             {
               columns.map(({ htmlLang, c }) => (
@@ -204,31 +145,21 @@ const columns = [
           </div>
         </div>
       </section>
-
       <section class="band livre-order" aria-labelledby="order-title">
         <div class="shell shell--mid">
           <h2 id="order-title" class="section-title livre-order__title">
             <Bilingual fr={fr.bookOrder.title} en={en.bookOrder.title} />
           </h2>
-          {/* French first, English beside it - the form matches the page. The
-              visitor still picks which EDITION of the book they want inside. */}
         <BookOrderForm locale="fr" altLocale="en" />
         </div>
       </section>
     </main>
-
     <footer class="band livre-footer">
       <div class="shell">
         <p><Bilingual fr={fr.footer.summary} en={en.footer.summary} /></p>
       </div>
     </footer>
-
     <script is:inline>
-      /*
-       * The parts that need the document parsed. Still inline and still ahead
-       * of the bundled modules, so the form has its messages in the right
-       * language before scripts/forms.ts ever reads them.
-       */
       (function () {
         var lang = document.documentElement.getAttribute('data-lang') === 'en' ? 'en' : 'fr';
 
@@ -236,16 +167,6 @@ const columns = [
         if (chip) chip.setAttribute('aria-current', 'true');
 
         if (lang === 'en') {
-          /*
-           * Everything the stylesheet cannot reach.
-           *
-           * `.l10n` hides one of two ELEMENTS, which covers the copy and the
-           * form labels but not an attribute and not the text inside an
-           * <option>. So the brand link went to the French homepage, the
-           * privacy link opened the French notice, and the edition dropdown
-           * read "Français / Anglais" - on the English page. Each carries its
-           * English value as data and it is applied here.
-           */
           document.querySelectorAll('[data-href-en]').forEach(function (el) {
             el.setAttribute('href', el.getAttribute('data-href-en'));
           });
@@ -262,28 +183,13 @@ const columns = [
         }
       })();
     </script>
-
     <script>
       import '@/scripts/motion.ts';
       import '@/scripts/forms.ts';
     </script>
   </body>
 </html>
-
 <style is:global>
-  /*
-   * ONE LANGUAGE AT A TIME.
-   *
-   * Every translatable fragment on this page is an element marked `.l10n`
-   * carrying its own `lang` - in the copy, and inside the order form via
-   * components/Bilingual.astro. French is the default and needs no attribute,
-   * so with no JavaScript, or on a bare /livre, the French half is what shows
-   * and the page is complete. `?lang=en` sets data-lang on <html> and the two
-   * halves swap.
-   *
-   * Global rather than scoped: the form's halves are rendered by another
-   * component, and a scoped rule would not reach them.
-   */
   html:not([data-lang='en']) .l10n[lang|='en'] {
     display: none;
   }
@@ -292,16 +198,7 @@ const columns = [
     display: none;
   }
 </style>
-
 <style>
-  /*
-   * FIXED, matching the main masthead.
-   *
-   * It was sticky, so it sat BELOW the space `body` reserves for the site's
-   * fixed bar - 68.8px of dead navy above it, which is the gap this page had
-   * between the top of the window and its own header. Fixed, it occupies that
-   * reserved space instead of adding to it.
-   */
   .livre-header {
     position: fixed;
     inset-inline: 0;
@@ -309,7 +206,6 @@ const columns = [
     z-index: 50;
   }
 
-  /* Mobile, and the base case: a plain solid bar, exactly as the site's. */
   .livre-header__inner {
     display: flex;
     align-items: center;
@@ -324,12 +220,6 @@ const columns = [
     border-block-end: 1px solid var(--hairline);
   }
 
-  /*
-   * On desktop it wears the same floating pill the site's masthead does once
-   * scrolled - held in that state permanently rather than shrinking, since
-   * there are no sections here to scroll past. Same measurements, so the two
-   * pages read as one site.
-   */
   @media (min-width: 62rem) {
     .livre-header {
       padding: 0.85rem 1rem 0;
@@ -372,7 +262,6 @@ const columns = [
     height: auto;
   }
 
-  /* The site's language chips, cut to the two languages the book exists in. */
   .livre-lang {
     display: flex;
     align-items: center;
@@ -404,12 +293,6 @@ const columns = [
     background: var(--gold);
   }
 
-  /*
-   * On desktop it wears the same floating pill the site's masthead does once
-   * scrolled - held in that state permanently rather than shrinking, since
-   * there are no sections here to scroll past. Same measurements, so the two
-   * pages read as one site.
-   */
   @media (min-width: 62rem) {
     .livre-header {
       padding: 0.85rem 1rem 0;
@@ -432,8 +315,6 @@ const columns = [
   }
 
   .livre {
-    /* Opens tighter than it closes: the fixed bar already leaves --header-h of
-       clear space above this, so a full 6rem on top read as a hole. */
     padding-block: clamp(2rem, 1.25rem + 2.5vw, 3rem) clamp(3rem, 2rem + 6vw, 6rem);
   }
 
@@ -453,7 +334,6 @@ const columns = [
 
   .livre__covers li {
     position: relative;
-    /* grow is set per cover, inline, from its aspect ratio. */
     flex: 0 1 0;
     max-width: 21rem;
   }
@@ -476,12 +356,6 @@ const columns = [
     font-size: 0.625rem;
   }
 
-  /*
-   * Divided the two language blocks when both were on screen. Only one is
-   * now, so the rule would sit above it dividing nothing - `display: none`
-   * does not stop `+` matching, and the hidden block is still the previous
-   * sibling. Reinstated only if a build ever shows both again.
-   */
   .livre__lang + .livre__lang {
     margin-block-start: 0;
     padding-block-start: 0;
@@ -536,10 +410,6 @@ const columns = [
 
   @media (min-width: 60rem) {
     .livre__inner {
-      /* The covers are the reason anyone scanned the code; they were sized
-         like a thumbnail beside the copy. `align-items: center` on the base
-         rule then holds them against the middle of the text rather than its
-         top, which only shows once one language is on screen at a time. */
       grid-template-columns: minmax(0, 34rem) minmax(0, 1fr);
       gap: 4rem;
     }

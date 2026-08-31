@@ -1,14 +1,3 @@
-/**
- * Shared progressive enhancement for all three forms.
- *
- * Every form works without this: it is a plain POST to /api/contact, and the
- * function redirects to a static confirmation page. With JavaScript the submit
- * is intercepted, so the visitor keeps their place on the page and their input
- * if something fails.
- *
- * Wire a form by giving it `data-form` and putting its strings in a
- * `<script type="application/json" data-form-strings>` next to it.
- */
 interface FormStrings {
   errors: Record<string, string>;
   successTitle: string;
@@ -24,7 +13,6 @@ function setup(form: HTMLFormElement) {
   if (!stringsEl?.textContent) return;
   const strings: FormStrings = JSON.parse(stringsEl.textContent);
 
-  // Marks the form as JS-capable and gives the server a timing baseline.
   const stamp = form.elements.namedItem('rendered_at') as HTMLInputElement | null;
   if (stamp) stamp.value = String(Date.now());
 
@@ -61,7 +49,6 @@ function setup(form: HTMLFormElement) {
     result.querySelector<HTMLElement>('[data-result-body]')!.textContent = body;
   };
 
-  /** Mirrors the server's rules so the visitor is told before a round trip. */
   const validate = (data: FormData): string[] => {
     const invalid: string[] = [];
     for (const field of form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(

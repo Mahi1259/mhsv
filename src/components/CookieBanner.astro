@@ -1,24 +1,7 @@
 ---
-/**
- * Cookie notice.
- *
- * There is nothing to consent TO yet: the site loads no analytics, no tracking
- * and no third-party script, and the only thing it stores is this banner's own
- * dismissal. So this is a notice with an acknowledgement, not a consent gate -
- * presenting a choice that changes nothing would be theatre, and offering a
- * "reject" that rejects nothing is worse.
- *
- * The button says "Understood" / "Compris" for that reason, confirmed by the
- * client on 28 August. "Accept" named a decision the reader is not making.
- * If optional cookies are ever added it has to become a real consent control
- * again, with a genuine reject - see the note below.
- *
- * If tracking is ever added it must be loaded from inside the accept handler
- * and nowhere else, and this must gain a genuine reject.
- *
- * Rendered hidden and revealed by script, so a reader without JavaScript - who
- * cannot dismiss it - is never shown a banner they cannot get rid of.
- */
+// A notice, not a consent gate: no analytics, no third-party scripts, no cookies.
+// If tracking is ever added, load it inside the accept handler and give this a
+// real reject.
 import { getContent, legalPath, type Locale } from '@/lib/i18n';
 
 interface Props {
@@ -38,7 +21,6 @@ const c = getContent(locale);
     {c.cookies.accept}
   </button>
 </aside>
-
 <script is:inline>
   (function () {
     var KEY = 'mhsv-cookie-notice';
@@ -48,32 +30,16 @@ const c = getContent(locale);
     var accept = el.querySelector('[data-cookie-accept]');
 
     function show() {
-      /*
-       * The notice may already be open - on a first visit it is, and the footer
-       * control is most likely to be tried exactly then. Re-showing something
-       * already shown changes nothing on screen, so the control looked broken:
-       * clicked, no page load, no banner appearing. It was working; there was
-       * simply nothing to see.
-       *
-       * So when it is already open, say so visibly. The attribute drives a
-       * short highlight in the stylesheet, and is removed afterwards so it can
-       * fire again on the next click.
-       */
       var alreadyOpen = !el.hidden;
       el.hidden = false;
 
       if (alreadyOpen) {
         el.removeAttribute('data-attention');
-        // Force a reflow so re-adding the attribute restarts the animation
-        // rather than being coalesced into no change at all.
         void el.offsetWidth;
         el.setAttribute('data-attention', '');
         setTimeout(function () { el.removeAttribute('data-attention'); }, 1200);
       }
 
-      /* Focus the notice when it is asked for, so a keyboard user is taken to
-         the thing they just requested. Not on first load - stealing focus from
-         someone who is already reading is rude. */
       if (accept) accept.focus();
     }
 
@@ -82,15 +48,9 @@ const c = getContent(locale);
       try {
         localStorage.setItem(KEY, 'accepted');
       } catch (e) {
-        /* nothing to do; the notice returns next visit */
       }
     });
 
-    /*
-     * The permanent "cookie settings" control in the footer. Revealed here
-     * rather than rendered visible, so it never appears for a reader without
-     * JavaScript, who could not use it.
-     */
     var reopeners = document.querySelectorAll('[data-cookie-reopen]');
     for (var i = 0; i < reopeners.length; i++) {
       reopeners[i].hidden = false;
@@ -101,38 +61,18 @@ const c = getContent(locale);
     try {
       seen = localStorage.getItem(KEY) === 'accepted';
     } catch (e) {
-      /* private mode: show the notice, it just will not be remembered */
     }
     if (seen) return;
     el.hidden = false;
   })();
 </script>
-
 <style>
-  /*
-   * A CARD, NOT A BAR.
-   *
-   * It used to be a full-bleed strip flexed with `justify-content: center`. On a
-   * phone the text filled the row, the button wrapped to a second line and then
-   * centred itself under left-aligned text, so the notice was tall, lopsided and
-   * read as a broken footer rather than an overlay - and at 96% opacity with no
-   * blur, the hero buttons underneath showed straight through it.
-   *
-   * Inset from the edges with a radius and a real shadow, it is unmistakably a
-   * layer above the page. The button is full width beneath the text, which is
-   * how a phone-sized action is expected to look, and the two only sit on one
-   * row once there is width for it.
-   */
   .cookie {
     position: fixed;
     inset-inline: 0;
     bottom: 0;
     z-index: 80;
-    /* inset-inline:0 + margin gives a card the width of the viewport less the
-       gutters, without having to know the viewport width. */
     margin: 0.75rem;
-    /* env() is 0 without viewport-fit=cover, which this site does not set;
-       max() keeps the gutter and picks up the inset if that ever changes. */
     margin-block-end: max(0.75rem, env(safe-area-inset-bottom, 0px));
     display: grid;
     gap: 0.875rem;
@@ -144,8 +84,6 @@ const c = getContent(locale);
     box-shadow: 0 14px 36px rgb(0 0 0 / 0.5);
   }
 
-  /* Without backdrop-filter the translucency is just bleed-through - the exact
-     problem being fixed - so those browsers get an opaque card instead. */
   @supports not (backdrop-filter: blur(1px)) {
     .cookie {
       background: var(--navy-deep);
@@ -156,16 +94,6 @@ const c = getContent(locale);
     display: none;
   }
 
-  /*
-   * The answer to "I clicked Cookie settings and nothing happened".
-   *
-   * On a first visit the notice is already open, so re-opening it is a no-op
-   * and the footer control appeared dead. This is what it does instead: a brief
-   * gold edge, so the eye is sent to the thing that was asked for.
-   *
-   * Colour is not the only signal - focus moves to the button at the same time,
-   * which is what a keyboard or screen-reader user gets.
-   */
   .cookie[data-attention] {
     animation: cookie-attention 1.2s var(--ease, ease-out);
   }
@@ -185,8 +113,6 @@ const c = getContent(locale);
     }
   }
 
-  /* No flash when motion is reduced - the focus move still happens, and that
-     is the part that actually conveys the response. */
   @media (prefers-reduced-motion: reduce) {
     .cookie[data-attention] {
       animation: none;
@@ -203,21 +129,14 @@ const c = getContent(locale);
   }
 
   .cookie__more {
-    /* Enough to separate it from the sentence, not enough to look like the gap
-       left by a missing word. */
     margin-inline-start: 0.25rem;
     white-space: nowrap;
   }
 
   .cookie__accept {
-    /* Full width is the phone-sized shape for the one action on the card. */
     width: 100%;
   }
 
-  /*
-   * Only once there is room for both on one line. Below this the button sits
-   * under the text, which is the whole point of the mobile layout.
-   */
   @media (min-width: 40rem) {
     .cookie {
       inset-inline: 1rem;

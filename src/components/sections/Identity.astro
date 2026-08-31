@@ -1,27 +1,4 @@
 ---
-/**
- * Identity, logos & collection - quiet type.
- *
- * THE THREE MARKS ARE NOT INTERCHANGEABLE, and this section is where that is
- * most likely to go wrong, so each is imported once and used once:
- *
- *   shield         the site's primary identity
- *   institutional  official documents, presentations, institutional contexts.
- *                  NEVER on collection clothing - the client's own usage note
- *                  says so, and the collection boards below carry only the
- *                  shield and the Focus mark
- *   Focus          the collection brand mark, and nothing else. Never the site
- *                  identity and never in the header
- *
- * The Focus mark ships in two versions and the wrong one is invisible rather
- * than merely wrong: navy-and-gold for light grounds, white-and-gold for dark.
- * This section is navy - #071426, measured, not assumed - so the DARK-ground
- * version is the one imported here.
- *
- * The institutional logo has the opposite problem. It is navy artwork on a
- * transparent ground, so on this section it would very nearly disappear; it
- * gets a light tile of its own, which is also how it is meant to be seen.
- */
 import { Image } from 'astro:assets';
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
@@ -45,12 +22,6 @@ const s = getContent(locale).sections.identity;
 
 const BOARDS: Record<string, ImageMetadata> = { performance, lifestyle, accessoires };
 
-/*
- * `key` comes from JSON, so it is a plain string as far as types go - narrowing
- * it in the callback is a claim the content cannot back up. Looked up instead,
- * and a board whose key has no image is dropped rather than rendering an
- * undefined src: a typo in the content should cost one board, not the page.
- */
 const boards = s.boards
   .map((b: { key: string; alt: string }) => ({ ...b, src: BOARDS[b.key] }))
   .filter((b: { src?: ImageMetadata }) => Boolean(b.src));
@@ -59,7 +30,6 @@ const boards = s.boards
 <Band locale={locale} anchor={s.anchor} title={s.title} type={type} lead={s.lead} status={s.status}>
   <h3 class="mono-label identity__heading">{s.logosTitle}</h3>
   <p class="identity__note">{s.logosNote}</p>
-
   <ul class="identity__logos" data-stagger data-rows>
     {
       s.logos.map((logo: { key: string; label: string; use: string }) => (
@@ -71,8 +41,6 @@ const boards = s.boards
             {logo.key === 'institutional' && (
               <Image src={institutional} alt={logo.label} widths={[220, 440]} sizes="14rem" loading="lazy" decoding="async" />
             )}
-            {/* Inlined rather than an <img>: it is a two-colour vector and this
-                keeps it a request lighter and lets it inherit nothing. */}
             {logo.key === 'focus' && <div class="identity__focus" role="img" aria-label={logo.label} set:html={focusDark} />}
           </div>
           <p class="identity__label mono-label">{logo.label}</p>
@@ -81,9 +49,7 @@ const boards = s.boards
       ))
     }
   </ul>
-
   <h3 class="mono-label identity__heading identity__heading--gallery">{s.galleryTitle}</h3>
-
   <ul class="identity__gallery" data-stagger data-rows>
     {
       boards.map((board) => (
@@ -100,12 +66,8 @@ const boards = s.boards
       ))
     }
   </ul>
-
-  {/* Required wording, verbatim. It is the whole basis on which these boards
-      may be shown at all: they are mock-ups, nothing here is for sale. */}
   <p class="identity__collection">{s.collectionNotice}</p>
 </Band>
-
 <style>
   .identity__heading {
     color: var(--band-muted);
@@ -138,30 +100,8 @@ const boards = s.boards
     }
   }
 
-  /*
-   * The gallery takes the full column, not the reading measure.
-   *
-   * This is a `quiet` band, which caps its main column at 46rem so prose stays
-   * readable. That is right for the text and wrong for these: at 46rem each
-   * board came out 235px wide, and they are dense boards of twenty-odd garments
-   * whose whole point is being looked at. Only the gallery escapes; the copy
-   * above it keeps its measure.
-   */
-  /*
-   * 84rem, not 64rem. The rail layout starts at 64rem but does not leave room
-   * for the breakout until the shell has stopped growing - asking for it at
-   * 1100px pushed the page into horizontal scroll. Below this the gallery keeps
-   * the reading measure, which is narrower than ideal and still correct.
-   */
   @media (min-width: 84rem) {
     .identity__gallery {
-      /*
-       * Measured from the PARENT, not the viewport. `100vw` includes the
-       * scrollbar, so the first version of this overflowed the page by a few
-       * pixels at 1440 - the audit catches that, and it is a horizontal scroll
-       * on a desktop for the sake of a gallery. Growing from 100% can only ever
-       * reach the space the band actually has.
-       */
       width: min(calc(100% + 14rem), 68rem);
     }
   }
@@ -182,12 +122,6 @@ const boards = s.boards
     border: 1px solid var(--band-rule);
   }
 
-  /*
-   * The institutional logo is navy artwork on a transparent ground. On this
-   * section's navy it would be a dark shape on a dark field, so it gets the
-   * light tile it is designed for. This is the one plate that differs, and it
-   * differs for a reason rather than for variety.
-   */
   .identity__plate--institutional {
     background: #ffffff;
     border-color: #ffffff;
@@ -218,29 +152,11 @@ const boards = s.boards
     line-height: 1.5;
   }
 
-  /*
-   * One height for all three, because they are not one shape: Performance and
-   * Accessories are landscape and Lifestyle is portrait. Left to their natural
-   * heights in a three-column grid, the portrait board ran to roughly twice the
-   * others and collided with the notice below.
-   *
-   * `contain`, never `cover`: these are mock-up boards and cropping one would
-   * cut garments out of the very thing being shown.
-   */
   .identity__board {
     position: relative;
     display: grid;
     place-items: center;
-    /* An aspect, not a fixed height. A fixed one squeezed the two landscape
-       boards into a thin strip inside a tall tile while the portrait one filled
-       its own; 4:3 sits between the two shapes so all three read at a similar
-       size. */
     aspect-ratio: 4 / 3;
-    /*
-     * Both needed, or the aspect is only a suggestion: a grid item's min-height
-     * is `auto`, so the portrait board's intrinsic height pushed its tile to
-     * 677px while the other two sat at 343.
-     */
     min-height: 0;
     overflow: hidden;
     padding: 0.5rem;
@@ -249,17 +165,6 @@ const boards = s.boards
     background: var(--band-raised);
   }
 
-  /*
-   * Absolutely positioned, which is the only version of this that worked.
-   *
-   * The tile takes its height from `aspect-ratio`, and neither `height: 100%`
-   * nor `max-height: 100%` on a centred grid child resolved against it - the
-   * portrait board rendered at its intrinsic 437px inside a 232px tile and
-   * `overflow: hidden` cut the bottom row of garments off. Twice. Absolute
-   * inset resolves against the padding box regardless, so `contain` finally has
-   * a box to fit inside: landscape by width, portrait by height, neither
-   * cropped.
-   */
   .identity__board :global(img) {
     position: absolute;
     inset: 0.5rem;

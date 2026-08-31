@@ -1,7 +1,3 @@
-/**
- * Regenerates functions/lib/crest-logo.mjs from public/icon-512.png.
- * `node scripts/build-crest.mjs`  - only needed if the logo changes.
- */
 import sharp from 'sharp';
 import { writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';

@@ -1,24 +1,4 @@
 ---
-/**
- * They Support MHSV® - grid type.
- *
- * Three groups, one section: patrons and donors, partners and sponsors,
- * ambassadors and supporters. They differ in what a profile carries - an
- * organisation has a logo and a website, a person has a photo and a quote - so
- * `category` decides which fields are rendered rather than three components
- * repeating the same card.
- *
- * SHIPS EMPTY, and unlike the previous version it still RENDERS. That changed
- * on the 28 August brief: while there are no profiles the section shows its
- * introduction, an "in development" badge and a way to get in touch, because a
- * reader looking for how to support MHSV® should find something rather than
- * nothing. Empty groups are simply absent - an empty heading says less than no
- * heading.
- *
- * No placeholder names, organisations, logos or quotes. Nothing is published
- * without MHSV®'s approval per profile. Adding one is a content edit in four
- * files - see src/data/README.md.
- */
 import Band from '@/components/Band.astro';
 import { Image } from 'astro:assets';
 import { getContent, type Locale } from '@/lib/i18n';
@@ -38,25 +18,16 @@ type Category = 'patron' | 'partner' | 'ambassador';
 type Profile = {
   name: string;
   category: Category;
-  /** Organisations and people both use this: a line under the name. */
   role?: string | null;
   intro?: string | null;
-  /** People only - their own words. */
   message?: string | null;
-  /** File name in src/assets/supporters/. Photo for a person, logo for an org. */
   photo?: string | null;
-  /** Organisations only. */
   website?: string | null;
-  /** People only. A link, never an embed - see src/data/README.md. */
   video?: string | null;
 };
 
 const profiles = (s.profiles ?? []) as Profile[];
 
-/*
- * Looked up rather than imported, so a missing or misspelled file leaves the
- * card without an image instead of failing the build.
- */
 const images = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/supporters/*.{jpg,jpeg,png,webp,avif}',
   { eager: true },
@@ -71,7 +42,6 @@ const groups = s.categories
 
 <Band locale={locale} anchor={s.anchor} title={s.title} type={type} status={s.status}>
   <p class="prose-body supporters__intro">{s.intro}</p>
-
   {
     groups.map((group) => (
       <section class="supporters__group">
@@ -96,7 +66,6 @@ const groups = s.categories
                 <h4 class="supporters__name">{profile.name}</h4>
                 {profile.role && <p class="supporters__role mono-label">{profile.role}</p>}
                 {profile.intro && <p class="supporters__text">{profile.intro}</p>}
-                {/* Their own words, so a quotation rather than more body copy. */}
                 {profile.message && (
                   <blockquote class="supporters__message">
                     <p>{profile.message}</p>
@@ -108,10 +77,6 @@ const groups = s.categories
                   </a>
                 )}
                 {profile.video && (
-                  /* A LINK, never an embedded player: an iframe from YouTube or
-                     Vimeo sets third-party cookies on load, which would make the
-                     cookies page untrue and need a consent gate that does not
-                     exist. */
                   <a
                     class="link supporters__video"
                     href={profile.video}
@@ -129,11 +94,8 @@ const groups = s.categories
     ))
   }
 
-  {/* The way in. Points at the contact form, which is where an offer of support
-      actually goes - not a mailto, so it is recorded like every other enquiry. */}
   <a class="btn btn--primary supporters__cta" href="#contact" data-magnetic>{s.ctaLabel}</a>
 </Band>
-
 <style>
   .supporters__intro {
     max-width: 58ch;
@@ -172,7 +134,6 @@ const groups = s.categories
     margin-block-end: 1rem;
   }
 
-  /* An organisation's mark is not a portrait: shown whole, not cropped round. */
   .supporters__image--logo {
     width: auto;
     max-width: 9rem;

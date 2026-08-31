@@ -1,18 +1,3 @@
-/**
- * Post-build gate. `npm run build:check` (runs automatically as part of build.)
- *
- * The content check guards the JSON; this one guards what actually ships. It
- * fails the build when the output would break one of the client's hard
- * constraints, so a violation cannot reach production by accident:
- *
- *   1. banned wording ("Beyond Football")
- *   2. any reference to an asset the pack marks REFERENCE_ONLY,
- *      INTERNAL_REFERENCE or REVIEW_REQUIRED
- *   3. the full Founding Book PDFs present in the output
- *   4. legal/association status leaking while the flag is off (BLOCKERS #1)
- *   5. structural SEO/a11y basics: one <h1> per page, 21 sections on the home
- *      documents, complete hreflang sets
- */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { resolve, dirname, relative, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -46,7 +31,6 @@ const textFiles = files.filter((f) =>
   ['.html', '.css', '.js', '.xml', '.txt', '.json', '.webmanifest'].includes(extname(f)),
 );
 
-// --- 1 & 2: banned wording and uncleared assets -----------------------------
 const FORBIDDEN = [
   { pattern: /beyond\s+football/i, why: 'retired baseline (hard constraint)' },
   { pattern: /REFERENCE_ONLY/i, why: 'asset marked REFERENCE_ONLY in ASSET_STATUS.csv' },
@@ -66,7 +50,6 @@ for (const file of textFiles) {
   }
 }
 
-// --- 3: the Founding Book PDFs must never be in the output ------------------
 for (const file of files) {
   const name = relative(DIST, file);
   if (extname(file).toLowerCase() === '.pdf') {
@@ -74,19 +57,7 @@ for (const file of files) {
   }
 }
 
-// --- 4: legal status must not leak while withheld ---------------------------
 if (!SHOW_LEGAL_STATUS) {
-  /*
-   * The legal pages EXIST while the flag is off - they are placeholders now,
-   * and the footer links to all four in every language, so a missing one is a
-   * 404 rather than a withheld page. What must not appear is legal STATUS, and
-   * the wording sweep below covers every HTML file including these.
-   *
-   * This guard used to assert the opposite: that no legal-notice page was
-   * built at all. That was right when the page carried the editor block and
-   * the association wording; it is wrong now that it carries one sentence
-   * saying a lawyer has not written it yet.
-   */
   for (const locale of LOCALES) {
     const expected = locale === 'fr'
       ? ['mentions-legales', 'protection-des-donnees', 'cookies', 'formulaires']
@@ -98,7 +69,6 @@ if (!SHOW_LEGAL_STATUS) {
     }
   }
 
-  // The association wording from §01/§21, in all four languages.
   const LEGAL_WORDING = [
     /association suisse à but non lucratif/i,
     /swiss non-profit association/i,
@@ -106,18 +76,6 @@ if (!SHOW_LEGAL_STATUS) {
     /associazione svizzera senza scopo di lucro/i,
     /MHSV Association/,
   ];
-  /*
-   * The two supplied legal notices are the exemption, and a narrow one.
-   *
-   * MHSV® supplied both texts for these URLs and both name "MHSV Association" -
-   * as the data controller in one, as the site's publisher in the other. Neither
-   * document can identify it any other way. Both carry a banner saying they are
-   * pending final validation, and neither banner may be removed.
-   *
-   * The ban stands everywhere else: the home documents, the footer, the hero
-   * status line. Exempting the whole build instead of these pages would have
-   * thrown away the guard that keeps association status off the site.
-   */
   const APPROVED_LEGAL_TEXT =
     /\/(protection-des-donnees|data-protection|mentions-legales|legal-notice)\//;
 
@@ -136,18 +94,6 @@ if (!SHOW_LEGAL_STATUS) {
   notes.push('PUBLIC_SHOW_LEGAL_STATUS is off - legal footer and hero status line withheld; the four legal pages are placeholders.');
 }
 
-/*
- * --- 4b: every language link must land on a page that exists ---------------
- *
- * The legal and photo-credits pages carry a different slug per language, and
- * the switcher used to swap only the prefix: from /it/crediti-foto/ it offered
- * /de/crediti-foto/, which does not exist. Every one of those pages was broken
- * in three languages out of four, and nothing here noticed, because the checks
- * only ever looked at the home documents.
- *
- * Static, so it needs no server: resolve each href to the file it would be
- * served from and require that file to be in the build.
- */
 for (const file of files.filter((f) => extname(f) === '.html')) {
   const html = readFileSync(file, 'utf8');
   const from = relative(DIST, file);
@@ -171,7 +117,6 @@ for (const file of files.filter((f) => extname(f) === '.html')) {
   }
 }
 
-// --- 5: structure -----------------------------------------------------------
 for (const locale of LOCALES) {
   const home = resolve(DIST, locale, 'index.html');
   let html;
@@ -185,17 +130,6 @@ for (const locale of LOCALES) {
   const h1s = html.match(/<h1[\s>]/g) ?? [];
   if (h1s.length !== 1) errors.push(`${locale}/index.html: ${h1s.length} <h1> elements, expected exactly 1`);
 
-  /*
-   * 22 sections, always.
-   *
-   * "They Support MHSV®" used to render nothing while its profiles array was
-   * empty, so this was derived - 21 or 22 depending on the content. The 28
-   * August brief changed that: the section now always renders, showing its
-   * introduction, its status badge and a way to get in touch even with no
-   * profiles, because a reader looking for how to support MHSV® should find
-   * something. So the count is fixed again, and adding a profile does not
-   * change it.
-   */
   const EXPECTED_SECTIONS = 22;
 
   const sections = html.match(/<section[^>]*aria-labelledby=/g) ?? [];
@@ -205,26 +139,20 @@ for (const locale of LOCALES) {
     );
   }
 
-  // The navigation list must exist exactly once. It used to be emitted twice -
-  // a desktop bar and a mobile panel - duplicating every link in the DOM.
   const navs = html.match(/id="main-nav"/g) ?? [];
   if (navs.length !== 1) {
     errors.push(`${locale}/index.html: ${navs.length} #main-nav elements, expected exactly 1`);
   }
 
-  // The section numbers are the content pack's editorial index, not copy.
   if (/class="[^"]*\beyebrow\b/.test(html)) {
     errors.push(`${locale}/index.html: section-number eyebrow rendered - numbers must not appear`);
   }
 
-  // The launch rate must be stated once. It was previously in both programme
-  // tables and again in the fees section.
   const currency = html.match(/CHF/g) ?? [];
   if (currency.length !== 1) {
     errors.push(`${locale}/index.html: "CHF" appears ${currency.length}×, expected exactly 1`);
   }
 
-  // Governance: exactly the six approved people, and no retired name.
   const members = html.match(/class="team__name"/g) ?? [];
   if (members.length !== 6) {
     errors.push(`${locale}/index.html: ${members.length} team members, expected 6`);
@@ -255,7 +183,8 @@ for (const locale of LOCALES) {
   if (!/rel="canonical"/.test(html)) errors.push(`${locale}/index.html: missing canonical`);
 }
 
-// --- 6: the book page, which the printed QR points at -----------------------
+// /livre is the printed QR code's landing page: it must exist, be canonical,
+// carry no PDF, and read as an order request rather than a purchase.
 {
   const livre = resolve(DIST, 'livre', 'index.html');
   let html = null;
@@ -266,14 +195,12 @@ for (const locale of LOCALES) {
   }
 
   if (html) {
-    // The QR encodes this exact path. It can never move.
     if (!/rel="canonical" href="[^"]*\/livre\/?"/.test(html)) {
       errors.push('livre/index.html: canonical does not point at /livre');
     }
     if (/href="[^"]*\.pdf"/i.test(html)) {
       errors.push('livre/index.html: links to a PDF - the complete book must never be downloadable');
     }
-    // It is an order request, not a purchase: pricing is not approved.
     for (const word of ['checkout', 'add to cart', 'panier', 'stripe', 'paypal']) {
       if (html.toLowerCase().includes(word)) {
         errors.push(`livre/index.html: contains "${word}" - this is an order request, not a purchase`);
@@ -285,16 +212,7 @@ for (const locale of LOCALES) {
   }
 }
 
-/*
- * --- 6b: no QR code is displayed on the site -------------------------------
- *
- * MHSV® confirmed on 27 August that the QR is for business cards pointing at
- * www.mhsv.ch and was never asked for on the website. The Book section briefly
- * carried one; this makes sure it does not come back unnoticed.
- *
- * The print assets in qr/ are unaffected - they are deliberately outside
- * public/, so they never enter the build. This checks the built pages only.
- */
+// No QR code on the site itself - the QR is a print asset.
 {
   for (const file of textFiles.filter((f) => extname(f) === '.html')) {
     const html = readFileSync(file, 'utf8');
@@ -310,18 +228,7 @@ for (const locale of LOCALES) {
   }
 }
 
-/*
- * --- 6c: every photograph on the page is credited, and nothing else is ------
- *
- * Credits are per-photograph. When four images were withdrawn for carrying club
- * and brand marks, the credits page would happily have gone on naming their
- * photographers - crediting pictures that are not on the site, and implying the
- * withdrawn ones are still in use.
- *
- * SectionImage renders nothing when its file is absent, by design, so the
- * number of <figure class="section-image"> blocks on a home page is exactly the
- * number of photographs in src/assets/stock/. Tie all three together.
- */
+// Every stock photograph must have a credit, and every credit a photograph.
 {
   const STOCK = resolve(ROOT, 'src/assets/stock');
   const photographs = existsSync(STOCK)
@@ -338,8 +245,6 @@ for (const locale of LOCALES) {
       );
     }
 
-    // Mirrors LEGAL_PAGES.photoCredits in src/config/site.ts, which this plain
-    // node script cannot import. The 4b link check would catch a rename.
     const creditsSlug = {
       fr: 'fr/credits-photos',
       en: 'en/photo-credits',
@@ -360,23 +265,8 @@ for (const locale of LOCALES) {
   }
 }
 
-/*
- * --- 6d: individual addresses stay inside Governance ------------------------
- *
- * Martial's 27 August instruction, widened by the 28 August one: the six
- * committee members now have their own institutional addresses, and those may
- * appear in exactly one place - their card in the Governance section. Every
- * other page, the footer and all three forms carry infos@mhsv.ch and nothing
- * else. His phone number appears nowhere at all; it was published in the
- * Contact section of all four languages until that instruction.
- *
- * Matched by SHAPE rather than by a list of names, so a seventh member added
- * later is covered without anyone remembering to update this: initial-dot-
- * surname at mhsv.ch. infos@ does not match, which is the point.
- *
- * Checked against built HTML rather than the content files, because it is the
- * rendered page that leaks.
- */
+// Individual addresses appear only on a Governance card; everywhere else is
+// infos@mhsv.ch. Matched by shape so a seventh member is covered too.
 {
   const INDIVIDUAL = /\b[a-z]\.[a-z-]+@mhsv\.ch\b/g;
 
@@ -384,25 +274,8 @@ for (const locale of LOCALES) {
     const name = relative(DIST, file);
     const html = readFileSync(file, 'utf8');
 
-    /*
-     * No phone number, anywhere. `tel:` covers the link, the digits cover the
-     * text - the number was published as both.
-     *
-     * TESTED AGAINST THE RENDERED TEXT, NOT THE MARKUP. astro.config sets
-     * inlineStylesheets:'always', so every page carries its whole stylesheet
-     * inline and the raw HTML is dense with hex colours. Scanning that, a
-     * gradient stop `#07142647 55%` reads as a ten-digit Swiss number. Strip
-     * style and script first and the question becomes the right one: is a
-     * phone number VISIBLE to a reader.
-     *
-     * The digit pattern used to be
-     *   /\+41[\s.-]?\d[\s.-]?\d{2}([\s.-]?\d{2}){3}/
-     * which reads as +41, one digit, two digits, then three pairs. The actual
-     * number groups as 79 294 64 73 - two, three, two, two - so it never
-     * matched, and this guard passed a build with the number rendered on the
-     * home page in all four languages. Counting nine digits after the country
-     * code, however the author spaced them, is the fix.
-     */
+    // Scans rendered text, not markup: stylesheets are inlined, so a gradient
+    // stop like #07142647 55% reads as a Swiss number in raw HTML.
     const visible = html
       .replace(/<(style|script)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ')
       .replace(/<[^>]+>/g, ' ');
@@ -410,8 +283,6 @@ for (const locale of LOCALES) {
     const tel = /(?:href|tel)\s*[=:]\s*["']?tel:\s*[+\d][\d\s.()+-]{5,}/i.exec(html);
     if (tel) errors.push(`${name}: publishes a phone link "${tel[0].trim()}"`);
     const intl = new RegExp(`(?:\\+|00)${SEP}41(?:${SEP}\\d){9}`);
-    // National form requires real separators between the groups, so a bare run
-    // of digits - an id, a year range, a hash - cannot masquerade as one.
     const national = /\b0[1-9]\d[\s.\u00a0-]\d{3}[\s.\u00a0-]\d{2}[\s.\u00a0-]\d{2}\b/;
     const digits = intl.exec(visible) ?? national.exec(visible);
     if (digits) errors.push(`${name}: publishes a phone number "${digits[0].trim()}"`);
@@ -419,7 +290,6 @@ for (const locale of LOCALES) {
     const found = [...new Set(html.match(INDIVIDUAL) ?? [])];
     if (!found.length) continue;
 
-    // Only the home documents carry the Governance section at all.
     const onHome = /^[a-z]{2}\/index\.html$/.test(name);
     if (!onHome) {
       errors.push(
@@ -433,7 +303,6 @@ for (const locale of LOCALES) {
       const inCard = new RegExp(
         `class="[^"]*\\bteam__email\\b[^"]*"\\s+href="mailto:${escaped}"`,
       ).test(html);
-      // mailto: href + link text = 2. Anything more is a second place.
       const count = (html.match(new RegExp(escaped, 'g')) ?? []).length;
       if (!inCard) {
         errors.push(`${name}: ${address} appears outside the Governance card`);
@@ -444,18 +313,7 @@ for (const locale of LOCALES) {
   }
 }
 
-/*
- * --- 6f: a deployed build may never canonicalise to localhost --------------
- *
- * The first Cloudflare deploy built with no PUBLIC_SITE_URL. site-url.mjs knew
- * about Vercel's variables and not Cloudflare's, so it fell through to the
- * local default and produced 41 pages whose canonical, hreflang, Open Graph
- * URLs and sitemap entries all pointed at http://localhost:4321. Every check
- * passed: nothing about that output looks wrong until it is live.
- *
- * Only fires in CI. A local build canonicalising to localhost is correct, and
- * failing it would just make `npm run build` unusable on a laptop.
- */
+// A build that canonicalises to localhost must never reach a deployment.
 {
   const inCI = Boolean(
     process.env.CF_PAGES || process.env.VERCEL || process.env.NETLIFY || process.env.CI,
@@ -476,26 +334,11 @@ for (const locale of LOCALES) {
   }
 }
 
-/*
- * --- 6g: the three marks are not interchangeable ---------------------------
- *
- * MHSV®'s own usage note is explicit, and each rule is easy to break by
- * reaching for whichever logo import is nearest:
- *
- *   Focus mark      collection brand ONLY - never the site identity, never
- *                   the header
- *   institutional   documents, presentations, institutional contexts - and
- *                   NEVER on collection clothing
- *
- * Checked in the SOURCE rather than the build, because that is where the rule
- * is broken: an import in the wrong component. Hashed filenames in dist/ say
- * nothing about intent.
- */
+// Logo usage rules, checked in the source rather than the output.
 {
   const SOURCE = resolve(ROOT, 'src');
   const sourceFiles = walk(SOURCE).filter((f) => /\.(astro|ts|tsx)$/.test(f));
 
-  // Where each mark is allowed to be imported at all.
   const RULES = [
     { mark: 'mhsv-focus', allowed: ['components/sections/Identity.astro'],
       why: 'the Focus mark is the collection brand, never the site identity' },
@@ -514,7 +357,6 @@ for (const locale of LOCALES) {
     }
   }
 
-  // The header is the one place named in the instruction, so name it back.
   const header = readFileSync(resolve(SOURCE, 'components/Header.astro'), 'utf8');
   for (const banned of ['mhsv-focus', 'mhsv-institutional']) {
     if (header.includes(banned)) {
@@ -523,18 +365,6 @@ for (const locale of LOCALES) {
   }
 }
 
-/*
- * --- 6h: the presentation video ---------------------------------------------
- *
- * Three things that fail quietly rather than loudly:
- *
- *   .srt in a <track>   browsers accept WebVTT and nothing else. An .srt does
- *                       not error - the video plays and the cues simply never
- *                       appear, which nobody notices until someone needs them.
- *   no poster           the frame is empty until playback starts.
- *   preload             without preload="none" the browser reaches for a 3.4MB
- *                       file on every page load whether or not anyone plays it.
- */
 for (const locale of LOCALES) {
   const home = resolve(DIST, locale, 'index.html');
   if (!existsSync(home)) continue;
@@ -558,19 +388,11 @@ for (const locale of LOCALES) {
   if (!/preload="none"/.test(video)) {
     errors.push(`${locale}/index.html: the video is missing preload="none" - it would fetch megabytes on load`);
   }
-  // The client asked for manual playback, not autoplay.
   if (/\bautoplay\b/.test(video)) {
     errors.push(`${locale}/index.html: the video autoplays`);
   }
 }
 
-/*
- * --- 6i: no dotfiles in the output -----------------------------------------
- *
- * public/ is copied verbatim, so a .DS_Store dropped there by Finder ships with
- * the site. One did. Harmless in itself, but it is macOS metadata on a public
- * server and it should not be there.
- */
 for (const file of files) {
   const name = relative(DIST, file);
   if (name.split('/').some((part) => part.startsWith('.'))) {
@@ -578,7 +400,6 @@ for (const file of files) {
   }
 }
 
-// --- 7: consent must never be pre-ticked ------------------------------------
 for (const file of textFiles.filter((f) => extname(f) === '.html')) {
   const html = readFileSync(file, 'utf8');
   const consentInputs = html.match(/<input[^>]*name="consent"[^>]*>/g) ?? [];
@@ -589,7 +410,6 @@ for (const file of textFiles.filter((f) => extname(f) === '.html')) {
   }
 }
 
-// --- report -----------------------------------------------------------------
 for (const note of notes) console.log(`  · ${note}`);
 
 if (errors.length) {

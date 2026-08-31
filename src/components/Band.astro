@@ -1,17 +1,4 @@
 ---
-/**
- * A content band - the page's repeating unit, in five archetypes.
- *
- * The two-digit section numbers are gone. They were the content pack's
- * internal editorial index ("check section 14"), never website copy, and
- * printing them on every section was the main reason the page read as a slide
- * deck.
- *
- * What replaces them is the sticky margin label: on wide screens the section
- * name pins beside its content while you scroll, which actually orients you.
- * It is aria-hidden - the <h2> already names the section for assistive
- * technology, and the label must not be announced twice.
- */
 import StatusBadge from '@/components/StatusBadge.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import type { SectionType, StatusKey } from '@/config/site';
@@ -20,17 +7,10 @@ interface Props {
   locale: Locale;
   anchor: string;
   title: string;
-  /**
-   * The heading pre-split into display lines, for the masked reveal. Splitting
-   * MUST be manual and per language - German wraps into a different number of
-   * lines than English, and an automatic splitter produces mismatched counts.
-   * Omit it and the heading simply uses the ordinary reveal.
-   */
   titleLines?: string[];
   type: SectionType;
   lead?: string;
   status?: { key: string; detail: string } | null;
-  /** Skips the built-in header so a section can lay out its own. */
   bare?: boolean;
   class?: string;
 }
@@ -50,15 +30,6 @@ const {
 const headingId = `${anchor}-title`;
 const titleClass = type === 'statement' ? 'statement-title' : 'section-title';
 
-/**
- * The margin label is SHORT - one or two words - and never the heading again.
- *
- * It read from the navigation, which only covers eight of the twenty-one
- * sections; the other thirteen fell back to the heading and printed it twice
- * side by side, which reads as a mistake rather than as orientation. There is
- * now a rail label per section, and the navigation is the fallback rather than
- * the source.
- */
 const c = getContent(locale);
 const rails = c.railLabels as Record<string, string>;
 const navLabel = c.nav.items.find((item) => item.id === anchor)?.label;
@@ -76,7 +47,6 @@ const label = rails[anchor] ?? navLabel ?? title;
 >
   <div class="shell band__shell">
     <p class="band__label mono-label" aria-hidden="true">{label}</p>
-
     <div class="band__main">
       {
         !bare && (
@@ -113,14 +83,11 @@ const label = rails[anchor] ?? navLabel ?? title;
     </div>
   </div>
 </section>
-
 <style>
   .band__shell {
     display: block;
   }
 
-  /* The margin label is decorative orientation; it only exists where there is
-     room for it beside the content. */
   .band__label {
     display: none;
   }
@@ -141,7 +108,6 @@ const label = rails[anchor] ?? navLabel ?? title;
     margin-block-start: clamp(1.75rem, 1.2rem + 2.2vw, 3.25rem);
   }
 
-  /* Statement sections are mostly air: a large line and nothing else. */
   .band--statement .band__head {
     max-width: 46rem;
   }
@@ -150,7 +116,6 @@ const label = rails[anchor] ?? navLabel ?? title;
     margin-block-start: clamp(2rem, 1.4rem + 2.6vw, 3.75rem);
   }
 
-  /* Quiet sections are narrow and recessive by design. */
   .band--quiet .band__main {
     max-width: 46rem;
   }
@@ -179,7 +144,6 @@ const label = rails[anchor] ?? navLabel ?? title;
       margin: 0;
       color: var(--band-muted);
       line-height: 1.4;
-      /* Long German section names must not widen the rail. */
       overflow-wrap: anywhere;
     }
 

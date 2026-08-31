@@ -1,11 +1,4 @@
 ---
-/**
- * Vision 2035 - statement type.
- *
- * Numbering is kept here: the three phases are a genuine sequence
- * (structure -> consolidate -> deploy), so the order carries meaning. An
- * ordered list keeps that true with CSS off.
- */
 import Band from '@/components/Band.astro';
 import { getContent, type Locale } from '@/lib/i18n';
 import type { SectionType } from '@/config/site';
@@ -41,7 +34,6 @@ const s = getContent(locale).sections.vision;
   </ol>
   <p class="prose-body vision__note">{s.note}</p>
 </Band>
-
 <style>
   .arc {
     display: grid;

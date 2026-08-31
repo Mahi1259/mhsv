@@ -1,23 +1,3 @@
-/**
- * Asset pipeline: developer pack -> src/assets + public/  (`npm run assets:prepare`)
- *
- * ASSET_STATUS.csv is the authority. This script refuses to emit anything that
- * is not APPROVED_FOR_PROTOTYPE or APPROVED_FOR_BOOK_BLOCK, so a
- * REFERENCE_ONLY / INTERNAL_REFERENCE / REVIEW_REQUIRED file cannot reach the
- * build even if someone imports it by name.
- *
- * Derived outputs:
- *   src/assets/logo/mhsv-logo.png        primary logo, whitespace trimmed,
- *                                        white background keyed to transparent
- *   src/assets/book/*.png                approved Founding Book covers
- *   public/favicon.svg, icon-*.png       crest crop of the primary logo
- *   public/og-image.png                  1200x630 share card
- *
- * The white-background key and the crest crop are mechanical derivations of the
- * one approved logo - no wordmark is altered and no unapproved variant is
- * introduced. The client's brief explicitly asks for icons derived from the
- * primary logo.
- */
 import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -28,9 +8,6 @@ const PACK = process.env.MHSV_ASSET_PACK || resolve(ROOT, '..');
 
 const PUBLISHABLE = new Set(['APPROVED_FOR_PROTOTYPE', 'APPROVED_FOR_BOOK_BLOCK']);
 
-// ---------------------------------------------------------------------------
-// ASSET_STATUS.csv
-// ---------------------------------------------------------------------------
 function readAssetStatus() {
   const csvPath = resolve(PACK, 'ASSET_STATUS.csv');
   if (!existsSync(csvPath)) {
@@ -56,8 +33,6 @@ function readAssetStatus() {
   const [, ...rows] = csv.split(/\r?\n/);
   const map = new Map();
   for (const row of rows) {
-    // Simple 3-column CSV; instructions contain no commas in the delivered file,
-    // but split with a limit so a stray comma cannot shift the status column.
     const first = row.indexOf(',');
     const second = row.indexOf(',', first + 1);
     if (first === -1 || second === -1) continue;
@@ -80,16 +55,6 @@ function assertPublishable(relPath) {
   return entry;
 }
 
-// ---------------------------------------------------------------------------
-// background keying
-// ---------------------------------------------------------------------------
-
-/**
- * Flood-fill from the image border across near-white pixels and return a
- * single-channel mask (0 = background, 255 = keep). Filling from the border
- * rather than keying every white pixel preserves the white lettering inside
- * the crest.
- */
 function backgroundMask(data, width, height, channels, threshold = 236) {
   const n = width * height;
   const mask = new Uint8Array(n).fill(255);
@@ -134,7 +99,6 @@ function backgroundMask(data, width, height, channels, threshold = 236) {
   return mask;
 }
 
-/** Tight bounding box of mask!=0, with optional padding. */
 function maskBounds(mask, width, height, pad = 0) {
   let minX = width;
   let minY = height;
@@ -158,10 +122,6 @@ function maskBounds(mask, width, height, pad = 0) {
   return { left: minX, top: minY, width: maxX - minX + 1, height: maxY - minY + 1 };
 }
 
-/**
- * Find the horizontal band of empty rows that separates the crest from the
- * wordmark lockup, so icons can use the crest alone.
- */
 function crestBounds(mask, width, bounds) {
   const rowHas = (y) => {
     for (let x = bounds.left; x < bounds.left + bounds.width; x++) {
@@ -176,7 +136,6 @@ function crestBounds(mask, width, bounds) {
       if (gapStart === -1) gapStart = y;
     } else if (gapStart !== -1) {
       const gap = { start: gapStart, end: y, size: y - gapStart };
-      // The crest must occupy at least a third of the artwork before the gap.
       if (gapStart - bounds.top > bounds.height * 0.33 && (!best || gap.size > best.size)) {
         best = gap;
       }
@@ -185,7 +144,6 @@ function crestBounds(mask, width, bounds) {
   }
   if (!best) return bounds;
   const crestMask = { ...bounds, height: best.start - bounds.top };
-  // Re-tighten horizontally within the crest rows only.
   let minX = width;
   let maxX = -1;
   for (let y = crestMask.top; y < crestMask.top + crestMask.height; y++) {
@@ -199,19 +157,6 @@ function crestBounds(mask, width, bounds) {
   return { left: minX, top: crestMask.top, width: maxX - minX + 1, height: crestMask.height };
 }
 
-/**
- * Compose the source pixels with the mask into an RGBA buffer.
- *
- * The alpha channel is assembled here rather than with sharp's joinChannel:
- * on this source (which carries an ICC profile) joinChannel silently returns a
- * 3-channel image, dropping the transparency. Writing the bytes directly is
- * deterministic and the raw pixels are already in hand.
- *
- * The mask is blurred first so the hard flood-fill boundary is feathered by a
- * sub-pixel and the mark does not get a jagged outline.
- * `toColourspace('b-w')` keeps that blur single-channel - sharp otherwise
- * promotes a 1-channel raw input to 3-channel RGB.
- */
 async function applyMask(data, mask, width, height, channels) {
   const softAlpha = await sharp(Buffer.from(mask), {
     raw: { width, height, channels: 1 },
@@ -236,9 +181,6 @@ async function applyMask(data, mask, width, height, channels) {
   return sharp(rgba, { raw: { width, height, channels: 4 } });
 }
 
-// ---------------------------------------------------------------------------
-// build
-// ---------------------------------------------------------------------------
 const written = [];
 
 function record(file, note) {
@@ -263,8 +205,6 @@ async function buildLogo() {
 
   mkdirSync(resolve(ROOT, 'src/assets/logo'), { recursive: true });
 
-  // Full lockup, whitespace trimmed. Astro's image pipeline handles the
-  // responsive derivatives and WebP conversion from here.
   await sharp(keyedBuf)
     .extract(bounds)
     .png({ compressionLevel: 9 })
@@ -274,7 +214,6 @@ async function buildLogo() {
     `full lockup, ${bounds.width}x${bounds.height}, transparent background`,
   );
 
-  // Crest only - icons and favicon.
   const crestBuf = await sharp(keyedBuf).extract(crest).png().toBuffer();
   await sharp(crestBuf).png().toFile(resolve(ROOT, 'src/assets/logo/mhsv-crest.png'));
   record('src/assets/logo/mhsv-crest.png', `crest crop, ${crest.width}x${crest.height}`);
@@ -296,7 +235,6 @@ async function buildLogo() {
     record(`public/icon-${size}.png`);
   }
 
-  // Maskable icon needs the safe-zone padding Android crops into.
   await sharp({
     create: { width: 512, height: 512, channels: 4, background: '#0B0B0C' },
   })
@@ -305,8 +243,6 @@ async function buildLogo() {
     .toFile(resolve(ROOT, 'public/icon-512-maskable.png'));
   record('public/icon-512-maskable.png', '512x512 with maskable safe zone');
 
-  // SVG favicon wrapping the crest raster - scalable container, and the one
-  // approved mark rather than a redrawn one.
   const favPng = await sharp(crestBuf)
     .resize(128, 128, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
     .png({ compressionLevel: 9, palette: true })
@@ -324,8 +260,6 @@ async function buildLogo() {
     .toFile(resolve(ROOT, 'public/favicon-32.png'));
   record('public/favicon-32.png', 'fallback for browsers without SVG favicon support');
 
-  // Open Graph card: logo on the brand dark, no text, so one image serves all
-  // four locales without a translation risk.
   const ogLogo = await sharp(keyedBuf).extract(bounds).resize({ height: 400, fit: 'inside' }).toBuffer();
   await sharp({ create: { width: 1200, height: 630, channels: 4, background: '#0B0B0C' } })
     .composite([{ input: ogLogo, gravity: 'centre' }])
@@ -336,18 +270,6 @@ async function buildLogo() {
   return { meta, bounds, crest };
 }
 
-/**
- * The content box of a cover, ignoring any pale border the export left on it.
- *
- * The supplied files are both 1489x2105 but neither fills that box: the
- * English cover carries 124px of white across the top and the French one 22px
- * down the left side. Rendered as-is, the English cover floated below its own
- * frame with a white band above it. Measured rather than guessed, and applied
- * per file, so a re-export with clean edges simply trims nothing.
- *
- * `sharp().trim()` is not used: it keys off the corner pixel and would take
- * the navy with it on a cover whose artwork reaches the edge.
- */
 async function contentBox(file) {
   const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const at = (x, y) => {
@@ -355,7 +277,6 @@ async function contentBox(file) {
     return [data[i], data[i + 1], data[i + 2], data[i + 3]];
   };
   const pale = (c) => c[3] < 20 || (c[0] > 230 && c[1] > 230 && c[2] > 230);
-  // Sampled every 6px: a border is uniform, and this keeps a 3MP scan quick.
   const rowPale = (y) => {
     let n = 0;
     let k = 0;
@@ -387,13 +308,6 @@ async function contentBox(file) {
   return { left, top, width: right - left + 1, height: bottom - top + 1 };
 }
 
-/*
- * NOTE: src/assets/logo/mhsv-lockup.png is NOT built here. MHSV® supplied it
- * directly on 26 August and the hero uses it. It has its own name precisely so
- * this script cannot overwrite it - mhsv-logo.png below is still derived from
- * the content pack and still used by the identity section.
- */
-
 async function buildBookCovers() {
   mkdirSync(resolve(ROOT, 'src/assets/book'), { recursive: true });
   for (const [loc, rel] of [
@@ -404,10 +318,6 @@ async function buildBookCovers() {
     const out = resolve(ROOT, `src/assets/book/founding-book-${loc}.png`);
     const source = resolve(PACK, rel);
     const box = await contentBox(source);
-    // Covers render at most ~264 CSS px, which is ~528 real pixels on a 2x
-    // screen, so a 600px cap left nothing in hand. 900 keeps the covers sharp
-    // on a retina display and still holds the PNG fallback that <Picture>
-    // emits well under a megabyte.
     await sharp(source)
       .extract(box)
       .resize({ width: 900, withoutEnlargement: true })
@@ -466,29 +376,6 @@ function writeInventory(logo) {
   record('ASSET_INVENTORY.md');
 }
 
-// ---------------------------------------------------------------------------
-// fonts
-// ---------------------------------------------------------------------------
-
-/**
- * Self-hosted fonts. A Swiss non-profit should not leak visitor IPs to a
- * third-party font CDN, and local files are faster besides.
- *
- * Only the Latin subset is shipped: it covers every accent used by FR/DE/IT
- * (Latin-1 Supplement) plus œ/Œ, the guillemets, the curly apostrophe, the em
- * dash and ®. Copying the files to public/ rather than importing them through
- * Vite keeps the URLs stable, so the critical faces can be preloaded.
- */
-/**
- * Only two faces are preloaded - the ones the first screenful actually paints
- * with: the hero heading (Archivo 900) and the body/lead copy (Source Sans
- * 400). Preloading more simply makes them compete for bandwidth and pushes LCP
- * out.
- *
- * Source Sans 300 is declared (the brief specifies 300/400/600) but nothing in
- * the current design uses it, so browsers never fetch it. It is there for the
- * client's designer without costing a request.
- */
 const FONTS = [
   { pkg: 'archivo', family: 'Archivo', weights: [700, 900], preload: [900] },
   { pkg: 'source-sans-3', family: 'Source Sans 3', weights: [300, 400, 600], preload: [400] },
