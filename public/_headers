@@ -1,8 +1,5 @@
-# Cloudflare Pages headers. Mirrors the [[headers]] blocks in netlify.toml,
-# which Netlify uses instead of this file.
-#
-# The policy is closed to 'self' because the site makes no third-party requests:
-# fonts are self-hosted, and there is no analytics and no CAPTCHA.
+# Cloudflare Pages headers.
+# Closed to 'self': the site makes no third-party requests.
 
 /*
   X-Frame-Options: DENY

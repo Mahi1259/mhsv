@@ -1,5 +1,5 @@
 {
-  "_note": "Vom Entwickler verfasste Texte, nicht im Content-Pack V3 enthalten. VOR PRODUKTIONSSTART VON MHSV® ZU VALIDIEREN. Siehe CONTENT.md. Schweizer Hochdeutsch: durchgehend «ss» statt «ß».",
+  "_note": "Vom Entwickler verfasste Texte, nicht im Content-Pack V3 enthalten. VOR PRODUKTIONSSTART VON MHSV® ZU VALIDIEREN. Schweizer Hochdeutsch: durchgehend «ss» statt «ß».",
   "meta": {
     "htmlLang": "de-CH",
     "ogLocale": "de_CH",
@@ -765,7 +765,7 @@
         "paragraphs": [
           "Domain name and email services: SwissCenter [LEGAL COMPANY NAME AND POSTAL ADDRESS TO BE CONFIRMED], Switzerland. SwissCenter currently manages the domain name and email services; any role it may have in website hosting must be confirmed.",
           "Final website hosting provider: [LEGAL COMPANY NAME, POSTAL ADDRESS AND COUNTRY TO BE CONFIRMED BEFORE PUBLICATION].",
-          "Additional technical services: [FINAL ROLE OF VERCEL, CLOUDFLARE AND ANY OTHER PROVIDER TO BE CONFIRMED: DNS, CDN, PROXY, SECURITY, HOSTING, WORKERS, FORMS, LOGS OR BACKUPS].",
+          "Additional technical services: [FINAL ROLE OF CLOUDFLARE AND ANY OTHER PROVIDER TO BE CONFIRMED: DNS, CDN, PROXY, SECURITY, HOSTING, WORKERS, FORMS, LOGS OR BACKUPS].",
           "Newsletter service: Brevo. Newsletter subscription data is processed and stored within the European Union - on Google Cloud infrastructure in Belgium and OVH infrastructure in France and Germany, according to Brevo's published documentation. This information will be reconfirmed once the account is active."
         ],
         "items": []

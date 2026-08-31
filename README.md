@@ -3,8 +3,6 @@
 One-page site for MHSV® — International Centre for Development and Transition
 (Geneva), in French, English, German and Italian. Astro, static output.
 
-Read [BLOCKERS.md](./BLOCKERS.md) before going to production.
-
 ## Run it
 
 ```bash
@@ -60,13 +58,28 @@ variable, not a runtime one.
 
 ## Deploy
 
-Build `npm run build`, output `dist`. Details in [DEPLOY.md](./DEPLOY.md).
+Cloudflare Pages. Build `npm run build`, output `dist`.
 
-| Host | Config | Form endpoint |
-| --- | --- | --- |
-| Cloudflare Pages | `wrangler.toml` | `functions/api/contact.js` |
-| Vercel | `vercel.json` | `api/contact.mjs` |
-| Netlify | `netlify.toml` | `functions/contact.mjs` |
+| Setting | Value |
+| --- | --- |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Deploy command | **leave empty** |
+| Node version | 20 or later |
 
-`CONTACT_TRANSPORT=smtp` can't work on Cloudflare — Workers have no raw TCP.
-Use `brevo`.
+Three things that will bite you:
+
+- **The deploy command must be empty.** `npx wrangler deploy` is the Workers
+  command and fails with "you have run `wrangler deploy` on a Pages project".
+  If the field can't be blank, use `npx wrangler pages deploy dist`.
+- **`PUBLIC_SITE_URL` must be a *build* variable, not a runtime one.** It is
+  baked into the HTML at build time. Set at runtime it does nothing, and every
+  page canonicalises to `http://localhost:4321` with nothing in the log looking
+  wrong.
+- **`CONTACT_TRANSPORT` must be `brevo` or `log`, never `smtp`.** Workers can't
+  open raw TCP. Run `npm run check:functions` before pushing.
+
+The form endpoint is `functions/api/contact.js`. Headers and redirects come from
+`public/_headers` and `public/_redirects`.
+
+The site ships `noindex` until you set `LAUNCHED = true` in `site-url.mjs`.

@@ -2,7 +2,7 @@
 #
 # The site is a STATIC build; `dist/` is uploaded as-is and the three forms are
 # served by the Pages Function in functions/api/. There is no Astro adapter and
-# no SSR route - see DEPLOY.md for why.
+# no SSR route.
 #
 # Secrets are NOT here. Set them per environment so they are never in the
 # repository:

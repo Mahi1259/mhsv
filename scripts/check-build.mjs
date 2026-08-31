@@ -316,7 +316,7 @@ for (const locale of LOCALES) {
 // A build that canonicalises to localhost must never reach a deployment.
 {
   const inCI = Boolean(
-    process.env.CF_PAGES || process.env.VERCEL || process.env.NETLIFY || process.env.CI,
+    process.env.CF_PAGES || process.env.CI,
   );
 
   if (inCI) {

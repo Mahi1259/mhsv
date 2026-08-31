@@ -1,43 +1,21 @@
-const VERCEL_IS_PROTOTYPE = true;
+// Flip to true at launch. Until then every build ships noindex, whatever
+// PUBLIC_SITE_URL says — this is what kept the prototype out of search.
+const LAUNCHED = false;
 
 const trimSlash = (url) => url.replace(/\/+$/, '');
-
 const withScheme = (host) => (/^https?:\/\//.test(host) ? host : `https://${host}`);
 
 export function resolveSite(env = process.env) {
   if (env.PUBLIC_SITE_URL) {
-    const onVercel = Boolean(env.VERCEL || env.VERCEL_ENV);
-    const isProduction =
-      VERCEL_IS_PROTOTYPE && onVercel
-        ? false
-        : env.VERCEL_ENV
-  // Previews canonicalise to their own URL and ship noindex rather than claiming
-  // to be production.
-          ? env.VERCEL_ENV === 'production'
-          : true;
     return {
       url: trimSlash(withScheme(env.PUBLIC_SITE_URL)),
-      source: onVercel && VERCEL_IS_PROTOTYPE ? 'PUBLIC_SITE_URL (Vercel prototype, noindex)' : 'PUBLIC_SITE_URL',
-      isProduction,
+      source: LAUNCHED ? 'PUBLIC_SITE_URL' : 'PUBLIC_SITE_URL (pre-launch, noindex)',
+      isProduction: LAUNCHED,
     };
   }
 
-  if (env.VERCEL_ENV === 'production' && env.VERCEL_PROJECT_PRODUCTION_URL) {
-    return {
-      url: trimSlash(withScheme(env.VERCEL_PROJECT_PRODUCTION_URL)),
-      source: 'VERCEL_PROJECT_PRODUCTION_URL',
-      isProduction: !VERCEL_IS_PROTOTYPE,
-    };
-  }
-
-  if (env.VERCEL_URL) {
-    return {
-      url: trimSlash(withScheme(env.VERCEL_URL)),
-      source: 'VERCEL_URL (preview)',
-      isProduction: false,
-    };
-  }
-
+  // Cloudflare previews canonicalise to themselves rather than claiming to be
+  // production.
   if (env.CF_PAGES_URL) {
     return {
       url: trimSlash(withScheme(env.CF_PAGES_URL)),
