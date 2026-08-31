@@ -31,8 +31,7 @@
       "titleLines": [
         "QUI",
         "SOMMES-NOUS ?"
-      ],
-      "_titleLinesCheck": "QUI SOMMES-NOUS ?"
+      ]
     },
     "vision": {
       "num": "03",
@@ -48,8 +47,7 @@
       "titleLines": [
         "NOTRE",
         "VISION 2035"
-      ],
-      "_titleLinesCheck": "NOTRE VISION 2035"
+      ]
     },
     "mission": {
       "num": "04",
@@ -191,8 +189,7 @@
       "titleLines": [
         "LE PROGRAMME",
         "SPORTIF EN ACTION"
-      ],
-      "_titleLinesCheck": "LE PROGRAMME SPORTIF EN ACTION"
+      ]
     },
     "founding": {
       "num": "10",
@@ -265,8 +262,7 @@
       "titleLines": [
         "INTERNATIONAL",
         "& ÉVÉNEMENTS"
-      ],
-      "_titleLinesCheck": "INTERNATIONAL & ÉVÉNEMENTS"
+      ]
     },
     "ecosystem": {
       "num": "12",
@@ -369,7 +365,7 @@
         },
         {
           "name": "Diego FUIANO",
-          "role": "Coordinateur Web & Digital et développement institutionnel et des partenariats",
+          "role": "Coordinateur Web & Digital",
           "email": "d.fuiano@mhsv.ch",
           "emailPending": false
         },
@@ -384,31 +380,6 @@
       "emailPending": "Adresse MHSV® à venir",
       "emailPendingHint": "L’adresse professionnelle sera publiée après validation écrite."
     },
-    "supporters": {
-      "anchor": "supporters",
-      "title": "Ils soutiennent MHSV®",
-      "intro": "MHSV® se construit avec celles et ceux qui choisissent de le soutenir. Cette section présentera les mécènes, partenaires et ambassadeurs engagés auprès du projet. Elle est en cours de structuration : aucun profil n’est publié sans l’accord de la personne ou de l’organisation concernée.",
-      "status": {
-        "key": "inDevelopment",
-        "detail": "EN COURS DE STRUCTURATION"
-      },
-      "ctaLabel": "Devenir partenaire ou soutenir MHSV®",
-      "categories": [
-        {
-          "key": "patron",
-          "heading": "Mécènes et donateurs"
-        },
-        {
-          "key": "partner",
-          "heading": "Partenaires et sponsors"
-        },
-        {
-          "key": "ambassador",
-          "heading": "Ambassadeurs et soutiens"
-        }
-      ],
-      "profiles": []
-    },
     "founder": {
       "num": "17",
       "anchor": "founder",
@@ -419,8 +390,7 @@
       "quote": "Parce que derrière chaque performance se trouve une personne. Derrière chaque personne existe un potentiel. Et ce potentiel mérite d’être accompagné.",
       "titleLines": [
         "LE FONDATEUR"
-      ],
-      "_titleLinesCheck": "LE FONDATEUR"
+      ]
     },
     "book": {
       "num": "18",
@@ -512,6 +482,7 @@
       "tagline": "Développons le potentiel. Préparons l’avenir.",
       "institutional": "MHSV® - Centre International de Développement et de Transition",
       "place": "Genève - Suisse",
+      "phone": "+41 79 294 64 73",
       "email": "infos@mhsv.ch",
       "website": "www.mhsv.ch",
       "legalFooter": [
@@ -527,6 +498,31 @@
       "emailLabel": "Contact institutionnel",
       "founderLabel": "Fondateur et Président",
       "founderEmail": "infos@mhsv.ch"
+    },
+    "supporters": {
+      "anchor": "supporters",
+      "title": "Ils soutiennent MHSV®",
+      "intro": "MHSV® se construit avec celles et ceux qui choisissent de le soutenir. Cette section présentera les mécènes, partenaires et ambassadeurs engagés auprès du projet. Elle est en cours de structuration : aucun profil n’est publié sans l’accord de la personne ou de l’organisation concernée.",
+      "status": {
+        "key": "inDevelopment",
+        "detail": "EN COURS DE STRUCTURATION"
+      },
+      "ctaLabel": "Devenir partenaire ou soutenir MHSV®",
+      "categories": [
+        {
+          "key": "patron",
+          "heading": "Mécènes et donateurs"
+        },
+        {
+          "key": "partner",
+          "heading": "Partenaires et sponsors"
+        },
+        {
+          "key": "ambassador",
+          "heading": "Ambassadeurs et soutiens"
+        }
+      ],
+      "profiles": []
     },
     "newsletter": {
       "title": "RESTEZ INFORMÉ(E) DE L’ACTUALITÉ MHSV®",
@@ -992,6 +988,7 @@
           "Nous conservons vos données personnelles uniquement pendant la durée nécessaire à la réalisation des finalités décrites dans la présente Notice ou afin de respecter nos obligations légales, réglementaires ou contractuelles.",
           "En particulier, les données sont conservées pendant toute la durée de votre relation avec l’Association. À l’expiration des durées de conservation applicables, les données personnelles sont supprimées, anonymisées ou archivées conformément au droit applicable.",
           "Les données personnelles sont principalement hébergées en Suisse ou dans l’Espace économique européen.",
+          "Les données d’inscription à la newsletter sont traitées et stockées au sein de l’Union européenne par notre prestataire d’emailing, Brevo - sur l’infrastructure Google Cloud située en Belgique et sur l’infrastructure OVH située en France et en Allemagne, selon la documentation publiée par le prestataire. Ces lieux d’hébergement seront reconfirmés dès l’activation du compte.",
           "Lorsque des données personnelles sont transférées vers un État ne bénéficiant pas d’un niveau de protection reconnu comme adéquat, l’Association met en œuvre les garanties appropriées prévues par le droit applicable, notamment les clauses contractuelles types approuvées par les autorités compétentes ou tout autre mécanisme reconnu."
         ],
         "items": []
@@ -1067,7 +1064,8 @@
         "paragraphs": [
           "Nom de domaine et messagerie : SwissCenter [DÉNOMINATION SOCIALE ET ADRESSE POSTALE À CONFIRMER], Suisse. SwissCenter assure actuellement la gestion du nom de domaine et des services de messagerie ; son rôle éventuel dans l’hébergement du site doit être confirmé.",
           "Hébergeur final du site : [DÉNOMINATION SOCIALE, ADRESSE POSTALE ET PAYS À CONFIRMER AVANT PUBLICATION].",
-          "Services techniques complémentaires : [RÔLE FINAL DE VERCEL, CLOUDFLARE ET DE TOUT AUTRE PRESTATAIRE À CONFIRMER : DNS, CDN, PROXY, SÉCURITÉ, HÉBERGEMENT, WORKERS, FORMULAIRES, JOURNAUX OU SAUVEGARDES]."
+          "Services techniques complémentaires : [RÔLE FINAL DE VERCEL, CLOUDFLARE ET DE TOUT AUTRE PRESTATAIRE À CONFIRMER : DNS, CDN, PROXY, SÉCURITÉ, HÉBERGEMENT, WORKERS, FORMULAIRES, JOURNAUX OU SAUVEGARDES].",
+          "Service d’envoi de la newsletter : Brevo. Les données d’inscription à la newsletter sont traitées et stockées au sein de l’Union européenne - sur l’infrastructure Google Cloud en Belgique et sur l’infrastructure OVH en France et en Allemagne, selon la documentation publiée par Brevo. Cette information sera reconfirmée dès l’activation du compte."
         ],
         "items": []
       },

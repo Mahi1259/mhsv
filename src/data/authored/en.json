@@ -214,7 +214,7 @@
         },
         {
           "name": "Diego FUIANO",
-          "role": "Web & Digital Coordinator and Institutional Development & Partnerships",
+          "role": "Web & Digital Coordinator",
           "email": "d.fuiano@mhsv.ch",
           "emailPending": false
         },
@@ -695,6 +695,7 @@
           "We retain your personal data only for as long as necessary to fulfil the purposes described in this Notice or to comply with our legal, regulatory or contractual obligations.",
           "In particular, data is retained for the duration of your relationship with the Association. At the end of the applicable retention periods, personal data is deleted, anonymised or archived in accordance with applicable law.",
           "Personal data is primarily hosted in Switzerland or the European Economic Area.",
+          "Newsletter subscription data is processed and stored within the European Union by our emailing provider, Brevo - on Google Cloud infrastructure located in Belgium and OVH infrastructure located in France and Germany, according to the provider's published documentation. These hosting locations will be reconfirmed once the account is active.",
           "Where personal data is transferred to a country that is not recognised as providing an adequate level of protection, the Association implements appropriate safeguards under applicable law, including standard contractual clauses approved by the competent authorities or any other recognised mechanism."
         ],
         "items": []
@@ -770,7 +771,8 @@
         "paragraphs": [
           "Domain name and email services: SwissCenter [LEGAL COMPANY NAME AND POSTAL ADDRESS TO BE CONFIRMED], Switzerland. SwissCenter currently manages the domain name and email services; any role it may have in website hosting must be confirmed.",
           "Final website hosting provider: [LEGAL COMPANY NAME, POSTAL ADDRESS AND COUNTRY TO BE CONFIRMED BEFORE PUBLICATION].",
-          "Additional technical services: [FINAL ROLE OF VERCEL, CLOUDFLARE AND ANY OTHER PROVIDER TO BE CONFIRMED: DNS, CDN, PROXY, SECURITY, HOSTING, WORKERS, FORMS, LOGS OR BACKUPS]."
+          "Additional technical services: [FINAL ROLE OF VERCEL, CLOUDFLARE AND ANY OTHER PROVIDER TO BE CONFIRMED: DNS, CDN, PROXY, SECURITY, HOSTING, WORKERS, FORMS, LOGS OR BACKUPS].",
+          "Newsletter service: Brevo. Newsletter subscription data is processed and stored within the European Union - on Google Cloud infrastructure in Belgium and OVH infrastructure in France and Germany, according to Brevo's published documentation. This information will be reconfirmed once the account is active."
         ],
         "items": []
       },

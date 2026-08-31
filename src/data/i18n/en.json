@@ -31,8 +31,7 @@
       "titleLines": [
         "WHO",
         "WE ARE"
-      ],
-      "_titleLinesCheck": "WHO WE ARE"
+      ]
     },
     "vision": {
       "num": "03",
@@ -48,8 +47,7 @@
       "titleLines": [
         "OUR",
         "VISION 2035"
-      ],
-      "_titleLinesCheck": "OUR VISION 2035"
+      ]
     },
     "mission": {
       "num": "04",
@@ -191,8 +189,7 @@
       "titleLines": [
         "SPORT PROGRAMMES",
         "IN ACTION"
-      ],
-      "_titleLinesCheck": "SPORT PROGRAMMES IN ACTION"
+      ]
     },
     "founding": {
       "num": "10",
@@ -265,8 +262,7 @@
       "titleLines": [
         "INTERNATIONAL",
         "& EVENTS"
-      ],
-      "_titleLinesCheck": "INTERNATIONAL & EVENTS"
+      ]
     },
     "ecosystem": {
       "num": "12",
@@ -369,7 +365,7 @@
         },
         {
           "name": "Diego FUIANO",
-          "role": "Web & Digital Coordinator and Institutional Development & Partnerships",
+          "role": "Web & Digital Coordinator",
           "email": "d.fuiano@mhsv.ch",
           "emailPending": false
         },
@@ -384,31 +380,6 @@
       "emailPending": "MHSV® address to come",
       "emailPendingHint": "The professional address will be published after written approval."
     },
-    "supporters": {
-      "anchor": "supporters",
-      "title": "They Support MHSV®",
-      "intro": "MHSV® is built with those who choose to support it. This section will present the patrons, partners and ambassadors committed to the project. It is being structured: no profile is published without the agreement of the person or organisation concerned.",
-      "status": {
-        "key": "inDevelopment",
-        "detail": "IN DEVELOPMENT"
-      },
-      "ctaLabel": "Become a Partner or Support MHSV®",
-      "categories": [
-        {
-          "key": "patron",
-          "heading": "Patrons and Donors"
-        },
-        {
-          "key": "partner",
-          "heading": "Partners and Sponsors"
-        },
-        {
-          "key": "ambassador",
-          "heading": "Ambassadors and Supporters"
-        }
-      ],
-      "profiles": []
-    },
     "founder": {
       "num": "17",
       "anchor": "founder",
@@ -419,8 +390,7 @@
       "quote": "Behind every performance is a person. Behind every person is potential. And that potential deserves to be supported.",
       "titleLines": [
         "FOUNDER"
-      ],
-      "_titleLinesCheck": "FOUNDER"
+      ]
     },
     "book": {
       "num": "18",
@@ -512,6 +482,7 @@
       "tagline": "Develop potential. Prepare the future.",
       "institutional": "MHSV® - International Centre for Development and Transition",
       "place": "Geneva - Switzerland",
+      "phone": "+41 79 294 64 73",
       "email": "infos@mhsv.ch",
       "website": "www.mhsv.ch",
       "legalFooter": [
@@ -527,6 +498,31 @@
       "emailLabel": "Institutional contact",
       "founderLabel": "Founder and President",
       "founderEmail": "infos@mhsv.ch"
+    },
+    "supporters": {
+      "anchor": "supporters",
+      "title": "They Support MHSV®",
+      "intro": "MHSV® is built with those who choose to support it. This section will present the patrons, partners and ambassadors committed to the project. It is being structured: no profile is published without the agreement of the person or organisation concerned.",
+      "status": {
+        "key": "inDevelopment",
+        "detail": "IN DEVELOPMENT"
+      },
+      "ctaLabel": "Become a Partner or Support MHSV®",
+      "categories": [
+        {
+          "key": "patron",
+          "heading": "Patrons and Donors"
+        },
+        {
+          "key": "partner",
+          "heading": "Partners and Sponsors"
+        },
+        {
+          "key": "ambassador",
+          "heading": "Ambassadors and Supporters"
+        }
+      ],
+      "profiles": []
     },
     "newsletter": {
       "title": "STAY INFORMED ABOUT MHSV®",
@@ -970,6 +966,7 @@
           "We retain your personal data only for as long as necessary to fulfil the purposes described in this Notice or to comply with our legal, regulatory or contractual obligations.",
           "In particular, data is retained for the duration of your relationship with the Association. At the end of the applicable retention periods, personal data is deleted, anonymised or archived in accordance with applicable law.",
           "Personal data is primarily hosted in Switzerland or the European Economic Area.",
+          "Newsletter subscription data is processed and stored within the European Union by our emailing provider, Brevo - on Google Cloud infrastructure located in Belgium and OVH infrastructure located in France and Germany, according to the provider's published documentation. These hosting locations will be reconfirmed once the account is active.",
           "Where personal data is transferred to a country that is not recognised as providing an adequate level of protection, the Association implements appropriate safeguards under applicable law, including standard contractual clauses approved by the competent authorities or any other recognised mechanism."
         ],
         "items": []
@@ -1045,7 +1042,8 @@
         "paragraphs": [
           "Domain name and email services: SwissCenter [LEGAL COMPANY NAME AND POSTAL ADDRESS TO BE CONFIRMED], Switzerland. SwissCenter currently manages the domain name and email services; any role it may have in website hosting must be confirmed.",
           "Final website hosting provider: [LEGAL COMPANY NAME, POSTAL ADDRESS AND COUNTRY TO BE CONFIRMED BEFORE PUBLICATION].",
-          "Additional technical services: [FINAL ROLE OF VERCEL, CLOUDFLARE AND ANY OTHER PROVIDER TO BE CONFIRMED: DNS, CDN, PROXY, SECURITY, HOSTING, WORKERS, FORMS, LOGS OR BACKUPS]."
+          "Additional technical services: [FINAL ROLE OF VERCEL, CLOUDFLARE AND ANY OTHER PROVIDER TO BE CONFIRMED: DNS, CDN, PROXY, SECURITY, HOSTING, WORKERS, FORMS, LOGS OR BACKUPS].",
+          "Newsletter service: Brevo. Newsletter subscription data is processed and stored within the European Union - on Google Cloud infrastructure in Belgium and OVH infrastructure in France and Germany, according to Brevo's published documentation. This information will be reconfirmed once the account is active."
         ],
         "items": []
       },

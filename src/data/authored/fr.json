@@ -214,7 +214,7 @@
         },
         {
           "name": "Diego FUIANO",
-          "role": "Coordinateur Web & Digital et développement institutionnel et des partenariats",
+          "role": "Coordinateur Web & Digital",
           "email": "d.fuiano@mhsv.ch",
           "emailPending": false
         },
@@ -695,6 +695,7 @@
           "Nous conservons vos données personnelles uniquement pendant la durée nécessaire à la réalisation des finalités décrites dans la présente Notice ou afin de respecter nos obligations légales, réglementaires ou contractuelles.",
           "En particulier, les données sont conservées pendant toute la durée de votre relation avec l’Association. À l’expiration des durées de conservation applicables, les données personnelles sont supprimées, anonymisées ou archivées conformément au droit applicable.",
           "Les données personnelles sont principalement hébergées en Suisse ou dans l’Espace économique européen.",
+          "Les données d’inscription à la newsletter sont traitées et stockées au sein de l’Union européenne par notre prestataire d’emailing, Brevo - sur l’infrastructure Google Cloud située en Belgique et sur l’infrastructure OVH située en France et en Allemagne, selon la documentation publiée par le prestataire. Ces lieux d’hébergement seront reconfirmés dès l’activation du compte.",
           "Lorsque des données personnelles sont transférées vers un État ne bénéficiant pas d’un niveau de protection reconnu comme adéquat, l’Association met en œuvre les garanties appropriées prévues par le droit applicable, notamment les clauses contractuelles types approuvées par les autorités compétentes ou tout autre mécanisme reconnu."
         ],
         "items": []
@@ -770,7 +771,8 @@
         "paragraphs": [
           "Nom de domaine et messagerie : SwissCenter [DÉNOMINATION SOCIALE ET ADRESSE POSTALE À CONFIRMER], Suisse. SwissCenter assure actuellement la gestion du nom de domaine et des services de messagerie ; son rôle éventuel dans l’hébergement du site doit être confirmé.",
           "Hébergeur final du site : [DÉNOMINATION SOCIALE, ADRESSE POSTALE ET PAYS À CONFIRMER AVANT PUBLICATION].",
-          "Services techniques complémentaires : [RÔLE FINAL DE VERCEL, CLOUDFLARE ET DE TOUT AUTRE PRESTATAIRE À CONFIRMER : DNS, CDN, PROXY, SÉCURITÉ, HÉBERGEMENT, WORKERS, FORMULAIRES, JOURNAUX OU SAUVEGARDES]."
+          "Services techniques complémentaires : [RÔLE FINAL DE VERCEL, CLOUDFLARE ET DE TOUT AUTRE PRESTATAIRE À CONFIRMER : DNS, CDN, PROXY, SÉCURITÉ, HÉBERGEMENT, WORKERS, FORMULAIRES, JOURNAUX OU SAUVEGARDES].",
+          "Service d’envoi de la newsletter : Brevo. Les données d’inscription à la newsletter sont traitées et stockées au sein de l’Union européenne - sur l’infrastructure Google Cloud en Belgique et sur l’infrastructure OVH en France et en Allemagne, selon la documentation publiée par Brevo. Cette information sera reconfirmée dès l’activation du compte."
         ],
         "items": []
       },

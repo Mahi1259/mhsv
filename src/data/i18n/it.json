@@ -30,8 +30,7 @@
       "leadNoLegalStatus": "MHSV® - Centro Internazionale di Sviluppo e Transizione è un'organizzazione con sede a Ginevra, in Svizzera.",
       "titleLines": [
         "CHI SIAMO"
-      ],
-      "_titleLinesCheck": "CHI SIAMO"
+      ]
     },
     "vision": {
       "num": "03",
@@ -47,8 +46,7 @@
       "titleLines": [
         "LA NOSTRA",
         "VISIONE 2035"
-      ],
-      "_titleLinesCheck": "LA NOSTRA VISIONE 2035"
+      ]
     },
     "mission": {
       "num": "04",
@@ -190,8 +188,7 @@
       "titleLines": [
         "IL PROGRAMMA",
         "SPORTIVO IN AZIONE"
-      ],
-      "_titleLinesCheck": "IL PROGRAMMA SPORTIVO IN AZIONE"
+      ]
     },
     "founding": {
       "num": "10",
@@ -264,8 +261,7 @@
       "titleLines": [
         "INTERNAZIONALE",
         "& EVENTI"
-      ],
-      "_titleLinesCheck": "INTERNAZIONALE & EVENTI"
+      ]
     },
     "ecosystem": {
       "num": "12",
@@ -368,7 +364,7 @@
         },
         {
           "name": "Diego FUIANO",
-          "role": "Coordinatore Web & Digital e sviluppo istituzionale e delle partnership",
+          "role": "Coordinatore Web & Digital",
           "email": "d.fuiano@mhsv.ch",
           "emailPending": false
         },
@@ -383,31 +379,6 @@
       "emailPending": "Indirizzo MHSV® in arrivo",
       "emailPendingHint": "L’indirizzo professionale sarà pubblicato dopo validazione scritta."
     },
-    "supporters": {
-      "anchor": "supporters",
-      "title": "Sostengono MHSV®",
-      "intro": "MHSV® si costruisce insieme a chi sceglie di sostenerlo. Questa sezione presenterà i mecenati, i partner e gli ambasciatori impegnati nel progetto. È in fase di strutturazione: nessun profilo viene pubblicato senza il consenso della persona o dell’organizzazione interessata.",
-      "status": {
-        "key": "inDevelopment",
-        "detail": "IN STRUTTURAZIONE"
-      },
-      "ctaLabel": "Diventare partner o sostenere MHSV®",
-      "categories": [
-        {
-          "key": "patron",
-          "heading": "Mecenati e donatori"
-        },
-        {
-          "key": "partner",
-          "heading": "Partner e sponsor"
-        },
-        {
-          "key": "ambassador",
-          "heading": "Ambasciatori e sostenitori"
-        }
-      ],
-      "profiles": []
-    },
     "founder": {
       "num": "17",
       "anchor": "founder",
@@ -418,8 +389,7 @@
       "quote": "Dietro ogni performance c’è una persona. Dietro ogni persona c’è un potenziale. E quel potenziale merita di essere accompagnato.",
       "titleLines": [
         "FONDATORE"
-      ],
-      "_titleLinesCheck": "FONDATORE"
+      ]
     },
     "book": {
       "num": "18",
@@ -511,6 +481,7 @@
       "tagline": "Sviluppare il potenziale. Preparare il futuro.",
       "institutional": "MHSV® - Centro Internazionale di Sviluppo e Transizione",
       "place": "Ginevra - Svizzera",
+      "phone": "+41 79 294 64 73",
       "email": "infos@mhsv.ch",
       "website": "www.mhsv.ch",
       "legalFooter": [
@@ -526,6 +497,31 @@
       "emailLabel": "Contatto istituzionale",
       "founderLabel": "Fondatore e Presidente",
       "founderEmail": "infos@mhsv.ch"
+    },
+    "supporters": {
+      "anchor": "supporters",
+      "title": "Sostengono MHSV®",
+      "intro": "MHSV® si costruisce insieme a chi sceglie di sostenerlo. Questa sezione presenterà i mecenati, i partner e gli ambasciatori impegnati nel progetto. È in fase di strutturazione: nessun profilo viene pubblicato senza il consenso della persona o dell’organizzazione interessata.",
+      "status": {
+        "key": "inDevelopment",
+        "detail": "IN STRUTTURAZIONE"
+      },
+      "ctaLabel": "Diventare partner o sostenere MHSV®",
+      "categories": [
+        {
+          "key": "patron",
+          "heading": "Mecenati e donatori"
+        },
+        {
+          "key": "partner",
+          "heading": "Partner e sponsor"
+        },
+        {
+          "key": "ambassador",
+          "heading": "Ambasciatori e sostenitori"
+        }
+      ],
+      "profiles": []
     },
     "newsletter": {
       "title": "RESTATE INFORMATI SU MHSV®",
@@ -969,6 +965,7 @@
           "We retain your personal data only for as long as necessary to fulfil the purposes described in this Notice or to comply with our legal, regulatory or contractual obligations.",
           "In particular, data is retained for the duration of your relationship with the Association. At the end of the applicable retention periods, personal data is deleted, anonymised or archived in accordance with applicable law.",
           "Personal data is primarily hosted in Switzerland or the European Economic Area.",
+          "Newsletter subscription data is processed and stored within the European Union by our emailing provider, Brevo - on Google Cloud infrastructure located in Belgium and OVH infrastructure located in France and Germany, according to the provider's published documentation. These hosting locations will be reconfirmed once the account is active.",
           "Where personal data is transferred to a country that is not recognised as providing an adequate level of protection, the Association implements appropriate safeguards under applicable law, including standard contractual clauses approved by the competent authorities or any other recognised mechanism."
         ],
         "items": []
@@ -1044,7 +1041,8 @@
         "paragraphs": [
           "Domain name and email services: SwissCenter [LEGAL COMPANY NAME AND POSTAL ADDRESS TO BE CONFIRMED], Switzerland. SwissCenter currently manages the domain name and email services; any role it may have in website hosting must be confirmed.",
           "Final website hosting provider: [LEGAL COMPANY NAME, POSTAL ADDRESS AND COUNTRY TO BE CONFIRMED BEFORE PUBLICATION].",
-          "Additional technical services: [FINAL ROLE OF VERCEL, CLOUDFLARE AND ANY OTHER PROVIDER TO BE CONFIRMED: DNS, CDN, PROXY, SECURITY, HOSTING, WORKERS, FORMS, LOGS OR BACKUPS]."
+          "Additional technical services: [FINAL ROLE OF VERCEL, CLOUDFLARE AND ANY OTHER PROVIDER TO BE CONFIRMED: DNS, CDN, PROXY, SECURITY, HOSTING, WORKERS, FORMS, LOGS OR BACKUPS].",
+          "Newsletter service: Brevo. Newsletter subscription data is processed and stored within the European Union - on Google Cloud infrastructure in Belgium and OVH infrastructure in France and Germany, according to Brevo's published documentation. This information will be reconfirmed once the account is active."
         ],
         "items": []
       },

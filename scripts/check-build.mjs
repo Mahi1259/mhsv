@@ -384,12 +384,37 @@ for (const locale of LOCALES) {
     const name = relative(DIST, file);
     const html = readFileSync(file, 'utf8');
 
-    // No phone number, anywhere. `tel:` covers the link, the digits cover the
-    // text - the number was published as both.
-    const tel = /tel:\+?[\d\s.-]{6,}/.exec(html);
+    /*
+     * No phone number, anywhere. `tel:` covers the link, the digits cover the
+     * text - the number was published as both.
+     *
+     * TESTED AGAINST THE RENDERED TEXT, NOT THE MARKUP. astro.config sets
+     * inlineStylesheets:'always', so every page carries its whole stylesheet
+     * inline and the raw HTML is dense with hex colours. Scanning that, a
+     * gradient stop `#07142647 55%` reads as a ten-digit Swiss number. Strip
+     * style and script first and the question becomes the right one: is a
+     * phone number VISIBLE to a reader.
+     *
+     * The digit pattern used to be
+     *   /\+41[\s.-]?\d[\s.-]?\d{2}([\s.-]?\d{2}){3}/
+     * which reads as +41, one digit, two digits, then three pairs. The actual
+     * number groups as 79 294 64 73 - two, three, two, two - so it never
+     * matched, and this guard passed a build with the number rendered on the
+     * home page in all four languages. Counting nine digits after the country
+     * code, however the author spaced them, is the fix.
+     */
+    const visible = html
+      .replace(/<(style|script)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ')
+      .replace(/<[^>]+>/g, ' ');
+    const SEP = '[\\s.\u00a0()-]*';
+    const tel = /(?:href|tel)\s*[=:]\s*["']?tel:\s*[+\d][\d\s.()+-]{5,}/i.exec(html);
     if (tel) errors.push(`${name}: publishes a phone link "${tel[0].trim()}"`);
-    const digits = /\+41[\s.-]?\d[\s.-]?\d{2}([\s.-]?\d{2}){3}/.exec(html);
-    if (digits) errors.push(`${name}: publishes a phone number "${digits[0]}"`);
+    const intl = new RegExp(`(?:\\+|00)${SEP}41(?:${SEP}\\d){9}`);
+    // National form requires real separators between the groups, so a bare run
+    // of digits - an id, a year range, a hash - cannot masquerade as one.
+    const national = /\b0[1-9]\d[\s.\u00a0-]\d{3}[\s.\u00a0-]\d{2}[\s.\u00a0-]\d{2}\b/;
+    const digits = intl.exec(visible) ?? national.exec(visible);
+    if (digits) errors.push(`${name}: publishes a phone number "${digits[0].trim()}"`);
 
     const found = [...new Set(html.match(INDIVIDUAL) ?? [])];
     if (!found.length) continue;
